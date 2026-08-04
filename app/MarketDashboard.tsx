@@ -1,0 +1,429 @@
+"use client";
+
+import { useMemo, useState } from "react";
+import data from "./data/market_data.json";
+
+type Tab = "overview" | "compare" | "profiles" | "competition" | "data" | "method";
+type MetricValue = { value: number; year: number } | null;
+type Market = (typeof data.markets)[number];
+
+const markerPositions: Record<string, { x: number; y: number }> = {
+  CAN: { x: 19, y: 28 },
+  MEX: { x: 23, y: 54 },
+  COL: { x: 31, y: 67 },
+  ARG: { x: 36, y: 85 },
+  GBR: { x: 49, y: 30 },
+  VNM: { x: 83, y: 56 },
+  PHL: { x: 89, y: 59 },
+  IDN: { x: 83, y: 72 },
+};
+
+const tabLabels: Array<{ id: Tab; label: string }> = [
+  { id: "overview", label: "Обзор" },
+  { id: "compare", label: "Сравнение" },
+  { id: "profiles", label: "Профили рынков" },
+  { id: "competition", label: "Конкуренты / тарифы" },
+  { id: "data", label: "Сырые данные" },
+  { id: "method", label: "Методология / источники" },
+];
+
+const gateLabels: Record<string, string> = {
+  partner_or_authorisation: "Партнёр / авторизация",
+  authorisation: "Авторизация",
+  registration: "Регистрация",
+  licensed_partner: "Лицензированный партнёр",
+  fiat_wrapper_only: "Только fiat-wrapper",
+  ifpe_or_bank: "IFPE / банк",
+};
+
+function formatMoney(metric: MetricValue) {
+  if (!metric) return "—";
+  const billions = metric.value / 1_000_000_000;
+  if (billions >= 1) return `$${billions.toLocaleString("ru-RU", { maximumFractionDigits: 1 })} млрд`;
+  return `$${(metric.value / 1_000_000).toLocaleString("ru-RU", { maximumFractionDigits: 0 })} млн`;
+}
+
+function formatPct(metric: MetricValue) {
+  if (!metric) return "—";
+  return `${metric.value.toLocaleString("ru-RU", { maximumFractionDigits: 2 })}%`;
+}
+
+function formatPeople(metric: MetricValue) {
+  if (!metric) return "—";
+  return `${(metric.value / 1_000_000).toLocaleString("ru-RU", { maximumFractionDigits: 1 })} млн`;
+}
+
+function ScoreBadge({ score }: { score: number }) {
+  const tone = score >= 4 ? "high" : score >= 3.2 ? "mid" : "low";
+  return <span className={`score-badge ${tone}`}>{score.toFixed(2)}</span>;
+}
+
+function SourceLink({ sourceId }: { sourceId: string }) {
+  const source = data.sources.find((item) => item.id === sourceId);
+  if (!source) return null;
+  return (
+    <a href={source.url} target="_blank" rel="noreferrer" className="source-chip">
+      {source.publisher}
+    </a>
+  );
+}
+
+export function MarketDashboard() {
+  const [tab, setTab] = useState<Tab>("overview");
+  const [selectedCode, setSelectedCode] = useState("PHL");
+  const [compareCodes, setCompareCodes] = useState<string[]>(["PHL", "COL", "MEX"]);
+  const [region, setRegion] = useState("Все регионы");
+
+  const selected = data.markets.find((market) => market.code === selectedCode) ?? data.markets[0];
+  const regions = ["Все регионы", ...Array.from(new Set(data.markets.map((market) => market.region)))];
+  const visibleMarkets = region === "Все регионы" ? data.markets : data.markets.filter((market) => market.region === region);
+  const compareMarkets = compareCodes
+    .map((code) => data.markets.find((market) => market.code === code))
+    .filter(Boolean) as Market[];
+
+  const maxRemittance = useMemo(
+    () => Math.max(...data.markets.map((market) => market.metrics.remittance_in_usd?.value ?? 0)),
+    [],
+  );
+
+  function chooseMarket(code: string, nextTab?: Tab) {
+    setSelectedCode(code);
+    if (nextTab) setTab(nextTab);
+  }
+
+  function toggleCompare(code: string) {
+    setCompareCodes((current) => {
+      if (current.includes(code)) return current.filter((item) => item !== code);
+      if (current.length >= 3) return [...current.slice(1), code];
+      return [...current, code];
+    });
+  }
+
+  return (
+    <main className="app-shell">
+      <header className="hero">
+        <div className="hero-topline">
+          <span className="eyebrow">APS / MARKET INTELLIGENCE</span>
+          <span className="update-stamp">Данные проверены · 04.08.2026</span>
+        </div>
+        <div className="hero-grid">
+          <div>
+            <h1>Где APS может выиграть — и на каких условиях</h1>
+            <p>
+              Восемь рынков, шесть критериев и единый слой фактических данных для
+              crypto-linked payments, управления цифровыми активами и карт.
+            </p>
+          </div>
+          <div className="hero-metrics" aria-label="Сводка исследования">
+            <div><strong>8</strong><span>рынков</span></div>
+            <div><strong>6</strong><span>критериев</span></div>
+            <div><strong>{data.sources.length}</strong><span>базовых источников</span></div>
+          </div>
+        </div>
+      </header>
+
+      <div className="method-banner">
+        <span className="method-icon">i</span>
+        <p>
+          <strong>Как читать рейтинг.</strong> Балл пересчитан строго по весам ТЗ.
+          Регуляторный gate показан отдельно: высокий спрос не означает, что direct
+          stablecoin card можно запускать без локального партнёра.
+        </p>
+      </div>
+
+      <nav className="tabs" aria-label="Разделы исследования">
+        {tabLabels.map((item) => (
+          <button
+            key={item.id}
+            type="button"
+            className={tab === item.id ? "active" : ""}
+            onClick={() => setTab(item.id)}
+          >
+            {item.label}
+          </button>
+        ))}
+      </nav>
+
+      {tab === "overview" && (
+        <section className="content-grid overview-grid">
+          <div className="panel atlas-panel">
+            <div className="panel-heading">
+              <div>
+                <span className="section-kicker">MARKET ATLAS</span>
+                <h2>Восемь рынков в одном поле</h2>
+                <p>Размер маркера отражает входящие переводы; цвет — взвешенный балл.</p>
+              </div>
+              <select value={region} onChange={(event) => setRegion(event.target.value)} aria-label="Фильтр по региону">
+                {regions.map((item) => <option key={item}>{item}</option>)}
+              </select>
+            </div>
+            <div className="atlas" aria-label="Схематичная карта восьми рынков">
+              <div className="atlas-label americas">AMERICAS</div>
+              <div className="atlas-label europe">EUROPE</div>
+              <div className="atlas-label asia">ASIA-PACIFIC</div>
+              {visibleMarkets.map((market) => {
+                const pos = markerPositions[market.code];
+                const volume = market.metrics.remittance_in_usd?.value ?? 0;
+                const size = 44 + Math.sqrt(volume / maxRemittance) * 26;
+                const tone = market.weighted_score >= 4 ? "high" : market.weighted_score >= 3.2 ? "mid" : "low";
+                return (
+                  <button
+                    key={market.code}
+                    type="button"
+                    className={`map-marker ${tone} ${selectedCode === market.code ? "selected" : ""}`}
+                    style={{ left: `${pos.x}%`, top: `${pos.y}%`, width: size, height: size }}
+                    onClick={() => chooseMarket(market.code)}
+                    aria-label={`${market.name_ru}, балл ${market.weighted_score}`}
+                  >
+                    <span>{market.code}</span>
+                    <small>{market.weighted_score.toFixed(2)}</small>
+                  </button>
+                );
+              })}
+              <div className="atlas-legend">
+                <span><i className="dot high" /> 4,0+</span>
+                <span><i className="dot mid" /> 3,2–3,99</span>
+                <span><i className="dot low" /> &lt;3,2</span>
+              </div>
+            </div>
+            <div className="selected-market">
+              <div>
+                <span className="section-kicker">ВЫБРАННЫЙ РЫНОК</span>
+                <h3>{selected.name_ru}</h3>
+                <p>{selected.profile.demand}</p>
+              </div>
+              <div className="selected-kpis">
+                <div><span>Балл</span><strong>{selected.weighted_score.toFixed(2)}</strong></div>
+                <div><span>Переводы</span><strong>{formatMoney(selected.metrics.remittance_in_usd)}</strong></div>
+                <div><span>Инфляция 2025</span><strong>{selected.metrics.imf_weo.inflation_2025_pct.toFixed(1)}%</strong></div>
+              </div>
+              <button type="button" className="primary-button" onClick={() => setTab("profiles")}>Открыть профиль →</button>
+            </div>
+          </div>
+
+          <aside className="panel ranking-panel">
+            <div className="panel-heading compact">
+              <div>
+                <span className="section-kicker">РЕЙТИНГ</span>
+                <h2>По формуле ТЗ</h2>
+              </div>
+              <span className="count-pill">8 рынков</span>
+            </div>
+            <div className="ranking-list">
+              {visibleMarkets.map((market) => (
+                <button key={market.code} type="button" onClick={() => chooseMarket(market.code)} className={selectedCode === market.code ? "active" : ""}>
+                  <span className="rank-number">{market.rank}</span>
+                  <span className="rank-name"><strong>{market.name_ru}</strong><small>{market.region}</small></span>
+                  <span className="gate-mini">{gateLabels[market.regulatory.gate]}</span>
+                  <ScoreBadge score={market.weighted_score} />
+                </button>
+              ))}
+            </div>
+            <div className="ranking-note">
+              <strong>Ключевой вывод</strong>
+              <p>Филиппины лидируют по сочетанию переводов и use case. Аргентина и Колумбия близки по баллу, но требуют разных регуляторных и конкурентных стратегий.</p>
+            </div>
+          </aside>
+        </section>
+      )}
+
+      {tab === "compare" && (
+        <section className="compare-layout">
+          <div className="panel compare-picker">
+            <div className="panel-heading">
+              <div>
+                <span className="section-kicker">COMPARE</span>
+                <h2>Выберите до трёх рынков</h2>
+              </div>
+              <span className="count-pill">{compareCodes.length}/3</span>
+            </div>
+            <div className="market-pills">
+              {data.markets.map((market) => (
+                <button
+                  key={market.code}
+                  type="button"
+                  className={compareCodes.includes(market.code) ? "active" : ""}
+                  onClick={() => toggleCompare(market.code)}
+                >
+                  {market.name_ru}<span>{market.weighted_score.toFixed(2)}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div className="comparison-cards">
+            {compareMarkets.map((market) => (
+              <article className="panel country-compare" key={market.code}>
+                <div className="country-card-head">
+                  <div><span>{market.code}</span><h2>{market.name_ru}</h2><p>{market.region}</p></div>
+                  <ScoreBadge score={market.weighted_score} />
+                </div>
+                <div className="metric-stack">
+                  <div><span>Входящие переводы</span><strong>{formatMoney(market.metrics.remittance_in_usd)}</strong><small>{market.metrics.remittance_in_usd?.year ?? "—"}</small></div>
+                  <div><span>Переводы / ВВП</span><strong>{formatPct(market.metrics.remittance_pct_gdp)}</strong><small>{market.metrics.remittance_pct_gdp?.year ?? "—"}</small></div>
+                  <div><span>Население</span><strong>{formatPeople(market.metrics.population)}</strong><small>{market.metrics.population?.year ?? "—"}</small></div>
+                  <div><span>Account ownership</span><strong>{market.metrics.findex_2024.account_ownership_pct.toFixed(1)}%</strong><small>Findex 2024</small></div>
+                  <div><span>Smartphone</span><strong>{market.metrics.findex_2024.smartphone_pct.toFixed(1)}%</strong><small>Findex 2024</small></div>
+                  <div><span>Crypto adoption</span><strong>{market.metrics.chainalysis_rank_2025 ? `#${market.metrics.chainalysis_rank_2025}` : "вне top-20"}</strong><small>из 151 стран</small></div>
+                </div>
+                <div className="gate-box"><span>Регуляторный gate</span><strong>{gateLabels[market.regulatory.gate]}</strong><p>{market.regulatory.status}</p></div>
+              </article>
+            ))}
+          </div>
+
+          <div className="panel criteria-panel">
+            <div className="panel-heading"><div><span className="section-kicker">SCORE BREAKDOWN</span><h2>Шесть критериев</h2></div></div>
+            <div className="criteria-table">
+              {data.metadata.criteria.map((criterion) => (
+                <div className="criteria-row" key={criterion.key}>
+                  <div className="criteria-label"><strong>{criterion.label}</strong><span>{Math.round(criterion.weight * 100)}%</span></div>
+                  {compareMarkets.map((market) => {
+                    const value = market.scores[criterion.key as keyof typeof market.scores];
+                    return <div className="criteria-value" key={market.code}><span style={{ width: `${value * 20}%` }} /><strong>{value}</strong></div>;
+                  })}
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {tab === "profiles" && (
+        <section className="profiles-layout">
+          <aside className="panel profile-nav">
+            <span className="section-kicker">COUNTRY PROFILES</span>
+            {data.markets.map((market) => (
+              <button key={market.code} type="button" className={selectedCode === market.code ? "active" : ""} onClick={() => chooseMarket(market.code)}>
+                <span>{market.code}</span><strong>{market.name_ru}</strong><small>{market.weighted_score.toFixed(2)}</small>
+              </button>
+            ))}
+          </aside>
+
+          <article className="panel profile-detail">
+            <div className="profile-hero">
+              <div><span className="section-kicker">{selected.region} · {selected.currency}</span><h2>{selected.name_ru}</h2><p>{selected.category}</p></div>
+              <div className="profile-score"><strong>{selected.weighted_score.toFixed(2)}</strong><span>из 5</span></div>
+            </div>
+            <div className="profile-grid">
+              <div><span>Источник спроса</span><p>{selected.profile.demand}</p></div>
+              <div><span>Приоритетная аудитория</span><p>{selected.profile.audience}</p></div>
+              <div><span>Сценарий</span><p>{selected.profile.use_case}</p></div>
+              <div><span>Главный барьер</span><p>{selected.profile.barrier}</p></div>
+              <div className="wide"><span>Рекомендуемый вход</span><p>{selected.profile.entry}</p></div>
+            </div>
+            <div className="numbers-strip">
+              <div><span>Переводы</span><strong>{formatMoney(selected.metrics.remittance_in_usd)}</strong><small>{selected.metrics.remittance_in_usd?.year}</small></div>
+              <div><span>Инфляция</span><strong>{selected.metrics.imf_weo.inflation_2025_pct.toFixed(1)}%</strong><small>IMF 2025</small></div>
+              <div><span>Account ownership</span><strong>{selected.metrics.findex_2024.account_ownership_pct.toFixed(1)}%</strong><small>Findex 2024</small></div>
+              <div><span>Crypto rank</span><strong>{selected.metrics.chainalysis_rank_2025 ? `#${selected.metrics.chainalysis_rank_2025}` : ">20"}</strong><small>Chainalysis 2025</small></div>
+            </div>
+            <div className="regulatory-section">
+              <div><span className="section-kicker">REGULATORY GATE</span><h3>{gateLabels[selected.regulatory.gate]}</h3><p>{selected.regulatory.status}</p></div>
+              <div className="source-chips">{selected.regulatory.source_ids.map((id) => <SourceLink key={id} sourceId={id} />)}</div>
+            </div>
+          </article>
+        </section>
+      )}
+
+      {tab === "competition" && (
+        <section className="panel benchmark-panel">
+          <div className="panel-heading">
+            <div>
+              <span className="section-kicker">PUBLIC PRICING BENCHMARKS</span>
+              <h2>Только опубликованные тарифы и лимиты</h2>
+              <p>Числа взяты из официальных help centers. Если тариф не раскрыт, он не оценивается.</p>
+            </div>
+            <span className="count-pill">{data.competitor_benchmarks.length} точек</span>
+          </div>
+          <div className="benchmark-grid">
+            {data.competitor_benchmarks.map((item, index) => {
+              const market = data.markets.find((entry) => entry.code === item.market_code);
+              const source = data.sources.find((entry) => entry.id === item.source_id);
+              return (
+                <article className="benchmark-card" key={`${item.provider}-${index}`}>
+                  <div className="benchmark-head">
+                    <span>{market?.name_ru ?? item.market_code}</span>
+                    <strong>{item.provider}</strong>
+                  </div>
+                  <p className="benchmark-product">{item.product}</p>
+                  <span className="benchmark-metric">{item.metric}</span>
+                  <h3>{item.value}</h3>
+                  {item.note && <p className="benchmark-note">{item.note}</p>}
+                  {source && <a href={source.url} target="_blank" rel="noreferrer">Официальные условия ↗</a>}
+                </article>
+              );
+            })}
+          </div>
+          <div className="benchmark-conclusion">
+            <strong>Что это означает для APS</strong>
+            <p>Сравнивать нужно effective cost полного сценария: funding → conversion → card/QR spend → cash-out. Headline «0%» без fair-use, FX и withdrawal cost недостаточен.</p>
+          </div>
+        </section>
+      )}
+
+      {tab === "data" && (
+        <section className="panel data-panel">
+          <div className="panel-heading">
+            <div><span className="section-kicker">RAW INDICATOR DATA</span><h2>Сопоставимые значения</h2><p>Каждая ячейка хранит год наблюдения; «—» означает, что источник не публикует показатель.</p></div>
+          </div>
+          <div className="table-scroll">
+            <table>
+              <thead><tr><th>Рынок</th><th>Балл</th><th>Входящие переводы</th><th>% ВВП</th><th>Население</th><th>Интернет</th><th>Account ownership</th><th>Digital payments</th><th>Smartphone</th><th>Инфляция 2025</th><th>Crypto rank</th></tr></thead>
+              <tbody>
+                {data.markets.map((market) => (
+                  <tr key={market.code} onClick={() => chooseMarket(market.code, "profiles")}>
+                    <td><strong>{market.name_ru}</strong><small>{market.code}</small></td>
+                    <td>{market.weighted_score.toFixed(2)}</td>
+                    <td>{formatMoney(market.metrics.remittance_in_usd)}<small>{market.metrics.remittance_in_usd?.year}</small></td>
+                    <td>{formatPct(market.metrics.remittance_pct_gdp)}<small>{market.metrics.remittance_pct_gdp?.year}</small></td>
+                    <td>{formatPeople(market.metrics.population)}<small>{market.metrics.population?.year}</small></td>
+                    <td>{market.metrics.internet_users_pct ? `${market.metrics.internet_users_pct.value.toFixed(1)}%` : "—"}<small>{market.metrics.internet_users_pct?.year}</small></td>
+                    <td>{market.metrics.findex_2024.account_ownership_pct.toFixed(1)}%<small>2024</small></td>
+                    <td>{market.metrics.findex_2024.digital_payment_pct == null ? "—" : `${market.metrics.findex_2024.digital_payment_pct.toFixed(1)}%`}<small>2024</small></td>
+                    <td>{market.metrics.findex_2024.smartphone_pct.toFixed(1)}%<small>2024</small></td>
+                    <td>{market.metrics.imf_weo.inflation_2025_pct.toFixed(1)}%<small>2025</small></td>
+                    <td>{market.metrics.chainalysis_rank_2025 ? `#${market.metrics.chainalysis_rank_2025}` : ">20"}<small>2025</small></td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </section>
+      )}
+
+      {tab === "method" && (
+        <section className="method-layout">
+          <article className="panel methodology-card">
+            <span className="section-kicker">METHODOLOGY</span>
+            <h2>Факты, оценки и gate не смешиваются</h2>
+            <div className="method-steps">
+              <div><span>01</span><strong>Фактический слой</strong><p>World Bank, Global Findex, IMF, Chainalysis и регуляторы. Год хранится рядом с каждым значением.</p></div>
+              <div><span>02</span><strong>Экспертные баллы</strong><p>Шесть баллов из исходного APS.docx сохранены как аналитические оценки; итог пересчитан по весам ТЗ.</p></div>
+              <div><span>03</span><strong>Регуляторный gate</strong><p>Отдельный статус показывает, возможен ли direct launch, нужен партнёр или допустим только fiat-wrapper.</p></div>
+            </div>
+            <div className="formula-box"><code>Σ (балл критерия × вес) = итог из 5</code><p>Пример: Филиппины = 5×25% + 5×20% + 5×15% + 3×15% + 4×15% + 5×10% = <strong>4,55</strong>.</p></div>
+          </article>
+
+          <article className="panel sources-card">
+            <div className="panel-heading compact"><div><span className="section-kicker">SOURCE REGISTER</span><h2>{data.sources.length} базовых источников</h2></div></div>
+            <div className="sources-list">
+              {data.sources.map((source) => (
+                <a key={source.id} href={source.url} target="_blank" rel="noreferrer">
+                  <span className="source-tier">{source.tier.replaceAll("_", " ")}</span>
+                  <strong>{source.title}</strong>
+                  <p>{source.publisher} · {source.period}</p>
+                  <small>Проверено {source.accessed} ↗</small>
+                </a>
+              ))}
+            </div>
+          </article>
+        </section>
+      )}
+
+      <footer>
+        <span>APS Market Intelligence · research workspace</span>
+        <span>Диагностический инструмент, не юридическое заключение</span>
+      </footer>
+    </main>
+  );
+}

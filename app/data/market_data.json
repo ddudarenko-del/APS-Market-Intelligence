@@ -1,0 +1,939 @@
+{
+  "metadata": {
+    "title": "APS Market Intelligence",
+    "updated": "2026-08-04",
+    "countries": 8,
+    "criteria": [
+      {
+        "key": "market",
+        "label": "Потенциал рынка",
+        "weight": 0.25
+      },
+      {
+        "key": "need",
+        "label": "Выраженность потребности",
+        "weight": 0.2
+      },
+      {
+        "key": "audience",
+        "label": "Потенциал аудиторий",
+        "weight": 0.15
+      },
+      {
+        "key": "competition",
+        "label": "Конкурентные возможности",
+        "weight": 0.15
+      },
+      {
+        "key": "access",
+        "label": "Доступность рынка",
+        "weight": 0.15
+      },
+      {
+        "key": "entry",
+        "label": "Возможность выхода",
+        "weight": 0.1
+      }
+    ],
+    "method_note": "Weighted score is recalculated exactly from the six source-document scores and the weights in the APS brief. Regulatory gate is shown separately and does not alter the arithmetic score."
+  },
+  "markets": [
+    {
+      "code": "PHL",
+      "name_ru": "Филиппины",
+      "name_en": "Philippines",
+      "region": "Юго-Восточная Азия",
+      "currency": "PHP",
+      "profile": {
+        "demand": "Семейные переводы и превращение зарубежного дохода в ежедневные деньги",
+        "audience": "OFW families, BPO/remote workers, freelancers и gaming/web3 аудитория",
+        "use_case": "Получить USD, сохранить часть и тратить PHP через QR, счета и карту",
+        "barrier": "Сильные GCash/Maya/Coins.ph и обязательная локальная BSP-инфраструктура",
+        "entry": "Remittance-first партнёрство с локальным EMI/VASP и QR Ph"
+      },
+      "scores": {
+        "market": 5,
+        "need": 5,
+        "audience": 5,
+        "competition": 3,
+        "access": 4,
+        "entry": 5
+      },
+      "weighted_score": 4.55,
+      "category": "Приоритетный для запуска",
+      "regulatory": {
+        "status": "Лицензируемые VASP/EMI",
+        "gate": "licensed_partner",
+        "score": 4,
+        "source_ids": [
+          "ph_bsp_vasp"
+        ]
+      },
+      "metrics": {
+        "population": {
+          "value": 116786962,
+          "year": 2025
+        },
+        "gdp_per_capita_usd": {
+          "value": 4170.72347271451,
+          "year": 2025
+        },
+        "internet_users_pct": {
+          "value": 67.26300914,
+          "year": 2024
+        },
+        "remittance_in_usd": {
+          "value": 41559641221.6247,
+          "year": 2025
+        },
+        "remittance_out_usd": {
+          "value": 293413287.718011,
+          "year": 2025
+        },
+        "remittance_pct_gdp": {
+          "value": 8.53229833446857,
+          "year": 2025
+        },
+        "findex_2024": {
+          "account_ownership_pct": 50.18,
+          "digital_payment_pct": 40.33,
+          "digital_merchant_payment_pct": 13.42,
+          "smartphone_pct": 69.0,
+          "recent_internet_use_pct": 70.71
+        },
+        "imf_weo": {
+          "inflation_2025_pct": 1.66,
+          "inflation_2026_forecast_pct": 4.27,
+          "real_gdp_growth_2025_pct": 4.4,
+          "real_gdp_growth_2026_forecast_pct": 4.07,
+          "gdp_per_capita_2025_usd": 4270.14
+        },
+        "chainalysis_rank_2025": 9,
+        "chainalysis_scope": 151
+      },
+      "metric_source_ids": [
+        "wb_api",
+        "wb_findex_2025",
+        "imf_weo_2026",
+        "chainalysis_2025"
+      ],
+      "rank": 1
+    },
+    {
+      "code": "ARG",
+      "name_ru": "Аргентина",
+      "name_en": "Argentina",
+      "region": "Латинская Америка",
+      "currency": "ARS",
+      "profile": {
+        "demand": "Сохранение стоимости, доступ к доллару и зарубежные доходы",
+        "audience": "Фрилансеры, exporters of services, предприниматели и путешественники",
+        "use_case": "Получить USD/USDC, хранить и конвертировать в ARS в момент расхода",
+        "barrier": "Высокая конкуренция и чувствительность к курсу, комиссии и доступности средств",
+        "entry": "PSAV-совместимая модель, интеграции с Deel/Upwork/Payoneer и локальный off-ramp"
+      },
+      "scores": {
+        "market": 5,
+        "need": 5,
+        "audience": 5,
+        "competition": 2,
+        "access": 4,
+        "entry": 5
+      },
+      "weighted_score": 4.4,
+      "category": "Приоритетный для запуска",
+      "regulatory": {
+        "status": "Регистрация PSAV",
+        "gate": "registration",
+        "score": 4,
+        "source_ids": [
+          "ar_cnv_psav"
+        ]
+      },
+      "metrics": {
+        "population": {
+          "value": 45851378,
+          "year": 2025
+        },
+        "gdp_per_capita_usd": {
+          "value": 14898.0885943842,
+          "year": 2025
+        },
+        "internet_users_pct": {
+          "value": 89.66715228,
+          "year": 2024
+        },
+        "remittance_in_usd": {
+          "value": 916447215.497399,
+          "year": 2025
+        },
+        "remittance_out_usd": {
+          "value": 837937016.120115,
+          "year": 2025
+        },
+        "remittance_pct_gdp": {
+          "value": 0.134160451487543,
+          "year": 2025
+        },
+        "findex_2024": {
+          "account_ownership_pct": 81.74,
+          "digital_payment_pct": 72.21,
+          "digital_merchant_payment_pct": 60.19,
+          "smartphone_pct": 67.77,
+          "recent_internet_use_pct": 88.13
+        },
+        "imf_weo": {
+          "inflation_2025_pct": 41.92,
+          "inflation_2026_forecast_pct": 30.36,
+          "real_gdp_growth_2025_pct": 4.37,
+          "real_gdp_growth_2026_forecast_pct": 3.5,
+          "gdp_per_capita_2025_usd": 14354.99
+        },
+        "chainalysis_rank_2025": 20,
+        "chainalysis_scope": 151
+      },
+      "metric_source_ids": [
+        "wb_api",
+        "wb_findex_2025",
+        "imf_weo_2026",
+        "chainalysis_2025"
+      ],
+      "rank": 2
+    },
+    {
+      "code": "COL",
+      "name_ru": "Колумбия",
+      "name_en": "Colombia",
+      "region": "Латинская Америка",
+      "currency": "COP",
+      "profile": {
+        "demand": "Зарубежные доходы, денежные переводы и dollar-linked savings",
+        "audience": "Фрилансеры, семьи с переводами из США/Испании и предприниматели",
+        "use_case": "Получать USD/EUR, хранить часть в stable-value balance и тратить в COP",
+        "barrier": "Криптоактивы не являются деньгами; сильный Littio и необходимость дешёвого off-ramp",
+        "entry": "Партнёрство с лицензированным платёжным/карточным провайдером"
+      },
+      "scores": {
+        "market": 5,
+        "need": 5,
+        "audience": 5,
+        "competition": 3,
+        "access": 3,
+        "entry": 5
+      },
+      "weighted_score": 4.4,
+      "category": "Приоритетный для запуска",
+      "regulatory": {
+        "status": "Нет отдельного режима",
+        "gate": "licensed_partner",
+        "score": 3,
+        "source_ids": [
+          "co_sfc_crypto",
+          "co_sfc_pilot"
+        ]
+      },
+      "metrics": {
+        "population": {
+          "value": 53425635,
+          "year": 2025
+        },
+        "gdp_per_capita_usd": {
+          "value": 8561.62091854449,
+          "year": 2025
+        },
+        "internet_users_pct": {
+          "value": 79.34543299,
+          "year": 2024
+        },
+        "remittance_in_usd": {
+          "value": 13129361534.8527,
+          "year": 2025
+        },
+        "remittance_out_usd": {
+          "value": 429158615.855671,
+          "year": 2025
+        },
+        "remittance_pct_gdp": {
+          "value": 2.87037024837972,
+          "year": 2025
+        },
+        "findex_2024": {
+          "account_ownership_pct": 57.06,
+          "digital_payment_pct": 49.23,
+          "digital_merchant_payment_pct": 26.12,
+          "smartphone_pct": 73.28,
+          "recent_internet_use_pct": 80.69
+        },
+        "imf_weo": {
+          "inflation_2025_pct": 5.14,
+          "inflation_2026_forecast_pct": 5.91,
+          "real_gdp_growth_2025_pct": 2.64,
+          "real_gdp_growth_2026_forecast_pct": 2.34,
+          "gdp_per_capita_2025_usd": 8622.57
+        },
+        "chainalysis_rank_2025": null,
+        "chainalysis_scope": 151
+      },
+      "metric_source_ids": [
+        "wb_api",
+        "wb_findex_2025",
+        "imf_weo_2026",
+        "chainalysis_2025"
+      ],
+      "rank": 3
+    },
+    {
+      "code": "MEX",
+      "name_ru": "Мексика",
+      "name_en": "Mexico",
+      "region": "Латинская Америка",
+      "currency": "MXN",
+      "profile": {
+        "demand": "Коридор США-Мексика, международные доходы и dollar-linked balance",
+        "audience": "Семьи с родственниками в США, freelancers, SMEs и digital nomads",
+        "use_case": "Получить USD, распределить семье, конвертировать и тратить в MXN",
+        "barrier": "Консервативная позиция регуляторов, сильные Bitso/ARQ и масштаб compliance",
+        "entry": "IFPE/банк или лицензированный партнёр; acquisition по обе стороны коридора"
+      },
+      "scores": {
+        "market": 5,
+        "need": 5,
+        "audience": 5,
+        "competition": 3,
+        "access": 2,
+        "entry": 4
+      },
+      "weighted_score": 4.15,
+      "category": "Приоритетный для запуска",
+      "regulatory": {
+        "status": "Ограниченный режим",
+        "gate": "ifpe_or_bank",
+        "score": 2,
+        "source_ids": [
+          "mx_cnbv_warning",
+          "mx_banxico_virtual_assets"
+        ]
+      },
+      "metrics": {
+        "population": {
+          "value": 131946900,
+          "year": 2025
+        },
+        "gdp_per_capita_usd": {
+          "value": 13889.2339628708,
+          "year": 2025
+        },
+        "internet_users_pct": {
+          "value": 83.12233799,
+          "year": 2024
+        },
+        "remittance_in_usd": {
+          "value": 64391618338,
+          "year": 2025
+        },
+        "remittance_out_usd": {
+          "value": 1182788565,
+          "year": 2025
+        },
+        "remittance_pct_gdp": {
+          "value": 3.51359625378134,
+          "year": 2025
+        },
+        "findex_2024": {
+          "account_ownership_pct": 53.03,
+          "digital_payment_pct": 41.39,
+          "digital_merchant_payment_pct": 25.95,
+          "smartphone_pct": 64.51,
+          "recent_internet_use_pct": 77.52
+        },
+        "imf_weo": {
+          "inflation_2025_pct": 3.82,
+          "inflation_2026_forecast_pct": 3.9,
+          "real_gdp_growth_2025_pct": 0.56,
+          "real_gdp_growth_2026_forecast_pct": 1.64,
+          "gdp_per_capita_2025_usd": 13741.3
+        },
+        "chainalysis_rank_2025": null,
+        "chainalysis_scope": 151
+      },
+      "metric_source_ids": [
+        "wb_api",
+        "wb_findex_2025",
+        "imf_weo_2026",
+        "chainalysis_2025"
+      ],
+      "rank": 4
+    },
+    {
+      "code": "GBR",
+      "name_ru": "Великобритания",
+      "name_en": "United Kingdom",
+      "region": "Европа",
+      "currency": "GBP",
+      "profile": {
+        "demand": "Международные доходы и трансграничные платежи",
+        "audience": "Мигранты, globally mobile специалисты, founders и crypto-native пользователи",
+        "use_case": "Получить международный доход, конвертировать и тратить из одного счёта",
+        "barrier": "Зрелые банки и сильные Wise/Revolut; новый режим FCA с 25.10.2027",
+        "entry": "FCA-ready партнёрская модель; cross-border продукт без crypto-first коммуникации"
+      },
+      "scores": {
+        "market": 4,
+        "need": 3,
+        "audience": 4,
+        "competition": 3,
+        "access": 3,
+        "entry": 4
+      },
+      "weighted_score": 3.5,
+      "category": "Перспективный для тестирования",
+      "regulatory": {
+        "status": "Переходный режим",
+        "gate": "partner_or_authorisation",
+        "score": 3,
+        "source_ids": [
+          "uk_fca_regime"
+        ]
+      },
+      "metrics": {
+        "population": {
+          "value": 69487000,
+          "year": 2025
+        },
+        "gdp_per_capita_usd": {
+          "value": 57601.9621201954,
+          "year": 2025
+        },
+        "internet_users_pct": {
+          "value": 95.4720993,
+          "year": 2024
+        },
+        "remittance_in_usd": {
+          "value": 5363775142.13541,
+          "year": 2025
+        },
+        "remittance_out_usd": {
+          "value": 13169401278.7287,
+          "year": 2025
+        },
+        "remittance_pct_gdp": {
+          "value": 0.134007690926395,
+          "year": 2025
+        },
+        "findex_2024": {
+          "account_ownership_pct": 99.28,
+          "digital_payment_pct": null,
+          "digital_merchant_payment_pct": null,
+          "smartphone_pct": 85.44,
+          "recent_internet_use_pct": 96.15
+        },
+        "imf_weo": {
+          "inflation_2025_pct": 3.37,
+          "inflation_2026_forecast_pct": 3.2,
+          "real_gdp_growth_2025_pct": 1.32,
+          "real_gdp_growth_2026_forecast_pct": 0.8,
+          "gdp_per_capita_2025_usd": 57608.21
+        },
+        "chainalysis_rank_2025": 11,
+        "chainalysis_scope": 151
+      },
+      "metric_source_ids": [
+        "wb_api",
+        "wb_findex_2025",
+        "imf_weo_2026",
+        "chainalysis_2025"
+      ],
+      "rank": 5
+    },
+    {
+      "code": "IDN",
+      "name_ru": "Индонезия",
+      "name_en": "Indonesia",
+      "region": "Юго-Восточная Азия",
+      "currency": "IDR",
+      "profile": {
+        "demand": "Международные доходы, creators и инвестиционный интерес к crypto",
+        "audience": "Фрилансеры, digital creators, cross-border sellers и путешественники",
+        "use_case": "Global income account с локальным IDR payment layer",
+        "barrier": "Crypto регулируется как финансовый актив, а платежи требуют отдельной BI-инфраструктуры",
+        "entry": "Локальный банк/PJP, IDR-карта и интеграция с e-wallet инфраструктурой"
+      },
+      "scores": {
+        "market": 5,
+        "need": 3,
+        "audience": 4,
+        "competition": 3,
+        "access": 2,
+        "entry": 3
+      },
+      "weighted_score": 3.5,
+      "category": "Перспективный для тестирования",
+      "regulatory": {
+        "status": "OJK регулирует торговлю активами",
+        "gate": "fiat_wrapper_only",
+        "score": 2,
+        "source_ids": [
+          "id_ojk_transition",
+          "id_ojk_2026"
+        ]
+      },
+      "metrics": {
+        "population": {
+          "value": 285721236,
+          "year": 2025
+        },
+        "gdp_per_capita_usd": {
+          "value": 5059.62596411213,
+          "year": 2025
+        },
+        "internet_users_pct": {
+          "value": 72.78075544,
+          "year": 2024
+        },
+        "remittance_in_usd": {
+          "value": 17601348404.982,
+          "year": 2025
+        },
+        "remittance_out_usd": {
+          "value": 11675040087.4911,
+          "year": 2025
+        },
+        "remittance_pct_gdp": {
+          "value": 1.2175449587467,
+          "year": 2025
+        },
+        "findex_2024": {
+          "account_ownership_pct": 56.33,
+          "digital_payment_pct": 42.69,
+          "digital_merchant_payment_pct": 13.6,
+          "smartphone_pct": 73.74,
+          "recent_internet_use_pct": 70.46
+        },
+        "imf_weo": {
+          "inflation_2025_pct": 1.91,
+          "inflation_2026_forecast_pct": 2.99,
+          "real_gdp_growth_2025_pct": 5.11,
+          "real_gdp_growth_2026_forecast_pct": 4.95,
+          "gdp_per_capita_2025_usd": 5082.44
+        },
+        "chainalysis_rank_2025": 7,
+        "chainalysis_scope": 151
+      },
+      "metric_source_ids": [
+        "wb_api",
+        "wb_findex_2025",
+        "imf_weo_2026",
+        "chainalysis_2025"
+      ],
+      "rank": 6
+    },
+    {
+      "code": "VNM",
+      "name_ru": "Вьетнам",
+      "name_en": "Vietnam",
+      "region": "Юго-Восточная Азия",
+      "currency": "VND",
+      "profile": {
+        "demand": "Международные доходы и высокая криптоактивность",
+        "audience": "IT-фрилансеры, digital professionals и международные продавцы",
+        "use_case": "Регулируемый fiat cross-border account; blockchain только как backend",
+        "barrier": "Признание цифровых активов и пилот торговли не равны разрешению retail stablecoin payments",
+        "entry": "Только через лицензированных локальных участников и расчёты в разрешённой валюте"
+      },
+      "scores": {
+        "market": 5,
+        "need": 4,
+        "audience": 4,
+        "competition": 3,
+        "access": 1,
+        "entry": 2
+      },
+      "weighted_score": 3.45,
+      "category": "Перспективный для тестирования",
+      "regulatory": {
+        "status": "Закон + пилот рынка активов",
+        "gate": "fiat_wrapper_only",
+        "score": 1,
+        "source_ids": [
+          "vn_digital_assets_law",
+          "vn_crypto_pilot"
+        ]
+      },
+      "metrics": {
+        "population": {
+          "value": 101598527,
+          "year": 2025
+        },
+        "gdp_per_capita_usd": {
+          "value": 5065.99091899299,
+          "year": 2025
+        },
+        "internet_users_pct": {
+          "value": 84.15,
+          "year": 2024
+        },
+        "remittance_in_usd": null,
+        "remittance_out_usd": null,
+        "remittance_pct_gdp": null,
+        "findex_2024": {
+          "account_ownership_pct": 70.55,
+          "digital_payment_pct": 62.38,
+          "digital_merchant_payment_pct": 51.13,
+          "smartphone_pct": 85.44,
+          "recent_internet_use_pct": 87.88
+        },
+        "imf_weo": {
+          "inflation_2025_pct": 3.31,
+          "inflation_2026_forecast_pct": 4.86,
+          "real_gdp_growth_2025_pct": 8.02,
+          "real_gdp_growth_2026_forecast_pct": 7.1,
+          "gdp_per_capita_2025_usd": 4829.38
+        },
+        "chainalysis_rank_2025": 4,
+        "chainalysis_scope": 151
+      },
+      "metric_source_ids": [
+        "wb_api",
+        "wb_findex_2025",
+        "imf_weo_2026",
+        "chainalysis_2025"
+      ],
+      "rank": 7
+    },
+    {
+      "code": "CAN",
+      "name_ru": "Канада",
+      "name_en": "Canada",
+      "region": "Северная Америка",
+      "currency": "CAD",
+      "profile": {
+        "demand": "USD/CAD и международные платежи, а не защита от девальвации",
+        "audience": "Новые иммигранты, remote workers, международный малый бизнес",
+        "use_case": "Получать USD и тратить/переводить в CAD с прозрачной конвертацией",
+        "barrier": "Высокое доверие к банкам и слабая массовая причина менять обычный счёт",
+        "entry": "Партнёрства с payroll, immigration и accounting платформами"
+      },
+      "scores": {
+        "market": 3,
+        "need": 3,
+        "audience": 3,
+        "competition": 3,
+        "access": 4,
+        "entry": 3
+      },
+      "weighted_score": 3.15,
+      "category": "Нишевой",
+      "regulatory": {
+        "status": "Федеральный режим stablecoin",
+        "gate": "authorisation",
+        "score": 4,
+        "source_ids": [
+          "ca_boc_stablecoins",
+          "ca_boc_rpaa"
+        ]
+      },
+      "metrics": {
+        "population": {
+          "value": 41651653,
+          "year": 2025
+        },
+        "gdp_per_capita_usd": {
+          "value": 55697.6639660837,
+          "year": 2025
+        },
+        "internet_users_pct": {
+          "value": 94.353302,
+          "year": 2024
+        },
+        "remittance_in_usd": {
+          "value": 834011822.892797,
+          "year": 2025
+        },
+        "remittance_out_usd": {
+          "value": 15114971734.9237,
+          "year": 2025
+        },
+        "remittance_pct_gdp": {
+          "value": 0.0359503385795271,
+          "year": 2025
+        },
+        "findex_2024": {
+          "account_ownership_pct": 98.4,
+          "digital_payment_pct": null,
+          "digital_merchant_payment_pct": null,
+          "smartphone_pct": 84.06,
+          "recent_internet_use_pct": 95.05
+        },
+        "imf_weo": {
+          "inflation_2025_pct": 2.08,
+          "inflation_2026_forecast_pct": 2.54,
+          "real_gdp_growth_2025_pct": 1.74,
+          "real_gdp_growth_2026_forecast_pct": 1.5,
+          "gdp_per_capita_2025_usd": 55764.71
+        },
+        "chainalysis_rank_2025": null,
+        "chainalysis_scope": 151
+      },
+      "metric_source_ids": [
+        "wb_api",
+        "wb_findex_2025",
+        "imf_weo_2026",
+        "chainalysis_2025"
+      ],
+      "rank": 8
+    }
+  ],
+  "competitor_benchmarks": [
+    {
+      "market_code": "GBR",
+      "provider": "Wise",
+      "product": "Debit card / cross-border account",
+      "metric": "Card order / ATM allowance",
+      "value": "£7; ATM до £250/мес. бесплатно, затем 2,69% на превышение",
+      "source_id": "wise_uk_card_fees"
+    },
+    {
+      "market_code": "GBR",
+      "provider": "Revolut",
+      "product": "Crypto-linked virtual card",
+      "metric": "Crypto-spend fee / limits",
+      "value": "0 exchange fee*; 100 обменов/24ч; ATM £3 000/24ч; £100 000/операцию",
+      "note": "*Возможен fair-usage fee по плану.",
+      "source_id": "revolut_uk_crypto_card"
+    },
+    {
+      "market_code": "PHL",
+      "provider": "Coins.ph",
+      "product": "PHP/crypto wallet",
+      "metric": "Cash-out fees",
+      "value": "InstaPay ₱10; personal PESONet бесплатно; OTC ₱105 до ₱10 тыс. или 1,6% выше",
+      "source_id": "coins_ph_cash_fees"
+    },
+    {
+      "market_code": "PHL",
+      "provider": "Coins.ph",
+      "product": "Verified wallet / QR Ph",
+      "metric": "Limits / merchant fee",
+      "value": "Identity verified: вывод до ₱1 млн/день; merchant payment QR Ph — 0",
+      "source_id": "coins_ph_limits",
+      "secondary_source_id": "coins_ph_qrph"
+    },
+    {
+      "market_code": "ARG",
+      "provider": "Lemon",
+      "product": "Investment orders",
+      "metric": "Buy/sell commission",
+      "value": "0,5% за операцию; заявлено без maintenance/subscription fee",
+      "source_id": "lemon_arg_fees"
+    }
+  ],
+  "sources": [
+    {
+      "id": "wb_api",
+      "title": "World Development Indicators API",
+      "publisher": "World Bank",
+      "period": "2019-2025",
+      "url": "https://api.worldbank.org/v2/",
+      "accessed": "2026-08-04",
+      "tier": "primary_dataset"
+    },
+    {
+      "id": "wb_findex_2025",
+      "title": "Global Findex Database 2025",
+      "publisher": "World Bank",
+      "period": "Survey year 2024",
+      "url": "https://www.worldbank.org/en/publication/globalfindex/download-data",
+      "accessed": "2026-08-04",
+      "tier": "primary_dataset"
+    },
+    {
+      "id": "imf_weo_2026",
+      "title": "World Economic Outlook Database, April 2026",
+      "publisher": "International Monetary Fund",
+      "period": "April 2026 vintage",
+      "url": "https://data.imf.org/Datasets/WEO",
+      "accessed": "2026-08-04",
+      "tier": "primary_dataset"
+    },
+    {
+      "id": "chainalysis_2025",
+      "title": "2025 Global Crypto Adoption Index",
+      "publisher": "Chainalysis",
+      "period": "2025",
+      "url": "https://www.chainalysis.com/blog/2025-global-crypto-adoption-index/",
+      "accessed": "2026-08-04",
+      "tier": "industry_methodology"
+    },
+    {
+      "id": "uk_fca_regime",
+      "title": "A new regime for cryptoasset regulation",
+      "publisher": "Financial Conduct Authority",
+      "period": "Updated 2026-07-22",
+      "url": "https://www.fca.org.uk/firms/new-regime-cryptoasset-regulation",
+      "accessed": "2026-08-04",
+      "tier": "regulator"
+    },
+    {
+      "id": "ca_boc_stablecoins",
+      "title": "Stablecoins: supervising stablecoin issuers",
+      "publisher": "Bank of Canada",
+      "period": "2026",
+      "url": "https://www.bankofcanada.ca/regulatory-oversight/stablecoins/",
+      "accessed": "2026-08-04",
+      "tier": "regulator"
+    },
+    {
+      "id": "ca_boc_rpaa",
+      "title": "Criteria for registering payment service providers",
+      "publisher": "Bank of Canada",
+      "period": "Updated 2026-06-29",
+      "url": "https://www.bankofcanada.ca/2026/06/criteria-for-registering-payment-service-providers/",
+      "accessed": "2026-08-04",
+      "tier": "regulator"
+    },
+    {
+      "id": "ar_cnv_psav",
+      "title": "Registro de Proveedores de Servicios de Activos Virtuales - FAQ",
+      "publisher": "Comision Nacional de Valores",
+      "period": "2025-04-24",
+      "url": "https://www.argentina.gob.ar/sites/default/files/psav_preguntas_frecuentes_24.04.2025_.pdf",
+      "accessed": "2026-08-04",
+      "tier": "regulator"
+    },
+    {
+      "id": "co_sfc_crypto",
+      "title": "Que son los activos digitales o criptoactivos?",
+      "publisher": "Superintendencia Financiera de Colombia",
+      "period": "Updated 2026-06-11",
+      "url": "https://www.superfinanciera.gov.co/publicaciones/10115324/que-son-los-activos-digitales-o-criptoactivos/",
+      "accessed": "2026-08-04",
+      "tier": "regulator"
+    },
+    {
+      "id": "co_sfc_pilot",
+      "title": "Cierre del piloto de cash-in/cash-out de criptoactivos",
+      "publisher": "Superintendencia Financiera de Colombia",
+      "period": "2024-06-27",
+      "url": "https://www.superfinanciera.gov.co/publicaciones/10115218/superfinanciera-presenta-balance-del-cierre-del-piloto-en-el-que-se-probaron-operaciones-en-productos-de-deposito-a-nombre-de-plataformas-de-criptoactivos/",
+      "accessed": "2026-08-04",
+      "tier": "regulator"
+    },
+    {
+      "id": "vn_digital_assets_law",
+      "title": "Law on Digital Technology Industry No. 71/2025/QH15",
+      "publisher": "National Assembly of Vietnam",
+      "period": "Effective 2026-01-01",
+      "url": "https://chinhphu.vn/?classid=1&docid=214609&pageid=27160&typegroupid=3",
+      "accessed": "2026-08-04",
+      "tier": "law"
+    },
+    {
+      "id": "vn_crypto_pilot",
+      "title": "Resolution 05/2025/NQ-CP on piloting the crypto asset market",
+      "publisher": "Government of Vietnam",
+      "period": "2025-09-09",
+      "url": "https://xaydungchinhsach.chinhphu.vn/toan-van-nghi-quyet-so-5-2025-nq-cp-ve-trien-khai-thi-diem-thi-truong-tai-san-ma-hoa-tai-viet-nam-119250909184045221.htm",
+      "accessed": "2026-08-04",
+      "tier": "law"
+    },
+    {
+      "id": "id_ojk_transition",
+      "title": "Transfer of digital financial asset and crypto supervision to OJK and BI",
+      "publisher": "OJK / Bank Indonesia / Bappebti",
+      "period": "2025-01-10",
+      "url": "https://www.ojk.go.id/id/berita-dan-kegiatan/siaran-pers/Pages/Bappebti-Kemendag-Alihkan-Tugas-Aset-Keuangan-Digital-termasuk-Aset-Kripto-serta-Derivatif-Keuangan-kepada-OJK-dan-BI.aspx",
+      "accessed": "2026-08-04",
+      "tier": "regulator"
+    },
+    {
+      "id": "id_ojk_2026",
+      "title": "May 2026 Board of Commissioners Meeting",
+      "publisher": "Otoritas Jasa Keuangan",
+      "period": "April 2026 data",
+      "url": "https://iru.ojk.go.id/iru/WebSite/ArticleList/View/1014_May_2026_Board_of_Commissioners_Meeting%3A_Financial_Services_Sector_Stability_Maintained_Amid_Increasing_Pressures_on_Global_Economic_Performance",
+      "accessed": "2026-08-04",
+      "tier": "regulator"
+    },
+    {
+      "id": "ph_bsp_vasp",
+      "title": "List of Virtual Asset Service Providers",
+      "publisher": "Bangko Sentral ng Pilipinas",
+      "period": "As of 2025-10-15",
+      "url": "https://www.bsp.gov.ph/lists/directories/attachments/19/vasp.pdf",
+      "accessed": "2026-08-04",
+      "tier": "regulator"
+    },
+    {
+      "id": "mx_cnbv_warning",
+      "title": "Banco de Mexico, SHCP y CNBV advierten sobre riesgos de utilizar activos virtuales",
+      "publisher": "CNBV / Banco de Mexico / SHCP",
+      "period": "2021-06-28; checked 2026-08-04",
+      "url": "https://www.gob.mx/cnbv/articulos/banco-de-mexico-shcp-y-cnbv-advierten-sobre-riesgos-de-utilizar-activos-virtuales-275831",
+      "accessed": "2026-08-04",
+      "tier": "regulator"
+    },
+    {
+      "id": "mx_banxico_virtual_assets",
+      "title": "Acciones regulatorias sobre activos virtuales",
+      "publisher": "Banco de Mexico",
+      "period": "Current framework checked 2026-08-04",
+      "url": "https://www.banxico.org.mx/sistemas-de-pago/6--acciones-regulatorias-po.html",
+      "accessed": "2026-08-04",
+      "tier": "regulator"
+    },
+    {
+      "id": "wise_uk_card_fees",
+      "title": "Pricing for the Wise debit card",
+      "publisher": "Wise",
+      "period": "Current pricing checked 2026-08-04",
+      "url": "https://wise.com/gb/pricing/card-fees",
+      "accessed": "2026-08-04",
+      "tier": "official_product_terms"
+    },
+    {
+      "id": "revolut_uk_crypto_card",
+      "title": "Crypto payment fees, rates, and limits",
+      "publisher": "Revolut UK",
+      "period": "Current terms checked 2026-08-04",
+      "url": "https://help.revolut.com/help/wealth/cryptocurrencies/crypto-payments/what-are-the-fees-for-crypto-transactions-using-my-revolut-card/",
+      "accessed": "2026-08-04",
+      "tier": "official_product_terms"
+    },
+    {
+      "id": "coins_ph_cash_fees",
+      "title": "Coins.ph Cash In and Cash Out Fees",
+      "publisher": "Coins.ph",
+      "period": "Updated 2025-08-07",
+      "url": "https://support.coins.ph/hc/en-us/articles/28522311646617-Coins-ph-Cash-In-and-Cash-Out-Fees",
+      "accessed": "2026-08-04",
+      "tier": "official_product_terms"
+    },
+    {
+      "id": "coins_ph_limits",
+      "title": "Cash-out minimums, maximums and verification limits",
+      "publisher": "Coins.ph",
+      "period": "Updated 2025-06-23",
+      "url": "https://support.coins.ph/hc/en-us/articles/212611088-Is-there-a-minimum-maximum-amount-for-cashing-out",
+      "accessed": "2026-08-04",
+      "tier": "official_product_terms"
+    },
+    {
+      "id": "coins_ph_qrph",
+      "title": "What is QR Ph?",
+      "publisher": "Coins.ph",
+      "period": "Current terms checked 2026-08-04",
+      "url": "https://support.coins.ph/hc/en-us/articles/13216802514073-What-is-QR-Ph",
+      "accessed": "2026-08-04",
+      "tier": "official_product_terms"
+    },
+    {
+      "id": "lemon_arg_fees",
+      "title": "Comisiones y precio de ejecucion",
+      "publisher": "Lemon Argentina",
+      "period": "Published 2026-05-05",
+      "url": "https://help.lemon.me/es/articles/14979054-cuales-son-las-comisiones-y-a-que-precio-se-ejecuta-mi-orden",
+      "accessed": "2026-08-04",
+      "tier": "official_product_terms"
+    }
+  ]
+}
