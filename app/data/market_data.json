@@ -714,7 +714,7 @@
       "provider": "Coins.ph",
       "product": "Verified wallet / QR Ph",
       "metric": "Limits / merchant fee",
-      "value": "Identity verified: вывод до ₱1 млн/день; merchant payment QR Ph — 0",
+      "value": "Identity verified: вывод до ₱1 млн/день; merchant payment QR Ph: 0",
       "source_id": "coins_ph_limits",
       "secondary_source_id": "coins_ph_qrph"
     },

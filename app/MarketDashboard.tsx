@@ -1,22 +1,11 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import data from "./data/market_data.json";
 
 type Tab = "overview" | "compare" | "profiles" | "competition" | "data" | "method";
 type MetricValue = { value: number; year: number } | null;
 type Market = (typeof data.markets)[number];
-
-const markerPositions: Record<string, { x: number; y: number }> = {
-  CAN: { x: 19, y: 28 },
-  MEX: { x: 23, y: 54 },
-  COL: { x: 31, y: 67 },
-  ARG: { x: 36, y: 85 },
-  GBR: { x: 49, y: 30 },
-  VNM: { x: 83, y: 56 },
-  PHL: { x: 89, y: 59 },
-  IDN: { x: 83, y: 72 },
-};
 
 const tabLabels: Array<{ id: Tab; label: string }> = [
   { id: "overview", label: "Обзор" },
@@ -37,19 +26,19 @@ const gateLabels: Record<string, string> = {
 };
 
 function formatMoney(metric: MetricValue) {
-  if (!metric) return "—";
+  if (!metric) return "нет данных";
   const billions = metric.value / 1_000_000_000;
   if (billions >= 1) return `$${billions.toLocaleString("ru-RU", { maximumFractionDigits: 1 })} млрд`;
   return `$${(metric.value / 1_000_000).toLocaleString("ru-RU", { maximumFractionDigits: 0 })} млн`;
 }
 
 function formatPct(metric: MetricValue) {
-  if (!metric) return "—";
+  if (!metric) return "нет данных";
   return `${metric.value.toLocaleString("ru-RU", { maximumFractionDigits: 2 })}%`;
 }
 
 function formatPeople(metric: MetricValue) {
-  if (!metric) return "—";
+  if (!metric) return "нет данных";
   return `${(metric.value / 1_000_000).toLocaleString("ru-RU", { maximumFractionDigits: 1 })} млн`;
 }
 
@@ -68,6 +57,143 @@ function SourceLink({ sourceId }: { sourceId: string }) {
   );
 }
 
+function MarketMap({
+  selectedCode,
+  visibleCodes,
+  onSelect,
+}: {
+  selectedCode: string;
+  visibleCodes: string[];
+  onSelect: (code: string) => void;
+}) {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const mapRef = useRef<any>(null);
+  const layerRef = useRef<any>(null);
+  const onSelectRef = useRef(onSelect);
+  const [mapStatus, setMapStatus] = useState<"loading" | "ready" | "error">("loading");
+
+  useEffect(() => {
+    onSelectRef.current = onSelect;
+  }, [onSelect]);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    async function initialiseMap() {
+      if (!containerRef.current || mapRef.current) return;
+      try {
+        const leafletModule = await import("leaflet");
+        if (cancelled || !containerRef.current) return;
+        const L = leafletModule.default;
+        const map = L.map(containerRef.current, {
+          center: [18, 8],
+          zoom: 2,
+          minZoom: 2,
+          maxZoom: 6,
+          zoomControl: false,
+          worldCopyJump: true,
+          attributionControl: true,
+        });
+        mapRef.current = map;
+        L.control.zoom({ position: "topright" }).addTo(map);
+        L.tileLayer("https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png", {
+          attribution: "&copy; OpenStreetMap contributors &copy; CARTO",
+          subdomains: "abcd",
+          maxZoom: 20,
+        }).addTo(map);
+
+        const response = await fetch("/data/countries.geojson");
+        if (!response.ok) throw new Error("Country geometry unavailable");
+        const geometry = await response.json();
+        if (cancelled) return;
+
+        const marketByCode = new Map(data.markets.map((market) => [market.code, market]));
+        const layer = L.geoJSON(geometry, {
+          style: (feature: any) => {
+            const code = feature?.properties?.ADM0_A3;
+            const market = marketByCode.get(code);
+            return {
+              color: market ? "#7b8a82" : "#303a35",
+              weight: market ? 1.2 : 0.55,
+              fillColor: market ? "#1e6b43" : "#111713",
+              fillOpacity: market ? 0.82 : 0.52,
+            };
+          },
+          onEachFeature: (feature: any, countryLayer: any) => {
+            const code = feature?.properties?.ADM0_A3;
+            const market = marketByCode.get(code);
+            if (!market) return;
+            countryLayer.bindTooltip(
+              `<strong>${market.name_ru}</strong><br>${market.weighted_score.toFixed(2)} / 5`,
+              { sticky: true, direction: "top", className: "aps-map-tooltip" },
+            );
+            countryLayer.on("click", () => onSelectRef.current(code));
+          },
+        }).addTo(map);
+        layerRef.current = layer;
+        map.fitBounds([[-56, -168], [76, 178]], { padding: [12, 12] });
+        setMapStatus("ready");
+      } catch {
+        setMapStatus("error");
+      }
+    }
+
+    initialiseMap();
+    return () => {
+      cancelled = true;
+      if (mapRef.current) {
+        mapRef.current.remove();
+        mapRef.current = null;
+        layerRef.current = null;
+      }
+    };
+  }, []);
+
+  useEffect(() => {
+    const layer = layerRef.current;
+    if (!layer) return;
+    const visibleSet = new Set(visibleCodes);
+    layer.eachLayer((countryLayer: any) => {
+      const code = countryLayer.feature?.properties?.ADM0_A3;
+      const market = data.markets.find((item) => item.code === code);
+      if (!market) return;
+      const visible = visibleSet.has(code);
+      const selected = code === selectedCode;
+      const fillColor = selected
+        ? "#40f785"
+        : market.weighted_score >= 4
+          ? "#29a865"
+          : market.weighted_score >= 3.2
+            ? "#197a49"
+            : "#155c3a";
+      countryLayer.setStyle({
+        color: selected ? "#d9ffe7" : "#82948a",
+        weight: selected ? 2.4 : 1.2,
+        fillColor,
+        fillOpacity: visible ? (selected ? 1 : 0.86) : 0.16,
+      });
+    });
+  }, [selectedCode, visibleCodes]);
+
+  function resetView() {
+    mapRef.current?.fitBounds([[-56, -168], [76, 178]], { padding: [12, 12] });
+  }
+
+  return (
+    <div className="map-frame">
+      <div ref={containerRef} className="real-map" aria-label="Интерактивная карта рынков APS" />
+      {mapStatus === "loading" && <div className="map-state">Загружаем границы стран...</div>}
+      {mapStatus === "error" && <div className="map-state error">Карта временно недоступна</div>}
+      <button type="button" className="map-reset" onClick={resetView}>Весь мир</button>
+      <div className="atlas-legend">
+        <span><i className="dot high" /> 4,0+</span>
+        <span><i className="dot mid" /> 3,2-3,99</span>
+        <span><i className="dot low" /> ниже 3,2</span>
+      </div>
+    </div>
+  );
+}
+
 export function MarketDashboard() {
   const [tab, setTab] = useState<Tab>("overview");
   const [selectedCode, setSelectedCode] = useState("PHL");
@@ -80,11 +206,6 @@ export function MarketDashboard() {
   const compareMarkets = compareCodes
     .map((code) => data.markets.find((market) => market.code === code))
     .filter(Boolean) as Market[];
-
-  const maxRemittance = useMemo(
-    () => Math.max(...data.markets.map((market) => market.metrics.remittance_in_usd?.value ?? 0)),
-    [],
-  );
 
   function chooseMarket(code: string, nextTab?: Tab) {
     setSelectedCode(code);
@@ -103,12 +224,12 @@ export function MarketDashboard() {
     <main className="app-shell">
       <header className="hero">
         <div className="hero-topline">
-          <span className="eyebrow">APS / MARKET INTELLIGENCE</span>
-          <span className="update-stamp">Данные проверены · 04.08.2026</span>
+          <img className="aps-logo" src="/brand/aps-logo.svg" alt="APS" />
+          <span className="update-stamp">Market Intelligence / данные проверены 04.08.2026</span>
         </div>
         <div className="hero-grid">
           <div>
-            <h1>Где APS может выиграть — и на каких условиях</h1>
+            <h1>Где APS может выиграть и на каких условиях</h1>
             <p>
               Восемь рынков, шесть критериев и единый слой фактических данных для
               crypto-linked payments, управления цифровыми активами и карт.
@@ -151,41 +272,17 @@ export function MarketDashboard() {
               <div>
                 <span className="section-kicker">MARKET ATLAS</span>
                 <h2>Восемь рынков в одном поле</h2>
-                <p>Размер маркера отражает входящие переводы; цвет — взвешенный балл.</p>
+                <p>Цвет страны отражает взвешенный балл. Нажмите на страну, чтобы открыть её показатели.</p>
               </div>
               <select value={region} onChange={(event) => setRegion(event.target.value)} aria-label="Фильтр по региону">
                 {regions.map((item) => <option key={item}>{item}</option>)}
               </select>
             </div>
-            <div className="atlas" aria-label="Схематичная карта восьми рынков">
-              <div className="atlas-label americas">AMERICAS</div>
-              <div className="atlas-label europe">EUROPE</div>
-              <div className="atlas-label asia">ASIA-PACIFIC</div>
-              {visibleMarkets.map((market) => {
-                const pos = markerPositions[market.code];
-                const volume = market.metrics.remittance_in_usd?.value ?? 0;
-                const size = 44 + Math.sqrt(volume / maxRemittance) * 26;
-                const tone = market.weighted_score >= 4 ? "high" : market.weighted_score >= 3.2 ? "mid" : "low";
-                return (
-                  <button
-                    key={market.code}
-                    type="button"
-                    className={`map-marker ${tone} ${selectedCode === market.code ? "selected" : ""}`}
-                    style={{ left: `${pos.x}%`, top: `${pos.y}%`, width: size, height: size }}
-                    onClick={() => chooseMarket(market.code)}
-                    aria-label={`${market.name_ru}, балл ${market.weighted_score}`}
-                  >
-                    <span>{market.code}</span>
-                    <small>{market.weighted_score.toFixed(2)}</small>
-                  </button>
-                );
-              })}
-              <div className="atlas-legend">
-                <span><i className="dot high" /> 4,0+</span>
-                <span><i className="dot mid" /> 3,2–3,99</span>
-                <span><i className="dot low" /> &lt;3,2</span>
-              </div>
-            </div>
+            <MarketMap
+              selectedCode={selectedCode}
+              visibleCodes={visibleMarkets.map((market) => market.code)}
+              onSelect={chooseMarket}
+            />
             <div className="selected-market">
               <div>
                 <span className="section-kicker">ВЫБРАННЫЙ РЫНОК</span>
@@ -259,9 +356,9 @@ export function MarketDashboard() {
                   <ScoreBadge score={market.weighted_score} />
                 </div>
                 <div className="metric-stack">
-                  <div><span>Входящие переводы</span><strong>{formatMoney(market.metrics.remittance_in_usd)}</strong><small>{market.metrics.remittance_in_usd?.year ?? "—"}</small></div>
-                  <div><span>Переводы / ВВП</span><strong>{formatPct(market.metrics.remittance_pct_gdp)}</strong><small>{market.metrics.remittance_pct_gdp?.year ?? "—"}</small></div>
-                  <div><span>Население</span><strong>{formatPeople(market.metrics.population)}</strong><small>{market.metrics.population?.year ?? "—"}</small></div>
+                  <div><span>Входящие переводы</span><strong>{formatMoney(market.metrics.remittance_in_usd)}</strong><small>{market.metrics.remittance_in_usd?.year ?? "нет данных"}</small></div>
+                  <div><span>Переводы / ВВП</span><strong>{formatPct(market.metrics.remittance_pct_gdp)}</strong><small>{market.metrics.remittance_pct_gdp?.year ?? "нет данных"}</small></div>
+                  <div><span>Население</span><strong>{formatPeople(market.metrics.population)}</strong><small>{market.metrics.population?.year ?? "нет данных"}</small></div>
                   <div><span>Account ownership</span><strong>{market.metrics.findex_2024.account_ownership_pct.toFixed(1)}%</strong><small>Findex 2024</small></div>
                   <div><span>Smartphone</span><strong>{market.metrics.findex_2024.smartphone_pct.toFixed(1)}%</strong><small>Findex 2024</small></div>
                   <div><span>Crypto adoption</span><strong>{market.metrics.chainalysis_rank_2025 ? `#${market.metrics.chainalysis_rank_2025}` : "вне top-20"}</strong><small>из 151 стран</small></div>
@@ -364,7 +461,7 @@ export function MarketDashboard() {
       {tab === "data" && (
         <section className="panel data-panel">
           <div className="panel-heading">
-            <div><span className="section-kicker">RAW INDICATOR DATA</span><h2>Сопоставимые значения</h2><p>Каждая ячейка хранит год наблюдения; «—» означает, что источник не публикует показатель.</p></div>
+            <div><span className="section-kicker">RAW INDICATOR DATA</span><h2>Сопоставимые значения</h2><p>Каждая ячейка хранит год наблюдения. «Нет данных» означает, что источник не публикует показатель.</p></div>
           </div>
           <div className="table-scroll">
             <table>
@@ -377,9 +474,9 @@ export function MarketDashboard() {
                     <td>{formatMoney(market.metrics.remittance_in_usd)}<small>{market.metrics.remittance_in_usd?.year}</small></td>
                     <td>{formatPct(market.metrics.remittance_pct_gdp)}<small>{market.metrics.remittance_pct_gdp?.year}</small></td>
                     <td>{formatPeople(market.metrics.population)}<small>{market.metrics.population?.year}</small></td>
-                    <td>{market.metrics.internet_users_pct ? `${market.metrics.internet_users_pct.value.toFixed(1)}%` : "—"}<small>{market.metrics.internet_users_pct?.year}</small></td>
+                    <td>{market.metrics.internet_users_pct ? `${market.metrics.internet_users_pct.value.toFixed(1)}%` : "нет данных"}<small>{market.metrics.internet_users_pct?.year}</small></td>
                     <td>{market.metrics.findex_2024.account_ownership_pct.toFixed(1)}%<small>2024</small></td>
-                    <td>{market.metrics.findex_2024.digital_payment_pct == null ? "—" : `${market.metrics.findex_2024.digital_payment_pct.toFixed(1)}%`}<small>2024</small></td>
+                    <td>{market.metrics.findex_2024.digital_payment_pct == null ? "нет данных" : `${market.metrics.findex_2024.digital_payment_pct.toFixed(1)}%`}<small>2024</small></td>
                     <td>{market.metrics.findex_2024.smartphone_pct.toFixed(1)}%<small>2024</small></td>
                     <td>{market.metrics.imf_weo.inflation_2025_pct.toFixed(1)}%<small>2025</small></td>
                     <td>{market.metrics.chainalysis_rank_2025 ? `#${market.metrics.chainalysis_rank_2025}` : ">20"}<small>2025</small></td>
