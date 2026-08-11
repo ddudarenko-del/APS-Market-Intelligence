@@ -883,7 +883,7 @@
   "competition_availability": {
     "checked_at": "2026-08-11",
     "reference_product": "KAST",
-    "reference_note": "KAST используется как продуктовый эталон и не включён в число конкурентов.",
+    "reference_note": "KAST используется как продуктовый эталон для Product Fit и одновременно включён в конкурентную матрицу как прямой конкурент APS.",
     "definitions": {
       "full": "Доступны сервис/аккаунт и выпуск карты для резидента рынка.",
       "partial": "Доступен аккаунт, exchange, переводы или иной ключевой сервис, но карта в стране не выпускается.",
@@ -1026,6 +1026,24 @@
     ]
   },
   "market_competitors": [
+    {
+      "provider": "KAST",
+      "profile": "Прямой · продуктовый эталон",
+      "product": "Global USD account, stablecoin deposits, global/local payouts и виртуальная/физическая Visa card",
+      "evidence": "KAST заявляет более 1 млн пользователей и около $5 млрд annualized volume. Официальная география доставки физической карты подтверждает присутствие в шести из восьми исследуемых рынков; по Филиппинам и Канаде публичных данных недостаточно для подтверждения KYC-доступа и выпуска виртуальной карты.",
+      "public_terms": "Standard: $0 в год; первые две виртуальные карты бесплатно; физическая карта бесплатно + $40 доставка; USD spend 0%; non-USD FX 0,5–1,75%.",
+      "source_ids": ["kast_series_a_2026", "kast_crypto_card", "kast_card_fees_2026", "kast_physical_card_shipping_2026", "kast_country_availability_2026"],
+      "availability": {
+        "PHL": { "status": "unconfirmed", "account": null, "card": false, "note": "Филиппины отсутствуют в официальном списке доставки физической карты. KAST не публикует открытый список стран KYC/виртуальной карты, поэтому доступность аккаунта и виртуальной карты не подтверждена.", "source_ids": ["kast_physical_card_shipping_2026", "kast_country_availability_2026"] },
+        "ARG": { "status": "full", "account": true, "card": true, "note": "Аргентина включена в официальный список доставки физической карты; карта выпускается из KYC-аккаунта KAST, виртуальная версия создаётся в приложении.", "source_ids": ["kast_physical_card_shipping_2026", "kast_crypto_card", "kast_account_creation_2026"] },
+        "COL": { "status": "full", "account": true, "card": true, "note": "Колумбия включена в официальный список доставки физической карты; карта выпускается из KYC-аккаунта KAST, виртуальная версия создаётся в приложении.", "source_ids": ["kast_physical_card_shipping_2026", "kast_crypto_card", "kast_account_creation_2026"] },
+        "MEX": { "status": "full", "account": true, "card": true, "note": "Мексика включена в официальный список доставки физической карты; карта выпускается из KYC-аккаунта KAST, виртуальная версия создаётся в приложении.", "source_ids": ["kast_physical_card_shipping_2026", "kast_crypto_card", "kast_account_creation_2026"] },
+        "GBR": { "status": "full", "account": true, "card": true, "note": "Великобритания включена в официальный список доставки физической карты; карта выпускается из KYC-аккаунта KAST, виртуальная версия создаётся в приложении.", "source_ids": ["kast_physical_card_shipping_2026", "kast_crypto_card", "kast_account_creation_2026"] },
+        "IDN": { "status": "full", "account": true, "card": true, "note": "Индонезия включена в официальный список доставки физической карты; карта выпускается из KYC-аккаунта KAST, виртуальная версия создаётся в приложении.", "source_ids": ["kast_physical_card_shipping_2026", "kast_crypto_card", "kast_account_creation_2026"] },
+        "VNM": { "status": "full", "account": true, "card": true, "note": "Вьетнам включён в официальный список доставки физической карты; карта выпускается из KYC-аккаунта KAST, виртуальная версия создаётся в приложении.", "source_ids": ["kast_physical_card_shipping_2026", "kast_crypto_card", "kast_account_creation_2026"] },
+        "CAN": { "status": "unconfirmed", "account": null, "card": false, "note": "Канада отсутствует в официальном списке доставки физической карты. KAST не публикует открытый список стран KYC/виртуальной карты, поэтому доступность аккаунта и виртуальной карты не подтверждена.", "source_ids": ["kast_physical_card_shipping_2026", "kast_country_availability_2026"] }
+      }
+    },
     {
       "provider": "RedotPay",
       "profile": "Прямой",
@@ -1559,6 +1577,33 @@
       "publisher": "KAST",
       "period": "Current product page checked 2026-08-11",
       "url": "https://www.kast.xyz/crypto-cards",
+      "accessed": "2026-08-11",
+      "tier": "official_product_terms"
+    },
+    {
+      "id": "kast_physical_card_shipping_2026",
+      "title": "What countries do you ship physical cards to?",
+      "publisher": "KAST",
+      "period": "Updated 2026-01-06",
+      "url": "https://concierge.kast.xyz/hc/en-us/articles/11308656152079-What-countries-do-you-ship-physical-cards-to",
+      "accessed": "2026-08-11",
+      "tier": "official_product_terms"
+    },
+    {
+      "id": "kast_country_availability_2026",
+      "title": "Is the KAST Card Available in My Country?",
+      "publisher": "KAST",
+      "period": "Updated 2026-01-31",
+      "url": "https://concierge.kast.xyz/hc/en-us/articles/13939999566095-Is-the-KAST-Card-Available-in-My-Country",
+      "accessed": "2026-08-11",
+      "tier": "official_product_terms"
+    },
+    {
+      "id": "kast_account_creation_2026",
+      "title": "How Do I Create a KAST Account?",
+      "publisher": "KAST",
+      "period": "Updated 2026-01-04",
+      "url": "https://concierge.kast.xyz/hc/en-us/articles/11634471645199-How-Do-I-Create-a-KAST-Account",
       "accessed": "2026-08-11",
       "tier": "official_product_terms"
     },

@@ -728,7 +728,7 @@ export function MarketDashboard() {
             <span className="count-pill">{data.market_competitors.length} конкурентов · {data.markets.length} рынков</span>
           </div>
           <div className="reference-note">
-            <strong>{data.competition_availability.reference_product} — продуктовый эталон</strong>
+            <strong>{data.competition_availability.reference_product} — эталон и прямой конкурент</strong>
             <span>{data.competition_availability.reference_note}</span>
           </div>
           <div className="availability-legend" aria-label="Обозначения доступности">
