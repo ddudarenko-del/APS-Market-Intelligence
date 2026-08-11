@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import data from "./data/market_data.json";
 
-type Tab = "overview" | "kastfit" | "barriers" | "compare" | "profiles" | "competition" | "data" | "method";
+type Tab = "overview" | "kastfit" | "barriers" | "acquisition" | "compare" | "profiles" | "competition" | "data" | "method";
 type ScoreMode = "aps" | "kast";
 type BarrierSort = "balance" | "driver" | "barrier";
 type MetricValue = { value: number; year: number } | null;
@@ -24,6 +24,7 @@ const tabLabels: Array<{ id: Tab; label: string }> = [
   { id: "overview", label: "Обзор" },
   { id: "kastfit", label: "KAST / Product Fit" },
   { id: "barriers", label: "Барьеры и драйверы" },
+  { id: "acquisition", label: "Каналы привлечения" },
   { id: "compare", label: "Сравнение" },
   { id: "profiles", label: "Профили рынков" },
   { id: "competition", label: "Конкуренты / тарифы" },
@@ -311,6 +312,7 @@ export function MarketDashboard() {
     .map((code) => data.markets.find((market) => market.code === code))
     .filter(Boolean) as Market[];
   const selectedKastFit = getKastFit(selected);
+  const selectedAcquisition = data.acquisition_channels.rows.find((row) => row.market_code === selected.code) ?? data.acquisition_channels.rows[0];
   const kastRanking = [...data.markets]
     .map((market) => ({ market, fit: getKastFit(market) }))
     .sort((a, b) => b.fit.score - a.fit.score);
@@ -622,6 +624,75 @@ export function MarketDashboard() {
               );
             })}
           </div>
+        </section>
+      )}
+
+      {tab === "acquisition" && (
+        <section className="acquisition-layout">
+          <article className="panel acquisition-summary">
+            <div className="panel-heading">
+              <div>
+                <span className="section-kicker">CATEGORY ACQUISITION PLAYBOOK</span>
+                <h2>Какие каналы способны привести первых пользователей</h2>
+                <p>Локальный digital reach, реальные механики конкурентов и практический вывод для нового KAST-подобного игрока.</p>
+              </div>
+              <span className="independent-badge">Не влияет на рейтинг</span>
+            </div>
+            <div className="acquisition-method-note">
+              <strong>Методология</strong>
+              <p>{data.acquisition_channels.method_note}</p>
+            </div>
+          </article>
+
+          <div className="acquisition-market-picker" aria-label="Выбор рынка для анализа каналов">
+            {data.markets.map((market) => (
+              <button key={market.code} type="button" className={selected.code === market.code ? "active" : ""} onClick={() => chooseMarket(market.code)}>
+                <span>{market.code}</span>{market.name_ru}
+              </button>
+            ))}
+          </div>
+
+          <article className="panel acquisition-country">
+            <div className="acquisition-country-head">
+              <div>
+                <span className="section-kicker">{selected.code} · {selected.region}</span>
+                <h2>{selected.name_ru}</h2>
+                <p>{selectedAcquisition.entry_mix}</p>
+              </div>
+              <div className="acquisition-source-date">Проверено<br /><strong>{data.acquisition_channels.checked_at}</strong></div>
+            </div>
+
+            <div className="acquisition-reach-grid">
+              <div><span>Internet users</span><strong>{selectedAcquisition.digital_reach.internet_users_m.toLocaleString("ru-RU")} млн</strong><small>январь 2025</small></div>
+              <div><span>Social identities</span><strong>{selectedAcquisition.digital_reach.social_identities_m.toLocaleString("ru-RU")} млн</strong><small>{selectedAcquisition.digital_reach.social_pct_population.toLocaleString("ru-RU")}% населения</small></div>
+              <div><span>Facebook ads</span><strong>{selectedAcquisition.digital_reach.facebook_ad_m.toLocaleString("ru-RU")} млн</strong><small>potential audience</small></div>
+              <div><span>YouTube ads</span><strong>{selectedAcquisition.digital_reach.youtube_ad_m.toLocaleString("ru-RU")} млн</strong><small>potential audience</small></div>
+              <div><span>TikTok ads 18+</span><strong>{selectedAcquisition.digital_reach.tiktok_adult_ad_m.toLocaleString("ru-RU")} млн</strong><small>potential audience</small></div>
+            </div>
+
+            <div className="acquisition-channels-heading">
+              <div><span className="section-kicker">CHANNEL POTENTIAL</span><h3>Приоритетный mix для запуска</h3></div>
+              <p>Оценка 1–5 используется только внутри этой вкладки для сравнения каналов.</p>
+            </div>
+            <div className="acquisition-channel-grid">
+              {selectedAcquisition.channels.map((channel, index) => (
+                <article className="acquisition-channel-card" key={channel.channel}>
+                  <div className="acquisition-channel-topline">
+                    <span>0{index + 1}</span>
+                    <div className="channel-importance" aria-label={`Важность канала ${channel.importance} из 5`}>
+                      {Array.from({ length: 5 }, (_, item) => <i key={item} className={item < channel.importance ? "filled" : ""} />)}
+                    </div>
+                    <strong>{channel.importance_label}</strong>
+                  </div>
+                  <h4>{channel.channel}</h4>
+                  <div className="channel-reach"><span>Масштаб / контекст</span><p>{channel.reach}</p></div>
+                  <div className="channel-example"><span>Пример конкурента</span><strong>{channel.competitor}</strong><p>{channel.example}</p></div>
+                  <div className="channel-playbook"><span>Как использовать новому игроку</span><p>{channel.playbook}</p></div>
+                  <div className="source-chips">{channel.source_ids.map((id) => <SourceLink key={id} sourceId={id} />)}</div>
+                </article>
+              ))}
+            </div>
+          </article>
         </section>
       )}
 

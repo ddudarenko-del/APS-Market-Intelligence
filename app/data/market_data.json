@@ -1025,6 +1025,92 @@
       }
     ]
   },
+  "acquisition_channels": {
+    "checked_at": "2026-08-11",
+    "method_note": "Вкладка не влияет на APS-рейтинг, KAST / Product Fit или оценки барьеров. Важность канала 1–5 является экспертной оценкой только для планирования acquisition: учитываются доступный цифровой охват, подтверждённое использование конкурентами и соответствие категории. Social-media identities и рекламные аудитории платформ не равны уникальным людям и используются как индикатор масштаба канала.",
+    "rows": [
+      {
+        "market_code": "PHL",
+        "entry_mix": "Creator-led social + referral loop + партнёрство в remittance / freelancer ecosystem.",
+        "digital_reach": { "internet_users_m": 97.5, "social_identities_m": 90.8, "social_pct_population": 78.0, "youtube_ad_m": 57.7, "facebook_ad_m": 90.8, "tiktok_adult_ad_m": 62.3, "source_id": "datareportal_ph_2025" },
+        "channels": [
+          { "channel": "Social video и creators", "category": "social_creator", "importance": 5, "importance_label": "Ключевой", "reach": "Facebook 90,8 млн; TikTok 18+ 62,3 млн; YouTube 57,7 млн рекламной аудитории.", "competitor": "Coins.ph", "example": "Coins.ph развивает публичную affiliate-программу для creators, communities и publishers, то есть использует внешнюю дистрибуцию контента как измеримый acquisition-канал.", "playbook": "Начинать с Tagalog/English creators вокруг OFW, freelancing и everyday money; оплачивать verified KYC / first funded account, а не просмотры.", "source_ids": ["datareportal_ph_2025", "coins_affiliate_2026"] },
+          { "channel": "Referral внутри продукта", "category": "referral", "importance": 5, "importance_label": "Ключевой", "reach": "Канал опирается на доверие внутри семей, рабочих и crypto-сообществ.", "competitor": "Coins.ph", "example": "У Coins.ph действует отдельная referral-механика с вознаграждением за приглашённых пользователей и их квалифицирующие действия.", "playbook": "Двусторонняя награда после KYC и первой международной выплаты; отдельные коды для OFW families и BPO-команд.", "source_ids": ["coins_referral_2026"] },
+          { "channel": "Embedded partnerships", "category": "partnership", "importance": 5, "importance_label": "Ключевой", "reach": "Особенно релевантен рынку с $41,6 млрд входящих переводов.", "competitor": "Coins.ph + Higlobe", "example": "Coins.ph и Higlobe запустили связку для более дешёвых и быстрых выплат филиппинским freelancers, встраивая acquisition в существующий поток международного дохода.", "playbook": "Искать payroll, EOR, freelancer marketplaces и remittance-провайдеров; давать партнёру совместный onboarding и attribution.", "source_ids": ["coins_higlobe_2026", "wb_api"] }
+        ]
+      },
+      {
+        "market_code": "ARG",
+        "entry_mix": "Referral-first + social proof вокруг digital USD + партнёрские финансовые продукты.",
+        "digital_reach": { "internet_users_m": 41.2, "social_identities_m": 32.2, "social_pct_population": 70.3, "youtube_ad_m": 32.2, "facebook_ad_m": 29.1, "tiktok_adult_ad_m": 24.4, "source_id": "datareportal_arg_2025" },
+        "channels": [
+          { "channel": "Social video и product education", "category": "social_creator", "importance": 5, "importance_label": "Ключевой", "reach": "YouTube 32,2 млн; Facebook 29,1 млн; TikTok 18+ 24,4 млн рекламной аудитории.", "competitor": "Lemon", "example": "Lemon ведёт локальные Instagram и TikTok-каналы и публикует сценарии использования карты, crypto и зарубежных денег для аргентинской аудитории.", "playbook": "Коммуникация должна начинаться не с crypto, а с понятных сценариев: получить USD, сохранить стоимость и потратить в ARS.", "source_ids": ["datareportal_arg_2025", "lemon_social_arg_2026"] },
+          { "channel": "Referral внутри продукта", "category": "referral", "importance": 5, "importance_label": "Ключевой", "reach": "Высокий потенциал в product-led категории, где доверие и подтверждение резервов критичны.", "competitor": "Lemon", "example": "Lemon поддерживает отдельный referral-раздел и процесс приглашения пользователей в аргентинском продукте.", "playbook": "Запускать reward только после ARS on-ramp / первой траты; показывать обеим сторонам статус выполнения условий.", "source_ids": ["lemon_referral_2026"] },
+          { "channel": "Финансовые партнёрства", "category": "partnership", "importance": 4, "importance_label": "Высокий", "reach": "Партнёр даёт доверие, локальные rails и доступ к уже сформированной аудитории.", "competitor": "Lemon + Banco Galicia / Fima", "example": "Lemon интегрировала доходность в песо через фонды Fima группы Galicia, расширяя продукт через локальную финансовую инфраструктуру.", "playbook": "Приоритет партнёрам с ARS rails, payroll и exporter-of-services аудиторией; совместный продукт сильнее отдельной бренд-кампании.", "source_ids": ["lemon_galicia_2026"] }
+        ]
+      },
+      {
+        "market_code": "COL",
+        "entry_mix": "Segmented creator funnels + social video + доверие через платёжных и банковских партнёров.",
+        "digital_reach": { "internet_users_m": 41.1, "social_identities_m": 36.8, "social_pct_population": 69.2, "youtube_ad_m": 30.6, "facebook_ad_m": 36.8, "tiktok_adult_ad_m": 32.0, "source_id": "datareportal_col_2025" },
+        "channels": [
+          { "channel": "Social video", "category": "social_creator", "importance": 5, "importance_label": "Ключевой", "reach": "Facebook 36,8 млн; TikTok 18+ 32,0 млн; YouTube 30,6 млн рекламной аудитории.", "competitor": "Littio", "example": "Littio поддерживает отдельную landing page для influencers и creators, связывая продукт с международными доходами аудитории.", "playbook": "Строить creator briefs вокруг USD-дохода, remote work и travel; вести на отдельные сегментные страницы с локальным COP-примером.", "source_ids": ["datareportal_col_2025", "littio_creators_2026"] },
+          { "channel": "Контент и segment landing pages", "category": "content_search", "importance": 4, "importance_label": "Высокий", "reach": "Работает на аудитории с явным намерением: студенты, freelancers, получатели US wires.", "competitor": "Littio", "example": "Littio публикует пошаговый Colombia guide и отдельные страницы под получение международных переводов и обучение за рубежом.", "playbook": "Создать локальные страницы под US payroll, postgraduate students, freelancers и family remittance; измерять funded account по каждой теме.", "source_ids": ["littio_colombia_guide_2026"] },
+          { "channel": "Платёжные партнёрства", "category": "partnership", "importance": 5, "importance_label": "Ключевой", "reach": "Партнёрство одновременно решает доверие, acceptance и дистрибуцию.", "competitor": "Littio + Mastercard", "example": "Littio использовала партнёрство с Mastercard для вывода digital-dollar продукта в повседневный карточный сценарий в Колумбии.", "playbook": "Публично выводить issuer / network partner в коммуникацию и строить совместные merchant offers после подтверждения retention.", "source_ids": ["littio_partners_2023"] }
+        ]
+      },
+      {
+        "market_code": "MEX",
+        "entry_mix": "KOL + referral + high-intent education вокруг SPEI и US–Mexico corridor.",
+        "digital_reach": { "internet_users_m": 110.0, "social_identities_m": 93.0, "social_pct_population": 70.7, "youtube_ad_m": 83.6, "facebook_ad_m": 93.0, "tiktok_adult_ad_m": 85.4, "source_id": "datareportal_mex_2025" },
+        "channels": [
+          { "channel": "KOL и social video", "category": "social_creator", "importance": 5, "importance_label": "Ключевой", "reach": "Facebook 93,0 млн; TikTok 18+ 85,4 млн; YouTube 83,6 млн рекламной аудитории.", "competitor": "Bitso", "example": "Bitso Onchain публикует отдельные условия KOL partnerships, подтверждая формализованную работу с opinion leaders как acquisition-каналом.", "playbook": "Использовать finance / remittance KOL с trackable link; обязательны локальные risk disclosures и оптимизация по funded SPEI account.", "source_ids": ["datareportal_mex_2025", "bitso_kol_2026"] },
+          { "channel": "Referral внутри продукта", "category": "referral", "importance": 5, "importance_label": "Ключевой", "reach": "Подходит массовому mobile-продукту с сильным word of mouth и повторяющимися переводами.", "competitor": "Bitso", "example": "Bitso ведёт локальную referral-кампанию с отдельной страницей условий и персональными ссылками приглашения.", "playbook": "Вознаграждать не регистрацию, а первый SPEI deposit и повторную транзакцию; ограничивать fraud через device и payment checks.", "source_ids": ["bitso_referral_2026"] },
+          { "channel": "Education и organic search", "category": "content_search", "importance": 4, "importance_label": "Высокий", "reach": "Канал ловит намерение по вопросам SPEI, deposits, withdrawals и легальности продукта.", "competitor": "Bitso", "example": "Bitso публикует отдельный практический материал How to Use Bitso in Mexico с локальными депозитами и выводами.", "playbook": "Строить SEO / paid-search связку вокруг recibir dólares, SPEI, tarjeta global и comisiones; вести на сценарий, а не на общий homepage.", "source_ids": ["bitso_mexico_guide_2026"] }
+        ]
+      },
+      {
+        "market_code": "GBR",
+        "entry_mix": "Affiliate / referral + co-branded distribution; mass paid social только после доказанной unit economics.",
+        "digital_reach": { "internet_users_m": 67.8, "social_identities_m": 54.8, "social_pct_population": 79.0, "youtube_ad_m": 54.8, "facebook_ad_m": 38.3, "tiktok_adult_ad_m": 24.8, "source_id": "datareportal_gbr_2025" },
+        "channels": [
+          { "channel": "Affiliate и referral", "category": "affiliate_referral", "importance": 4, "importance_label": "Высокий", "reach": "Wirex ведёт отдельные UK terms; канал можно контролировать по CPA и qualifying actions.", "competitor": "Wirex", "example": "Wirex поддерживает UK refer-a-friend promotion и отдельный раздел refer-a-friend and affiliate.", "playbook": "Ограничить партнёров regulated-finance publishers и payroll / expat communities; оплачивать активированную карту и первый перевод.", "source_ids": ["wirex_referral_uk_2026", "wirex_affiliate_2026"] },
+          { "channel": "YouTube и paid social", "category": "paid_social", "importance": 4, "importance_label": "Высокий", "reach": "YouTube 54,8 млн; Facebook 38,3 млн; TikTok 18+ 24,8 млн рекламной аудитории.", "competitor": "Wirex", "example": "Wirex использует promo-led acquisition и landing pages под конкретные UK offers, а не только общий продуктовый сайт.", "playbook": "Тестировать narrow cohorts: expats, remote workers, crypto card users; creative должен вести с FX / cross-border benefit и FCA-safe copy.", "source_ids": ["datareportal_gbr_2025", "wirex_referral_uk_2026"] },
+          { "channel": "Co-branded / B2B2C partnerships", "category": "partnership", "importance": 5, "importance_label": "Ключевой", "reach": "Даёт доступ к существующей клиентской базе без прямой конкуренции с банками за каждый install.", "competitor": "Wirex", "example": "Wirex отдельно предлагает co-branded Visa cards powered by stablecoins для партнёрских брендов.", "playbook": "Приоритет payroll, travel, creator economy и fintech platforms; APS предоставляет account/card stack, партнёр — аудиторию и use case.", "source_ids": ["wirex_cobranded_2026"] }
+        ]
+      },
+      {
+        "market_code": "IDN",
+        "entry_mix": "Education-led community + referral + gaming / creator partnerships.",
+        "digital_reach": { "internet_users_m": 212.0, "social_identities_m": 143.0, "social_pct_population": 50.2, "youtube_ad_m": 143.0, "facebook_ad_m": 122.0, "tiktok_adult_ad_m": 108.0, "source_id": "datareportal_idn_2025" },
+        "channels": [
+          { "channel": "Education и community", "category": "education_community", "importance": 5, "importance_label": "Ключевой", "reach": "YouTube 143 млн; Facebook 122 млн; TikTok 18+ 108 млн рекламной аудитории.", "competitor": "Pintu Academy", "example": "Pintu развивает Academy с бесплатными crypto-классами, beginner guides и локальными образовательными материалами.", "playbook": "Сначала объяснять legal fiat-wrapper, безопасность и IDR flow; собирать community в Bahasa Indonesia до масштабирования performance.", "source_ids": ["datareportal_idn_2025", "pintu_academy_2026"] },
+          { "channel": "Referral внутри продукта", "category": "referral", "importance": 5, "importance_label": "Ключевой", "reach": "Referral встроен в локальный продукт и усиливается временными commission campaigns.", "competitor": "Pintu", "example": "Pintu поддерживает постоянную referral-программу и отдельные кампании с повышенной комиссией за приглашения.", "playbook": "Награждать после KYC и первой IDR-funded операции; локальные лимиты и antifraud должны быть частью механики с первого дня.", "source_ids": ["pintu_referral_2026"] },
+          { "channel": "Gaming и creator partnerships", "category": "partnership", "importance": 4, "importance_label": "Высокий", "reach": "Канал соединяет молодую mobile-аудиторию, communities и measurable referral code.", "competitor": "Pintu + RRQ Guild", "example": "Pintu запускала отдельную referral-активацию с RRQ Guild и вознаграждением для аудитории gaming-community.", "playbook": "Выбирать communities с финансовым / creator-income use case; тестировать один партнёрский cohort и удержание до широкого sponsorship.", "source_ids": ["pintu_rrq_2026"] }
+        ]
+      },
+      {
+        "market_code": "VNM",
+        "entry_mix": "Ambassadors + education/community + ecosystem partnerships; paid acquisition только в разрешённом продуктовом периметре.",
+        "digital_reach": { "internet_users_m": 79.8, "social_identities_m": 76.2, "social_pct_population": 75.2, "youtube_ad_m": 62.3, "facebook_ad_m": 76.2, "tiktok_adult_ad_m": 40.9, "source_id": "datareportal_vnm_2025" },
+        "channels": [
+          { "channel": "Ambassadors и KOL", "category": "ambassador", "importance": 5, "importance_label": "Ключевой", "reach": "Facebook 76,2 млн; YouTube 62,3 млн; TikTok 18+ 40,9 млн рекламной аудитории.", "competitor": "Coin98 Titans", "example": "Coin98 запустила формализованную Global Ambassador programme Titans для локальных лидеров сообществ и контент-активностей.", "playbook": "Набирать небольшую группу проверенных Vietnamese educators; KPI — qualified waitlist / KYC после разрешения, а не vanity reach.", "source_ids": ["datareportal_vnm_2025", "coin98_titans_2026"] },
+          { "channel": "Community events и education", "category": "education_community", "importance": 5, "importance_label": "Ключевой", "reach": "Высокий crypto adoption делает доверие сообщества важнее generic financial advertising.", "competitor": "Coin98", "example": "Coin98 проводит собственные community gatherings и публикует итоги локальных встреч, связывая продукт с активным сообществом.", "playbook": "Проводить small-format workshops по cross-border income и разрешённому fiat use case; legal messaging проверять до публикации.", "source_ids": ["coin98_community_2026", "chainalysis_2025"] },
+          { "channel": "Ecosystem / developer partnerships", "category": "partnership", "importance": 4, "importance_label": "Высокий", "reach": "Партнёрский канал создаёт раннюю аудиторию builders и crypto power users.", "competitor": "Coin98 + Solana ecosystem", "example": "Coin98 co-sponsored Vietnam Regional Track в Solana Season Hackathon, используя developer ecosystem как distribution и brand channel.", "playbook": "Работать с payroll, freelancer и developer communities; не позиционировать hackathon-аудиторию как весь mass market.", "source_ids": ["coin98_solana_hackathon_2026"] }
+        ]
+      },
+      {
+        "market_code": "CAN",
+        "entry_mix": "Targeted referral / affiliate + trusted partnerships; массовый brand spend вторичен из-за слабой базовой боли.",
+        "digital_reach": { "internet_users_m": 38.0, "social_identities_m": 31.7, "social_pct_population": 79.4, "youtube_ad_m": 31.7, "facebook_ad_m": 23.9, "tiktok_adult_ad_m": 12.9, "source_id": "datareportal_can_2025" },
+        "channels": [
+          { "channel": "Referral внутри продукта", "category": "referral", "importance": 4, "importance_label": "Высокий", "reach": "Подходит для regulated product, где личное доверие снижает friction регистрации.", "competitor": "Crypto.com Canada", "example": "Crypto.com публикует отдельную канадскую referral-программу для app users.", "playbook": "Таргетировать newcomers, remote workers и international SMEs; reward после проверки и первой CAD / USD операции.", "source_ids": ["cryptocom_referral_can_2026"] },
+          { "channel": "Affiliate publishers", "category": "affiliate_referral", "importance": 4, "importance_label": "Высокий", "reach": "Позволяет покупать measurable traffic в finance / crypto media без широкого охвата всего рынка.", "competitor": "Crypto.com", "example": "Crypto.com ведёт отдельную affiliate-программу для publishers и creators с commission-based моделью.", "playbook": "Использовать только compliant partners, сравнивающих FX, cards и cross-border accounts; KPI — approved account и retained balance.", "source_ids": ["cryptocom_affiliate_2026"] },
+          { "channel": "Brand video и sports partnerships", "category": "brand_sponsorship", "importance": 3, "importance_label": "Поддерживающий", "reach": "YouTube 31,7 млн; Facebook 23,9 млн; TikTok 18+ 12,9 млн рекламной аудитории.", "competitor": "Crypto.com", "example": "Crypto.com использует глобальные brand campaigns и sports partnerships для массовой известности, поверх performance и referral механик.", "playbook": "Для нового игрока не начинать со sponsorship: сначала доказать нишевой use case и CAC/LTV, затем использовать brand video для доверия.", "source_ids": ["datareportal_can_2025", "cryptocom_brand_campaign_2026", "cryptocom_partners_2026"] }
+        ]
+      }
+    ]
+  },
   "market_competitors": [
     {
       "provider": "KAST",
@@ -2155,6 +2241,294 @@
       "url": "https://nssc.novascotia.ca/before-you-invest/why-did-binance-exit-canada",
       "accessed": "2026-08-11",
       "tier": "regulator_primary"
+    },
+    {
+      "id": "datareportal_ph_2025",
+      "title": "Digital 2025: The Philippines",
+      "publisher": "DataReportal / Kepios",
+      "period": "January 2025",
+      "url": "https://datareportal.com/reports/digital-2025-philippines",
+      "accessed": "2026-08-11",
+      "tier": "industry_dataset"
+    },
+    {
+      "id": "coins_affiliate_2026",
+      "title": "Coins.ph Affiliate Program",
+      "publisher": "Coins.ph",
+      "period": "Checked 2026-08-11",
+      "url": "https://www.coins.ph/en-ph/affiliates",
+      "accessed": "2026-08-11",
+      "tier": "official_acquisition_program"
+    },
+    {
+      "id": "coins_referral_2026",
+      "title": "Coins.ph Referral Program Rewards",
+      "publisher": "Coins.ph Help Center",
+      "period": "Checked 2026-08-11",
+      "url": "https://support.coins.ph/hc/en-us/articles/27351503467801-Coins-ph-Referral-Program-Rewards",
+      "accessed": "2026-08-11",
+      "tier": "official_acquisition_program"
+    },
+    {
+      "id": "coins_higlobe_2026",
+      "title": "Coins.ph and Higlobe unlock payments for Filipino freelancers",
+      "publisher": "Coins.ph",
+      "period": "Checked 2026-08-11",
+      "url": "https://www.coins.ph/en-ph/blog/coins-ph-and-higlobe-unlock-faster-fairer-payments-for-filipino-freelancers",
+      "accessed": "2026-08-11",
+      "tier": "official_partnership"
+    },
+    {
+      "id": "datareportal_arg_2025",
+      "title": "Digital 2025: Argentina",
+      "publisher": "DataReportal / Kepios",
+      "period": "January 2025",
+      "url": "https://datareportal.com/reports/digital-2025-argentina",
+      "accessed": "2026-08-11",
+      "tier": "industry_dataset"
+    },
+    {
+      "id": "lemon_social_arg_2026",
+      "title": "Lemon official Instagram channel",
+      "publisher": "Lemon",
+      "period": "Checked 2026-08-11",
+      "url": "https://www.instagram.com/lemoncash.app/",
+      "accessed": "2026-08-11",
+      "tier": "official_social_channel"
+    },
+    {
+      "id": "lemon_referral_2026",
+      "title": "Lemon referral programme",
+      "publisher": "Lemon Help Center",
+      "period": "Checked 2026-08-11",
+      "url": "https://help.lemon.me/es/articles/11420040-en-que-consiste-el-programa-de-referidos",
+      "accessed": "2026-08-11",
+      "tier": "official_acquisition_program"
+    },
+    {
+      "id": "lemon_galicia_2026",
+      "title": "Lemon launches peso yield with Galicia's Fima funds",
+      "publisher": "Lemon",
+      "period": "Checked 2026-08-11",
+      "url": "https://lemon.me/en/blog/rendimiento-pesos-fondos-fima-galicia",
+      "accessed": "2026-08-11",
+      "tier": "official_partnership"
+    },
+    {
+      "id": "datareportal_col_2025",
+      "title": "Digital 2025: Colombia",
+      "publisher": "DataReportal / Kepios",
+      "period": "January 2025",
+      "url": "https://datareportal.com/reports/digital-2025-colombia",
+      "accessed": "2026-08-11",
+      "tier": "industry_dataset"
+    },
+    {
+      "id": "littio_creators_2026",
+      "title": "Littio landing page for influencers and creators",
+      "publisher": "Littio",
+      "period": "Checked 2026-08-11",
+      "url": "https://littio.co/en/influencers-creadores",
+      "accessed": "2026-08-11",
+      "tier": "official_acquisition_page"
+    },
+    {
+      "id": "littio_colombia_guide_2026",
+      "title": "How Littio works in Colombia",
+      "publisher": "Littio",
+      "period": "Checked 2026-08-11",
+      "url": "https://littio.co/en/blog/c%C3%B3mo-funciona-littio-en-colombia-paso-a-paso",
+      "accessed": "2026-08-11",
+      "tier": "official_content_marketing"
+    },
+    {
+      "id": "datareportal_mex_2025",
+      "title": "Digital 2025: Mexico",
+      "publisher": "DataReportal / Kepios",
+      "period": "January 2025",
+      "url": "https://datareportal.com/reports/digital-2025-mexico",
+      "accessed": "2026-08-11",
+      "tier": "industry_dataset"
+    },
+    {
+      "id": "bitso_kol_2026",
+      "title": "KOL Partnership Terms and Conditions",
+      "publisher": "Bitso Onchain",
+      "period": "Checked 2026-08-11",
+      "url": "https://onchain.bitso.com/partnership-terms",
+      "accessed": "2026-08-11",
+      "tier": "official_acquisition_program"
+    },
+    {
+      "id": "bitso_referral_2026",
+      "title": "Bitso referral campaign terms",
+      "publisher": "Bitso",
+      "period": "Checked 2026-08-11",
+      "url": "https://lp.bitso.com/refer",
+      "accessed": "2026-08-11",
+      "tier": "official_acquisition_program"
+    },
+    {
+      "id": "bitso_mexico_guide_2026",
+      "title": "How to Use Bitso in Mexico",
+      "publisher": "Bitso",
+      "period": "Checked 2026-08-11",
+      "url": "https://blog.bitso.com/blog/how-to-use-bitso-in-mexico",
+      "accessed": "2026-08-11",
+      "tier": "official_content_marketing"
+    },
+    {
+      "id": "datareportal_gbr_2025",
+      "title": "Digital 2025: The United Kingdom",
+      "publisher": "DataReportal / Kepios",
+      "period": "January 2025",
+      "url": "https://datareportal.com/reports/digital-2025-united-kingdom",
+      "accessed": "2026-08-11",
+      "tier": "industry_dataset"
+    },
+    {
+      "id": "wirex_referral_uk_2026",
+      "title": "Refer-a-friend UK Promotion Terms",
+      "publisher": "Wirex",
+      "period": "Checked 2026-08-11",
+      "url": "https://wirexapp.com/help/article/refer-a-friend-uk-promotion-terms-and-conditions-1455",
+      "accessed": "2026-08-11",
+      "tier": "official_acquisition_program"
+    },
+    {
+      "id": "wirex_affiliate_2026",
+      "title": "Refer-a-friend and affiliate",
+      "publisher": "Wirex",
+      "period": "Checked 2026-08-11",
+      "url": "https://wirexapp.com/help/category/refer-a-friend-and-affiliate-0366",
+      "accessed": "2026-08-11",
+      "tier": "official_acquisition_program"
+    },
+    {
+      "id": "wirex_cobranded_2026",
+      "title": "Co-branded Visa cards powered by stablecoins",
+      "publisher": "Wirex",
+      "period": "Checked 2026-08-11",
+      "url": "https://www.wirexapp.com/co-branded-card",
+      "accessed": "2026-08-11",
+      "tier": "official_partnership_product"
+    },
+    {
+      "id": "datareportal_idn_2025",
+      "title": "Digital 2025: Indonesia",
+      "publisher": "DataReportal / Kepios",
+      "period": "January 2025",
+      "url": "https://datareportal.com/reports/digital-2025-indonesia",
+      "accessed": "2026-08-11",
+      "tier": "industry_dataset"
+    },
+    {
+      "id": "pintu_academy_2026",
+      "title": "Pintu Academy",
+      "publisher": "Pintu",
+      "period": "Checked 2026-08-11",
+      "url": "https://www.pintu.co.id/academy",
+      "accessed": "2026-08-11",
+      "tier": "official_content_marketing"
+    },
+    {
+      "id": "pintu_referral_2026",
+      "title": "Pintu Referral Program",
+      "publisher": "Pintu",
+      "period": "Checked 2026-08-11",
+      "url": "https://pintu.co.id/en/faq/pintu-referral-program-cara-kerja-komisi-klaim",
+      "accessed": "2026-08-11",
+      "tier": "official_acquisition_program"
+    },
+    {
+      "id": "pintu_rrq_2026",
+      "title": "Pintu x RRQ Guild referral activation",
+      "publisher": "Pintu",
+      "period": "Checked 2026-08-11",
+      "url": "https://pintu.co.id/blog/gunakan-kode-referral-pintu-x-rrq-guild-dapatkan-gratis-solana",
+      "accessed": "2026-08-11",
+      "tier": "official_partnership_campaign"
+    },
+    {
+      "id": "datareportal_vnm_2025",
+      "title": "Digital 2025: Vietnam",
+      "publisher": "DataReportal / Kepios",
+      "period": "January 2025",
+      "url": "https://datareportal.com/reports/digital-2025-vietnam",
+      "accessed": "2026-08-11",
+      "tier": "industry_dataset"
+    },
+    {
+      "id": "coin98_titans_2026",
+      "title": "Coin98 Titans Global Ambassador programme",
+      "publisher": "Coin98",
+      "period": "Checked 2026-08-11",
+      "url": "https://blog.coin98.com/coin98-global-ambassador-titans/",
+      "accessed": "2026-08-11",
+      "tier": "official_acquisition_program"
+    },
+    {
+      "id": "coin98_community_2026",
+      "title": "Coin98 June Community Gathering",
+      "publisher": "Coin98",
+      "period": "Checked 2026-08-11",
+      "url": "https://blog.coin98.com/june-community-gathering/",
+      "accessed": "2026-08-11",
+      "tier": "official_community_program"
+    },
+    {
+      "id": "coin98_solana_hackathon_2026",
+      "title": "Coin98 co-sponsors Vietnam Regional Track in Solana Season Hackathon",
+      "publisher": "Coin98",
+      "period": "Checked 2026-08-11",
+      "url": "https://blog.coin98.com/coin98-co-sponsors-vietnam-regional-track-in-solana-season-hackathon/",
+      "accessed": "2026-08-11",
+      "tier": "official_partnership_campaign"
+    },
+    {
+      "id": "datareportal_can_2025",
+      "title": "Digital 2025: Canada",
+      "publisher": "DataReportal / Kepios",
+      "period": "January 2025",
+      "url": "https://datareportal.com/reports/digital-2025-canada",
+      "accessed": "2026-08-11",
+      "tier": "industry_dataset"
+    },
+    {
+      "id": "cryptocom_referral_can_2026",
+      "title": "Crypto.com Canada App Referral Programme",
+      "publisher": "Crypto.com Canada",
+      "period": "Checked 2026-08-11",
+      "url": "https://crypto.com/ca/product-news/app-referral-program",
+      "accessed": "2026-08-11",
+      "tier": "official_acquisition_program"
+    },
+    {
+      "id": "cryptocom_affiliate_2026",
+      "title": "Crypto.com Affiliate Program",
+      "publisher": "Crypto.com",
+      "period": "Checked 2026-08-11",
+      "url": "https://crypto.com/en/affiliate/",
+      "accessed": "2026-08-11",
+      "tier": "official_acquisition_program"
+    },
+    {
+      "id": "cryptocom_brand_campaign_2026",
+      "title": "Crypto.com launches global brand campaign",
+      "publisher": "Crypto.com",
+      "period": "Checked 2026-08-11",
+      "url": "https://crypto.com/en/company-news/crypto-com-launches-global-brand-campaign-2",
+      "accessed": "2026-08-11",
+      "tier": "official_brand_campaign"
+    },
+    {
+      "id": "cryptocom_partners_2026",
+      "title": "Crypto.com Partners",
+      "publisher": "Crypto.com",
+      "period": "Checked 2026-08-11",
+      "url": "https://crypto.com/en/partners/",
+      "accessed": "2026-08-11",
+      "tier": "official_partnerships"
     }
   ]
 }
