@@ -134,12 +134,21 @@ function barrierScoreLabel(score: number) {
   return score === 5 ? "Блокирующий" : score === 4 ? "Высокий" : score === 3 ? "Существенный" : score === 2 ? "Управляемый" : "Низкий";
 }
 
+const sourceLabelOverrides: Record<string, string> = {
+  kast_series_a_2026: "KAST · показатели",
+  kast_card_fees_2026: "KAST · тарифы",
+  kast_crypto_card: "KAST · карты",
+  kast_physical_card_shipping_2026: "KAST · доставка карт",
+  kast_country_availability_2026: "KAST · география",
+  kast_account_creation_2026: "KAST · регистрация",
+};
+
 function SourceLink({ sourceId }: { sourceId: string }) {
   const source = data.sources.find((item) => item.id === sourceId);
   if (!source) return null;
   return (
-    <a href={source.url} target="_blank" rel="noreferrer" className="source-chip">
-      {source.publisher}
+    <a href={source.url} target="_blank" rel="noreferrer" className="source-chip" title={`${source.publisher}: ${source.title}`}>
+      {sourceLabelOverrides[sourceId] ?? source.publisher}
     </a>
   );
 }
