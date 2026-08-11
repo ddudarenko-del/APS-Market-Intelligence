@@ -1,14 +1,20 @@
 "use client";
 
+import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import data from "./data/market_data.json";
 
-type Tab = "overview" | "compare" | "profiles" | "competition" | "data" | "method";
+type Tab = "overview" | "kastfit" | "compare" | "profiles" | "competition" | "data" | "method";
+type ScoreMode = "aps" | "kast";
 type MetricValue = { value: number; year: number } | null;
 type Market = (typeof data.markets)[number];
+type CountryProperties = { ADM0_A3?: string };
+type CountryFeature = GeoJSON.Feature<GeoJSON.Geometry, CountryProperties>;
+type CountryLayer = import("leaflet").Path & { feature?: CountryFeature };
 
 const tabLabels: Array<{ id: Tab; label: string }> = [
   { id: "overview", label: "Обзор" },
+  { id: "kastfit", label: "KAST / Product Fit" },
   { id: "compare", label: "Сравнение" },
   { id: "profiles", label: "Профили рынков" },
   { id: "competition", label: "Конкуренты / тарифы" },
@@ -42,6 +48,43 @@ function formatPeople(metric: MetricValue) {
   return `${(metric.value / 1_000_000).toLocaleString("ru-RU", { maximumFractionDigits: 1 })} млн`;
 }
 
+function bandScore(value: number, bands: Array<[number, number]>) {
+  for (const [threshold, score] of bands) {
+    if (value >= threshold) return score;
+  }
+  return 1;
+}
+
+function getKastFit(market: Market) {
+  const metrics = market.metrics;
+  const inflation = metrics.imf_weo.inflation_2025_pct;
+  const remittanceIn = metrics.remittance_in_usd?.value ?? 0;
+  const remittanceGdp = metrics.remittance_pct_gdp?.value ?? 0;
+  const cryptoRank = metrics.chainalysis_rank_2025;
+
+  const usdNeed = bandScore(inflation, [[25, 5], [10, 4], [5, 3], [3, 2]]);
+  const remittanceVolume = bandScore(remittanceIn, [[50_000_000_000, 5], [20_000_000_000, 4], [10_000_000_000, 3], [1_000_000_000, 2]]);
+  const remittanceIntensity = bandScore(remittanceGdp, [[5, 5], [3, 4], [1, 3], [0.25, 2]]);
+  const crossBorder = (remittanceVolume + remittanceIntensity) / 2;
+  const cryptoAudience = cryptoRank == null ? 2 : cryptoRank <= 10 ? 5 : cryptoRank <= 20 ? 4 : 2;
+  const mobileReadiness = Math.min(5, ((metrics.findex_2024.smartphone_pct + metrics.findex_2024.recent_internet_use_pct) / 2) / 20);
+  const accessGap = Math.min(5, (100 - metrics.findex_2024.account_ownership_pct) / 20);
+
+  const components = [
+    { key: "usd_need", label: "USD-защита", score: usdNeed, weight: 0.3, evidence: `${inflation.toFixed(1)}% инфляция` },
+    { key: "cross_border", label: "Cross-border", score: crossBorder, weight: 0.2, evidence: `${formatMoney(metrics.remittance_in_usd)} · ${formatPct(metrics.remittance_pct_gdp)} ВВП` },
+    { key: "crypto_audience", label: "Crypto-аудитория", score: cryptoAudience, weight: 0.25, evidence: cryptoRank ? `#${cryptoRank} Chainalysis` : "вне опубликованного top-20" },
+    { key: "mobile_readiness", label: "Mobile readiness", score: mobileReadiness, weight: 0.15, evidence: `${metrics.findex_2024.smartphone_pct.toFixed(1)}% smartphone · ${metrics.findex_2024.recent_internet_use_pct.toFixed(1)}% internet` },
+    { key: "access_gap", label: "Access gap", score: accessGap, weight: 0.1, evidence: `${metrics.findex_2024.account_ownership_pct.toFixed(1)}% имеют счёт` },
+  ];
+  const score = components.reduce((total, component) => total + component.score * component.weight, 0);
+  return {
+    score,
+    category: score >= 3.2 ? "Высокий fit" : score >= 2.6 ? "Средний fit" : "Низкий fit",
+    components,
+  };
+}
+
 function ScoreBadge({ score }: { score: number }) {
   const tone = score >= 4 ? "high" : score >= 3.2 ? "mid" : "low";
   return <span className={`score-badge ${tone}`}>{score.toFixed(2)}</span>;
@@ -60,15 +103,17 @@ function SourceLink({ sourceId }: { sourceId: string }) {
 function MarketMap({
   selectedCode,
   visibleCodes,
+  scoreMode,
   onSelect,
 }: {
   selectedCode: string;
   visibleCodes: string[];
+  scoreMode: ScoreMode;
   onSelect: (code: string) => void;
 }) {
   const containerRef = useRef<HTMLDivElement>(null);
-  const mapRef = useRef<any>(null);
-  const layerRef = useRef<any>(null);
+  const mapRef = useRef<import("leaflet").Map | null>(null);
+  const layerRef = useRef<import("leaflet").GeoJSON | null>(null);
   const onSelectRef = useRef(onSelect);
   const [mapStatus, setMapStatus] = useState<"loading" | "ready" | "error">("loading");
 
@@ -109,7 +154,7 @@ function MarketMap({
 
         const marketByCode = new Map(data.markets.map((market) => [market.code, market]));
         const layer = L.geoJSON(geometry, {
-          style: (feature: any) => {
+          style: (feature?: CountryFeature) => {
             const code = feature?.properties?.ADM0_A3;
             const market = marketByCode.get(code);
             return {
@@ -119,12 +164,13 @@ function MarketMap({
               fillOpacity: market ? 0.82 : 0.52,
             };
           },
-          onEachFeature: (feature: any, countryLayer: any) => {
+          onEachFeature: (feature: CountryFeature, countryLayer: import("leaflet").Layer) => {
             const code = feature?.properties?.ADM0_A3;
             const market = marketByCode.get(code);
             if (!market) return;
+            const score = scoreMode === "kast" ? getKastFit(market).score : market.weighted_score;
             countryLayer.bindTooltip(
-              `<strong>${market.name_ru}</strong><br>${market.weighted_score.toFixed(2)} / 5`,
+              `<strong>${market.name_ru}</strong><br>${scoreMode === "kast" ? "KAST Fit" : "APS"}: ${score.toFixed(2)} / 5`,
               { sticky: true, direction: "top", className: "aps-map-tooltip" },
             );
             countryLayer.on("click", () => onSelectRef.current(code));
@@ -147,23 +193,25 @@ function MarketMap({
         layerRef.current = null;
       }
     };
-  }, []);
+  }, [scoreMode]);
 
   useEffect(() => {
     const layer = layerRef.current;
     if (!layer) return;
     const visibleSet = new Set(visibleCodes);
-    layer.eachLayer((countryLayer: any) => {
+    layer.eachLayer((layerItem: import("leaflet").Layer) => {
+      const countryLayer = layerItem as CountryLayer;
       const code = countryLayer.feature?.properties?.ADM0_A3;
       const market = data.markets.find((item) => item.code === code);
       if (!market) return;
       const visible = visibleSet.has(code);
       const selected = code === selectedCode;
+      const score = scoreMode === "kast" ? getKastFit(market).score : market.weighted_score;
       const fillColor = selected
         ? "#40f785"
-        : market.weighted_score >= 4
+        : score >= 4
           ? "#29a865"
-          : market.weighted_score >= 3.2
+          : score >= 3.2
             ? "#197a49"
             : "#155c3a";
       countryLayer.setStyle({
@@ -173,7 +221,7 @@ function MarketMap({
         fillOpacity: visible ? (selected ? 1 : 0.86) : 0.16,
       });
     });
-  }, [selectedCode, visibleCodes]);
+  }, [selectedCode, visibleCodes, scoreMode]);
 
   function resetView() {
     mapRef.current?.fitBounds([[-56, -168], [76, 178]], { padding: [12, 12] });
@@ -196,9 +244,11 @@ function MarketMap({
 
 export function MarketDashboard() {
   const [tab, setTab] = useState<Tab>("overview");
+  const [scoreMode, setScoreMode] = useState<ScoreMode>("aps");
   const [selectedCode, setSelectedCode] = useState("PHL");
   const [compareCodes, setCompareCodes] = useState<string[]>(["PHL", "COL", "MEX"]);
   const [region, setRegion] = useState("Все регионы");
+  const [competitorMarket, setCompetitorMarket] = useState("ALL");
 
   const selected = data.markets.find((market) => market.code === selectedCode) ?? data.markets[0];
   const regions = ["Все регионы", ...Array.from(new Set(data.markets.map((market) => market.region)))];
@@ -206,6 +256,15 @@ export function MarketDashboard() {
   const compareMarkets = compareCodes
     .map((code) => data.markets.find((market) => market.code === code))
     .filter(Boolean) as Market[];
+  const selectedKastFit = getKastFit(selected);
+  const kastRanking = [...data.markets]
+    .map((market) => ({ market, fit: getKastFit(market) }))
+    .sort((a, b) => b.fit.score - a.fit.score);
+  const rankedVisibleMarkets = [...visibleMarkets].sort((a, b) => {
+    if (scoreMode === "kast") return getKastFit(b).score - getKastFit(a).score;
+    return a.rank - b.rank;
+  });
+  const visibleCompetitors = data.market_competitors.filter((item) => competitorMarket === "ALL" || item.market_codes.includes(competitorMarket));
 
   function chooseMarket(code: string, nextTab?: Tab) {
     setSelectedCode(code);
@@ -224,20 +283,20 @@ export function MarketDashboard() {
     <main className="app-shell">
       <header className="hero">
         <div className="hero-topline">
-          <img className="aps-logo" src="/brand/aps-logo.svg" alt="APS" />
-          <span className="update-stamp">Market Intelligence / данные проверены 04.08.2026</span>
+            <Image className="aps-logo" src="/brand/aps-logo.svg" alt="APS" width={132} height={52} priority />
+          <span className="update-stamp">Market Intelligence / данные проверены 11.08.2026</span>
         </div>
         <div className="hero-grid">
           <div>
             <h1>Где APS может выиграть и на каких условиях</h1>
             <p>
-              Восемь рынков, шесть критериев и единый слой фактических данных для
-              crypto-linked payments, управления цифровыми активами и карт.
+              Восемь рынков, исходный рейтинг APS и отдельный KAST / Product Fit
+              для stablecoin-powered global money app.
             </p>
           </div>
           <div className="hero-metrics" aria-label="Сводка исследования">
             <div><strong>8</strong><span>рынков</span></div>
-            <div><strong>6</strong><span>критериев</span></div>
+            <div><strong>6+1</strong><span>APS + KAST Fit</span></div>
             <div><strong>{data.sources.length}</strong><span>базовых источников</span></div>
           </div>
         </div>
@@ -246,9 +305,9 @@ export function MarketDashboard() {
       <div className="method-banner">
         <span className="method-icon">i</span>
         <p>
-          <strong>Как читать рейтинг.</strong> Балл пересчитан строго по весам ТЗ.
-          Регуляторный gate показан отдельно: высокий спрос не означает, что direct
-          stablecoin card можно запускать без локального партнёра.
+          <strong>Два независимых показателя.</strong> Исходный APS-балл сохранён без изменений.
+          KAST / Product Fit оценивает только сходство спроса и аудитории с моделью KAST;
+          регуляторный gate по-прежнему показан отдельно.
         </p>
       </div>
 
@@ -274,13 +333,20 @@ export function MarketDashboard() {
                 <h2>Восемь рынков в одном поле</h2>
                 <p>Цвет страны отражает взвешенный балл. Нажмите на страну, чтобы открыть её показатели.</p>
               </div>
-              <select value={region} onChange={(event) => setRegion(event.target.value)} aria-label="Фильтр по региону">
-                {regions.map((item) => <option key={item}>{item}</option>)}
-              </select>
+              <div className="panel-controls">
+                <div className="metric-switch" aria-label="Показатель карты">
+                  <button type="button" className={scoreMode === "aps" ? "active" : ""} onClick={() => setScoreMode("aps")}>APS</button>
+                  <button type="button" className={scoreMode === "kast" ? "active" : ""} onClick={() => setScoreMode("kast")}>KAST Fit</button>
+                </div>
+                <select value={region} onChange={(event) => setRegion(event.target.value)} aria-label="Фильтр по региону">
+                  {regions.map((item) => <option key={item}>{item}</option>)}
+                </select>
+              </div>
             </div>
             <MarketMap
               selectedCode={selectedCode}
               visibleCodes={visibleMarkets.map((market) => market.code)}
+              scoreMode={scoreMode}
               onSelect={chooseMarket}
             />
             <div className="selected-market">
@@ -290,9 +356,9 @@ export function MarketDashboard() {
                 <p>{selected.profile.demand}</p>
               </div>
               <div className="selected-kpis">
-                <div><span>Балл</span><strong>{selected.weighted_score.toFixed(2)}</strong></div>
+                <div><span>APS-балл</span><strong>{selected.weighted_score.toFixed(2)}</strong></div>
+                <div><span>KAST Fit</span><strong>{selectedKastFit.score.toFixed(2)}</strong></div>
                 <div><span>Переводы</span><strong>{formatMoney(selected.metrics.remittance_in_usd)}</strong></div>
-                <div><span>Инфляция 2025</span><strong>{selected.metrics.imf_weo.inflation_2025_pct.toFixed(1)}%</strong></div>
               </div>
               <button type="button" className="primary-button" onClick={() => setTab("profiles")}>Открыть профиль →</button>
             </div>
@@ -302,25 +368,88 @@ export function MarketDashboard() {
             <div className="panel-heading compact">
               <div>
                 <span className="section-kicker">РЕЙТИНГ</span>
-                <h2>По формуле ТЗ</h2>
+                <h2>{scoreMode === "aps" ? "По формуле ТЗ" : "По KAST / Product Fit"}</h2>
               </div>
               <span className="count-pill">8 рынков</span>
             </div>
             <div className="ranking-list">
-              {visibleMarkets.map((market) => (
+              {rankedVisibleMarkets.map((market, index) => (
                 <button key={market.code} type="button" onClick={() => chooseMarket(market.code)} className={selectedCode === market.code ? "active" : ""}>
-                  <span className="rank-number">{market.rank}</span>
+                  <span className="rank-number">{scoreMode === "aps" ? market.rank : index + 1}</span>
                   <span className="rank-name"><strong>{market.name_ru}</strong><small>{market.region}</small></span>
                   <span className="gate-mini">{gateLabels[market.regulatory.gate]}</span>
-                  <ScoreBadge score={market.weighted_score} />
+                  <ScoreBadge score={scoreMode === "aps" ? market.weighted_score : getKastFit(market).score} />
                 </button>
               ))}
             </div>
             <div className="ranking-note">
               <strong>Ключевой вывод</strong>
-              <p>Филиппины лидируют по сочетанию переводов и use case. Аргентина и Колумбия близки по баллу, но требуют разных регуляторных и конкурентных стратегий.</p>
+              <p>{scoreMode === "aps" ? "Филиппины лидируют по исходной формуле. Аргентина и Колумбия близки по баллу, но требуют разных стратегий." : "Для модели KAST вверх поднимаются рынки, где одновременно видны USD-защита, crypto-аудитория, мобильная готовность и трансграничный сценарий."}</p>
             </div>
           </aside>
+        </section>
+      )}
+
+      {tab === "kastfit" && (
+        <section className="kast-layout">
+          <article className="panel kast-benchmark">
+            <div className="kast-benchmark-copy">
+              <span className="section-kicker">PRODUCT REFERENCE</span>
+              <h2>KAST как точная продуктовая модель</h2>
+              <p>{data.kast_benchmark.positioning}. Показатель ниже отвечает только на вопрос: насколько каждый из восьми рынков похож на среду, где этот сценарий востребован.</p>
+              <div className="source-chips">{data.kast_benchmark.source_ids.map((id) => <SourceLink key={id} sourceId={id} />)}</div>
+            </div>
+            <div className="kast-benchmark-metrics">
+              <div><span>Пользователи</span><strong>{data.kast_benchmark.users}</strong><small>заявление KAST</small></div>
+              <div><span>Annualized volume</span><strong>{data.kast_benchmark.annualized_volume}</strong><small>заявление KAST</small></div>
+              <div><span>Приём карты</span><strong>{data.kast_benchmark.merchant_acceptance}</strong><small>merchant locations</small></div>
+              <div><span>Standard / USD spend</span><strong>{data.kast_benchmark.standard_card}</strong><small>{data.kast_benchmark.usd_spend_fee} комиссия</small></div>
+            </div>
+          </article>
+
+          <div className="kast-workspace">
+            <aside className="panel kast-ranking-panel">
+              <div className="panel-heading compact">
+                <div><span className="section-kicker">KAST FIT RANKING</span><h2>Отдельно от APS</h2></div>
+                <span className="count-pill">0–5</span>
+              </div>
+              <div className="kast-ranking-list">
+                {kastRanking.map(({ market, fit }, index) => (
+                  <button key={market.code} type="button" className={selectedCode === market.code ? "active" : ""} onClick={() => chooseMarket(market.code)}>
+                    <span className="rank-number">{index + 1}</span>
+                    <span className="rank-name"><strong>{market.name_ru}</strong><small>{fit.category}</small></span>
+                    <ScoreBadge score={fit.score} />
+                  </button>
+                ))}
+              </div>
+            </aside>
+
+            <article className="panel kast-detail">
+              <div className="kast-detail-head">
+                <div><span className="section-kicker">{selected.code} · PRODUCT FIT</span><h2>{selected.name_ru}</h2><p>{selectedKastFit.category} · исходный APS-балл {selected.weighted_score.toFixed(2)}</p></div>
+                <div className="profile-score kast-score"><strong>{selectedKastFit.score.toFixed(2)}</strong><span>из 5</span></div>
+              </div>
+              <div className="fit-component-list">
+                {selectedKastFit.components.map((component) => (
+                  <div className="fit-component" key={component.key}>
+                    <div className="fit-component-title"><strong>{component.label}</strong><span>{Math.round(component.weight * 100)}%</span></div>
+                    <div className="fit-bar"><span style={{ width: `${component.score * 20}%` }} /></div>
+                    <div className="fit-component-meta"><small>{component.evidence}</small><strong>{component.score.toFixed(2)}</strong></div>
+                  </div>
+                ))}
+              </div>
+              <div className="fit-reading">
+                <div><span className="section-kicker">ПРИОРИТЕТНАЯ АУДИТОРИЯ</span><p>{selected.profile.audience}</p></div>
+                <div><span className="section-kicker">СЦЕНАРИЙ KAST</span><p>{selected.profile.use_case}</p></div>
+              </div>
+            </article>
+          </div>
+
+          <article className="panel fit-method-summary">
+            <div><span className="section-kicker">ФОРМУЛА</span><h3>Пять наблюдаемых сигналов, без экспертной надбавки</h3></div>
+            <code>30% USD-защита + 20% cross-border + 25% crypto-аудитория + 15% mobile readiness + 10% access gap</code>
+            <p>Регуляторная возможность запуска и интенсивность конкуренции намеренно не входят в Product Fit: они остаются отдельными слоями и не подменяют наличие спроса.</p>
+          </article>
         </section>
       )}
 
@@ -353,9 +482,10 @@ export function MarketDashboard() {
               <article className="panel country-compare" key={market.code}>
                 <div className="country-card-head">
                   <div><span>{market.code}</span><h2>{market.name_ru}</h2><p>{market.region}</p></div>
-                  <ScoreBadge score={market.weighted_score} />
+                  <div className="dual-score"><span>APS <ScoreBadge score={market.weighted_score} /></span><span>KAST <ScoreBadge score={getKastFit(market).score} /></span></div>
                 </div>
                 <div className="metric-stack">
+                  <div><span>KAST / Product Fit</span><strong>{getKastFit(market).score.toFixed(2)}</strong><small>{getKastFit(market).category}</small></div>
                   <div><span>Входящие переводы</span><strong>{formatMoney(market.metrics.remittance_in_usd)}</strong><small>{market.metrics.remittance_in_usd?.year ?? "нет данных"}</small></div>
                   <div><span>Переводы / ВВП</span><strong>{formatPct(market.metrics.remittance_pct_gdp)}</strong><small>{market.metrics.remittance_pct_gdp?.year ?? "нет данных"}</small></div>
                   <div><span>Население</span><strong>{formatPeople(market.metrics.population)}</strong><small>{market.metrics.population?.year ?? "нет данных"}</small></div>
@@ -399,7 +529,10 @@ export function MarketDashboard() {
           <article className="panel profile-detail">
             <div className="profile-hero">
               <div><span className="section-kicker">{selected.region} · {selected.currency}</span><h2>{selected.name_ru}</h2><p>{selected.category}</p></div>
-              <div className="profile-score"><strong>{selected.weighted_score.toFixed(2)}</strong><span>из 5</span></div>
+              <div className="profile-score-pair">
+                <div className="profile-score"><strong>{selected.weighted_score.toFixed(2)}</strong><span>APS</span></div>
+                <div className="profile-score kast-score"><strong>{selectedKastFit.score.toFixed(2)}</strong><span>KAST Fit</span></div>
+              </div>
             </div>
             <div className="profile-grid">
               <div><span>Источник спроса</span><p>{selected.profile.demand}</p></div>
@@ -414,6 +547,14 @@ export function MarketDashboard() {
               <div><span>Account ownership</span><strong>{selected.metrics.findex_2024.account_ownership_pct.toFixed(1)}%</strong><small>Findex 2024</small></div>
               <div><span>Crypto rank</span><strong>{selected.metrics.chainalysis_rank_2025 ? `#${selected.metrics.chainalysis_rank_2025}` : ">20"}</strong><small>Chainalysis 2025</small></div>
             </div>
+            <div className="profile-fit-section">
+              <div><span className="section-kicker">KAST / PRODUCT FIT</span><h3>{selectedKastFit.category}</h3><p>Отдельный показатель не меняет исходный APS-рейтинг.</p></div>
+              <div className="profile-fit-bars">
+                {selectedKastFit.components.map((component) => (
+                  <div key={component.key}><span>{component.label}</span><div><i style={{ width: `${component.score * 20}%` }} /></div><strong>{component.score.toFixed(1)}</strong></div>
+                ))}
+              </div>
+            </div>
             <div className="regulatory-section">
               <div><span className="section-kicker">REGULATORY GATE</span><h3>{gateLabels[selected.regulatory.gate]}</h3><p>{selected.regulatory.status}</p></div>
               <div className="source-chips">{selected.regulatory.source_ids.map((id) => <SourceLink key={id} sourceId={id} />)}</div>
@@ -426,10 +567,30 @@ export function MarketDashboard() {
         <section className="panel benchmark-panel">
           <div className="panel-heading">
             <div>
-              <span className="section-kicker">PUBLIC PRICING BENCHMARKS</span>
-              <h2>Только опубликованные тарифы и лимиты</h2>
-              <p>Числа взяты из официальных help centers. Если тариф не раскрыт, он не оценивается.</p>
+              <span className="section-kicker">KAST-LIKE COMPETITION</span>
+              <h2>Конкуренты того же продуктового профиля</h2>
+              <p>Прямые stablecoin-карты и global money apps отделены от локальных смежных продуктов. Покрытие и тарифы подтверждены официальными страницами.</p>
             </div>
+            <span className="count-pill">{data.market_competitors.length} групп</span>
+          </div>
+          <div className="competitor-filter" aria-label="Фильтр конкурентов по рынку">
+            <button type="button" className={competitorMarket === "ALL" ? "active" : ""} onClick={() => setCompetitorMarket("ALL")}>Все рынки</button>
+            {data.markets.map((market) => <button key={market.code} type="button" className={competitorMarket === market.code ? "active" : ""} onClick={() => setCompetitorMarket(market.code)}>{market.name_ru}</button>)}
+          </div>
+          <div className="competitor-grid">
+            {visibleCompetitors.map((item) => (
+              <article className="competitor-card" key={item.provider}>
+                <div className="competitor-card-head"><span>{item.profile}</span><strong>{item.provider}</strong></div>
+                <p className="competitor-markets">{item.market_codes.map((code) => data.markets.find((market) => market.code === code)?.name_ru).filter(Boolean).join(" · ")}</p>
+                <h3>{item.product}</h3>
+                <p>{item.evidence}</p>
+                <div className="competitor-terms"><span>Публичные условия</span><strong>{item.public_terms}</strong></div>
+                <div className="source-chips">{item.source_ids.map((id) => <SourceLink key={id} sourceId={id} />)}</div>
+              </article>
+            ))}
+          </div>
+          <div className="subsection-heading">
+            <div><span className="section-kicker">VERIFIED PRICE POINTS</span><h2>Опубликованные тарифы и лимиты</h2></div>
             <span className="count-pill">{data.competitor_benchmarks.length} точек</span>
           </div>
           <div className="benchmark-grid">
@@ -439,7 +600,7 @@ export function MarketDashboard() {
               return (
                 <article className="benchmark-card" key={`${item.provider}-${index}`}>
                   <div className="benchmark-head">
-                    <span>{market?.name_ru ?? item.market_code}</span>
+                    <span>{item.market_code === "GLOBAL" ? "Global benchmark" : market?.name_ru ?? item.market_code}</span>
                     <strong>{item.provider}</strong>
                   </div>
                   <p className="benchmark-product">{item.product}</p>
@@ -465,12 +626,13 @@ export function MarketDashboard() {
           </div>
           <div className="table-scroll">
             <table>
-              <thead><tr><th>Рынок</th><th>Балл</th><th>Входящие переводы</th><th>% ВВП</th><th>Население</th><th>Интернет</th><th>Account ownership</th><th>Digital payments</th><th>Smartphone</th><th>Инфляция 2025</th><th>Crypto rank</th></tr></thead>
+              <thead><tr><th>Рынок</th><th>APS</th><th>KAST Fit</th><th>Входящие переводы</th><th>% ВВП</th><th>Население</th><th>Интернет</th><th>Account ownership</th><th>Digital payments</th><th>Smartphone</th><th>Инфляция 2025</th><th>Crypto rank</th></tr></thead>
               <tbody>
                 {data.markets.map((market) => (
                   <tr key={market.code} onClick={() => chooseMarket(market.code, "profiles")}>
                     <td><strong>{market.name_ru}</strong><small>{market.code}</small></td>
                     <td>{market.weighted_score.toFixed(2)}</td>
+                    <td>{getKastFit(market).score.toFixed(2)}<small>{getKastFit(market).category}</small></td>
                     <td>{formatMoney(market.metrics.remittance_in_usd)}<small>{market.metrics.remittance_in_usd?.year}</small></td>
                     <td>{formatPct(market.metrics.remittance_pct_gdp)}<small>{market.metrics.remittance_pct_gdp?.year}</small></td>
                     <td>{formatPeople(market.metrics.population)}<small>{market.metrics.population?.year}</small></td>
@@ -497,8 +659,10 @@ export function MarketDashboard() {
               <div><span>01</span><strong>Фактический слой</strong><p>World Bank, Global Findex, IMF, Chainalysis и регуляторы. Год хранится рядом с каждым значением.</p></div>
               <div><span>02</span><strong>Экспертные баллы</strong><p>Шесть баллов из исходного APS.docx сохранены как аналитические оценки; итог пересчитан по весам ТЗ.</p></div>
               <div><span>03</span><strong>Регуляторный gate</strong><p>Отдельный статус показывает, возможен ли direct launch, нужен партнёр или допустим только fiat-wrapper.</p></div>
+              <div><span>04</span><strong>KAST / Product Fit</strong><p>Новый независимый балл использует инфляцию IMF, переводы World Bank, crypto rank Chainalysis и показатели Findex. Ручная экспертная надбавка не применяется.</p></div>
             </div>
             <div className="formula-box"><code>Σ (балл критерия × вес) = итог из 5</code><p>Пример: Филиппины = 5×25% + 5×20% + 5×15% + 3×15% + 4×15% + 5×10% = <strong>4,55</strong>.</p></div>
+            <div className="formula-box kast-formula"><code>KAST Fit = 30% USD need + 20% cross-border + 25% crypto audience + 15% mobile readiness + 10% access gap</code><p>Инфляция: 5 баллов от 25%, 4 от 10%, 3 от 5%, 2 от 3%, иначе 1. Cross-border — среднее баллов по абсолютному объёму переводов и доле ВВП. Crypto: top-10 = 5, #11–20 = 4, вне опубликованного top-20 = 2. Mobile readiness — среднее smartphone и recent internet use, делённое на 20. Access gap = (100% − account ownership) / 20.</p><p>Для Вьетнама входящие переводы 2024 рассчитаны как 3,4% от опубликованного World Bank ВВП 2024; это производное значение отмечено в данных.</p></div>
           </article>
 
           <article className="panel sources-card">

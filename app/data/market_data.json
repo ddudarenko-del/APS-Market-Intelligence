@@ -1,7 +1,7 @@
 {
   "metadata": {
     "title": "APS Market Intelligence",
-    "updated": "2026-08-04",
+    "updated": "2026-08-11",
     "countries": 8,
     "criteria": [
       {
@@ -35,7 +35,39 @@
         "weight": 0.1
       }
     ],
-    "method_note": "Weighted score is recalculated exactly from the six source-document scores and the weights in the APS brief. Regulatory gate is shown separately and does not alter the arithmetic score."
+    "method_note": "Weighted score is recalculated exactly from the six source-document scores and the weights in the APS brief. Regulatory gate is shown separately and does not alter the arithmetic score.",
+    "kast_fit": {
+      "label": "KAST / Product Fit",
+      "scale": "0-5",
+      "weights": [
+        {
+          "key": "usd_need",
+          "label": "Потребность в защите через USD",
+          "weight": 0.3
+        },
+        {
+          "key": "cross_border",
+          "label": "Трансграничная потребность",
+          "weight": 0.2
+        },
+        {
+          "key": "crypto_audience",
+          "label": "Crypto / stablecoin-аудитория",
+          "weight": 0.25
+        },
+        {
+          "key": "mobile_readiness",
+          "label": "Мобильная готовность",
+          "weight": 0.15
+        },
+        {
+          "key": "access_gap",
+          "label": "Разрыв финансового доступа",
+          "weight": 0.1
+        }
+      ],
+      "method_note": "Отдельный диагностический показатель для продукта, полностью повторяющего KAST. Он не изменяет исходный рейтинг APS и рассчитывается только из сопоставимых опубликованных данных."
+    }
   },
   "markets": [
     {
@@ -572,9 +604,16 @@
           "value": 84.15,
           "year": 2024
         },
-        "remittance_in_usd": null,
+        "remittance_in_usd": {
+          "value": 16197260000,
+          "year": 2024,
+          "derived": true
+        },
         "remittance_out_usd": null,
-        "remittance_pct_gdp": null,
+        "remittance_pct_gdp": {
+          "value": 3.4,
+          "year": 2024
+        },
         "findex_2024": {
           "account_ownership_pct": 70.55,
           "digital_payment_pct": 62.38,
@@ -683,7 +722,127 @@
       "rank": 8
     }
   ],
+  "kast_benchmark": {
+    "users": ">1 млн",
+    "annualized_volume": "≈$5 млрд",
+    "merchant_acceptance": "150 млн+",
+    "positioning": "Получать глобальный доход, хранить цифровые доллары и тратить локально в одном продукте",
+    "standard_card": "$0 в год; физическая карта бесплатна, доставка $40",
+    "usd_spend_fee": "0%",
+    "non_usd_fx_fee": "0,5–1,75%",
+    "source_ids": [
+      "kast_series_a_2026",
+      "kast_card_fees_2026",
+      "kast_crypto_card"
+    ]
+  },
+  "market_competitors": [
+    {
+      "provider": "RedotPay",
+      "profile": "Прямой",
+      "market_codes": ["PHL", "ARG", "COL", "MEX", "GBR", "IDN", "VNM", "CAN"],
+      "product": "Stablecoin-based wallet, виртуальная/физическая карта и конвертация в момент оплаты",
+      "evidence": "Сервис заявляет присутствие в 100+ странах; ни один из восьми рынков не входит в опубликованный список запрета на выпуск карты.",
+      "public_terms": "Виртуальная карта $10, физическая $100; тариф Pro — $12,90/мес. или $129/год.",
+      "source_ids": ["redotpay_features_2026", "redotpay_restrictions_2026", "redotpay_pro_2026"]
+    },
+    {
+      "provider": "DolarApp / ARQ",
+      "profile": "Прямой",
+      "market_codes": ["ARG", "COL", "MEX"],
+      "product": "Счёт в цифровых долларах, международные переводы и Mastercard, обеспеченная stablecoin-балансом",
+      "evidence": "Официальные материалы указывают работу в Аргентине, Колумбии и Мексике.",
+      "public_terms": "Виртуальная карта $0; физическая — $4,99 за доставку; международный перевод — фиксированные 3 USDc.",
+      "source_ids": ["dolarapp_markets", "dolarapp_card", "dolarapp_transfer_fee"]
+    },
+    {
+      "provider": "Littio",
+      "profile": "Прямой локальный",
+      "market_codes": ["COL"],
+      "product": "USDC/EURC/COPM-балансы и международная Mastercard с Apple Pay / Google Pay",
+      "evidence": "Официальная страница подтверждает расчёты цифровыми активами и глобальное использование карты.",
+      "public_terms": "$0 ежемесячная плата, $0 комиссия за локальные и международные покупки, $0 активация виртуальной карты.",
+      "source_ids": ["littio_card_2026"]
+    },
+    {
+      "provider": "ether.fi Cash",
+      "profile": "Прямой crypto-native",
+      "market_codes": ["ARG", "MEX", "GBR", "IDN", "CAN"],
+      "product": "Non-custodial crypto credit card, расходы под обеспечение on-chain баланса",
+      "evidence": "Аргентина, Мексика, Великобритания, Индонезия и Канада перечислены среди поддерживаемых регионов доставки.",
+      "public_terms": "Core: виртуальная карта $10, физическая $50; ATM 2%; 0 FX fee для EUR/USD операций.",
+      "source_ids": ["etherfi_cash_2026", "etherfi_regions_2026"]
+    },
+    {
+      "provider": "Bybit Card",
+      "profile": "Прямой exchange-led",
+      "market_codes": ["ARG", "MEX", "IDN", "VNM"],
+      "product": "Карта, расходующая USDT/USDC и другие crypto-активы из funding account",
+      "evidence": "Отдельные программы действуют в Аргентине и Мексике; локализованный карточный продукт подтверждён для Индонезии, а карточные кампании — для Вьетнама.",
+      "public_terms": "Виртуальная карта без комиссии; физическая — $5/USDT в Аргентине и для Asia Pacific; комиссии зависят от региона.",
+      "source_ids": ["bybit_card_fees_2026", "bybit_card_faq_2026", "bybit_indonesia_2026", "bybit_vietnam_2026"]
+    },
+    {
+      "provider": "Coins.ph",
+      "profile": "Локальный смежный",
+      "market_codes": ["PHL"],
+      "product": "PHP/crypto wallet, cash-in/out и QR Ph — сильный локальный spending/off-ramp слой",
+      "evidence": "Не является полным аналогом KAST, но закрывает критическую локальную часть сценария на Филиппинах.",
+      "public_terms": "InstaPay ₱10; personal PESONet $0; merchant payment QR Ph $0.",
+      "source_ids": ["coins_ph_cash_fees", "coins_ph_qrph"]
+    },
+    {
+      "provider": "Lemon",
+      "profile": "Локальный смежный",
+      "market_codes": ["ARG"],
+      "product": "Crypto/stablecoin wallet и card ecosystem для аргентинской аудитории",
+      "evidence": "Сильный локальный бренд и существующая crypto-native аудитория; не полный глобальный USD account аналог.",
+      "public_terms": "0,5% за buy/sell операцию; заявлено без maintenance/subscription fee.",
+      "source_ids": ["lemon_arg_fees"]
+    },
+    {
+      "provider": "Revolut",
+      "profile": "Смежный neobank",
+      "market_codes": ["GBR"],
+      "product": "Мультивалютный neobank с crypto-spend и глобальными переводами",
+      "evidence": "Функционально конкурирует за globally mobile аудиторию, но stablecoin не является ядром продукта.",
+      "public_terms": "Crypto-spend: 0 exchange fee по опубликованным условиям; может применяться fair-usage fee тарифа.",
+      "source_ids": ["revolut_uk_crypto_card"]
+    }
+  ],
   "competitor_benchmarks": [
+    {
+      "market_code": "GLOBAL",
+      "provider": "KAST",
+      "product": "Standard stablecoin card / USD account",
+      "metric": "Card / annual fee / USD spend",
+      "value": "$0 в год; виртуальная $0; физическая $0 + $40 доставка; USD spend 0%",
+      "source_id": "kast_card_fees_2026"
+    },
+    {
+      "market_code": "GLOBAL",
+      "provider": "KAST",
+      "product": "Non-USD card spend",
+      "metric": "FX fee",
+      "value": "0,5–1,75% в зависимости от страны проживания и страны операции",
+      "source_id": "kast_card_fees_2026"
+    },
+    {
+      "market_code": "GLOBAL",
+      "provider": "RedotPay",
+      "product": "Stablecoin card",
+      "metric": "Card issuance / Pro membership",
+      "value": "Виртуальная $10; физическая $100; Pro $12,90/мес. или $129/год",
+      "source_id": "redotpay_pro_2026"
+    },
+    {
+      "market_code": "GLOBAL",
+      "provider": "ether.fi Cash",
+      "product": "Core crypto credit card",
+      "metric": "Cards / ATM / FX",
+      "value": "Виртуальная $10; физическая $50; ATM 2%; EUR/USD FX 0%",
+      "source_id": "etherfi_cash_2026"
+    },
     {
       "market_code": "GBR",
       "provider": "Wise",
@@ -933,6 +1092,168 @@
       "period": "Published 2026-05-05",
       "url": "https://help.lemon.me/es/articles/14979054-cuales-son-las-comisiones-y-a-que-precio-se-ejecuta-mi-orden",
       "accessed": "2026-08-04",
+      "tier": "official_product_terms"
+    },
+    {
+      "id": "wb_vietnam_data",
+      "title": "Viet Nam country data: remittances and GDP",
+      "publisher": "World Bank",
+      "period": "2024",
+      "url": "https://data.worldbank.org/country/vn",
+      "accessed": "2026-08-11",
+      "tier": "primary_dataset"
+    },
+    {
+      "id": "visa_stablecoin_cards_2026",
+      "title": "Stablecoin-linked cards and money movement",
+      "publisher": "Visa",
+      "period": "Updated 2026-03-31",
+      "url": "https://www.visa.com/en-us/thought-leadership/innovation/stablecoin-linked-cards-monetize-money-movement",
+      "accessed": "2026-08-11",
+      "tier": "card_network"
+    },
+    {
+      "id": "kast_series_a_2026",
+      "title": "KAST Announces $80M Series A",
+      "publisher": "KAST",
+      "period": "Updated 2026-05-01",
+      "url": "https://www.kast.xyz/blog/kast-announces-80m-series-a",
+      "accessed": "2026-08-11",
+      "tier": "official_company_claim"
+    },
+    {
+      "id": "kast_card_fees_2026",
+      "title": "Fees and conditions for KAST cards and accounts",
+      "publisher": "KAST",
+      "period": "Updated 2026-03-10",
+      "url": "https://concierge.kast.xyz/hc/en-us/articles/9850062738703-What-Are-the-Fees-and-Conditions-for-KAST-Cards-and-Accounts",
+      "accessed": "2026-08-11",
+      "tier": "official_product_terms"
+    },
+    {
+      "id": "kast_crypto_card",
+      "title": "KAST Crypto Cards",
+      "publisher": "KAST",
+      "period": "Current product page checked 2026-08-11",
+      "url": "https://www.kast.xyz/crypto-cards",
+      "accessed": "2026-08-11",
+      "tier": "official_product_terms"
+    },
+    {
+      "id": "redotpay_features_2026",
+      "title": "RedotPay services and features",
+      "publisher": "RedotPay",
+      "period": "Current help page checked 2026-08-11",
+      "url": "https://helpcenter.redotpay.com/en/articles/11070044-redotpay-services-and-features",
+      "accessed": "2026-08-11",
+      "tier": "official_product_terms"
+    },
+    {
+      "id": "redotpay_restrictions_2026",
+      "title": "Card issuance restrictions",
+      "publisher": "RedotPay",
+      "period": "Current list checked 2026-08-11",
+      "url": "https://helpcenter.redotpay.com/en/articles/14254838-card-issuance-restrictions",
+      "accessed": "2026-08-11",
+      "tier": "official_product_terms"
+    },
+    {
+      "id": "redotpay_pro_2026",
+      "title": "Getting started with RedotPay Pro",
+      "publisher": "RedotPay",
+      "period": "Published 2026-06-12",
+      "url": "https://helpcenter.redotpay.com/en/articles/14686020-getting-started-with-redotpay-pro",
+      "accessed": "2026-08-11",
+      "tier": "official_product_terms"
+    },
+    {
+      "id": "dolarapp_markets",
+      "title": "Wise or DolarApp: product and market coverage",
+      "publisher": "DolarApp",
+      "period": "Current product article checked 2026-08-11",
+      "url": "https://www.dolarapp.com/es-BR-MX00%3A00/blog/your-money/wise-dolarapp-cual-es-mejor",
+      "accessed": "2026-08-11",
+      "tier": "official_product_terms"
+    },
+    {
+      "id": "dolarapp_card",
+      "title": "DolarCard: una tarjeta para todas las monedas",
+      "publisher": "DolarApp / ARQ",
+      "period": "Current help article checked 2026-08-11",
+      "url": "https://help.dolarapp.com/es/articles/7517947-dolarcard-una-tarjeta-para-todas-las-monedas",
+      "accessed": "2026-08-11",
+      "tier": "official_product_terms"
+    },
+    {
+      "id": "dolarapp_transfer_fee",
+      "title": "International transfer through DolarApp",
+      "publisher": "DolarApp",
+      "period": "Current product article checked 2026-08-11",
+      "url": "https://www.dolarapp.com/es-CO/blog/your-money/como-transferir-dinero-tarjeta-a-tarjeta",
+      "accessed": "2026-08-11",
+      "tier": "official_product_terms"
+    },
+    {
+      "id": "littio_card_2026",
+      "title": "Littio international card",
+      "publisher": "Littio",
+      "period": "Current product page checked 2026-08-11",
+      "url": "https://littio.co/littio-card",
+      "accessed": "2026-08-11",
+      "tier": "official_product_terms"
+    },
+    {
+      "id": "etherfi_cash_2026",
+      "title": "ether.fi Cash card",
+      "publisher": "ether.fi",
+      "period": "Current product page checked 2026-08-11",
+      "url": "https://www.ether.fi/cash",
+      "accessed": "2026-08-11",
+      "tier": "official_product_terms"
+    },
+    {
+      "id": "etherfi_regions_2026",
+      "title": "Physical cards and supported regions",
+      "publisher": "ether.fi",
+      "period": "Current help page checked 2026-08-11",
+      "url": "https://help.ether.fi/en/articles/376356-physical-cards-everything-you-need-to-know",
+      "accessed": "2026-08-11",
+      "tier": "official_product_terms"
+    },
+    {
+      "id": "bybit_card_fees_2026",
+      "title": "Fees and limits for Bybit Card",
+      "publisher": "Bybit",
+      "period": "Updated 2026-06-25",
+      "url": "https://www.bybit.com/en/help-center/article/Fees-and-Spending-Limits-Bybit-Card",
+      "accessed": "2026-08-11",
+      "tier": "official_product_terms"
+    },
+    {
+      "id": "bybit_card_faq_2026",
+      "title": "Bybit Card general inquiries",
+      "publisher": "Bybit",
+      "period": "Updated 2026-06-22",
+      "url": "https://www.bybit.com/en/help-center/article/FAQ-Bybit-Card-General-Inquiries",
+      "accessed": "2026-08-11",
+      "tier": "official_product_terms"
+    },
+    {
+      "id": "bybit_vietnam_2026",
+      "title": "Bybit Card campaign for Vietnamese users",
+      "publisher": "Bybit",
+      "period": "Published 2026-05-14",
+      "url": "https://announcements.bybit.com/vi-VN/article/2026-btc-pizza-day-bybit-i-pizza--bltb26047a452323a8e/",
+      "accessed": "2026-08-11",
+      "tier": "official_product_terms"
+    },
+    {
+      "id": "bybit_indonesia_2026",
+      "title": "Bybit Card Indonesia product page",
+      "publisher": "Bybit",
+      "period": "Current product page checked 2026-08-11",
+      "url": "https://www.bybit.com/id-ID/cards/",
+      "accessed": "2026-08-11",
       "tier": "official_product_terms"
     }
   ]
