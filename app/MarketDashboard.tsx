@@ -585,6 +585,39 @@ export function MarketDashboard() {
                     <p>{decision}</p>
                     <button type="button" onClick={() => chooseMarket(market.code, "profiles")}>Открыть профиль</button>
                   </div>
+                  <div className="barrier-cases">
+                    <div className="barrier-cases-heading">
+                      <div>
+                        <span className="section-kicker">РЕАЛЬНЫЕ ЗАПУСКИ</span>
+                        <h4>Какие компании подтвердили драйвер и барьер</h4>
+                      </div>
+                      <p>Факт компании отделён от аналитического вывода APS.</p>
+                    </div>
+                    <div className="barrier-cases-grid">
+                      {(["success", "failure"] as const).map((kind) => {
+                        const study = market.case_studies[kind];
+                        return (
+                          <article key={kind} className={`barrier-case-card ${kind}`}>
+                            <div className="barrier-case-topline">
+                              <span>{kind === "success" ? "Драйвер учтён" : "Барьер реализовался"}</span>
+                              <small>{study.period}</small>
+                            </div>
+                            <h5>{study.company}</h5>
+                            <p className="barrier-case-product">{study.product}</p>
+                            <div className="barrier-case-copy">
+                              <span>Подтверждённый факт</span>
+                              <p>{study.evidence}</p>
+                            </div>
+                            <div className="barrier-case-copy lesson">
+                              <span>Аналитический вывод APS</span>
+                              <p>{study.lesson}</p>
+                            </div>
+                            <div className="source-chips">{study.source_ids.map((id) => <SourceLink key={id} sourceId={id} />)}</div>
+                          </article>
+                        );
+                      })}
+                    </div>
+                  </div>
                 </article>
               );
             })}

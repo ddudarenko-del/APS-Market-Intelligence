@@ -391,12 +391,12 @@
           "source_ids": ["bitso_users_2025", "bitso_spei_2025"]
         },
         "failure": {
-          "company": "Bineo / Banorte",
-          "product": "Полностью цифровой банк",
-          "period": "2024–2026",
-          "evidence": "Bineo получил чистый убыток 981 млн MXN за 2024 год; в отчётности за I квартал 2026 года Banorte классифицировал его как discontinued operation из-за решения о продаже.",
-          "lesson": "Даже лицензированный digital-only банк не гарантирует экономику: для входа нужны доказанный канал привлечения и строгая стоимость обслуживания.",
-          "source_ids": ["banorte_bineo_2024", "banorte_bineo_sale_2026"]
+          "company": "Bitso Card",
+          "product": "Crypto-linked debit card в Мексике",
+          "period": "2023–26.05.2025",
+          "evidence": "Bitso сохранила exchange и локальные SPEI rails, но официально деактивировала физическую и цифровую Bitso Card с 26 мая 2025 года.",
+          "lesson": "Успех exchange и интеграции с SPEI не гарантирует жизнеспособность карточного слоя: его экономика, эмиссия и повседневная ценность должны подтверждаться отдельно.",
+          "source_ids": ["bitso_card_discontinuation_2025", "bitso_spei_2025"]
         }
       },
       "scores": {
@@ -590,12 +590,12 @@
           "source_ids": ["pintu_presskit_2026"]
         },
         "failure": {
-          "company": "Zipmex Indonesia",
-          "product": "Crypto exchange и кошелёк",
-          "period": "июль–август 2022",
-          "evidence": "После приостановки клиентских выводов Bappebti взяла Zipmex Indonesia под усиленный надзор; выводы из trade wallet были восстановлены с 21 июля 2022 года.",
-          "lesson": "Ликвидность и сегрегация клиентских средств — обязательный product gate, а не только back-office риск.",
-          "source_ids": ["bappebti_zipmex_2022"]
+          "company": "Fasset / PT Gerbang Aset Digital",
+          "product": "Digital Financial Asset Trader",
+          "period": "отказ 25.05.2026",
+          "evidence": "OJK отказала PT Gerbang Aset Digital в лицензии, отозвала её регистрацию prospective crypto trader, запретила операции с цифровыми и crypto-активами и потребовала урегулировать обязательства перед клиентами.",
+          "lesson": "В Индонезии глобальный продукт не может заменить местную лицензию: регуляторный gate способен полностью остановить запуск ещё до масштабирования.",
+          "source_ids": ["id_ojk_fasset_rejection_2026"]
         }
       },
       "scores": {
@@ -690,12 +690,12 @@
           "source_ids": ["coin98_users_2024", "coin98_wallet_2025"]
         },
         "failure": {
-          "company": "Sky Mavis / Ronin",
-          "product": "Ronin Bridge для Axie Infinity",
-          "period": "март–июнь 2022",
-          "evidence": "Из моста были выведены 173 600 ETH и 25,5 млн USDC; Sky Mavis обязалась полностью покрыть средства пользователей и перезапустила мост после аудитов.",
-          "lesson": "Bridge и custody security — критическая часть доверия к stablecoin-продукту, даже при сильной локальной аудитории.",
-          "source_ids": ["ronin_bridge_2022"]
+          "company": "VBTC / BitcoinVN",
+          "product": "Локальный VND spot market",
+          "period": "сворачивание в 2026 году",
+          "evidence": "19 марта 2026 года VBTC остановила onboarding новых клиентов и новые VND-депозиты и объявила полное закрытие VND spot market в текущей форме к 31 декабря 2026 года на фоне перехода к лицензируемому режиму.",
+          "lesson": "Высокий crypto-спрос не отменяет market-entry gate: без модели, совместимой с новым локальным лицензированием, даже давно работающий VND-продукт приходится сворачивать.",
+          "source_ids": ["vbtc_vnd_winddown_2026", "vn_crypto_pilot"]
         }
       },
       "scores": {
@@ -2022,6 +2022,15 @@
       "tier": "official_product_terms"
     },
     {
+      "id": "bitso_card_discontinuation_2025",
+      "title": "Bitso Card Discontinuation",
+      "publisher": "Bitso Help Center",
+      "period": "Effective 2025-05-26",
+      "url": "https://support.bitso.com/hc/en-us/sections/36683928659348-Bitso-Card-Discontinuation",
+      "accessed": "2026-08-11",
+      "tier": "official_product_terms"
+    },
+    {
       "id": "banorte_bineo_2024",
       "title": "Grupo Financiero Banorte Annual Report 2024",
       "publisher": "Grupo Financiero Banorte",
@@ -2067,6 +2076,15 @@
       "tier": "official_company_data"
     },
     {
+      "id": "id_ojk_fasset_rejection_2026",
+      "title": "Rejection of PT Gerbang Aset Digital business licence application",
+      "publisher": "Otoritas Jasa Keuangan",
+      "period": "2026-05-29",
+      "url": "https://www.ojk.go.id/en/berita-dan-kegiatan/pengumuman/Pages/Rejection-of-Business-License-Application-of-PT-Gerbang-Aset-Digital-as-a-Digital-Financial-Asset-Trader.aspx",
+      "accessed": "2026-08-11",
+      "tier": "regulator_primary"
+    },
+    {
       "id": "bappebti_zipmex_2022",
       "title": "Bappebti monitors Zipmex Indonesia",
       "publisher": "Bappebti / Indonesian Ministry of Trade",
@@ -2092,6 +2110,15 @@
       "url": "https://docs.coin98.com/vn/san-pham/coin98-super-wallet",
       "accessed": "2026-08-11",
       "tier": "official_product_terms"
+    },
+    {
+      "id": "vbtc_vnd_winddown_2026",
+      "title": "VBTC Service Announcement: wind-down of VND spot markets",
+      "publisher": "BitcoinVN / VBTC",
+      "period": "2026-03-19",
+      "url": "https://bitcoinvn.io/insights/vbtc-wind-down-of-vnd-spot-markets/",
+      "accessed": "2026-08-11",
+      "tier": "official_company_data"
     },
     {
       "id": "ronin_bridge_2022",
