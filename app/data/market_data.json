@@ -736,78 +736,197 @@
       "kast_crypto_card"
     ]
   },
+  "competition_availability": {
+    "checked_at": "2026-08-11",
+    "reference_product": "KAST",
+    "reference_note": "KAST используется как продуктовый эталон и не включён в число конкурентов.",
+    "definitions": {
+      "full": "Доступны сервис/аккаунт и выпуск карты для резидента рынка.",
+      "partial": "Доступен аккаунт, exchange, переводы или иной ключевой сервис, но карта в стране не выпускается.",
+      "unavailable": "Регистрация или ключевой продукт официально не поддерживаются; сюда также относятся waitlist / coming soon.",
+      "unconfirmed": "Официальные материалы подтверждают отсутствие карты, но не позволяют надёжно установить доступность основного аккаунта."
+    }
+  },
   "market_competitors": [
     {
       "provider": "RedotPay",
       "profile": "Прямой",
-      "market_codes": ["PHL", "ARG", "COL", "MEX", "GBR", "IDN", "VNM", "CAN"],
       "product": "Stablecoin-based wallet, виртуальная/физическая карта и конвертация в момент оплаты",
-      "evidence": "Сервис заявляет присутствие в 100+ странах; ни один из восьми рынков не входит в опубликованный список запрета на выпуск карты.",
+      "evidence": "Официально заявлены услуги в 100+ странах; ни один из восьми рынков не включён в актуальный список запрета на выпуск виртуальных и физических карт.",
       "public_terms": "Виртуальная карта $10, физическая $100; тариф Pro — $12,90/мес. или $129/год.",
-      "source_ids": ["redotpay_features_2026", "redotpay_restrictions_2026", "redotpay_pro_2026"]
+      "source_ids": ["redotpay_features_2026", "redotpay_restrictions_2026", "redotpay_pro_2026"],
+      "availability": {
+        "PHL": { "status": "full", "account": true, "card": true, "note": "Рынок не входит в официальный список ограничений выпуска; применяется индивидуальная KYC-проверка.", "source_ids": ["redotpay_features_2026", "redotpay_restrictions_2026"] },
+        "ARG": { "status": "full", "account": true, "card": true, "note": "Рынок не входит в официальный список ограничений выпуска; применяется индивидуальная KYC-проверка.", "source_ids": ["redotpay_features_2026", "redotpay_restrictions_2026"] },
+        "COL": { "status": "full", "account": true, "card": true, "note": "Рынок не входит в официальный список ограничений выпуска; применяется индивидуальная KYC-проверка.", "source_ids": ["redotpay_features_2026", "redotpay_restrictions_2026"] },
+        "MEX": { "status": "full", "account": true, "card": true, "note": "Рынок не входит в официальный список ограничений выпуска; применяется индивидуальная KYC-проверка.", "source_ids": ["redotpay_features_2026", "redotpay_restrictions_2026"] },
+        "GBR": { "status": "full", "account": true, "card": true, "note": "Рынок не входит в официальный список ограничений выпуска; применяется индивидуальная KYC-проверка.", "source_ids": ["redotpay_features_2026", "redotpay_restrictions_2026"] },
+        "IDN": { "status": "full", "account": true, "card": true, "note": "Рынок не входит в официальный список ограничений выпуска; применяется индивидуальная KYC-проверка.", "source_ids": ["redotpay_features_2026", "redotpay_restrictions_2026"] },
+        "VNM": { "status": "full", "account": true, "card": true, "note": "Рынок не входит в официальный список ограничений выпуска; применяется индивидуальная KYC-проверка.", "source_ids": ["redotpay_features_2026", "redotpay_restrictions_2026"] },
+        "CAN": { "status": "full", "account": true, "card": true, "note": "Рынок не входит в официальный список ограничений выпуска; применяется индивидуальная KYC-проверка.", "source_ids": ["redotpay_features_2026", "redotpay_restrictions_2026"] }
+      }
     },
     {
-      "provider": "DolarApp / ARQ",
+      "provider": "Bleap",
       "profile": "Прямой",
-      "market_codes": ["ARG", "COL", "MEX"],
-      "product": "Счёт в цифровых долларах, международные переводы и Mastercard, обеспеченная stablecoin-балансом",
-      "evidence": "Официальные материалы указывают работу в Аргентине, Колумбии и Мексике.",
-      "public_terms": "Виртуальная карта $0; физическая — $4,99 за доставку; международный перевод — фиксированные 3 USDc.",
-      "source_ids": ["dolarapp_markets", "dolarapp_card", "dolarapp_transfer_fee"]
-    },
-    {
-      "provider": "Littio",
-      "profile": "Прямой локальный",
-      "market_codes": ["COL"],
-      "product": "USDC/EURC/COPM-балансы и международная Mastercard с Apple Pay / Google Pay",
-      "evidence": "Официальная страница подтверждает расчёты цифровыми активами и глобальное использование карты.",
-      "public_terms": "$0 ежемесячная плата, $0 комиссия за локальные и международные покупки, $0 активация виртуальной карты.",
-      "source_ids": ["littio_card_2026"]
+      "product": "Self-custodial wallet, банковские переводы, crypto buy/sell и Mastercard",
+      "evidence": "Карта доступна в EEA и Швейцарии. В Великобритании подтверждены способы покупки/пополнения, но не выпуск карты; Аргентина, Колумбия и Мексика обозначены как будущая экспансия.",
+      "public_terms": "Card spend 0%; SEPA buy/sell 0%; лимит карточных покупок €15 000 в день и €30 000 за 30 дней.",
+      "source_ids": ["bleap_availability_2026", "bleap_uk_payments_2026", "bleap_fees_2026", "bleap_limits_2026"],
+      "availability": {
+        "PHL": { "status": "unavailable", "account": false, "card": false, "note": "Страна не входит в текущую зону запуска Bleap.", "source_ids": ["bleap_availability_2026"] },
+        "ARG": { "status": "unavailable", "account": false, "card": false, "note": "Аргентина указана как будущая экспансия, а не активный рынок.", "source_ids": ["bleap_availability_2026"] },
+        "COL": { "status": "unavailable", "account": false, "card": false, "note": "Колумбия указана как будущая экспансия, а не активный рынок.", "source_ids": ["bleap_availability_2026"] },
+        "MEX": { "status": "unavailable", "account": false, "card": false, "note": "Мексика указана как будущая экспансия, а не активный рынок.", "source_ids": ["bleap_availability_2026"] },
+        "GBR": { "status": "partial", "account": true, "card": false, "note": "Покупка и пополнение поддерживаются в UK, но текущая география карты ограничена EEA и Швейцарией.", "source_ids": ["bleap_availability_2026", "bleap_uk_payments_2026"] },
+        "IDN": { "status": "unavailable", "account": false, "card": false, "note": "Страна не входит в текущую зону запуска Bleap.", "source_ids": ["bleap_availability_2026"] },
+        "VNM": { "status": "unavailable", "account": false, "card": false, "note": "Страна не входит в текущую зону запуска Bleap.", "source_ids": ["bleap_availability_2026"] },
+        "CAN": { "status": "unavailable", "account": false, "card": false, "note": "Страна не входит в текущую зону запуска Bleap.", "source_ids": ["bleap_availability_2026"] }
+      }
     },
     {
       "provider": "ether.fi Cash",
       "profile": "Прямой crypto-native",
-      "market_codes": ["ARG", "MEX", "GBR", "IDN", "CAN"],
       "product": "Non-custodial crypto credit card, расходы под обеспечение on-chain баланса",
-      "evidence": "Аргентина, Мексика, Великобритания, Индонезия и Канада перечислены среди поддерживаемых регионов доставки.",
+      "evidence": "Текущий официальный список запрещённых юрисдикций включает Вьетнам, но не остальные семь исследуемых рынков; для Cash требуется KYC и подтверждение адреса.",
       "public_terms": "Core: виртуальная карта $10, физическая $50; ATM 2%; 0 FX fee для EUR/USD операций.",
-      "source_ids": ["etherfi_cash_2026", "etherfi_regions_2026"]
+      "source_ids": ["etherfi_cash_2026", "etherfi_unavailable_2026"],
+      "availability": {
+        "PHL": { "status": "full", "account": true, "card": true, "note": "Филиппины не входят в текущий список запрещённых юрисдикций Cash; требуется KYC.", "source_ids": ["etherfi_unavailable_2026"] },
+        "ARG": { "status": "full", "account": true, "card": true, "note": "Аргентина не входит в текущий список запрещённых юрисдикций Cash; требуется KYC.", "source_ids": ["etherfi_unavailable_2026"] },
+        "COL": { "status": "full", "account": true, "card": true, "note": "Колумбия не входит в текущий список запрещённых юрисдикций Cash; требуется KYC.", "source_ids": ["etherfi_unavailable_2026"] },
+        "MEX": { "status": "full", "account": true, "card": true, "note": "Мексика не входит в текущий список запрещённых юрисдикций Cash; требуется KYC.", "source_ids": ["etherfi_unavailable_2026"] },
+        "GBR": { "status": "full", "account": true, "card": true, "note": "Великобритания не входит в текущий список запрещённых юрисдикций Cash; требуется KYC.", "source_ids": ["etherfi_unavailable_2026"] },
+        "IDN": { "status": "full", "account": true, "card": true, "note": "Индонезия не входит в текущий список запрещённых юрисдикций Cash; требуется KYC.", "source_ids": ["etherfi_unavailable_2026"] },
+        "VNM": { "status": "unavailable", "account": false, "card": false, "note": "Вьетнам прямо указан среди неподдерживаемых стран для Cash и fiat services.", "source_ids": ["etherfi_unavailable_2026"] },
+        "CAN": { "status": "full", "account": true, "card": true, "note": "Канада не входит в текущий список запрещённых юрисдикций Cash; требуется KYC.", "source_ids": ["etherfi_unavailable_2026"] }
+      }
     },
     {
-      "provider": "Bybit Card",
-      "profile": "Прямой exchange-led",
-      "market_codes": ["ARG", "MEX", "IDN", "VNM"],
-      "product": "Карта, расходующая USDT/USDC и другие crypto-активы из funding account",
-      "evidence": "Отдельные программы действуют в Аргентине и Мексике; локализованный карточный продукт подтверждён для Индонезии, а карточные кампании — для Вьетнама.",
-      "public_terms": "Виртуальная карта без комиссии; физическая — $5/USDT в Аргентине и для Asia Pacific; комиссии зависят от региона.",
-      "source_ids": ["bybit_card_fees_2026", "bybit_card_faq_2026", "bybit_indonesia_2026", "bybit_vietnam_2026"]
+      "provider": "Gnosis Pay",
+      "profile": "Прямой crypto-native",
+      "product": "Self-custodial Safe и Visa debit card с расходованием stablecoin-баланса",
+      "evidence": "Аргентина, Колумбия, Мексика и Великобритания входят в официальный список eligible countries; Канада и Филиппины отмечены coming soon.",
+      "public_terms": "Card order и доставка — бесплатно; 0 fee за покупки и FX; 5 ATM-снятий или 200 единиц валюты/мес. бесплатно, затем 2%.",
+      "source_ids": ["gnosis_countries_2026", "gnosis_fees_2026"],
+      "availability": {
+        "PHL": { "status": "unavailable", "account": false, "card": false, "note": "Филиппины указаны в разделе Coming soon.", "source_ids": ["gnosis_countries_2026"] },
+        "ARG": { "status": "full", "account": true, "card": true, "note": "Аргентина включена в официальный список eligible countries.", "source_ids": ["gnosis_countries_2026"] },
+        "COL": { "status": "full", "account": true, "card": true, "note": "Колумбия включена в официальный список eligible countries.", "source_ids": ["gnosis_countries_2026"] },
+        "MEX": { "status": "full", "account": true, "card": true, "note": "Мексика включена в официальный список eligible countries.", "source_ids": ["gnosis_countries_2026"] },
+        "GBR": { "status": "full", "account": true, "card": true, "note": "Великобритания включена в официальный список eligible countries.", "source_ids": ["gnosis_countries_2026"] },
+        "IDN": { "status": "unavailable", "account": false, "card": false, "note": "Индонезия отсутствует в списке eligible и coming soon.", "source_ids": ["gnosis_countries_2026"] },
+        "VNM": { "status": "unavailable", "account": false, "card": false, "note": "Вьетнам отсутствует в списке eligible и coming soon.", "source_ids": ["gnosis_countries_2026"] },
+        "CAN": { "status": "unavailable", "account": false, "card": false, "note": "Канада указана в разделе Coming soon.", "source_ids": ["gnosis_countries_2026"] }
+      }
     },
     {
-      "provider": "Coins.ph",
-      "profile": "Локальный смежный",
-      "market_codes": ["PHL"],
-      "product": "PHP/crypto wallet, cash-in/out и QR Ph — сильный локальный spending/off-ramp слой",
-      "evidence": "Не является полным аналогом KAST, но закрывает критическую локальную часть сценария на Филиппинах.",
-      "public_terms": "InstaPay ₱10; personal PESONet $0; merchant payment QR Ph $0.",
-      "source_ids": ["coins_ph_cash_fees", "coins_ph_qrph"]
+      "provider": "Nexo",
+      "profile": "Криптоплатформа + карта",
+      "product": "Crypto wealth account и dual-mode debit/credit card",
+      "evidence": "Nexo Card официально доступна только в выбранных европейских странах, включая Великобританию. Для остальных семи рынков официальный источник не даёт достаточного списка доступности основного аккаунта.",
+      "public_terms": "Виртуальная карта после баланса $50; физическая — при балансе свыше $5 000 и Gold tier; FX 0,2–2,5%.",
+      "source_ids": ["nexo_card_2026", "nexo_country_disclaimer_2026"],
+      "availability": {
+        "PHL": { "status": "unconfirmed", "account": null, "card": false, "note": "Карта не выпускается вне выбранных стран Европы; доступность основного аккаунта по официальным материалам не подтверждена.", "source_ids": ["nexo_card_2026", "nexo_country_disclaimer_2026"] },
+        "ARG": { "status": "unconfirmed", "account": null, "card": false, "note": "Карта не выпускается; официальный Help Center отдельно исключает резидентов Аргентины из адресатов ряда материалов, но не публикует однозначный список аккаунтов.", "source_ids": ["nexo_card_2026", "nexo_country_disclaimer_2026"] },
+        "COL": { "status": "unconfirmed", "account": null, "card": false, "note": "Карта не выпускается; официальный Help Center отдельно исключает резидентов Колумбии из адресатов ряда материалов, но не публикует однозначный список аккаунтов.", "source_ids": ["nexo_card_2026", "nexo_country_disclaimer_2026"] },
+        "MEX": { "status": "unconfirmed", "account": null, "card": false, "note": "Карта не выпускается вне выбранных стран Европы; доступность основного аккаунта по официальным материалам не подтверждена.", "source_ids": ["nexo_card_2026", "nexo_country_disclaimer_2026"] },
+        "GBR": { "status": "full", "account": true, "card": true, "note": "Великобритания прямо включена в географию Nexo Card.", "source_ids": ["nexo_card_2026"] },
+        "IDN": { "status": "unconfirmed", "account": null, "card": false, "note": "Карта не выпускается вне выбранных стран Европы; доступность основного аккаунта по официальным материалам не подтверждена.", "source_ids": ["nexo_card_2026", "nexo_country_disclaimer_2026"] },
+        "VNM": { "status": "unconfirmed", "account": null, "card": false, "note": "Карта не выпускается вне выбранных стран Европы; доступность основного аккаунта по официальным материалам не подтверждена.", "source_ids": ["nexo_card_2026", "nexo_country_disclaimer_2026"] },
+        "CAN": { "status": "unconfirmed", "account": null, "card": false, "note": "Карта не выпускается вне выбранных стран Европы; доступность основного аккаунта по официальным материалам не подтверждена.", "source_ids": ["nexo_card_2026", "nexo_country_disclaimer_2026"] }
+      }
     },
     {
-      "provider": "Lemon",
-      "profile": "Локальный смежный",
-      "market_codes": ["ARG"],
-      "product": "Crypto/stablecoin wallet и card ecosystem для аргентинской аудитории",
-      "evidence": "Сильный локальный бренд и существующая crypto-native аудитория; не полный глобальный USD account аналог.",
-      "public_terms": "0,5% за buy/sell операцию; заявлено без maintenance/subscription fee.",
-      "source_ids": ["lemon_arg_fees"]
+      "provider": "Crypto.com",
+      "profile": "Криптоплатформа + карта",
+      "product": "Crypto exchange/app, wallet и региональные Visa card programmes",
+      "evidence": "Официальные материалы подтверждают App/Web на большинстве рынков, но карточные программы среди исследуемых стран подтверждены только для Великобритании и Канады; Индонезия включена в App geo restrictions.",
+      "public_terms": "Тарифы карты зависят от страны и уровня; матрица фиксирует доступность, а не переносит условия одного региона на другой.",
+      "source_ids": ["cryptocom_app_regions_2026", "cryptocom_web_regions_2026", "cryptocom_card_markets_2026"],
+      "availability": {
+        "PHL": { "status": "partial", "account": true, "card": false, "note": "App/Web поддерживаются, но выпуск карты для Филиппин не подтверждён текущими карточными программами.", "source_ids": ["cryptocom_app_regions_2026", "cryptocom_web_regions_2026", "cryptocom_card_markets_2026"] },
+        "ARG": { "status": "partial", "account": true, "card": false, "note": "App/Web поддерживаются, но выпуск карты для Аргентины не подтверждён текущими карточными программами.", "source_ids": ["cryptocom_app_regions_2026", "cryptocom_web_regions_2026", "cryptocom_card_markets_2026"] },
+        "COL": { "status": "partial", "account": true, "card": false, "note": "App/Web поддерживаются, но выпуск карты для Колумбии не подтверждён текущими карточными программами.", "source_ids": ["cryptocom_app_regions_2026", "cryptocom_web_regions_2026", "cryptocom_card_markets_2026"] },
+        "MEX": { "status": "partial", "account": true, "card": false, "note": "App/Web поддерживаются, но выпуск карты для Мексики не подтверждён текущими карточными программами.", "source_ids": ["cryptocom_app_regions_2026", "cryptocom_web_regions_2026", "cryptocom_card_markets_2026"] },
+        "GBR": { "status": "full", "account": true, "card": true, "note": "App и карточная программа доступны в Великобритании.", "source_ids": ["cryptocom_app_regions_2026", "cryptocom_card_markets_2026"] },
+        "IDN": { "status": "unavailable", "account": false, "card": false, "note": "Индонезия включена в официальный список App geo restrictions.", "source_ids": ["cryptocom_app_regions_2026"] },
+        "VNM": { "status": "partial", "account": true, "card": false, "note": "App/Web поддерживаются, но выпуск карты для Вьетнама не подтверждён текущими карточными программами.", "source_ids": ["cryptocom_app_regions_2026", "cryptocom_web_regions_2026", "cryptocom_card_markets_2026"] },
+        "CAN": { "status": "full", "account": true, "card": true, "note": "App и карточная программа доступны в Канаде.", "source_ids": ["cryptocom_app_regions_2026", "cryptocom_card_markets_2026"] }
+      }
+    },
+    {
+      "provider": "Wirex",
+      "profile": "Криптоплатформа + карта",
+      "product": "Fiat/crypto account, exchange и debit card",
+      "evidence": "Официальная таблица по странам отдельно показывает доступность аккаунта, crypto account и карты — это позволяет различить полное и частичное присутствие.",
+      "public_terms": "UK: выпуск виртуальной/пластиковой карты бесплатно; доставка £5; ATM до £200/мес. бесплатно, затем 2%.",
+      "source_ids": ["wirex_supported_2026", "wirex_uk_fees_2026"],
+      "availability": {
+        "PHL": { "status": "unavailable", "account": false, "card": false, "note": "В официальной таблице все функции для Филиппин отмечены N/A.", "source_ids": ["wirex_supported_2026"] },
+        "ARG": { "status": "full", "account": true, "card": true, "note": "В таблице отмечены Wirex account, crypto account и card.", "source_ids": ["wirex_supported_2026"] },
+        "COL": { "status": "partial", "account": true, "card": false, "note": "Account и crypto account доступны; Card отмечена N/A.", "source_ids": ["wirex_supported_2026"] },
+        "MEX": { "status": "partial", "account": true, "card": false, "note": "Account и crypto account доступны; Card отмечена N/A.", "source_ids": ["wirex_supported_2026"] },
+        "GBR": { "status": "full", "account": true, "card": true, "note": "В таблице отмечены Wirex account, crypto account и card.", "source_ids": ["wirex_supported_2026", "wirex_uk_fees_2026"] },
+        "IDN": { "status": "partial", "account": true, "card": false, "note": "Account и crypto account доступны; Card отмечена N/A.", "source_ids": ["wirex_supported_2026"] },
+        "VNM": { "status": "partial", "account": true, "card": false, "note": "Account и crypto account доступны; Card отмечена N/A.", "source_ids": ["wirex_supported_2026"] },
+        "CAN": { "status": "unavailable", "account": false, "card": false, "note": "В официальной таблице все функции для Канады отмечены N/A.", "source_ids": ["wirex_supported_2026"] }
+      }
+    },
+    {
+      "provider": "Coinbase",
+      "profile": "Криптоплатформа + карта",
+      "product": "Crypto exchange/account и Coinbase Card",
+      "evidence": "Coinbase account или crypto-only services подтверждены во всех восьми странах, но Coinbase Card среди них выпускается только в Великобритании.",
+      "public_terms": "Карточные и trading-условия зависят от страны; Аргентина с 31.01.2026 обозначена как crypto-only market.",
+      "source_ids": ["coinbase_card_countries_2026", "coinbase_account_countries_2026", "coinbase_crypto_only_2026"],
+      "availability": {
+        "PHL": { "status": "partial", "account": true, "card": false, "note": "Coinbase account поддерживается; Coinbase Card для Филиппин не выпускается.", "source_ids": ["coinbase_card_countries_2026", "coinbase_account_countries_2026"] },
+        "ARG": { "status": "partial", "account": true, "card": false, "note": "Доступен crypto-only account без локального fiat; карта не выпускается.", "source_ids": ["coinbase_card_countries_2026", "coinbase_crypto_only_2026"] },
+        "COL": { "status": "partial", "account": true, "card": false, "note": "Coinbase account поддерживается; Coinbase Card для Колумбии не выпускается.", "source_ids": ["coinbase_card_countries_2026", "coinbase_account_countries_2026"] },
+        "MEX": { "status": "partial", "account": true, "card": false, "note": "Coinbase account поддерживается; Coinbase Card для Мексики не выпускается.", "source_ids": ["coinbase_card_countries_2026", "coinbase_account_countries_2026"] },
+        "GBR": { "status": "full", "account": true, "card": true, "note": "Великобритания входит в список стран Coinbase Card.", "source_ids": ["coinbase_card_countries_2026", "coinbase_account_countries_2026"] },
+        "IDN": { "status": "partial", "account": true, "card": false, "note": "Coinbase account поддерживается; Coinbase Card для Индонезии не выпускается.", "source_ids": ["coinbase_card_countries_2026", "coinbase_account_countries_2026"] },
+        "VNM": { "status": "partial", "account": true, "card": false, "note": "Identity verification/account support подтверждены; Coinbase Card для Вьетнама не выпускается.", "source_ids": ["coinbase_card_countries_2026", "coinbase_account_countries_2026"] },
+        "CAN": { "status": "partial", "account": true, "card": false, "note": "Coinbase account поддерживается; Coinbase Card для Канады не выпускается.", "source_ids": ["coinbase_card_countries_2026", "coinbase_account_countries_2026"] }
+      }
     },
     {
       "provider": "Revolut",
-      "profile": "Смежный neobank",
-      "market_codes": ["GBR"],
-      "product": "Мультивалютный neobank с crypto-spend и глобальными переводами",
-      "evidence": "Функционально конкурирует за globally mobile аудиторию, но stablecoin не является ядром продукта.",
-      "public_terms": "Crypto-spend: 0 exchange fee по опубликованным условиям; может применяться fair-usage fee тарифа.",
-      "source_ids": ["revolut_uk_crypto_card"]
+      "profile": "Смежный global fintech",
+      "product": "Мультивалютный neobank, международные переводы и crypto-функции",
+      "evidence": "Полный продукт и карты подтверждены в Великобритании и Мексике; Аргентина и Колумбия находятся на стадии waitlist / подготовки запуска.",
+      "public_terms": "UK crypto-spend: 0 exchange fee по опубликованным условиям; может применяться fair-usage fee тарифа.",
+      "source_ids": ["revolut_supported_2026", "revolut_mexico_2026", "revolut_colombia_2026", "revolut_argentina_waitlist_2026", "revolut_uk_crypto_card"],
+      "availability": {
+        "PHL": { "status": "unavailable", "account": false, "card": false, "note": "Филиппины отсутствуют в текущем списке стран регистрации.", "source_ids": ["revolut_supported_2026"] },
+        "ARG": { "status": "unavailable", "account": false, "card": false, "note": "Для Аргентины опубликована waitlist, а не действующий продукт.", "source_ids": ["revolut_argentina_waitlist_2026"] },
+        "COL": { "status": "unavailable", "account": false, "card": false, "note": "Revolut сообщает о подготовке банковского запуска, но активный продукт ещё не подтверждён.", "source_ids": ["revolut_colombia_2026"] },
+        "MEX": { "status": "full", "account": true, "card": true, "note": "Официальная мексиканская страница подтверждает счёт, физические и виртуальные карты для резидентов.", "source_ids": ["revolut_mexico_2026"] },
+        "GBR": { "status": "full", "account": true, "card": true, "note": "Великобритания входит в текущий список поддерживаемых стран.", "source_ids": ["revolut_supported_2026", "revolut_uk_crypto_card"] },
+        "IDN": { "status": "unavailable", "account": false, "card": false, "note": "Индонезия отсутствует в текущем списке стран регистрации.", "source_ids": ["revolut_supported_2026"] },
+        "VNM": { "status": "unavailable", "account": false, "card": false, "note": "Вьетнам отсутствует в текущем списке стран регистрации.", "source_ids": ["revolut_supported_2026"] },
+        "CAN": { "status": "unavailable", "account": false, "card": false, "note": "Канада отсутствует в текущем списке стран регистрации.", "source_ids": ["revolut_supported_2026"] }
+      }
+    },
+    {
+      "provider": "Wise",
+      "profile": "Смежный global fintech",
+      "product": "Мультивалютный account, cross-border transfers и debit card",
+      "evidence": "Официальные списки отдельно фиксируют страны карты, Wise balance и переводов, поэтому рынки без карты отражены как частичные, а не отсутствующие.",
+      "public_terms": "UK: заказ карты £7; ATM до £250/мес. бесплатно, затем 2,69% на превышение.",
+      "source_ids": ["wise_card_countries_2026", "wise_balance_countries_2026", "wise_service_countries_2026", "wise_uk_card_fees"],
+      "availability": {
+        "PHL": { "status": "full", "account": true, "card": true, "note": "Филиппины входят в официальный список стран Wise card и Wise balance.", "source_ids": ["wise_card_countries_2026", "wise_balance_countries_2026"] },
+        "ARG": { "status": "partial", "account": true, "card": false, "note": "Wise balance доступен, но карта в Аргентине не выпускается.", "source_ids": ["wise_card_countries_2026", "wise_balance_countries_2026"] },
+        "COL": { "status": "partial", "account": true, "card": false, "note": "Wise balance доступен, но карта в Колумбии не выпускается.", "source_ids": ["wise_card_countries_2026", "wise_balance_countries_2026"] },
+        "MEX": { "status": "partial", "account": true, "card": false, "note": "Переводы Wise доступны, но Wise balance и карта для Мексики не входят в текущие списки.", "source_ids": ["wise_card_countries_2026", "wise_balance_countries_2026", "wise_service_countries_2026"] },
+        "GBR": { "status": "full", "account": true, "card": true, "note": "Великобритания входит в официальный список стран Wise card и Wise balance.", "source_ids": ["wise_card_countries_2026", "wise_balance_countries_2026"] },
+        "IDN": { "status": "partial", "account": true, "card": false, "note": "Переводы Wise доступны, но Wise balance и карта для Индонезии не входят в текущие списки.", "source_ids": ["wise_card_countries_2026", "wise_balance_countries_2026", "wise_service_countries_2026"] },
+        "VNM": { "status": "partial", "account": true, "card": false, "note": "Переводы Wise доступны, но Wise balance и карта для Вьетнама не входят в текущие списки.", "source_ids": ["wise_card_countries_2026", "wise_balance_countries_2026", "wise_service_countries_2026"] },
+        "CAN": { "status": "full", "account": true, "card": true, "note": "Канада входит в официальный список стран Wise card и Wise balance.", "source_ids": ["wise_card_countries_2026", "wise_balance_countries_2026"] }
+      }
     }
   ],
   "competitor_benchmarks": [
@@ -844,6 +963,39 @@
       "source_id": "etherfi_cash_2026"
     },
     {
+      "market_code": "GLOBAL",
+      "provider": "Bleap",
+      "product": "Card / SEPA",
+      "metric": "Card spend / SEPA buy & sell / limits",
+      "value": "Card spend 0%; SEPA buy и sell 0%; card payments €15 000/день и €30 000/30 дней",
+      "source_id": "bleap_fees_2026",
+      "secondary_source_id": "bleap_limits_2026"
+    },
+    {
+      "market_code": "GLOBAL",
+      "provider": "Gnosis Pay",
+      "product": "Self-custodial Visa card",
+      "metric": "Order / card spend / FX / ATM",
+      "value": "Карта и доставка 0; card spend и FX 0%; 5 ATM или 200/мес. бесплатно, затем 2%",
+      "source_id": "gnosis_fees_2026"
+    },
+    {
+      "market_code": "GBR",
+      "provider": "Nexo",
+      "product": "Dual-mode crypto card",
+      "metric": "Eligibility / FX / ATM",
+      "value": "Virtual: баланс от $50; physical: >$5 000 + Gold; FX 0,2–2,5%; ATM сверх allowance — 2%",
+      "source_id": "nexo_card_2026"
+    },
+    {
+      "market_code": "GBR",
+      "provider": "Wirex",
+      "product": "Fiat/crypto debit card",
+      "metric": "Card / delivery / ATM",
+      "value": "Virtual и plastic £0; доставка UK £5; ATM £200/мес. бесплатно, затем 2%",
+      "source_id": "wirex_uk_fees_2026"
+    },
+    {
       "market_code": "GBR",
       "provider": "Wise",
       "product": "Debit card / cross-border account",
@@ -859,31 +1011,6 @@
       "value": "0 exchange fee*; 100 обменов/24ч; ATM £3 000/24ч; £100 000/операцию",
       "note": "*Возможен fair-usage fee по плану.",
       "source_id": "revolut_uk_crypto_card"
-    },
-    {
-      "market_code": "PHL",
-      "provider": "Coins.ph",
-      "product": "PHP/crypto wallet",
-      "metric": "Cash-out fees",
-      "value": "InstaPay ₱10; personal PESONet бесплатно; OTC ₱105 до ₱10 тыс. или 1,6% выше",
-      "source_id": "coins_ph_cash_fees"
-    },
-    {
-      "market_code": "PHL",
-      "provider": "Coins.ph",
-      "product": "Verified wallet / QR Ph",
-      "metric": "Limits / merchant fee",
-      "value": "Identity verified: вывод до ₱1 млн/день; merchant payment QR Ph: 0",
-      "source_id": "coins_ph_limits",
-      "secondary_source_id": "coins_ph_qrph"
-    },
-    {
-      "market_code": "ARG",
-      "provider": "Lemon",
-      "product": "Investment orders",
-      "metric": "Buy/sell commission",
-      "value": "0,5% за операцию; заявлено без maintenance/subscription fee",
-      "source_id": "lemon_arg_fees"
     }
   ],
   "sources": [
@@ -1253,6 +1380,222 @@
       "publisher": "Bybit",
       "period": "Current product page checked 2026-08-11",
       "url": "https://www.bybit.com/id-ID/cards/",
+      "accessed": "2026-08-11",
+      "tier": "official_product_terms"
+    },
+    {
+      "id": "etherfi_unavailable_2026",
+      "title": "Where is Ether.Fi Cash currently unavailable?",
+      "publisher": "ether.fi",
+      "period": "Updated 2026-08-10",
+      "url": "https://help.ether.fi/en/articles/262373-where-is-ether-fi-cash-currently-unavailable",
+      "accessed": "2026-08-11",
+      "tier": "official_product_terms"
+    },
+    {
+      "id": "bleap_availability_2026",
+      "title": "Bleap regional availability and expansion",
+      "publisher": "Bleap",
+      "period": "Current campaign page checked 2026-08-11",
+      "url": "https://campaign.bleap.finance/en",
+      "accessed": "2026-08-11",
+      "tier": "official_product_terms"
+    },
+    {
+      "id": "bleap_uk_payments_2026",
+      "title": "Supported payment methods and currencies",
+      "publisher": "Bleap",
+      "period": "Current help article checked 2026-08-11",
+      "url": "https://help.bleap.finance/en/articles/8728196-what-payment-methods-and-currencies-does-bleap-support-when-buying",
+      "accessed": "2026-08-11",
+      "tier": "official_product_terms"
+    },
+    {
+      "id": "bleap_fees_2026",
+      "title": "Fee Schedule",
+      "publisher": "Bleap",
+      "period": "Published 2026-05-25",
+      "url": "https://help.bleap.finance/en/articles/12097920-fee-schedule",
+      "accessed": "2026-08-11",
+      "tier": "official_product_terms"
+    },
+    {
+      "id": "bleap_limits_2026",
+      "title": "What limits exist in Bleap?",
+      "publisher": "Bleap",
+      "period": "Published 2026-06-19",
+      "url": "https://help.bleap.finance/en/articles/15566380-what-limits-exist-in-bleap",
+      "accessed": "2026-08-11",
+      "tier": "official_product_terms"
+    },
+    {
+      "id": "gnosis_countries_2026",
+      "title": "Eligible Countries for Gnosis Pay",
+      "publisher": "Gnosis Pay",
+      "period": "Updated 2026-05-28",
+      "url": "https://help.gnosispay.com/hc/en-us/articles/39401751918612-Eligible-Countries-for-Gnosis-Pay",
+      "accessed": "2026-08-11",
+      "tier": "official_product_terms"
+    },
+    {
+      "id": "gnosis_fees_2026",
+      "title": "Understanding Your Card's Fees and Limits",
+      "publisher": "Gnosis Pay",
+      "period": "Updated 2026-04-27",
+      "url": "https://help.gnosispay.com/hc/en-us/articles/39533569163284-Understanding-Your-Card-s-Fees-and-Limits",
+      "accessed": "2026-08-11",
+      "tier": "official_product_terms"
+    },
+    {
+      "id": "nexo_card_2026",
+      "title": "Nexo Card eligibility, fees and limits",
+      "publisher": "Nexo",
+      "period": "Current product page checked 2026-08-11",
+      "url": "https://nexo.com/en-gb/crypto-card",
+      "accessed": "2026-08-11",
+      "tier": "official_product_terms"
+    },
+    {
+      "id": "nexo_country_disclaimer_2026",
+      "title": "Nexo app country availability notice",
+      "publisher": "Nexo",
+      "period": "Current help article checked 2026-08-11",
+      "url": "https://support.nexo.com/article/is-the-latest-nexo-app-version-available-in-my-country",
+      "accessed": "2026-08-11",
+      "tier": "official_product_terms"
+    },
+    {
+      "id": "cryptocom_app_regions_2026",
+      "title": "Crypto.com App Geo-Restrictions",
+      "publisher": "Crypto.com",
+      "period": "Current help article checked 2026-08-11",
+      "url": "https://help.crypto.com/en/articles/5792178-crypto-com-app-geo-restrictions",
+      "accessed": "2026-08-11",
+      "tier": "official_product_terms"
+    },
+    {
+      "id": "cryptocom_web_regions_2026",
+      "title": "Where is Crypto.com Web available?",
+      "publisher": "Crypto.com",
+      "period": "Current help article checked 2026-08-11",
+      "url": "https://help.crypto.com/en/articles/9805276-where-is-crypto-com-web-available",
+      "accessed": "2026-08-11",
+      "tier": "official_product_terms"
+    },
+    {
+      "id": "cryptocom_card_markets_2026",
+      "title": "Available Crypto.com Visa Card markets",
+      "publisher": "Crypto.com",
+      "period": "Current help article checked 2026-08-11",
+      "url": "https://help.crypto.com/en/articles/1341655-which-are-the-available-markets",
+      "accessed": "2026-08-11",
+      "tier": "official_product_terms"
+    },
+    {
+      "id": "wirex_supported_2026",
+      "title": "Supported countries and features",
+      "publisher": "Wirex",
+      "period": "Current country table checked 2026-08-11",
+      "url": "https://help.wirexapp.com/article/supported-countries-1189",
+      "accessed": "2026-08-11",
+      "tier": "official_product_terms"
+    },
+    {
+      "id": "wirex_uk_fees_2026",
+      "title": "Wirex Fees (UK)",
+      "publisher": "Wirex",
+      "period": "Current help article checked 2026-08-11",
+      "url": "https://help.wirexapp.com/article/wirex-fees-uk-1395",
+      "accessed": "2026-08-11",
+      "tier": "official_product_terms"
+    },
+    {
+      "id": "coinbase_card_countries_2026",
+      "title": "Coinbase Card availability",
+      "publisher": "Coinbase",
+      "period": "Current help article checked 2026-08-11",
+      "url": "https://help.coinbase.com/en/coinbase/trading-and-funding/other/coinbase-card-faq",
+      "accessed": "2026-08-11",
+      "tier": "official_product_terms"
+    },
+    {
+      "id": "coinbase_account_countries_2026",
+      "title": "Coinbase account locations and identity documents",
+      "publisher": "Coinbase",
+      "period": "Current help article checked 2026-08-11",
+      "url": "https://help.coinbase.com/en/coinbase/getting-started/getting-started-with-coinbase/id-doc-verification-row",
+      "accessed": "2026-08-11",
+      "tier": "official_product_terms"
+    },
+    {
+      "id": "coinbase_crypto_only_2026",
+      "title": "Crypto-only markets",
+      "publisher": "Coinbase",
+      "period": "Argentina change effective 2026-01-31",
+      "url": "https://help.coinbase.com/en/coinbase/managing-my-account/other/crypto-only-markets",
+      "accessed": "2026-08-11",
+      "tier": "official_product_terms"
+    },
+    {
+      "id": "revolut_supported_2026",
+      "title": "Supported countries for Revolut sign-up",
+      "publisher": "Revolut",
+      "period": "Current help article checked 2026-08-11",
+      "url": "https://help.revolut.com/help/profile-and-plan/profile-plan/verifying-identity/what-countries-are-supported/",
+      "accessed": "2026-08-11",
+      "tier": "official_product_terms"
+    },
+    {
+      "id": "revolut_mexico_2026",
+      "title": "Revolut Mexico account and cards",
+      "publisher": "Revolut Mexico",
+      "period": "Current product page checked 2026-08-11",
+      "url": "https://www.revolut.com/en-MX/",
+      "accessed": "2026-08-11",
+      "tier": "official_product_terms"
+    },
+    {
+      "id": "revolut_colombia_2026",
+      "title": "Revolut granted authorisation to establish Colombian bank",
+      "publisher": "Revolut",
+      "period": "Launch preparation checked 2026-08-11",
+      "url": "https://www.revolut.com/en-MX/news/revolut_granted_authorisation_to_establish_colombian_bank/",
+      "accessed": "2026-08-11",
+      "tier": "official_product_terms"
+    },
+    {
+      "id": "revolut_argentina_waitlist_2026",
+      "title": "Argentina waiting list privacy notice",
+      "publisher": "Revolut",
+      "period": "Current waitlist notice checked 2026-08-11",
+      "url": "https://cdn.revolut.com/terms_and_conditions/pdf/waiting_list_privacy_notice_ef309d6e_1.0.0_1741724571_en.pdf",
+      "accessed": "2026-08-11",
+      "tier": "official_product_terms"
+    },
+    {
+      "id": "wise_card_countries_2026",
+      "title": "Can I get the Wise card in my country?",
+      "publisher": "Wise",
+      "period": "Current help article checked 2026-08-11",
+      "url": "https://wise.com/help/articles/2968915/can-i-get-the-wise-card-in-my-country",
+      "accessed": "2026-08-11",
+      "tier": "official_product_terms"
+    },
+    {
+      "id": "wise_balance_countries_2026",
+      "title": "Where can I open a Wise balance?",
+      "publisher": "Wise",
+      "period": "Current help article checked 2026-08-11",
+      "url": "https://wise.com/help/articles/2813542/where-can-i-open-a-wise-balance",
+      "accessed": "2026-08-11",
+      "tier": "official_product_terms"
+    },
+    {
+      "id": "wise_service_countries_2026",
+      "title": "Where can I use Wise?",
+      "publisher": "Wise",
+      "period": "Current help article checked 2026-08-11",
+      "url": "https://wise.com/help/articles/2978049/where-can-i-use-wise",
       "accessed": "2026-08-11",
       "tier": "official_product_terms"
     }

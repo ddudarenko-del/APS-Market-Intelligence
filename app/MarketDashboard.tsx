@@ -8,6 +8,14 @@ type Tab = "overview" | "kastfit" | "compare" | "profiles" | "competition" | "da
 type ScoreMode = "aps" | "kast";
 type MetricValue = { value: number; year: number } | null;
 type Market = (typeof data.markets)[number];
+type AvailabilityStatus = "full" | "partial" | "unavailable" | "unconfirmed";
+type Availability = {
+  status: AvailabilityStatus;
+  account: boolean | null;
+  card: boolean;
+  note: string;
+  source_ids: string[];
+};
 type CountryProperties = { ADM0_A3?: string };
 type CountryFeature = GeoJSON.Feature<GeoJSON.Geometry, CountryProperties>;
 type CountryLayer = import("leaflet").Path & { feature?: CountryFeature };
@@ -30,6 +38,33 @@ const gateLabels: Record<string, string> = {
   fiat_wrapper_only: "Только fiat-wrapper",
   ifpe_or_bank: "IFPE / банк",
 };
+
+const availabilityLabels: Record<AvailabilityStatus, string> = {
+  full: "Полностью",
+  partial: "Частично",
+  unavailable: "Недоступно",
+  unconfirmed: "Не подтверждено",
+};
+
+const availabilityOrder: Record<AvailabilityStatus, number> = {
+  full: 0,
+  partial: 1,
+  unconfirmed: 2,
+  unavailable: 3,
+};
+
+function getAvailability(competitor: (typeof data.market_competitors)[number], marketCode: string) {
+  return (competitor.availability as Record<string, Availability>)[marketCode];
+}
+
+function AvailabilityBadge({ status, compact = false }: { status: AvailabilityStatus; compact?: boolean }) {
+  return <span className={`availability-badge ${status} ${compact ? "compact" : ""}`}>{compact ? "" : availabilityLabels[status]}</span>;
+}
+
+function supportLabel(value: boolean | null) {
+  if (value === null) return "не подтверждено";
+  return value ? "да" : "нет";
+}
 
 function formatMoney(metric: MetricValue) {
   if (!metric) return "нет данных";
@@ -264,7 +299,16 @@ export function MarketDashboard() {
     if (scoreMode === "kast") return getKastFit(b).score - getKastFit(a).score;
     return a.rank - b.rank;
   });
-  const visibleCompetitors = data.market_competitors.filter((item) => competitorMarket === "ALL" || item.market_codes.includes(competitorMarket));
+  const visibleCompetitors = [...data.market_competitors].sort((a, b) => {
+    if (competitorMarket === "ALL") return 0;
+    return availabilityOrder[getAvailability(a, competitorMarket).status] - availabilityOrder[getAvailability(b, competitorMarket).status];
+  });
+  const selectedAvailabilityCounts = competitorMarket === "ALL"
+    ? null
+    : visibleCompetitors.reduce<Record<AvailabilityStatus, number>>((counts, item) => {
+        counts[getAvailability(item, competitorMarket).status] += 1;
+        return counts;
+      }, { full: 0, partial: 0, unavailable: 0, unconfirmed: 0 });
 
   function chooseMarket(code: string, nextTab?: Tab) {
     setSelectedCode(code);
@@ -567,30 +611,104 @@ export function MarketDashboard() {
         <section className="panel benchmark-panel">
           <div className="panel-heading">
             <div>
-              <span className="section-kicker">KAST-LIKE COMPETITION</span>
-              <h2>Конкуренты того же продуктового профиля</h2>
-              <p>Прямые stablecoin-карты и global money apps отделены от локальных смежных продуктов. Покрытие и тарифы подтверждены официальными страницами.</p>
+              <span className="section-kicker">MARKET AVAILABILITY · 11.08.2026</span>
+              <h2>Где конкурент доступен полностью, а где — частично</h2>
+              <p>Отдельно проверены основной сервис/аккаунт и выпуск карты для резидента. Waitlist и coming soon не считаются действующим присутствием.</p>
             </div>
-            <span className="count-pill">{data.market_competitors.length} групп</span>
+            <span className="count-pill">{data.market_competitors.length} конкурентов · {data.markets.length} рынков</span>
+          </div>
+          <div className="reference-note">
+            <strong>{data.competition_availability.reference_product} — продуктовый эталон</strong>
+            <span>{data.competition_availability.reference_note}</span>
+          </div>
+          <div className="availability-legend" aria-label="Обозначения доступности">
+            {(Object.entries(data.competition_availability.definitions) as Array<[AvailabilityStatus, string]>).map(([status, definition]) => (
+              <div key={status}><AvailabilityBadge status={status} /><span>{definition}</span></div>
+            ))}
           </div>
           <div className="competitor-filter" aria-label="Фильтр конкурентов по рынку">
             <button type="button" className={competitorMarket === "ALL" ? "active" : ""} onClick={() => setCompetitorMarket("ALL")}>Все рынки</button>
             {data.markets.map((market) => <button key={market.code} type="button" className={competitorMarket === market.code ? "active" : ""} onClick={() => setCompetitorMarket(market.code)}>{market.name_ru}</button>)}
           </div>
+          {selectedAvailabilityCounts && (
+            <div className="availability-summary">
+              {(Object.keys(availabilityLabels) as AvailabilityStatus[]).map((status) => (
+                <div key={status}><AvailabilityBadge status={status} /><strong>{selectedAvailabilityCounts[status]}</strong></div>
+              ))}
+            </div>
+          )}
+          <div className="availability-table-scroll">
+            <table className="availability-table">
+              <thead>
+                <tr>
+                  <th>Конкурент</th>
+                  <th>Тип</th>
+                  {data.markets.map((market) => <th key={market.code}>{market.code}<small>{market.name_ru}</small></th>)}
+                </tr>
+              </thead>
+              <tbody>
+                {data.market_competitors.map((item) => (
+                  <tr key={item.provider}>
+                    <td><strong>{item.provider}</strong></td>
+                    <td><span>{item.profile}</span></td>
+                    {data.markets.map((market) => {
+                      const marketAvailability = getAvailability(item, market.code);
+                      return (
+                        <td key={market.code}>
+                          <button type="button" onClick={() => setCompetitorMarket(market.code)} title={`${item.provider} · ${market.name_ru}: ${availabilityLabels[marketAvailability.status]}`}>
+                            <AvailabilityBadge status={marketAvailability.status} compact />
+                          </button>
+                        </td>
+                      );
+                    })}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <div className="subsection-heading competition-detail-heading">
+            <div>
+              <span className="section-kicker">OFFICIAL EVIDENCE</span>
+              <h2>{competitorMarket === "ALL" ? "Профили и покрытие" : `Доступность: ${data.markets.find((market) => market.code === competitorMarket)?.name_ru}`}</h2>
+            </div>
+            <span className="count-pill">{competitorMarket === "ALL" ? "вся география" : "сначала доступные"}</span>
+          </div>
           <div className="competitor-grid">
-            {visibleCompetitors.map((item) => (
-              <article className="competitor-card" key={item.provider}>
-                <div className="competitor-card-head"><span>{item.profile}</span><strong>{item.provider}</strong></div>
-                <p className="competitor-markets">{item.market_codes.map((code) => data.markets.find((market) => market.code === code)?.name_ru).filter(Boolean).join(" · ")}</p>
-                <h3>{item.product}</h3>
-                <p>{item.evidence}</p>
-                <div className="competitor-terms"><span>Публичные условия</span><strong>{item.public_terms}</strong></div>
-                <div className="source-chips">{item.source_ids.map((id) => <SourceLink key={id} sourceId={id} />)}</div>
-              </article>
-            ))}
+            {visibleCompetitors.map((item) => {
+              const selectedAvailability = competitorMarket === "ALL" ? null : getAvailability(item, competitorMarket);
+              const fullMarkets = data.markets.filter((market) => getAvailability(item, market.code).status === "full");
+              const partialMarkets = data.markets.filter((market) => getAvailability(item, market.code).status === "partial");
+              return (
+                <article className="competitor-card" key={item.provider}>
+                  <div className="competitor-card-head">
+                    <span>{item.profile}</span>
+                    <strong>{item.provider}</strong>
+                  </div>
+                  {selectedAvailability ? (
+                    <div className="selected-availability">
+                      <div className="selected-availability-head"><AvailabilityBadge status={selectedAvailability.status} /><span>{competitorMarket}</span></div>
+                      <div className="support-checks">
+                        <span>Сервис / аккаунт <strong>{supportLabel(selectedAvailability.account)}</strong></span>
+                        <span>Выпуск карты <strong>{supportLabel(selectedAvailability.card)}</strong></span>
+                      </div>
+                      <p>{selectedAvailability.note}</p>
+                    </div>
+                  ) : (
+                    <p className="competitor-markets">
+                      <strong>Полностью:</strong> {fullMarkets.map((market) => market.name_ru).join(" · ") || "—"}<br />
+                      <strong>Частично:</strong> {partialMarkets.map((market) => market.name_ru).join(" · ") || "—"}
+                    </p>
+                  )}
+                  <h3>{item.product}</h3>
+                  <p>{item.evidence}</p>
+                  <div className="competitor-terms"><span>Публичные условия</span><strong>{item.public_terms}</strong></div>
+                  <div className="source-chips">{item.source_ids.map((id) => <SourceLink key={id} sourceId={id} />)}</div>
+                </article>
+              );
+            })}
           </div>
           <div className="subsection-heading">
-            <div><span className="section-kicker">VERIFIED PRICE POINTS</span><h2>Опубликованные тарифы и лимиты</h2></div>
+            <div><span className="section-kicker">VERIFIED PRICE POINTS</span><h2>Сопоставимые тарифы и лимиты</h2><p>Только опубликованные цифры с официальных страниц; условия разных регионов не переносятся автоматически.</p></div>
             <span className="count-pill">{data.competitor_benchmarks.length} точек</span>
           </div>
           <div className="benchmark-grid">
@@ -607,7 +725,10 @@ export function MarketDashboard() {
                   <span className="benchmark-metric">{item.metric}</span>
                   <h3>{item.value}</h3>
                   {item.note && <p className="benchmark-note">{item.note}</p>}
-                  {source && <a href={source.url} target="_blank" rel="noreferrer">Официальные условия ↗</a>}
+                  <div className="benchmark-sources">
+                    {source && <a href={source.url} target="_blank" rel="noreferrer">Официальные условия ↗</a>}
+                    {"secondary_source_id" in item && item.secondary_source_id && <SourceLink sourceId={item.secondary_source_id} />}
+                  </div>
                 </article>
               );
             })}
