@@ -87,7 +87,9 @@ a { color: inherit; }
 .panel-heading p { margin: 7px 0 0; color: var(--ink-soft); font-size: 14px; line-height: 1.45; }
 .panel-heading select { min-width: 190px; border: 1px solid var(--line); background: white; border-radius: 12px; padding: 10px 34px 10px 12px; color: var(--ink); }
 .section-kicker { color: #4f5e7b; }
-.count-pill, .gate-mini { border: 1px solid var(--line); background: #fbf8e9; border-radius: 999px; padding: 6px 10px; font-size: 11px; color: var(--ink-soft); white-space: nowrap; }
+.count-pill, .gate-mini { border: 1px solid var(--line); background: #fbf8e9; border-radius: 999px; padding: 6px 10px; font-size: 11px; color: var(--ink-soft); }
+.count-pill { white-space: nowrap; }
+.gate-mini { width: 112px; max-width: 100%; min-width: 0; white-space: normal; text-align: center; line-height: 1.18; overflow-wrap: anywhere; }
 
 .atlas { position: relative; height: 590px; overflow: hidden; background-color: #dfe8e8; background-image: linear-gradient(rgba(255,255,255,.45) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.45) 1px, transparent 1px), radial-gradient(ellipse at 24% 48%, rgba(255,255,255,.92) 0 16%, transparent 16.4%), radial-gradient(ellipse at 32% 75%, rgba(255,255,255,.92) 0 11%, transparent 11.4%), radial-gradient(ellipse at 52% 35%, rgba(255,255,255,.92) 0 9%, transparent 9.4%), radial-gradient(ellipse at 58% 63%, rgba(255,255,255,.92) 0 15%, transparent 15.4%), radial-gradient(ellipse at 80% 48%, rgba(255,255,255,.92) 0 20%, transparent 20.4%), radial-gradient(ellipse at 88% 81%, rgba(255,255,255,.92) 0 8%, transparent 8.4%); background-size: 8% 12%, 8% 12%, auto, auto, auto, auto, auto, auto; border-bottom: 1px solid var(--line); }
 .atlas::after { content: "Схематичное положение рынков · не картографическая проекция"; position: absolute; top: 18px; right: 20px; font: 10px var(--font-plex-mono), monospace; color: rgba(10,23,51,.52); }
@@ -106,10 +108,10 @@ a { color: inherit; }
 .selected-kpis div { padding: 12px; border-left: 1px dashed var(--line); }.selected-kpis span, .metric-stack span, .profile-grid span, .numbers-strip span, .gate-box span { display: block; color: var(--ink-soft); font-size: 11px; text-transform: uppercase; letter-spacing: .08em; }.selected-kpis strong { display: block; margin-top: 4px; font-size: 18px; }
 .primary-button { border: 0; border-radius: 12px; background: var(--ink); color: white; padding: 13px 17px; cursor: pointer; white-space: nowrap; }
 
-.ranking-list { padding: 8px 14px; }
-.ranking-list button { width: 100%; display: grid; grid-template-columns: 28px minmax(120px, 1fr) auto auto; gap: 10px; align-items: center; border: 0; border-bottom: 1px dashed var(--line); background: transparent; padding: 14px 8px; text-align: left; cursor: pointer; border-radius: 10px; }
+.ranking-list { min-width: 0; padding: 8px 14px; }
+.ranking-list button { width: 100%; min-width: 0; display: grid; grid-template-columns: 28px minmax(0, 1fr) minmax(86px, 112px) auto; gap: 10px; align-items: center; border: 0; border-bottom: 1px dashed var(--line); background: transparent; padding: 14px 8px; text-align: left; cursor: pointer; border-radius: 10px; }
 .ranking-list button:hover, .ranking-list button.active { background: #f7f4e6; }
-.rank-number { color: var(--ink-soft); font: 12px var(--font-plex-mono), monospace; }.rank-name strong, .rank-name small { display: block; }.rank-name small { color: var(--ink-soft); font-size: 11px; margin-top: 3px; }
+.rank-number { color: var(--ink-soft); font: 12px var(--font-plex-mono), monospace; }.rank-name { min-width: 0; }.rank-name strong, .rank-name small { display: block; overflow-wrap: anywhere; }.rank-name small { color: var(--ink-soft); font-size: 11px; margin-top: 3px; }
 .score-badge { min-width: 48px; padding: 7px 8px; text-align: center; border-radius: 999px; font: 700 13px var(--font-plex-mono), monospace; }.score-badge.high { background: var(--red); }.score-badge.mid { background: var(--yellow); }.score-badge.low { background: #b8e9b1; }
 .ranking-note { margin: 12px 18px 20px; padding: 16px; background: var(--aqua); border-radius: 13px; }.ranking-note p { margin: 6px 0 0; font-size: 13px; line-height: 1.5; color: #30405d; }
 
@@ -638,4 +640,10 @@ footer { border-top: 1px solid #1f2823; }
   .kast-benchmark-metrics, .kast-ranking-list { grid-template-columns: 1fr; }
   .profile-hero { align-items: flex-start; flex-direction: column; gap: 20px; }
   .selected-kpis { grid-template-columns: 1fr; }
+  .ranking-list { padding-inline: 10px; }
+  .ranking-list button { grid-template-columns: 24px minmax(0, 1fr) 48px; grid-template-areas: "rank name score" ". gate score"; column-gap: 8px; row-gap: 7px; padding-inline: 6px; }
+  .ranking-list .rank-number { grid-area: rank; }
+  .ranking-list .rank-name { grid-area: name; }
+  .ranking-list .gate-mini { grid-area: gate; justify-self: start; width: auto; max-width: 150px; }
+  .ranking-list .score-badge { grid-area: score; }
 }
