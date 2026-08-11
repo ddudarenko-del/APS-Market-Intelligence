@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import data from "./data/market_data.json";
 
@@ -348,7 +347,7 @@ export function MarketDashboard() {
     <main className="app-shell">
       <header className="hero">
         <div className="hero-topline">
-            <Image className="aps-logo" src="/brand/aps-logo.svg" alt="APS" width={132} height={52} priority />
+          <img className="aps-logo" src="./brand/aps-logo.svg" alt="APS" width={132} height={52} />
           <span className="update-stamp">Market Intelligence / данные проверены 11.08.2026</span>
         </div>
         <div className="hero-grid">
