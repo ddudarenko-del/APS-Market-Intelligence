@@ -83,6 +83,24 @@
         "barrier": "Сильные GCash/Maya/Coins.ph и обязательная локальная BSP-инфраструктура",
         "entry": "Remittance-first партнёрство с локальным EMI/VASP и QR Ph"
       },
+      "case_studies": {
+        "success": {
+          "company": "Coins.ph",
+          "product": "Локальный crypto-wallet, exchange и платёжный аккаунт",
+          "period": "2014–2026",
+          "evidence": "16+ млн зарегистрированных и 7+ млн активных пользователей в месяц; компания одновременно имеет лицензии BSP на virtual currency и electronic money.",
+          "lesson": "Масштаб появился у продукта, который встроил crypto в локальную лицензированную платёжную инфраструктуру, а не оставил его отдельным кошельком.",
+          "source_ids": ["coins_about_2026"]
+        },
+        "failure": {
+          "company": "Binance",
+          "product": "Нелицензированная глобальная exchange-платформа",
+          "period": "2023–2024",
+          "evidence": "SEC Philippines установила, что оператор не зарегистрирован, а в 2024 году добилась блокировки его онлайн-присутствия в стране.",
+          "lesson": "Глобальный масштаб не заменяет местную регистрацию и разрешённый канал дистрибуции.",
+          "source_ids": ["ph_sec_binance_2023", "ph_sec_binance_block_2024"]
+        }
+      },
       "scores": {
         "market": 5,
         "need": 5,
@@ -164,6 +182,24 @@
         "barrier": "Высокая конкуренция и чувствительность к курсу, комиссии и доступности средств",
         "entry": "PSAV-совместимая модель, интеграции с Deel/Upwork/Payoneer и локальный off-ramp"
       },
+      "case_studies": {
+        "success": {
+          "company": "Lemon",
+          "product": "Crypto-app, stable-value баланс и Visa card",
+          "period": "2019–2025",
+          "evidence": "5 млн пользователей в Аргентине и Перу, более 1 млн MAU, свыше 7 транзакций в секунду, $160+ млн клиентских активов под хранением и $20 млн Series B.",
+          "lesson": "Локальный UX, карта и прозрачные резервы превращают crypto-инфраструктуру в ежедневный финансовый продукт.",
+          "source_ids": ["lemon_series_b_2025"]
+        },
+        "failure": {
+          "company": "Coinbase",
+          "product": "Покупка и продажа USDC за ARS",
+          "period": "изменение с 31.01.2026",
+          "evidence": "Coinbase прекратила покупку и продажу USDC за аргентинские песо; остались только crypto-to-crypto операции без ARS-депозита и вывода в местный банк или на карту.",
+          "lesson": "Crypto-only доступ без локального fiat on/off-ramp не закрывает основной сценарий KAST.",
+          "source_ids": ["coinbase_crypto_only_2026"]
+        }
+      },
       "scores": {
         "market": 5,
         "need": 5,
@@ -244,6 +280,24 @@
         "use_case": "Получать USD/EUR, хранить часть в stable-value balance и тратить в COP",
         "barrier": "Криптоактивы не являются деньгами; сильный Littio и необходимость дешёвого off-ramp",
         "entry": "Партнёрство с лицензированным платёжным/карточным провайдером"
+      },
+      "case_studies": {
+        "success": {
+          "company": "Littio",
+          "product": "Мультивалютный digital-dollar account и Mastercard",
+          "period": "2022–2026",
+          "evidence": "Компания запустила первую в Колумбии глобальную карту в цифровых долларах и добавила расчёты в USD, EUR, COP и MXN без комиссии в валюте покупки.",
+          "lesson": "Локальный COP-слой и международная карта снимают разрыв между сохранением в stable-value активе и повседневной тратой.",
+          "source_ids": ["littio_partners_2023", "littio_card_multicurrency_2024"]
+        },
+        "failure": {
+          "company": "Binance Card",
+          "product": "Crypto-funded Mastercard, эмитент Movii",
+          "period": "март–сентябрь 2023",
+          "evidence": "Карточная программа в Колумбии была закрыта примерно через пять месяцев после запуска; после 21 сентября 2023 года карты отклонялись.",
+          "lesson": "Карточный продукт зависит от устойчивости банковского, эмиссионного и платёжного партнёрства — одного exchange-аккаунта недостаточно.",
+          "source_ids": ["binance_card_colombia_2023"]
+        }
       },
       "scores": {
         "market": 5,
@@ -327,6 +381,24 @@
         "barrier": "Консервативная позиция регуляторов, сильные Bitso/ARQ и масштаб compliance",
         "entry": "IFPE/банк или лицензированный партнёр; acquisition по обе стороны коридора"
       },
+      "case_studies": {
+        "success": {
+          "company": "Bitso",
+          "product": "MXN/crypto account с локальными SPEI rails",
+          "period": "2014–2025",
+          "evidence": "Bitso сообщает о 9+ млн пользователей в Латинской Америке; в Мексике продукт принимает MXN через SPEI и даёт прямой доступ к crypto-активам.",
+          "lesson": "Локальный real-time rail превращает stablecoin/crypto-счёт в часть привычного денежного оборота.",
+          "source_ids": ["bitso_users_2025", "bitso_spei_2025"]
+        },
+        "failure": {
+          "company": "Bineo / Banorte",
+          "product": "Полностью цифровой банк",
+          "period": "2024–2026",
+          "evidence": "Bineo получил чистый убыток 981 млн MXN за 2024 год; в отчётности за I квартал 2026 года Banorte классифицировал его как discontinued operation из-за решения о продаже.",
+          "lesson": "Даже лицензированный digital-only банк не гарантирует экономику: для входа нужны доказанный канал привлечения и строгая стоимость обслуживания.",
+          "source_ids": ["banorte_bineo_2024", "banorte_bineo_sale_2026"]
+        }
+      },
       "scores": {
         "market": 5,
         "need": 5,
@@ -409,6 +481,24 @@
         "barrier": "Зрелые банки и сильные Wise/Revolut; новый режим FCA с 25.10.2027",
         "entry": "FCA-ready партнёрская модель; cross-border продукт без crypto-first коммуникации"
       },
+      "case_studies": {
+        "success": {
+          "company": "Wirex",
+          "product": "Fiat/crypto account и платёжная карта",
+          "period": "2014–2025",
+          "evidence": "7+ млн пользователей, $20+ млрд обработанных транзакций и присутствие в 130 странах; UK-продукт поддерживает Faster Payments, crypto transfers и карту.",
+          "lesson": "В зрелом рынке работает понятный everyday-money интерфейс поверх нескольких типов активов и локальных банковских rails.",
+          "source_ids": ["wirex_uk_scale_2025"]
+        },
+        "failure": {
+          "company": "Binance Markets Limited",
+          "product": "Регулируемое присутствие Binance в Великобритании",
+          "period": "2021–2023",
+          "evidence": "FCA ограничила регулируемую деятельность BML, а 30 мая 2023 года завершила отмену её разрешений; ни одна компания Binance Group не имела UK-авторизации или регистрации.",
+          "lesson": "В Великобритании нельзя строить regulated proposition поверх глобального бренда без полноценного FCA-perimeter.",
+          "source_ids": ["fca_binance_2023"]
+        }
+      },
       "scores": {
         "market": 4,
         "need": 3,
@@ -489,6 +579,24 @@
         "use_case": "Global income account с локальным IDR payment layer",
         "barrier": "Crypto регулируется как финансовый актив, а платежи требуют отдельной BI-инфраструктуры",
         "entry": "Локальный банк/PJP, IDR-карта и интеграция с e-wallet инфраструктурой"
+      },
+      "case_studies": {
+        "success": {
+          "company": "Pintu",
+          "product": "Локальная crypto-investment app",
+          "period": "2020–2026",
+          "evidence": "Официальный press kit фиксирует 4,8+ млн загрузок приложения у индонезийского продукта, работающего с 2020 года.",
+          "lesson": "Локальный бренд, язык и IDR-first onboarding важнее глобальной оболочки, даже если платёжный сценарий KAST требует отдельного партнёра.",
+          "source_ids": ["pintu_presskit_2026"]
+        },
+        "failure": {
+          "company": "Zipmex Indonesia",
+          "product": "Crypto exchange и кошелёк",
+          "period": "июль–август 2022",
+          "evidence": "После приостановки клиентских выводов Bappebti взяла Zipmex Indonesia под усиленный надзор; выводы из trade wallet были восстановлены с 21 июля 2022 года.",
+          "lesson": "Ликвидность и сегрегация клиентских средств — обязательный product gate, а не только back-office риск.",
+          "source_ids": ["bappebti_zipmex_2022"]
+        }
       },
       "scores": {
         "market": 5,
@@ -572,6 +680,24 @@
         "barrier": "Признание цифровых активов и пилот торговли не равны разрешению retail stablecoin payments",
         "entry": "Только через лицензированных локальных участников и расчёты в разрешённой валюте"
       },
+      "case_studies": {
+        "success": {
+          "company": "Coin98 / Ninety Eight",
+          "product": "Vietnam-built multichain self-custody wallet",
+          "period": "2019–2025",
+          "evidence": "Coin98 сообщала о 10+ млн пользователей и развила кошелёк до поддержки более 120 блокчейнов, сохранив модель self-custody.",
+          "lesson": "Вьетнамская команда доказала экспортный спрос на wallet-инфраструктуру; это не подтверждает разрешённость локальных stablecoin-платежей.",
+          "source_ids": ["coin98_users_2024", "coin98_wallet_2025"]
+        },
+        "failure": {
+          "company": "Sky Mavis / Ronin",
+          "product": "Ronin Bridge для Axie Infinity",
+          "period": "март–июнь 2022",
+          "evidence": "Из моста были выведены 173 600 ETH и 25,5 млн USDC; Sky Mavis обязалась полностью покрыть средства пользователей и перезапустила мост после аудитов.",
+          "lesson": "Bridge и custody security — критическая часть доверия к stablecoin-продукту, даже при сильной локальной аудитории.",
+          "source_ids": ["ronin_bridge_2022"]
+        }
+      },
       "scores": {
         "market": 5,
         "need": 4,
@@ -651,6 +777,24 @@
         "use_case": "Получать USD и тратить/переводить в CAD с прозрачной конвертацией",
         "barrier": "Высокое доверие к банкам и слабая массовая причина менять обычный счёт",
         "entry": "Партнёрства с payroll, immigration и accounting платформами"
+      },
+      "case_studies": {
+        "success": {
+          "company": "Crypto.com Canada",
+          "product": "Регулируемая crypto-app и prepaid Visa Card",
+          "period": "2022–2026",
+          "evidence": "Компания зарегистрирована как FINTRAC MSB и Restricted Dealer во всех провинциях и территориях; канадская карта выпускается Digital Commerce Bank и работает только в CAD.",
+          "lesson": "Устойчивое присутствие строится через локальную регистрацию и банковского эмитента; crypto конвертируется до загрузки карты.",
+          "source_ids": ["cryptocom_canada_registration_2025", "cryptocom_canada_card_2026"]
+        },
+        "failure": {
+          "company": "Binance",
+          "product": "Crypto trading platform",
+          "period": "выход в 2023 году",
+          "evidence": "Binance прекратила операции в Канаде, назвав новые требования к stablecoins и лимитам инвесторов экономически неприемлемыми для своей модели.",
+          "lesson": "Для KAST-подобного продукта stablecoin compliance — самостоятельный market-entry gate, а не функция, которую можно добавить после запуска.",
+          "source_ids": ["nssc_binance_exit_2023"]
+        }
       },
       "scores": {
         "market": 3,
@@ -1598,6 +1742,195 @@
       "url": "https://wise.com/help/articles/2978049/where-can-i-use-wise",
       "accessed": "2026-08-11",
       "tier": "official_product_terms"
+    },
+    {
+      "id": "coins_about_2026",
+      "title": "About Coins.ph",
+      "publisher": "Coins.ph",
+      "period": "Current company page checked 2026-08-11",
+      "url": "https://www.coins.ph/en-ph/about",
+      "accessed": "2026-08-11",
+      "tier": "official_company_data"
+    },
+    {
+      "id": "ph_sec_binance_2023",
+      "title": "SEC Advisory Against Binance",
+      "publisher": "Philippine SEC",
+      "period": "2023-11-28",
+      "url": "https://www.sec.gov.ph/wp-content/uploads/2023/11/2023Advisory-against-Binance.pdf",
+      "accessed": "2026-08-11",
+      "tier": "regulator_primary"
+    },
+    {
+      "id": "ph_sec_binance_block_2024",
+      "title": "SEC NewSECLetter: blocking the online presence of Binance",
+      "publisher": "Philippine SEC",
+      "period": "April–June 2024",
+      "url": "https://www.sec.gov.ph/wp-content/uploads/2024/08/2024NewSECLetter_2024Q2_FINAL_Spread-1.pdf",
+      "accessed": "2026-08-11",
+      "tier": "regulator_primary"
+    },
+    {
+      "id": "lemon_series_b_2025",
+      "title": "Lemon raises $20 million Series B",
+      "publisher": "Lemon",
+      "period": "2025-10-08",
+      "url": "https://lemon.me/blog/serie-b",
+      "accessed": "2026-08-11",
+      "tier": "official_company_data"
+    },
+    {
+      "id": "littio_partners_2023",
+      "title": "Littio partners: Mastercard and the first global digital-dollar card in Colombia",
+      "publisher": "Littio",
+      "period": "2023-04-28",
+      "url": "https://littio.co/blog/nuestros-partners",
+      "accessed": "2026-08-11",
+      "tier": "official_company_data"
+    },
+    {
+      "id": "littio_card_multicurrency_2024",
+      "title": "International Littio Card for global transactions",
+      "publisher": "Littio",
+      "period": "2024-03-27",
+      "url": "https://littio.co/blog/una-tarjeta-internacional-para-tus-transacciones-globales",
+      "accessed": "2026-08-11",
+      "tier": "official_product_terms"
+    },
+    {
+      "id": "binance_card_colombia_2023",
+      "title": "Mastercard and Binance end crypto-card programmes",
+      "publisher": "Reuters",
+      "period": "2023-08-24",
+      "url": "https://m.investing.com/news/stock-market-news/mastercard-binance-to-end-crypto-card-partnership-3160921",
+      "accessed": "2026-08-11",
+      "tier": "independent_reporting"
+    },
+    {
+      "id": "bitso_users_2025",
+      "title": "The new Bitso: more control, less complexity",
+      "publisher": "Bitso",
+      "period": "2025-12-09",
+      "url": "https://bitso.com/blog/new-bitso/",
+      "accessed": "2026-08-11",
+      "tier": "official_company_data"
+    },
+    {
+      "id": "bitso_spei_2025",
+      "title": "How to connect to SPEI",
+      "publisher": "Bitso Business",
+      "period": "2025-09-24",
+      "url": "https://business.bitso.com/es/blog/como-conectarte-a-spei",
+      "accessed": "2026-08-11",
+      "tier": "official_product_terms"
+    },
+    {
+      "id": "banorte_bineo_2024",
+      "title": "Grupo Financiero Banorte Annual Report 2024",
+      "publisher": "Grupo Financiero Banorte",
+      "period": "FY 2024",
+      "url": "https://investors.banorte.com/~/media/Files/B/Banorte-IR/financial-information/annual-reports/en/2025/GFNORTE-%20Annual%20Report%202024_CUE.pdf",
+      "accessed": "2026-08-11",
+      "tier": "company_financial_filing"
+    },
+    {
+      "id": "banorte_bineo_sale_2026",
+      "title": "Grupo Financiero Banorte 1Q26 Results",
+      "publisher": "Grupo Financiero Banorte",
+      "period": "Q1 2026",
+      "url": "https://investors.banorte.com/~/media/Files/B/Banorte-IR/financial-information/quarterly-results/en/2026/1Q26/1Q26_f.pdf",
+      "accessed": "2026-08-11",
+      "tier": "company_financial_filing"
+    },
+    {
+      "id": "wirex_uk_scale_2025",
+      "title": "Wirex UK Personal Accounts and Crypto Services",
+      "publisher": "Wirex",
+      "period": "Company data as of November 2025",
+      "url": "https://www.wirexapp.com/en-gb/uk-personal",
+      "accessed": "2026-08-11",
+      "tier": "official_company_data"
+    },
+    {
+      "id": "fca_binance_2023",
+      "title": "Consumer warning on Binance Markets Limited and Binance Group",
+      "publisher": "UK Financial Conduct Authority",
+      "period": "Updated 2023-06-07",
+      "url": "https://www.fca.org.uk/news/news-stories/consumer-warning-binance-markets-limited-and-binance-group",
+      "accessed": "2026-08-11",
+      "tier": "regulator_primary"
+    },
+    {
+      "id": "pintu_presskit_2026",
+      "title": "Pintu Press Kit",
+      "publisher": "Pintu",
+      "period": "Current page checked 2026-08-11",
+      "url": "https://pintu.co.id/en/press-kit",
+      "accessed": "2026-08-11",
+      "tier": "official_company_data"
+    },
+    {
+      "id": "bappebti_zipmex_2022",
+      "title": "Bappebti monitors Zipmex Indonesia",
+      "publisher": "Bappebti / Indonesian Ministry of Trade",
+      "period": "2022-08-15",
+      "url": "https://bappebti.go.id/resources/docs/siaran_pers_2022_08_15_407kcjst_id.pdf",
+      "accessed": "2026-08-11",
+      "tier": "regulator_primary"
+    },
+    {
+      "id": "coin98_users_2024",
+      "title": "Coin98 integrates Unlimit Crypto",
+      "publisher": "Coin98",
+      "period": "2024-05-21",
+      "url": "https://coin98.com/blog/coin98-integrates-unlimit-crypto/",
+      "accessed": "2026-08-11",
+      "tier": "official_company_data"
+    },
+    {
+      "id": "coin98_wallet_2025",
+      "title": "Coin98 Super Wallet product documentation",
+      "publisher": "Coin98",
+      "period": "Current documentation checked 2026-08-11",
+      "url": "https://docs.coin98.com/vn/san-pham/coin98-super-wallet",
+      "accessed": "2026-08-11",
+      "tier": "official_product_terms"
+    },
+    {
+      "id": "ronin_bridge_2022",
+      "title": "The Ronin Bridge Is Open",
+      "publisher": "Ronin / Sky Mavis",
+      "period": "2022-06-28",
+      "url": "https://blog.roninchain.com/p/the-ronin-bridge-is-open-",
+      "accessed": "2026-08-11",
+      "tier": "official_incident_report"
+    },
+    {
+      "id": "cryptocom_canada_registration_2025",
+      "title": "Crypto.com obtains Restricted Dealer registration in Canada",
+      "publisher": "Crypto.com",
+      "period": "2025-05-12",
+      "url": "https://crypto.com/eea/company-news/cryptocom-obtains-restricted-dealer-registration-in-canada",
+      "accessed": "2026-08-11",
+      "tier": "official_company_data"
+    },
+    {
+      "id": "cryptocom_canada_card_2026",
+      "title": "Crypto.com Visa Card Canada",
+      "publisher": "Crypto.com Canada",
+      "period": "Current product terms checked 2026-08-11",
+      "url": "https://crypto.com/ca/cards/",
+      "accessed": "2026-08-11",
+      "tier": "official_product_terms"
+    },
+    {
+      "id": "nssc_binance_exit_2023",
+      "title": "Why Did Binance Exit Canada?",
+      "publisher": "Nova Scotia Securities Commission",
+      "period": "2023-07-05",
+      "url": "https://nssc.novascotia.ca/before-you-invest/why-did-binance-exit-canada",
+      "accessed": "2026-08-11",
+      "tier": "regulator_primary"
     }
   ]
 }

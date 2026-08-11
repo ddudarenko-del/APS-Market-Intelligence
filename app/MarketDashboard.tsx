@@ -599,6 +599,30 @@ export function MarketDashboard() {
                 ))}
               </div>
             </div>
+            <div className="case-studies-section">
+              <div className="case-studies-heading">
+                <div><span className="section-kicker">ПОДТВЕРЖДЁННЫЕ КЕЙСЫ</span><h3>Что уже сработало — и что сломалось</h3></div>
+                <p>Только конкретные компании и опубликованные факты. Вывод APS отделён от доказательства.</p>
+              </div>
+              <div className="case-studies-grid">
+                {(["success", "failure"] as const).map((kind) => {
+                  const study = selected.case_studies[kind];
+                  return (
+                    <article key={kind} className={`case-study-card ${kind}`}>
+                      <div className="case-study-topline">
+                        <span>{kind === "success" ? "Подтверждённый рост" : "Закрытие / сбой"}</span>
+                        <small>{study.period}</small>
+                      </div>
+                      <h4>{study.company}</h4>
+                      <p className="case-study-product">{study.product}</p>
+                      <div className="case-study-fact"><span>Факт</span><p>{study.evidence}</p></div>
+                      <div className="case-study-lesson"><span>Вывод для APS</span><p>{study.lesson}</p></div>
+                      <div className="source-chips">{study.source_ids.map((id) => <SourceLink key={id} sourceId={id} />)}</div>
+                    </article>
+                  );
+                })}
+              </div>
+            </div>
             <div className="regulatory-section">
               <div><span className="section-kicker">REGULATORY GATE</span><h3>{gateLabels[selected.regulatory.gate]}</h3><p>{selected.regulatory.status}</p></div>
               <div className="source-chips">{selected.regulatory.source_ids.map((id) => <SourceLink key={id} sourceId={id} />)}</div>
