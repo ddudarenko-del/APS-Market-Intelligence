@@ -891,6 +891,140 @@
       "unconfirmed": "Официальные материалы подтверждают отсутствие карты, но не позволяют надёжно установить доступность основного аккаунта."
     }
   },
+  "barriers_drivers": {
+    "scale": "1-5",
+    "method_note": "Драйвер и барьер оцениваются отдельно как экспертная интерпретация опубликованных фактов. Драйвер: 1 = маргинальный спрос, 3 = заметный сегмент, 5 = массовая структурная потребность. Барьер: 1 = простая интеграция, 3 = существенная адаптация, 5 = launch-blocking регулирование или структурное отсутствие спроса.",
+    "rows": [
+      {
+        "market_code": "PHL",
+        "analogs": ["Coins.ph", "KAST"],
+        "driver": {
+          "score": 5,
+          "title": "Дешёвые переводы и зарубежный доход",
+          "explanation": "$41,6 млрд входящих переводов, или 8,53% ВВП; Coins.ph сообщает о 16+ млн зарегистрированных и 7+ млн активных пользователей в месяц.",
+          "source_ids": ["wb_api", "coins_about_2026", "kast_crypto_card"]
+        },
+        "barrier": {
+          "score": 5,
+          "title": "Локальная лицензия и BSP-инфраструктура",
+          "explanation": "Для рабочей модели нужны местные VASP/EMI rails. SEC добилась блокировки Binance после работы без регистрации.",
+          "source_ids": ["ph_bsp_vasp", "ph_sec_binance_2023", "ph_sec_binance_block_2024"]
+        }
+      },
+      {
+        "market_code": "ARG",
+        "analogs": ["Lemon", "KAST"],
+        "driver": {
+          "score": 5,
+          "title": "Digital USD как ежедневные деньги",
+          "explanation": "Инфляция 2025 года составила 41,92%; Lemon сообщает о 5 млн пользователей в Аргентине и Перу и более 1 млн MAU.",
+          "source_ids": ["imf_weo_2026", "lemon_series_b_2025", "kast_crypto_card"]
+        },
+        "barrier": {
+          "score": 4,
+          "title": "Глубокая локализация ARS on/off-ramp",
+          "explanation": "Нужна PSAV-совместимая модель и удобные ARS rails. Coinbase с 31.01.2026 оставила в стране только crypto-to-crypto операции.",
+          "source_ids": ["ar_cnv_psav", "coinbase_crypto_only_2026"]
+        }
+      },
+      {
+        "market_code": "COL",
+        "analogs": ["Littio"],
+        "driver": {
+          "score": 4,
+          "title": "Долларовые сбережения без зарубежного счёта",
+          "explanation": "$13,1 млрд входящих переводов, или 2,87% ВВП; Littio связала USD, EUR, COP и MXN с международной Mastercard.",
+          "source_ids": ["wb_api", "littio_partners_2023", "littio_card_multicurrency_2024"]
+        },
+        "barrier": {
+          "score": 4,
+          "title": "Связь с локальной банковской системой",
+          "explanation": "Криптоактивы не являются законным платёжным средством; после закрытия регуляторного пилота требуется отдельный лицензированный cash-in/cash-out и карточный слой.",
+          "source_ids": ["co_sfc_crypto", "co_sfc_pilot"]
+        }
+      },
+      {
+        "market_code": "MEX",
+        "analogs": ["Bitso", "DolarApp", "KAST"],
+        "driver": {
+          "score": 5,
+          "title": "Глобальный доход и коридор США-Мексика",
+          "explanation": "$64,4 млрд входящих переводов, или 3,51% ВВП; Bitso сообщает о 9+ млн пользователей в регионе, DolarApp даёт USD-счёт и карту.",
+          "source_ids": ["wb_api", "bitso_users_2025", "dolarapp_markets", "dolarapp_card", "kast_crypto_card"]
+        },
+        "barrier": {
+          "score": 5,
+          "title": "Интеграция с SPEI и финансовый периметр",
+          "explanation": "SPEI работает через регулируемых участников; для операций, связанных с virtual assets, Banco de México требует усиленную идентификацию и трассируемость.",
+          "source_ids": ["mx_spei_2026", "mx_banxico_virtual_assets", "bitso_spei_2025"]
+        }
+      },
+      {
+        "market_code": "GBR",
+        "analogs": ["Wirex", "Bleap"],
+        "driver": {
+          "score": 3,
+          "title": "Rewards и crypto-функции поверх banking",
+          "explanation": "Wirex сообщает о 7+ млн пользователей и $20+ млрд транзакций глобально; Bleap подтверждает UK funding, но не выпуск карты.",
+          "source_ids": ["wirex_uk_scale_2025", "bleap_uk_payments_2026", "bleap_availability_2026"]
+        },
+        "barrier": {
+          "score": 4,
+          "title": "Слабая базовая боль и высокий compliance",
+          "explanation": "99,28% взрослых имеют финансовый счёт; Wise, Revolut и банки уже закрывают FX и cross-border, а crypto-proposition входит в FCA perimeter.",
+          "source_ids": ["wb_findex_2025", "wise_uk_card_fees", "revolut_uk_crypto_card", "uk_fca_regime"]
+        }
+      },
+      {
+        "market_code": "IDN",
+        "analogs": ["Pintu", "Bybit Card", "RedotPay"],
+        "driver": {
+          "score": 4,
+          "title": "Stablecoin balance и глобальная карта",
+          "explanation": "Индонезия занимает #7 в crypto adoption; Pintu фиксирует 4,8+ млн загрузок, а Bybit Card и RedotPay подтверждают конкретные карточные продукты.",
+          "source_ids": ["chainalysis_2025", "pintu_presskit_2026", "bybit_indonesia_2026", "redotpay_features_2026"]
+        },
+        "barrier": {
+          "score": 5,
+          "title": "Crypto нельзя использовать как платёжный инструмент",
+          "explanation": "Bank Indonesia запрещает платёжным провайдерам проводить операции с virtual currency; нужен отдельный IDR fiat/card wrapper и лицензированный партнёр.",
+          "source_ids": ["id_bi_virtual_currency", "id_ojk_transition"]
+        }
+      },
+      {
+        "market_code": "VNM",
+        "analogs": ["Coin98", "Bybit Card", "RedotPay"],
+        "driver": {
+          "score": 5,
+          "title": "Глобальные деньги для большой crypto-аудитории",
+          "explanation": "Вьетнам занимает #4 в crypto adoption; входящие переводы оцениваются в $16,2 млрд, а Coin98 сообщает о 10+ млн пользователей глобально.",
+          "source_ids": ["chainalysis_2025", "wb_vietnam_data", "coin98_users_2024", "bybit_vietnam_2026", "redotpay_features_2026"]
+        },
+        "barrier": {
+          "score": 5,
+          "title": "Пилот crypto-рынка не равен everyday banking",
+          "explanation": "Государственный пилот ограничивает выпуск и торговлю лицензированными участниками; доступная глобальная карта не подтверждает разрешение локальных stablecoin-платежей.",
+          "source_ids": ["vn_digital_assets_law", "vn_crypto_pilot", "bybit_vietnam_2026"]
+        }
+      },
+      {
+        "market_code": "CAN",
+        "analogs": ["Crypto.com"],
+        "driver": {
+          "score": 2,
+          "title": "Rewards, crypto-баланс и экономия на FX",
+          "explanation": "Crypto.com сохраняет регулируемую app и CAD prepaid card, но входящие переводы составляют лишь $0,83 млрд и 0,04% ВВП.",
+          "source_ids": ["cryptocom_canada_registration_2025", "cryptocom_canada_card_2026", "wb_api"]
+        },
+        "barrier": {
+          "score": 4,
+          "title": "Нет острой боли, есть отдельный stablecoin regime",
+          "explanation": "98,4% взрослых имеют финансовый счёт; Bank of Canada регулирует fiat-backed stablecoin issuers, а Binance покинула рынок из-за новых требований.",
+          "source_ids": ["wb_findex_2025", "ca_boc_stablecoins", "ca_boc_rpaa", "nssc_binance_exit_2023"]
+        }
+      }
+    ]
+  },
   "market_competitors": [
     {
       "provider": "RedotPay",
@@ -1309,6 +1443,24 @@
       "period": "Current framework checked 2026-08-04",
       "url": "https://www.banxico.org.mx/sistemas-de-pago/6--acciones-regulatorias-po.html",
       "accessed": "2026-08-04",
+      "tier": "regulator"
+    },
+    {
+      "id": "mx_spei_2026",
+      "title": "SPEI characteristics and participation requirements",
+      "publisher": "Banco de México",
+      "period": "Current framework checked 2026-08-11",
+      "url": "https://www.banxico.org.mx/servicios/spei_-informacion-banco-mex.html",
+      "accessed": "2026-08-11",
+      "tier": "regulator"
+    },
+    {
+      "id": "id_bi_virtual_currency",
+      "title": "Bank Indonesia FAQ on payment-system and virtual currency rules",
+      "publisher": "Bank Indonesia",
+      "period": "Current rule basis checked 2026-08-11",
+      "url": "https://www.bi.go.id/en/publikasi/peraturan/Documents/FAQ_PBI_191217.pdf",
+      "accessed": "2026-08-11",
       "tier": "regulator"
     },
     {

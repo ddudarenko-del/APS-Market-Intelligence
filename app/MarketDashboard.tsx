@@ -4,8 +4,9 @@ import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import data from "./data/market_data.json";
 
-type Tab = "overview" | "kastfit" | "compare" | "profiles" | "competition" | "data" | "method";
+type Tab = "overview" | "kastfit" | "barriers" | "compare" | "profiles" | "competition" | "data" | "method";
 type ScoreMode = "aps" | "kast";
+type BarrierSort = "balance" | "driver" | "barrier";
 type MetricValue = { value: number; year: number } | null;
 type Market = (typeof data.markets)[number];
 type AvailabilityStatus = "full" | "partial" | "unavailable" | "unconfirmed";
@@ -23,6 +24,7 @@ type CountryLayer = import("leaflet").Path & { feature?: CountryFeature };
 const tabLabels: Array<{ id: Tab; label: string }> = [
   { id: "overview", label: "Обзор" },
   { id: "kastfit", label: "KAST / Product Fit" },
+  { id: "barriers", label: "Барьеры и драйверы" },
   { id: "compare", label: "Сравнение" },
   { id: "profiles", label: "Профили рынков" },
   { id: "competition", label: "Конкуренты / тарифы" },
@@ -123,6 +125,14 @@ function getKastFit(market: Market) {
 function ScoreBadge({ score }: { score: number }) {
   const tone = score >= 4 ? "high" : score >= 3.2 ? "mid" : "low";
   return <span className={`score-badge ${tone}`}>{score.toFixed(2)}</span>;
+}
+
+function driverScoreLabel(score: number) {
+  return score === 5 ? "Структурный" : score === 4 ? "Сильный" : score === 3 ? "Сегментный" : score === 2 ? "Нишевой" : "Слабый";
+}
+
+function barrierScoreLabel(score: number) {
+  return score === 5 ? "Блокирующий" : score === 4 ? "Высокий" : score === 3 ? "Существенный" : score === 2 ? "Управляемый" : "Низкий";
 }
 
 function SourceLink({ sourceId }: { sourceId: string }) {
@@ -284,6 +294,7 @@ export function MarketDashboard() {
   const [compareCodes, setCompareCodes] = useState<string[]>(["PHL", "COL", "MEX"]);
   const [region, setRegion] = useState("Все регионы");
   const [competitorMarket, setCompetitorMarket] = useState("ALL");
+  const [barrierSort, setBarrierSort] = useState<BarrierSort>("balance");
 
   const selected = data.markets.find((market) => market.code === selectedCode) ?? data.markets[0];
   const regions = ["Все регионы", ...Array.from(new Set(data.markets.map((market) => market.region)))];
@@ -309,6 +320,16 @@ export function MarketDashboard() {
         counts[getAvailability(item, competitorMarket).status] += 1;
         return counts;
       }, { full: 0, partial: 0, unavailable: 0, unconfirmed: 0 });
+  const barrierRows = data.barriers_drivers.rows
+    .map((row) => ({ row, market: data.markets.find((market) => market.code === row.market_code)! }))
+    .sort((a, b) => {
+      if (barrierSort === "driver") return b.row.driver.score - a.row.driver.score || b.row.barrier.score - a.row.barrier.score;
+      if (barrierSort === "barrier") return b.row.barrier.score - a.row.barrier.score || b.row.driver.score - a.row.driver.score;
+      return (b.row.driver.score - b.row.barrier.score) - (a.row.driver.score - a.row.barrier.score) || b.row.driver.score - a.row.driver.score;
+    });
+  const averageDriver = data.barriers_drivers.rows.reduce((sum, item) => sum + item.driver.score, 0) / data.barriers_drivers.rows.length;
+  const averageBarrier = data.barriers_drivers.rows.reduce((sum, item) => sum + item.barrier.score, 0) / data.barriers_drivers.rows.length;
+  const launchBlockingMarkets = data.barriers_drivers.rows.filter((item) => item.barrier.score === 5).length;
 
   function chooseMarket(code: string, nextTab?: Tab) {
     setSelectedCode(code);
@@ -340,7 +361,7 @@ export function MarketDashboard() {
           </div>
           <div className="hero-metrics" aria-label="Сводка исследования">
             <div><strong>8</strong><span>рынков</span></div>
-            <div><strong>6+1</strong><span>APS + KAST Fit</span></div>
+            <div><strong>6+2</strong><span>APS + Fit + B/D</span></div>
             <div><strong>{data.sources.length}</strong><span>базовых источников</span></div>
           </div>
         </div>
@@ -494,6 +515,72 @@ export function MarketDashboard() {
             <code>30% USD-защита + 20% cross-border + 25% crypto-аудитория + 15% mobile readiness + 10% access gap</code>
             <p>Регуляторная возможность запуска и интенсивность конкуренции намеренно не входят в Product Fit: они остаются отдельными слоями и не подменяют наличие спроса.</p>
           </article>
+        </section>
+      )}
+
+      {tab === "barriers" && (
+        <section className="barriers-layout">
+          <article className="panel barriers-summary">
+            <div className="panel-heading">
+              <div>
+                <span className="section-kicker">MARKET ENTRY REALITY</span>
+                <h2>Сила потребности против сложности входа</h2>
+                <p>Две независимые экспертные оценки по шкале 1–5. Каждая опирается на опубликованные показатели, правила и продуктовые аналоги.</p>
+              </div>
+              <div className="barrier-sort" aria-label="Сортировка рынков">
+                {(["balance", "driver", "barrier"] as const).map((sort) => (
+                  <button key={sort} type="button" aria-pressed={barrierSort === sort} className={barrierSort === sort ? "active" : ""} onClick={() => setBarrierSort(sort)}>
+                    {sort === "balance" ? "По балансу" : sort === "driver" ? "По драйверу" : "По барьеру"}
+                  </button>
+                ))}
+              </div>
+            </div>
+            <div className="barriers-summary-metrics">
+              <div><span>Средний драйвер</span><strong>{averageDriver.toFixed(1)}</strong><small>из 5</small></div>
+              <div><span>Средний барьер</span><strong>{averageBarrier.toFixed(1)}</strong><small>из 5</small></div>
+              <div><span>Launch-blocking</span><strong>{launchBlockingMarkets}</strong><small>рынка с барьером 5</small></div>
+            </div>
+            <div className="barrier-method-note"><strong>Как читать:</strong><span>{data.barriers_drivers.method_note}</span></div>
+          </article>
+
+          <div className="barrier-matrix-head" aria-hidden="true">
+            <span>Рынок и аналоги</span><span>Драйвер категории</span><span>Ключевой барьер</span><span>Баланс</span>
+          </div>
+          <div className="barrier-matrix">
+            {barrierRows.map(({ row, market }) => {
+              const balance = row.driver.score - row.barrier.score;
+              const decision = balance > 0 ? "Окно входа" : balance === 0 ? "Нужна точная модель входа" : "Сначала снять барьер";
+              return (
+                <article className="panel barrier-row" key={row.market_code}>
+                  <div className="barrier-market">
+                    <span className="section-kicker">{market.code} · {market.region}</span>
+                    <h3>{market.name_ru}</h3>
+                    <div className="analog-list" aria-label="Подтверждённые аналоги">
+                      {row.analogs.map((analog) => <span key={analog}>{analog}</span>)}
+                    </div>
+                  </div>
+                  <div className="evidence-column driver-column">
+                    <div className="evidence-score"><strong>{row.driver.score}</strong><span>{driverScoreLabel(row.driver.score)}</span></div>
+                    <h4>{row.driver.title}</h4>
+                    <p>{row.driver.explanation}</p>
+                    <div className="source-chips">{row.driver.source_ids.map((id) => <SourceLink key={id} sourceId={id} />)}</div>
+                  </div>
+                  <div className="evidence-column barrier-column">
+                    <div className="evidence-score"><strong>{row.barrier.score}</strong><span>{barrierScoreLabel(row.barrier.score)}</span></div>
+                    <h4>{row.barrier.title}</h4>
+                    <p>{row.barrier.explanation}</p>
+                    <div className="source-chips">{row.barrier.source_ids.map((id) => <SourceLink key={id} sourceId={id} />)}</div>
+                  </div>
+                  <div className={`barrier-balance ${balance > 0 ? "positive" : balance < 0 ? "negative" : "neutral"}`}>
+                    <span>Драйвер − барьер</span>
+                    <strong>{balance > 0 ? `+${balance}` : balance}</strong>
+                    <p>{decision}</p>
+                    <button type="button" onClick={() => chooseMarket(market.code, "profiles")}>Открыть профиль</button>
+                  </div>
+                </article>
+              );
+            })}
+          </div>
         </section>
       )}
 
@@ -805,6 +892,7 @@ export function MarketDashboard() {
               <div><span>02</span><strong>Экспертные баллы</strong><p>Шесть баллов из исходного APS.docx сохранены как аналитические оценки; итог пересчитан по весам ТЗ.</p></div>
               <div><span>03</span><strong>Регуляторный gate</strong><p>Отдельный статус показывает, возможен ли direct launch, нужен партнёр или допустим только fiat-wrapper.</p></div>
               <div><span>04</span><strong>KAST / Product Fit</strong><p>Новый независимый балл использует инфляцию IMF, переводы World Bank, crypto rank Chainalysis и показатели Findex. Ручная экспертная надбавка не применяется.</p></div>
+              <div><span>05</span><strong>Барьеры и драйверы</strong><p>Два отдельных экспертных балла 1–5: сила подтверждённой продуктовой потребности и тяжесть market-entry барьера. Факты и источники показаны рядом с каждой оценкой.</p></div>
             </div>
             <div className="formula-box"><code>Σ (балл критерия × вес) = итог из 5</code><p>Пример: Филиппины = 5×25% + 5×20% + 5×15% + 3×15% + 4×15% + 5×10% = <strong>4,55</strong>.</p></div>
             <div className="formula-box kast-formula"><code>KAST Fit = 30% USD need + 20% cross-border + 25% crypto audience + 15% mobile readiness + 10% access gap</code><p>Инфляция: 5 баллов от 25%, 4 от 10%, 3 от 5%, 2 от 3%, иначе 1. Cross-border — среднее баллов по абсолютному объёму переводов и доле ВВП. Crypto: top-10 = 5, #11–20 = 4, вне опубликованного top-20 = 2. Mobile readiness — среднее smartphone и recent internet use, делённое на 20. Access gap = (100% − account ownership) / 20.</p><p>Для Вьетнама входящие переводы 2024 рассчитаны как 3,4% от опубликованного World Bank ВВП 2024; это производное значение отмечено в данных.</p></div>
