@@ -861,33 +861,65 @@ export function MarketDashboard() {
             </div>
           )}
           <div className="availability-table-scroll">
-            <table className="availability-table">
-              <thead>
-                <tr>
-                  <th>Конкурент</th>
-                  <th>Тип</th>
-                  {data.markets.map((market) => <th key={market.code}>{market.code}<small>{market.name_ru}</small></th>)}
-                </tr>
-              </thead>
-              <tbody>
-                {data.market_competitors.map((item) => (
-                  <tr key={item.provider}>
-                    <td><strong>{item.provider}</strong></td>
-                    <td><span>{item.profile}</span></td>
-                    {data.markets.map((market) => {
-                      const marketAvailability = getAvailability(item, market.code);
-                      return (
-                        <td key={market.code}>
-                          <button type="button" onClick={() => setCompetitorMarket(market.code)} title={`${item.provider} · ${market.name_ru}: ${availabilityLabels[marketAvailability.status]}`}>
-                            <AvailabilityBadge status={marketAvailability.status} compact />
-                          </button>
-                        </td>
-                      );
-                    })}
+            {competitorMarket === "ALL" ? (
+              <table className="availability-table">
+                <thead>
+                  <tr>
+                    <th>Конкурент</th>
+                    <th>Тип</th>
+                    {data.markets.map((market) => <th key={market.code}>{market.code}<small>{market.name_ru}</small></th>)}
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {data.market_competitors.map((item) => (
+                    <tr key={item.provider}>
+                      <td><strong>{item.provider}</strong></td>
+                      <td><span>{item.profile}</span></td>
+                      {data.markets.map((market) => {
+                        const marketAvailability = getAvailability(item, market.code);
+                        return (
+                          <td key={market.code}>
+                            <button type="button" onClick={() => setCompetitorMarket(market.code)} title={`${item.provider} · ${market.name_ru}: ${availabilityLabels[marketAvailability.status]}`}>
+                              <AvailabilityBadge status={marketAvailability.status} compact />
+                            </button>
+                          </td>
+                        );
+                      })}
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            ) : (
+              <table className="availability-table focused-availability-table">
+                <thead>
+                  <tr>
+                    <th>Конкурент</th>
+                    <th>Тип</th>
+                    <th>Статус</th>
+                    <th>Сервис / аккаунт</th>
+                    <th>Выпуск карты</th>
+                    <th>Подтверждённый факт</th>
+                    <th>Источники</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {visibleCompetitors.map((item) => {
+                    const marketAvailability = getAvailability(item, competitorMarket);
+                    return (
+                      <tr key={item.provider}>
+                        <td><strong>{item.provider}</strong></td>
+                        <td><span>{item.profile}</span></td>
+                        <td><AvailabilityBadge status={marketAvailability.status} /></td>
+                        <td><strong className={`support-value ${marketAvailability.account === null ? "unknown" : marketAvailability.account ? "yes" : "no"}`}>{supportLabel(marketAvailability.account)}</strong></td>
+                        <td><strong className={`support-value ${marketAvailability.card ? "yes" : "no"}`}>{supportLabel(marketAvailability.card)}</strong></td>
+                        <td><p className="availability-note-cell">{marketAvailability.note}</p></td>
+                        <td><div className="source-chips">{marketAvailability.source_ids.map((id) => <SourceLink key={id} sourceId={id} />)}</div></td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            )}
           </div>
           <div className="subsection-heading competition-detail-heading">
             <div>
@@ -915,6 +947,10 @@ export function MarketDashboard() {
                         <span>Выпуск карты <strong>{supportLabel(selectedAvailability.card)}</strong></span>
                       </div>
                       <p>{selectedAvailability.note}</p>
+                      <div className="selected-availability-sources">
+                        <span>Источники по рынку</span>
+                        <div className="source-chips">{selectedAvailability.source_ids.map((id) => <SourceLink key={id} sourceId={id} />)}</div>
+                      </div>
                     </div>
                   ) : (
                     <p className="competitor-markets">
