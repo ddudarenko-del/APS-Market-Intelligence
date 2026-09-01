@@ -102,11 +102,43 @@ test("preserves the structured Indonesia country-detail report", () => {
   assert.ok(report);
   const sections = Object.fromEntries(report.sections.map((section) => [section.id, section]));
   assert.ok(sections.summary.paragraphs.every((paragraph) => paragraph.startsWith("::b0::")));
+  assert.match(sections.summary.paragraphs.join(" "), /QRIS — главный локальный продуктовый аргумент/);
+  assert.match(sections.audience.paragraphs.join(" "), /активные пользователи криптоактивов|Уже существующие пользователи криптоактивов/);
   assert.match(sections.product.paragraphs.join(" "), /Tangem Wallet/);
   assert.match(sections.product.paragraphs.join(" "), /Стоимость физической карты — болевая точка/);
+  assert.match(sections.product.paragraphs.join(" "), /Не требовать отдельный gas token/);
+  assert.match(sections.product.paragraphs.join(" "), /Bahasa Indonesia \+ English/);
+  assert.match(sections.competition.paragraphs.join(" "), /RedotPay/);
+  assert.match(sections.competition.paragraphs.join(" "), /Tria/);
+  assert.match(sections.competition.paragraphs.join(" "), /Bitget Wallet/);
   assert.match(sections.marketing.paragraphs.join(" "), /Coinfest Asia/);
   assert.match(sections.marketing.paragraphs.join(" "), /::b2::\[AirdropFind\]/);
+  assert.ok(sections.competition.source_ids.includes("interview_id_marketing_2026"));
+  assert.ok(sections.regulation.source_ids.includes("interview_id_treasury_2026"));
   assert.doesNotMatch(report.sections.flatMap((section) => section.paragraphs).join(" "), /чч|на уровне Филиппин/);
+});
+
+test("integrates both Indonesia interviews into positioning, acquisition and competitors", () => {
+  const assessment = data.market_assessments.find((item) => item.market_code === "IDN");
+  assert.ok(assessment);
+  assert.match(assessment.priority_audience, /пользователи цифровых активов/);
+  assert.match(assessment.market_principle, /QRIS/);
+  assert.equal(assessment.brand_role.level, "high");
+  assert.ok(assessment.source_ids.includes("interview_id_marketing_2026"));
+  assert.ok(assessment.source_ids.includes("interview_id_treasury_2026"));
+
+  const acquisition = data.acquisition_channels.rows.find((item) => item.market_code === "IDN");
+  assert.ok(acquisition);
+  assert.match(acquisition.strategy.decision.primary_channel, /X\/Telegram/);
+  assert.match(acquisition.channels.map((item) => item.channel).join(" "), /Airdrop/);
+  assert.match(acquisition.strategy.profile_evidence.map((item) => item.point).join(" "), /Instagram|TikTok/);
+
+  const marketCompetition = data.competition_by_market.find((item) => item.market_code === "IDN");
+  assert.ok(marketCompetition);
+  const ids = new Set(marketCompetition.entities.map((item) => item.competitor_id));
+  for (const id of ["kast", "redotpay", "bybit", "tria", "bitget_wallet", "binance", "tangem_wallet", "shopeepay"]) {
+    assert.ok(ids.has(id), `IDN: missing interview-backed competitor ${id}`);
+  }
 });
 
 test("includes the sourced Tangem success case for Indonesia", () => {
@@ -116,6 +148,7 @@ test("includes the sourced Tangem success case for Indonesia", () => {
   assert.match(tangem.outcome, /Coinfest Asia/);
   assert.match(tangem.constraint, /NFC|X-сообществ/);
   assert.ok(tangem.source_ids.includes("interview_id_marketing_2026"));
+  assert.ok(tangem.source_ids.includes("interview_id_treasury_2026"));
   assert.ok(tangem.source_ids.includes("tangem_annual_report_2025"));
   assert.ok(tangem.source_ids.includes("tangem_ring_official"));
 });
