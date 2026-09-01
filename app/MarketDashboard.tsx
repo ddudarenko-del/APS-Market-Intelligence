@@ -1009,7 +1009,7 @@ export function MarketDashboard() {
           </article>
 
           <div className="cases-section-heading">
-            <div><span className="section-kicker">ДОПОЛНИТЕЛЬНЫЕ ПРИМЕРЫ</span><h2>Один и тот же риск проявляется по-разному</h2></div>
+            <div><span className="section-kicker">ДОПОЛНИТЕЛЬНЫЕ ПРИМЕРЫ</span><h2>Что сработало — и что остановило рост</h2></div>
             <p>Факт или свидетельство отделены от аналитического вывода APS.</p>
           </div>
           <div className="supporting-cases-grid">
@@ -1018,7 +1018,7 @@ export function MarketDashboard() {
                 <div className="supporting-case-topline"><span>{study.evidence_type}</span><strong>{study.market}</strong></div>
                 <h3>{study.company}</h3>
                 <div className="case-fact"><span>Что произошло</span><p>{study.outcome}</p></div>
-                <div className="case-fact constraint"><span>Что ограничило результат</span><p>{study.constraint}</p></div>
+                <div className="case-fact constraint"><span>{study.constraint_label ?? "Что ограничило результат"}</span><p>{study.constraint}</p></div>
                 <div className="source-chips">{study.source_ids.map((id) => <SourceChip key={id} sourceId={id} />)}</div>
                 <div className="case-fact lesson"><span>Урок для нового игрока</span><p>{study.lesson}</p></div>
               </article>

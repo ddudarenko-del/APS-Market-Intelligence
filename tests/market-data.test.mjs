@@ -109,6 +109,17 @@ test("preserves the structured Indonesia country-detail report", () => {
   assert.doesNotMatch(report.sections.flatMap((section) => section.paragraphs).join(" "), /чч|на уровне Филиппин/);
 });
 
+test("includes the sourced Tangem success case for Indonesia", () => {
+  const tangem = data.case_lessons.supporting_cases.find((item) => item.company === "Tangem Wallet" && item.market === "Индонезия");
+  assert.ok(tangem);
+  assert.equal(tangem.constraint_label, "Почему сработало");
+  assert.match(tangem.outcome, /Coinfest Asia/);
+  assert.match(tangem.constraint, /NFC|X-сообществ/);
+  assert.ok(tangem.source_ids.includes("interview_id_marketing_2026"));
+  assert.ok(tangem.source_ids.includes("tangem_annual_report_2025"));
+  assert.ok(tangem.source_ids.includes("tangem_ring_official"));
+});
+
 test("calculates one unified market score from nine non-overlapping criteria", () => {
   const weights = Object.fromEntries(
     data.unified_scoring.blocks.flatMap((block) => block.criteria.map((criterion) => [criterion.key, criterion.weight])),

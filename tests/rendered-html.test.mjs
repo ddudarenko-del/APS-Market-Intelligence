@@ -78,6 +78,7 @@ test("keeps production metadata and documented market intelligence", async () =>
   assert.match(dashboard, /Конкретные основания решения/);
   assert.match(dashboard, /Подтверждённый пример \/ свидетельство/);
   assert.match(dashboard, /data\.case_lessons/);
+  assert.match(dashboard, /study\.constraint_label \?\? "Что ограничило результат"/);
   assert.match(dashboard, /section\.id === "audience"/);
   assert.match(dashboard, /getUnifiedScore\(market\.code\)\.final_score/);
   assert.doesNotMatch(dashboard, /ScoreMode|scoreMode|getKastFit|По формуле APS|По KAST \/ Product Fit/);

@@ -3477,6 +3477,20 @@
     },
     "supporting_cases": [
       {
+        "company": "Tangem Wallet",
+        "market": "Индонезия",
+        "evidence_type": "Экспертный успешный кейс",
+        "outcome": "По оценке локального маркетингового эксперта, Tangem стал успешным кейсом входа в Индонезию. Компания предложила понятный новичкам cold wallet в формате NFC-карт и физического кольца, а продукт получил локальную видимость через Coinfest Asia и криптосообщество.",
+        "constraint_label": "Почему сработало",
+        "constraint": "Форматы карты и wearable-кольца попали в lifestyle-коды аудитории и дали продукту заметное отличие. Коммуникация вокруг безопасности, простая работа через NFC и присутствие в X-сообществах помогли переносить доверие криптокоммьюнити на новый для рынка бренд.",
+        "lesson": "Уникальные функции, например hardware ring, и lifestyle-ценность в дополнение к актуальному продуктовому предложению помогают дифференцироваться. Но необычный форм-фактор должен быть подкреплён понятной пользой, безопасностью и доверием локального сообщества.",
+        "source_ids": [
+          "interview_id_marketing_2026",
+          "tangem_annual_report_2025",
+          "tangem_ring_official"
+        ]
+      },
+      {
         "company": "Binance",
         "market": "Канада",
         "evidence_type": "Публичный кейс",
@@ -4901,6 +4915,26 @@
       "period": "август 2026",
       "accessed": "2026-09-01",
       "url": null
+    },
+    {
+      "id": "tangem_annual_report_2025",
+      "type": "company",
+      "tier": "official_company_data",
+      "title": "Tangem Annual Report 2025",
+      "publisher": "Tangem",
+      "period": "2025",
+      "accessed": "2026-09-01",
+      "url": "https://tangem.com/en/annual-report/"
+    },
+    {
+      "id": "tangem_ring_official",
+      "type": "company",
+      "tier": "official_company_data",
+      "title": "Tangem Ring — wearable hardware wallet",
+      "publisher": "Tangem",
+      "period": "Current product page checked 2026-09-01",
+      "accessed": "2026-09-01",
+      "url": "https://tangem.com/en/ring/"
     },
     {
       "id": "ph_bsp_remittances_2025",

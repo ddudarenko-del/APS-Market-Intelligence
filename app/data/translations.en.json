@@ -933,6 +933,7 @@
   "Что рынок уже показал на практике": "What the market has already shown in practice",
   "Факт компании отделён от аналитического вывода APS.": "The fact of the company is separate from the analytical conclusion of APS.",
   "Что сработало": "What worked",
+  "Почему сработало": "Why it worked",
   "Что ограничило результат": "What limited the result?",
   "Подтверждённый факт": "Confirmed fact",
   "Аналитический вывод APS": "APS Analytical Output",
@@ -979,6 +980,7 @@
   "Главный урок": "Main lesson",
   "ДОПОЛНИТЕЛЬНЫЕ ПРИМЕРЫ": "ADDITIONAL EXAMPLES",
   "Один и тот же риск проявляется по-разному": "The same risk manifests itself in different ways",
+  "Что сработало — и что остановило рост": "What worked — and what stopped growth",
   "Факт или свидетельство отделены от аналитического вывода APS.": "The fact or evidence is separate from the analytical conclusion of the APS.",
   "Что произошло": "What happened",
   "Урок для нового игрока": "Lesson for a new player",
@@ -1314,5 +1316,9 @@
   "ИЗ ПРОФИЛЯ И ИНТЕРВЬЮ": "FROM PROFILE AND INTERVIEW",
   "Конкретные основания решения": "Concrete evidence behind the decision",
   "Только подтверждённые механики конкурентов, профили рынков и свидетельства интервью.": "Only verified competitor mechanics, market profiles and interview evidence.",
-  "Подтверждённый пример / свидетельство": "Verified example / interview evidence"
+  "Подтверждённый пример / свидетельство": "Verified example / interview evidence",
+  "Экспертный успешный кейс": "Expert-validated success case",
+  "По оценке локального маркетингового эксперта, Tangem стал успешным кейсом входа в Индонезию. Компания предложила понятный новичкам cold wallet в формате NFC-карт и физического кольца, а продукт получил локальную видимость через Coinfest Asia и криптосообщество.": "According to a local marketing expert, Tangem became a successful market-entry case in Indonesia. The company offered a beginner-friendly cold wallet in the form of NFC cards and a physical ring, while Coinfest Asia and the crypto community gave the product local visibility.",
+  "Форматы карты и wearable-кольца попали в lifestyle-коды аудитории и дали продукту заметное отличие. Коммуникация вокруг безопасности, простая работа через NFC и присутствие в X-сообществах помогли переносить доверие криптокоммьюнити на новый для рынка бренд.": "The card and wearable-ring formats matched the audience's lifestyle codes and gave the product a visible point of difference. Security-led messaging, simple NFC interaction, and a presence in X communities helped transfer crypto-community trust to a brand that was new to the market.",
+  "Уникальные функции, например hardware ring, и lifestyle-ценность в дополнение к актуальному продуктовому предложению помогают дифференцироваться. Но необычный форм-фактор должен быть подкреплён понятной пользой, безопасностью и доверием локального сообщества.": "Distinctive features such as a hardware ring, combined with lifestyle value and a relevant product proposition, can help a new player differentiate. An unusual form factor still needs clear utility, security, and the trust of the local community."
 }
