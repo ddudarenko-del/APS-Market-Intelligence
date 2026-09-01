@@ -321,6 +321,41 @@ function AudienceGroups({ paragraphs, language }: { paragraphs: string[]; langua
   );
 }
 
+function RichInlineText({ source, language }: { source: string; language: Language }) {
+  const tokens = source.split(/(\*\*[^*]+\*\*|\[[^\]]+\]\(https?:\/\/[^)]+\)|https?:\/\/[^\s]+)/g).filter(Boolean);
+  return tokens.map((token, index) => {
+    const bold = token.match(/^\*\*([\s\S]+)\*\*$/);
+    if (bold) return <strong key={index}>{translateTextNode(bold[1], language)}</strong>;
+    const markdownLink = token.match(/^\[([^\]]+)\]\((https?:\/\/[^)]+)\)$/);
+    if (markdownLink) {
+      return <a key={index} href={markdownLink[2]} target="_blank" rel="noreferrer">{translateTextNode(markdownLink[1], language)}</a>;
+    }
+    if (/^https?:\/\//.test(token)) return <a key={index} href={token} target="_blank" rel="noreferrer">{token}</a>;
+    return <span key={index}>{translateTextNode(token, language)}</span>;
+  });
+}
+
+function RichReportContent({ paragraphs, language }: { paragraphs: string[]; language: Language }) {
+  return (
+    <div className="report-rich-content" role="list">
+      {paragraphs.map((source, index) => {
+        const marker = source.match(/^::(h|p|b([0-3]))::([\s\S]*)$/);
+        const kind = marker?.[1] ?? "p";
+        const level = marker?.[2] ? Number(marker[2]) : 0;
+        const content = marker?.[3] ?? source;
+        if (kind === "h") return <h4 className="report-rich-heading" key={index}><RichInlineText source={content} language={language} /></h4>;
+        if (kind === "p") return <p className="report-rich-paragraph" key={index}><RichInlineText source={content} language={language} /></p>;
+        return (
+          <div className={`report-rich-bullet level-${level}`} role="listitem" aria-level={level + 1} key={index}>
+            <span className="report-rich-marker" aria-hidden="true">{level >= 2 ? "–" : "•"}</span>
+            <p><RichInlineText source={content} language={language} /></p>
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
 function MarketMap({
   selectedCode,
   visibleCodes,
@@ -1096,7 +1131,7 @@ export function MarketDashboard() {
             <div className="market-report">
               {selectedReport.sections.map((section, index) => (
                 <section className="market-report-section" key={section.id}>
-                  <span className="report-index">0{index + 1}</span><div><h3>{section.title}</h3>{section.id === "audience" ? <AudienceGroups paragraphs={section.paragraphs} language={language} /> : section.paragraphs.map((paragraph, paragraphIndex) => <p key={paragraphIndex}>{paragraph}</p>)}<div className="source-chips">{section.source_ids.map((id) => <SourceChip key={id} sourceId={id} />)}</div></div>
+                  <span className="report-index">0{index + 1}</span><div><h3>{section.title}</h3>{section.paragraphs.some((paragraph) => paragraph.startsWith("::")) ? <RichReportContent paragraphs={section.paragraphs} language={language} /> : section.id === "audience" ? <AudienceGroups paragraphs={section.paragraphs} language={language} /> : section.paragraphs.map((paragraph, paragraphIndex) => <p key={paragraphIndex}>{paragraph}</p>)}<div className="source-chips">{section.source_ids.map((id) => <SourceChip key={id} sourceId={id} />)}</div></div>
                 </section>
               ))}
             </div>

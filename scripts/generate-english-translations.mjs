@@ -7,9 +7,26 @@ const dataPath = path.join(projectRoot, "app/data/market_data.json");
 const componentPath = path.join(projectRoot, "app/MarketDashboard.tsx");
 const outputPath = path.join(projectRoot, "app/data/translations.en.json");
 const cyrillic = /[А-Яа-яЁё]/;
+const richMarker = /^::(?:h|p|b[0-3])::/;
+const richToken = /(\*\*[^*]+\*\*|\[[^\]]+\]\(https?:\/\/[^)]+\)|https?:\/\/[^\s]+)/g;
+
+function collectRichString(value, output) {
+  const tokens = value.replace(richMarker, "").split(richToken).filter(Boolean);
+  for (const token of tokens) {
+    if (/^https?:\/\//.test(token)) continue;
+    const bold = token.match(/^\*\*([\s\S]+)\*\*$/);
+    const link = token.match(/^\[([^\]]+)\]\(https?:\/\/[^)]+\)$/);
+    const visibleText = (bold?.[1] ?? link?.[1] ?? token).trim();
+    if (cyrillic.test(visibleText)) output.add(visibleText);
+  }
+}
 
 function collectJsonStrings(value, output) {
   if (typeof value === "string") {
+    if (richMarker.test(value)) {
+      collectRichString(value, output);
+      return;
+    }
     if (cyrillic.test(value)) output.add(value);
     return;
   }

@@ -93,6 +93,17 @@ test("publishes only completed respondents and current ARQ naming", () => {
   assert.ok(data.market_competitors.every((competitor) => competitor.provider !== "DolarApp"));
 });
 
+test("preserves the structured Indonesia country-detail report", () => {
+  const report = data.market_reports.find((item) => item.market_code === "IDN");
+  assert.ok(report);
+  const sections = Object.fromEntries(report.sections.map((section) => [section.id, section]));
+  assert.ok(sections.summary.paragraphs.every((paragraph) => paragraph.startsWith("::b0::")));
+  assert.match(sections.product.paragraphs.join(" "), /Tangem Wallet/);
+  assert.match(sections.marketing.paragraphs.join(" "), /Coinfest Asia/);
+  assert.match(sections.marketing.paragraphs.join(" "), /::b2::\[AirdropFind\]/);
+  assert.doesNotMatch(report.sections.flatMap((section) => section.paragraphs).join(" "), /чч|на уровне Филиппин/);
+});
+
 test("calculates one unified market score from nine non-overlapping criteria", () => {
   const weights = Object.fromEntries(
     data.unified_scoring.blocks.flatMap((block) => block.criteria.map((criterion) => [criterion.key, criterion.weight])),

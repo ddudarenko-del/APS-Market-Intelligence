@@ -927,6 +927,17 @@ footer { border-top: 1px solid #1f2823; }
 .market-report-section h3 { margin: 0 0 14px; font-size: 25px; }
 .market-report-section p { max-width: 920px; margin: 0 0 14px; color: #cbd4cf; font-size: 13px; line-height: 1.72; }
 .market-report-section .source-chips { justify-content: flex-start; margin-top: 13px; }
+.report-rich-content { display: grid; gap: 10px; max-width: 920px; }
+.report-rich-heading { margin: 18px 0 2px; color: var(--ink); font-size: 17px; font-weight: 800; line-height: 1.4; }
+.report-rich-paragraph { margin: 0 !important; }
+.report-rich-bullet { display: grid; grid-template-columns: 12px minmax(0, 1fr); gap: 8px; align-items: start; }
+.report-rich-bullet.level-1 { margin-left: 22px; }
+.report-rich-bullet.level-2 { margin-left: 44px; }
+.report-rich-bullet.level-3 { margin-left: 66px; }
+.report-rich-bullet p { margin: 0 !important; }
+.report-rich-marker { color: var(--lime); font-weight: 800; line-height: 1.72; }
+.report-rich-content strong { color: var(--ink); font-weight: 800; }
+.report-rich-content a { color: var(--lime); text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 3px; }
 .audience-groups { display: grid; gap: 4px; max-width: 920px; margin-top: 18px; }
 .audience-group { padding: 18px 0 4px; border-top: 1px dashed var(--line); }
 .audience-group h4 { max-width: 840px; margin: 0 0 10px; color: var(--ink); font-size: 18px; font-weight: 780; line-height: 1.42; letter-spacing: -.015em; }
@@ -1082,6 +1093,9 @@ footer {
   .unified-criteria-list article > p { min-height: 0; }
   .respondent-metrics div { border-right: 0; border-bottom: 1px solid var(--line); }
   .market-report-section { grid-template-columns: 1fr; }
+  .report-rich-bullet.level-1 { margin-left: 14px; }
+  .report-rich-bullet.level-2 { margin-left: 28px; }
+  .report-rich-bullet.level-3 { margin-left: 42px; }
   .audience-group h4 { font-size: 19px; line-height: 1.38; }
   .cases-intro > div:first-child { padding: 25px 20px; }.cases-intro-metrics { grid-template-columns: 1fr; }.cases-intro-metrics div { padding: 17px 20px; border-top: 1px solid var(--line); border-left: 0; }.cases-intro-metrics div:first-child { border-top: 0; }.primary-case-heading { align-items: flex-start; flex-direction: column; padding: 25px 20px; }.primary-case-heading .source-chips { justify-content: flex-start; }.case-trajectory, .case-reasons-grid, .supporting-cases-grid, .case-patterns-grid { grid-template-columns: 1fr; }.case-trajectory article, .case-reasons-heading { padding: 22px 20px; }.case-main-lesson { grid-template-columns: 1fr; gap: 9px; padding: 22px 20px; }.cases-section-heading { align-items: flex-start; flex-direction: column; padding: 20px 4px 4px; }.cases-section-heading > p { text-align: left; }.supporting-case:last-child { grid-column: auto; }.cases-section-heading.compact { padding: 22px 20px 17px; }
 }
