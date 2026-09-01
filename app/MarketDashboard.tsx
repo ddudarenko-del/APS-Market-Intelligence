@@ -246,6 +246,16 @@ function MarketMap({
         });
         mapRef.current = map;
         L.control.zoom({ position: "topright" }).addTo(map);
+        map.on("popupopen", (event) => {
+          const button = event.popup.getElement()?.querySelector<HTMLButtonElement>("[data-market-profile]");
+          const code = button?.dataset.marketProfile;
+          if (!button || !code) return;
+          L.DomEvent.on(button, "click", (clickEvent) => {
+            L.DomEvent.stop(clickEvent);
+            map.closePopup();
+            onOpenProfileRef.current(code);
+          });
+        });
 
         const response = await fetch("/data/countries.geojson");
         if (!response.ok) throw new Error("Country geometry unavailable");
@@ -287,11 +297,6 @@ function MarketMap({
             countryLayer.on("click", () => {
               onSelectRef.current(code);
               countryLayer.openPopup();
-            });
-            countryLayer.on("popupopen", () => {
-              const popupElement = countryLayer.getPopup()?.getElement();
-              const button = popupElement?.querySelector<HTMLButtonElement>(`[data-market-profile="${code}"]`);
-              button?.addEventListener("click", () => onOpenProfileRef.current(code), { once: true });
             });
             countryLayer.on("add", () => {
               const element = (countryLayer as import("leaflet").Path).getElement();

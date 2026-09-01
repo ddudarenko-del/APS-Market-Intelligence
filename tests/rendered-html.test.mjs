@@ -53,6 +53,8 @@ test("keeps production metadata and documented market intelligence", async () =>
   assert.match(dashboard, /data\.market_competitors/);
   assert.match(dashboard, /\/data\/countries\.geojson/);
   assert.doesNotMatch(dashboard, /cartocdn|CARTO/i);
+  assert.match(dashboard, /map\.on\("popupopen"/);
+  assert.match(dashboard, /onOpenProfileRef\.current\(code\)/);
   assert.match(data, /"kast_fit"/);
   assert.match(data, /"market_competitors"/);
   assert.match(data, /"market_assessments"/);
