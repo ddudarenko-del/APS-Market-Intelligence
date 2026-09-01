@@ -55,6 +55,8 @@ test("keeps production metadata and documented market intelligence", async () =>
   assert.doesNotMatch(dashboard, /cartocdn|CARTO/i);
   assert.match(dashboard, /map\.on\("popupopen"/);
   assert.match(dashboard, /onOpenProfileRef\.current\(code\)/);
+  assert.match(dashboard, /scoreMode !== "potential" && <span className="rank-number">/);
+  assert.match(dashboard, /potential-mode/);
   assert.match(data, /"kast_fit"/);
   assert.match(data, /"market_competitors"/);
   assert.match(data, /"market_assessments"/);

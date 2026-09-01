@@ -554,8 +554,8 @@ export function MarketDashboard() {
             </div>
             <div className="ranking-list">
               {rankedVisibleMarkets.map((market, index) => (
-                <button key={market.code} type="button" onClick={() => chooseMarket(market.code)} className={selectedCode === market.code ? "active" : ""}>
-                  <span className="rank-number">{scoreMode === "potential" ? market.code : scoreMode === "aps" ? market.rank : index + 1}</span>
+                <button key={market.code} type="button" onClick={() => chooseMarket(market.code)} className={`${selectedCode === market.code ? "active " : ""}${scoreMode === "potential" ? "potential-mode" : ""}`.trim()}>
+                  {scoreMode !== "potential" && <span className="rank-number">{scoreMode === "aps" ? market.rank : index + 1}</span>}
                   <span className="rank-name"><strong>{market.name_ru}</strong><small>{market.region}</small></span>
                   {scoreMode === "potential" ? (
                     <><span className="gate-mini">{data.market_assessments.find((item) => item.market_code === market.code)?.headline}</span><span className={`potential-dot ${data.market_assessments.find((item) => item.market_code === market.code)?.potential.level}`}>{potentialLabels[data.market_assessments.find((item) => item.market_code === market.code)?.potential.level ?? "low"]}</span></>
