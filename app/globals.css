@@ -43,7 +43,7 @@ a { color: inherit; }
   border-bottom: 1px solid var(--line);
 }
 
-.hero-topline, .hero-grid, .method-banner, .tabs, .content-grid, .compare-layout,
+.hero-topline, .hero-grid, .tabs, .content-grid, .compare-layout,
 .profiles-layout, .barriers-layout, .data-panel, .method-layout, footer {
   max-width: 1540px;
   margin-left: auto;
@@ -69,10 +69,6 @@ a { color: inherit; }
 .hero-metrics div:last-child { border-right: 0; }
 .hero-metrics strong { display: block; font-size: 34px; letter-spacing: -.04em; }
 .hero-metrics span { display: block; color: var(--ink-soft); font-size: 12px; margin-top: 5px; }
-
-.method-banner { display: flex; gap: 14px; align-items: center; margin-top: 22px; padding: 16px 20px; background: var(--aqua); border-left: 5px solid #38aab1; border-radius: 14px; }
-.method-banner p { margin: 0; line-height: 1.5; }
-.method-icon { width: 28px; height: 28px; display: grid; place-items: center; flex: 0 0 auto; border: 2px solid #38aab1; border-radius: 50%; font-family: Georgia, serif; font-weight: 700; }
 
 .tabs { display: flex; gap: 4px; padding: 0 8px; margin-top: 22px; background: var(--paper); border: 1px solid var(--line); border-radius: 18px 18px 0 0; overflow-x: auto; }
 .tabs button { border: 0; background: transparent; padding: 19px 22px; white-space: nowrap; cursor: pointer; color: var(--ink-soft); border-bottom: 3px solid transparent; font-weight: 650; }
@@ -194,7 +190,7 @@ body {
     linear-gradient(145deg, #0e1511 0%, #070a08 65%);
 }
 
-.hero-topline, .hero-grid, .method-banner, .tabs, .content-grid, .compare-layout,
+.hero-topline, .hero-grid, .tabs, .content-grid, .compare-layout,
 .profiles-layout, .data-panel, .method-layout, footer, .benchmark-panel, .kast-layout {
   max-width: 1328px;
 }
@@ -245,20 +241,6 @@ body {
 
 .hero-metrics div { border-color: #334039; }
 .hero-metrics strong { color: var(--lime); }
-
-.method-banner {
-  margin-top: 18px;
-  border: 1px solid rgba(64, 247, 133, .28);
-  border-left: 5px solid var(--lime);
-  border-radius: 18px;
-  background: #102419;
-}
-
-.method-icon {
-  border-color: var(--lime);
-  color: var(--lime);
-  font-family: var(--font-manrope);
-}
 
 .tabs {
   margin-top: 18px;
@@ -839,7 +821,7 @@ footer { border-top: 1px solid #1f2823; }
   .hero { margin: 0; padding: 20px 18px 28px; border-radius: 0 0 26px 26px; }.hero-topline { align-items: flex-start; }.update-stamp { max-width: 190px; text-align: right; }
   .aps-logo { width: 106px; }
   .hero-metrics { grid-template-columns: 1fr; }.hero-metrics div { border-right: 0; border-bottom: 1px solid var(--line); }.hero-metrics div:last-child { border-bottom: 0; }
-  .method-banner { margin: 16px 12px 0; align-items: flex-start; }.tabs { margin: 16px 12px 0; }
+  .tabs { margin: 16px 12px 0; }
   .overview-grid, .compare-layout, .profiles-layout, .method-layout, .kast-layout, .barriers-layout, .acquisition-layout, .conclusions-layout, .respondents-layout { padding: 14px 12px 0; }.data-panel { margin: 0 12px; }
   .panel-heading { flex-direction: column; }.panel-controls { width: 100%; justify-content: stretch; }.metric-switch { flex: 1; }.metric-switch button { flex: 1; }.panel-heading select { width: 100%; }.map-frame, .real-map { min-height: 480px; height: 480px; }
   .selected-market { grid-template-columns: 1fr; }.selected-kpis { grid-template-columns: 1fr 1fr; }.ranking-list { grid-template-columns: 1fr; }

@@ -479,14 +479,6 @@ export function MarketDashboard() {
         </div>
       </header>
 
-      <div className="method-banner">
-        <span className="method-icon">i</span>
-        <p>
-          <strong>Три независимых слоя.</strong> Исходные APS и KAST / Product Fit сохранены как справочные оценки.
-          Предварительный потенциал после интервью является качественным выводом и не рассчитывается из их суммы.
-        </p>
-      </div>
-
       <nav className="tabs" aria-label="Разделы исследования">
         {tabLabels.map((item) => (
           <button

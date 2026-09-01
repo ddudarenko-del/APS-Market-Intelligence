@@ -32,8 +32,8 @@ test("server-renders the unified APS research workspace", async () => {
   assert.match(html, /<title>APS Market Intelligence<\/title>/i);
   assert.match(html, /Выводы/);
   assert.match(html, /Респонденты/);
-  assert.match(html, /Предварительный потенциал/);
-  assert.match(html, /Исходные APS и KAST \/ Product Fit сохранены/);
+  assert.match(html, /По предварительному потенциалу/);
+  assert.doesNotMatch(html, /Три независимых слоя/);
   assert.match(html, /Интерактивная карта рынков APS/);
   assert.doesNotMatch(html, /codex-preview|Your site is taking shape/);
 });
