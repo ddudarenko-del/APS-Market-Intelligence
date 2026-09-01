@@ -206,25 +206,21 @@ function MarketMap({
   visibleCodes,
   scoreMode,
   onSelect,
-  onOpenProfile,
 }: {
   selectedCode: string;
   visibleCodes: string[];
   scoreMode: ScoreMode;
   onSelect: (code: string) => void;
-  onOpenProfile: (code: string) => void;
 }) {
   const containerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<import("leaflet").Map | null>(null);
   const layerRef = useRef<import("leaflet").GeoJSON | null>(null);
   const onSelectRef = useRef(onSelect);
-  const onOpenProfileRef = useRef(onOpenProfile);
   const [mapStatus, setMapStatus] = useState<"loading" | "ready" | "error">("loading");
 
   useEffect(() => {
     onSelectRef.current = onSelect;
-    onOpenProfileRef.current = onOpenProfile;
-  }, [onSelect, onOpenProfile]);
+  }, [onSelect]);
 
   useEffect(() => {
     let cancelled = false;
@@ -246,16 +242,6 @@ function MarketMap({
         });
         mapRef.current = map;
         L.control.zoom({ position: "topright" }).addTo(map);
-        map.on("popupopen", (event) => {
-          const button = event.popup.getElement()?.querySelector<HTMLButtonElement>("[data-market-profile]");
-          const code = button?.dataset.marketProfile;
-          if (!button || !code) return;
-          L.DomEvent.on(button, "click", (clickEvent) => {
-            L.DomEvent.stop(clickEvent);
-            map.closePopup();
-            onOpenProfileRef.current(code);
-          });
-        });
 
         const response = await fetch("/data/countries.geojson");
         if (!response.ok) throw new Error("Country geometry unavailable");
@@ -290,8 +276,8 @@ function MarketMap({
             );
             if (assessment) {
               countryLayer.bindPopup(
-                `<section class="market-map-popup"><strong>${market.name_ru}</strong><span>${assessment.potential.label}</span><p><b>Сила потребности:</b> ${assessment.need.score}/5</p><p><b>Сложность входа:</b> ${assessment.entry_complexity.score}/5</p><p>${assessment.headline}</p><p><b>Незакрытая задача:</b> ${assessment.market_gap}</p><small>${confidenceLabels[assessment.confidence]}</small><button type="button" data-market-profile="${code}">Открыть профиль</button></section>`,
-                { maxWidth: 320, className: "aps-map-popup-shell" },
+                `<section class="market-map-popup"><strong>${market.name_ru}</strong><small>Предварительный потенциал рынка</small><span class="market-map-popup-value ${assessment.potential.level}">${potentialLabels[assessment.potential.level]}</span></section>`,
+                { maxWidth: 240, className: "aps-map-popup-shell" },
               );
             }
             countryLayer.on("click", () => {
@@ -383,6 +369,9 @@ function MarketMap({
       {mapStatus === "error" && <div className="map-state error">Карта временно недоступна</div>}
       <button type="button" className="map-reset" onClick={resetView}>Весь мир</button>
       <div className="atlas-legend">
+        <strong className="atlas-legend-title">
+          {scoreMode === "potential" ? "Предварительный потенциал рынка" : scoreMode === "aps" ? "Оценка APS" : "KAST / Product Fit"}
+        </strong>
         {scoreMode === "potential" ? (
           <><span><i className="dot high" /> высокий</span><span><i className="dot mid" /> средний</span><span><i className="dot low" /> низкий</span></>
         ) : (
@@ -517,7 +506,6 @@ export function MarketDashboard() {
               visibleCodes={visibleMarkets.map((market) => market.code)}
               scoreMode={scoreMode}
               onSelect={chooseMarket}
-              onOpenProfile={(code) => chooseMarket(code, "profiles")}
             />
             <div className="selected-market">
               <div>

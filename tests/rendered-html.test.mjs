@@ -53,8 +53,10 @@ test("keeps production metadata and documented market intelligence", async () =>
   assert.match(dashboard, /data\.market_competitors/);
   assert.match(dashboard, /\/data\/countries\.geojson/);
   assert.doesNotMatch(dashboard, /cartocdn|CARTO/i);
-  assert.match(dashboard, /map\.on\("popupopen"/);
-  assert.match(dashboard, /onOpenProfileRef\.current\(code\)/);
+  assert.doesNotMatch(dashboard, /data-market-profile|onOpenProfileRef/);
+  assert.match(dashboard, /market-map-popup-value/);
+  assert.match(dashboard, /Предварительный потенциал рынка/);
+  assert.match(dashboard, /atlas-legend-title/);
   assert.match(dashboard, /scoreMode !== "potential" && <span className="rank-number">/);
   assert.match(dashboard, /potential-mode/);
   assert.match(data, /"kast_fit"/);
