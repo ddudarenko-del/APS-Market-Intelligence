@@ -676,7 +676,7 @@ footer { border-top: 1px solid #1f2823; }
 .potential-badge.medium_high { border-color: #aed95b; background: #27341b; color: #e0f5a5; }
 .potential-badge.medium { border-color: #b68c42; background: #302717; color: #f2d28f; }
 .potential-badge.low { border-color: #66575a; background: #21191a; color: #c8b8bb; }
-.potential-dot { justify-self: end; width: 84px; max-width: 100%; font-size: 9px; line-height: 1.2; text-align: right; }
+.potential-dot { justify-self: start; width: 100%; max-width: 84px; min-width: 0; font-size: 11px; line-height: 1.35; text-align: left; overflow-wrap: break-word; }
 .potential-dot.high { color: var(--lime); }.potential-dot.medium_high { color: #d4ed73; }.potential-dot.medium { color: #e4c26d; }.potential-dot.low { color: #a8999c; }
 .market-gap { margin-top: 10px !important; font-size: 12px; line-height: 1.45; }
 
@@ -856,8 +856,8 @@ footer { border-top: 1px solid #1f2823; }
   .ranking-list .rank-name { grid-area: name; }
   .ranking-list .gate-mini { grid-area: gate; justify-self: start; width: auto; max-width: 150px; }
   .ranking-list .score-badge { grid-area: score; }
-  .ranking-list .potential-dot { grid-area: score; width: 48px; overflow-wrap: anywhere; }
-  .ranking-list button.potential-mode { grid-template-columns: minmax(0, 1fr) minmax(118px, 1.05fr) 52px; grid-template-areas: "name gate score"; column-gap: 8px; row-gap: 0; }
+  .ranking-list .potential-dot { grid-area: score; justify-self: start; width: 100%; max-width: none; }
+  .ranking-list button.potential-mode { grid-template-columns: minmax(0, .8fr) minmax(112px, 1fr) minmax(66px, .6fr); grid-template-areas: "name gate score"; column-gap: 8px; row-gap: 0; }
   .ranking-list button.potential-mode .gate-mini { grid-area: gate; justify-self: stretch; width: 100%; max-width: none; }
   .research-conclusion, .respondents-intro { padding: 24px 20px; }
   .qualitative-scores, .respondent-metrics { grid-template-columns: 1fr; }
