@@ -518,7 +518,7 @@ export function MarketDashboard() {
               onSelect={chooseMarket}
             />
             <div className="selected-market">
-              <div>
+              <div className="selected-market-copy">
                 <span className="section-kicker">ВЫБРАННЫЙ РЫНОК</span>
                 <h3>{selected.name_ru}</h3>
                 <span className={`attractiveness-badge ${selectedUnified.level}`}>{selectedUnified.label} · {selectedUnified.final_score.toFixed(2)} / 5</span>
@@ -526,10 +526,10 @@ export function MarketDashboard() {
                 <p className="market-gap"><strong>Незакрытая задача:</strong> {selectedAssessment.market_gap}</p>
                 <p className="selected-confidence">Подтверждение: {confidenceLabels[selectedAssessment.confidence]}</p>
               </div>
-              <div className="selected-kpis">
-                <div><span>Потребность</span><strong>{selectedUnified.block_scores.product_need.toFixed(2)}</strong></div>
-                <div><span>Коммерческий потенциал</span><strong>{selectedUnified.block_scores.commercial_viability.toFixed(2)}</strong></div>
-                <div><span>Реализуемость входа</span><strong>{selectedUnified.block_scores.entry_feasibility.toFixed(2)}</strong></div>
+              <div className="selected-kpis" aria-label="Компоненты единой оценки">
+                <div><span>Потребность<small>35% итоговой оценки</small></span><strong>{selectedUnified.block_scores.product_need.toFixed(2)}<small>/ 5</small></strong></div>
+                <div><span>Коммерческий потенциал<small>30% итоговой оценки</small></span><strong>{selectedUnified.block_scores.commercial_viability.toFixed(2)}<small>/ 5</small></strong></div>
+                <div><span>Реализуемость входа<small>35% итоговой оценки</small></span><strong>{selectedUnified.block_scores.entry_feasibility.toFixed(2)}<small>/ 5</small></strong></div>
               </div>
               <button type="button" className="primary-button" onClick={() => setTab("profiles")}>Открыть профиль</button>
             </div>
