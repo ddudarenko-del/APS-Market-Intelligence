@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import data from "./data/market_data.json";
+import { type Language, translateCompositeText, translateText, translateTextNode } from "./localization";
 
 type Tab = "overview" | "conclusions" | "compare" | "profiles" | "competition" | "barriers" | "cases" | "acquisition" | "respondents" | "data" | "method";
 type BarrierSort = "default" | "driver" | "barrier";
@@ -19,6 +20,81 @@ type Availability = {
 type CountryProperties = { ADM0_A3?: string };
 type CountryFeature = GeoJSON.Feature<GeoJSON.Geometry, CountryProperties>;
 type CountryLayer = import("leaflet").Path & { feature?: CountryFeature };
+
+const translatableAttributes = ["aria-label", "title", "placeholder"] as const;
+
+function useDomLocalization(language: Language) {
+  const rootRef = useRef<HTMLElement>(null);
+  const originalTextRef = useRef(new WeakMap<Text, string>());
+  const originalAttributeRef = useRef(new WeakMap<Element, Map<string, string>>());
+
+  useEffect(() => {
+    const root = rootRef.current;
+    if (!root) return;
+
+    document.documentElement.lang = language;
+
+    const localizeText = (node: Text) => {
+      const current = node.nodeValue ?? "";
+      if (/[А-Яа-яЁё]/.test(current)) originalTextRef.current.set(node, current);
+      const source = originalTextRef.current.get(node) ?? current;
+      const localized = language === "en" ? translateTextNode(source, language) : source;
+      if (localized !== current) node.nodeValue = localized;
+    };
+
+    const localizeAttributes = (element: Element) => {
+      let originals = originalAttributeRef.current.get(element);
+      if (!originals) {
+        originals = new Map<string, string>();
+        originalAttributeRef.current.set(element, originals);
+      }
+      for (const attribute of translatableAttributes) {
+        const current = element.getAttribute(attribute);
+        if (!current) continue;
+        if (/[А-Яа-яЁё]/.test(current)) originals.set(attribute, current);
+        const source = originals.get(attribute) ?? current;
+        const localized = language === "en" ? translateCompositeText(source, language) : source;
+        if (localized !== current) element.setAttribute(attribute, localized);
+      }
+    };
+
+    const localizeTree = (node: Node) => {
+      if (node.nodeType === Node.TEXT_NODE) {
+        localizeText(node as Text);
+        return;
+      }
+      if (!(node instanceof Element)) return;
+      if (node.matches("script, style")) return;
+      localizeAttributes(node);
+      const walker = document.createTreeWalker(node, NodeFilter.SHOW_ELEMENT | NodeFilter.SHOW_TEXT);
+      let current = walker.nextNode();
+      while (current) {
+        if (current.nodeType === Node.TEXT_NODE) localizeText(current as Text);
+        else if (current instanceof Element) localizeAttributes(current);
+        current = walker.nextNode();
+      }
+    };
+
+    localizeTree(root);
+    const observer = new MutationObserver((mutations) => {
+      for (const mutation of mutations) {
+        if (mutation.type === "characterData") localizeText(mutation.target as Text);
+        if (mutation.type === "attributes" && mutation.target instanceof Element) localizeAttributes(mutation.target);
+        mutation.addedNodes.forEach(localizeTree);
+      }
+    });
+    observer.observe(root, {
+      subtree: true,
+      childList: true,
+      characterData: true,
+      attributes: true,
+      attributeFilter: [...translatableAttributes],
+    });
+    return () => observer.disconnect();
+  }, [language]);
+
+  return rootRef;
+}
 
 const tabLabels: Array<{ id: Tab; label: string }> = [
   { id: "overview", label: "Обзор" },
@@ -76,21 +152,23 @@ function supportLabel(value: boolean | null) {
   return value ? "да" : "нет";
 }
 
-function formatMoney(metric: MetricValue) {
-  if (!metric) return "нет данных";
+function formatMoney(metric: MetricValue, language: Language) {
+  if (!metric) return translateText("нет данных", language);
+  const locale = language === "en" ? "en-US" : "ru-RU";
   const billions = metric.value / 1_000_000_000;
-  if (billions >= 1) return `$${billions.toLocaleString("ru-RU", { maximumFractionDigits: 1 })} млрд`;
-  return `$${(metric.value / 1_000_000).toLocaleString("ru-RU", { maximumFractionDigits: 0 })} млн`;
+  if (billions >= 1) return `$${billions.toLocaleString(locale, { maximumFractionDigits: 1 })} ${language === "en" ? "bn" : "млрд"}`;
+  return `$${(metric.value / 1_000_000).toLocaleString(locale, { maximumFractionDigits: 0 })} ${language === "en" ? "m" : "млн"}`;
 }
 
-function formatPct(metric: MetricValue) {
-  if (!metric) return "нет данных";
-  return `${metric.value.toLocaleString("ru-RU", { maximumFractionDigits: 2 })}%`;
+function formatPct(metric: MetricValue, language: Language) {
+  if (!metric) return translateText("нет данных", language);
+  return `${metric.value.toLocaleString(language === "en" ? "en-US" : "ru-RU", { maximumFractionDigits: 2 })}%`;
 }
 
-function formatPeople(metric: MetricValue) {
-  if (!metric) return "нет данных";
-  return `${(metric.value / 1_000_000).toLocaleString("ru-RU", { maximumFractionDigits: 1 })} млн`;
+function formatPeople(metric: MetricValue, language: Language) {
+  if (!metric) return translateText("нет данных", language);
+  const locale = language === "en" ? "en-US" : "ru-RU";
+  return `${(metric.value / 1_000_000).toLocaleString(locale, { maximumFractionDigits: 1 })} ${language === "en" ? "m" : "млн"}`;
 }
 
 function getUnifiedScore(marketCode: string): UnifiedScore {
@@ -199,9 +277,9 @@ function SourceChip({ sourceId }: { sourceId: string }) {
 }
 
 function splitAudienceLead(paragraph: string) {
-  const isGroupLead = /^(?:Группа \d+\.|Опция \d+\.|Первая(?: и [^—]+)? аудитория\s+—|Вторая аудитория\s+—|Третья(?: и [^—]+)? аудитория\s+—|Третья гипотеза\s+—|Четвертая гипотеза\s+—|Наиболее интересная гипотеза\s+—)/.test(paragraph);
+  const isGroupLead = /^(?:Группа \d+\.|Опция \d+\.|Первая(?: и [^—]+)? аудитория\s+—|Вторая аудитория\s+—|Третья(?: и [^—]+)? аудитория\s+—|Третья гипотеза\s+—|Четвертая гипотеза\s+—|Наиболее интересная гипотеза\s+—|Group \d+[.:]|Option \d+[.:]|First(?: and [^—]+)? audience\s+—|Second audience\s+—|Third(?: and [^—]+)? audience\s+—|Third hypothesis\s+—|Fourth hypothesis\s+—|Most promising hypothesis\s+—)/.test(paragraph);
   if (!isGroupLead) return null;
-  const numberedPrefix = paragraph.match(/^(?:Группа \d+\.|Опция \d+\.)\s*/)?.[0].length ?? 0;
+  const numberedPrefix = paragraph.match(/^(?:Группа \d+\.|Опция \d+\.|Group \d+[.:]|Option \d+[.:])\s*/)?.[0].length ?? 0;
   const sentenceEnd = paragraph.indexOf(". ", numberedPrefix);
   if (sentenceEnd === -1) return { title: paragraph, detail: "" };
   return {
@@ -210,12 +288,13 @@ function splitAudienceLead(paragraph: string) {
   };
 }
 
-function AudienceGroups({ paragraphs }: { paragraphs: string[] }) {
+function AudienceGroups({ paragraphs, language }: { paragraphs: string[]; language: Language }) {
   const intro: string[] = [];
   const groups: Array<{ title: string; details: string[] }> = [];
   let currentGroup: { title: string; details: string[] } | null = null;
 
-  for (const paragraph of paragraphs) {
+  for (const sourceParagraph of paragraphs) {
+    const paragraph = translateText(sourceParagraph, language);
     const lead = splitAudienceLead(paragraph);
     if (lead) {
       currentGroup = { title: lead.title, details: lead.detail ? [lead.detail] : [] };
@@ -408,6 +487,9 @@ function MarketMap({
 }
 
 export function MarketDashboard() {
+  const [language, setLanguage] = useState<Language>("ru");
+  const localizationRootRef = useDomLocalization(language);
+  const locale = language === "en" ? "en-US" : "ru-RU";
   const [tab, setTab] = useState<Tab>("overview");
   const tabsRef = useRef<HTMLElement>(null);
   const [tabScroll, setTabScroll] = useState({ left: false, right: false });
@@ -492,13 +574,19 @@ export function MarketDashboard() {
   }
 
   return (
-    <main className="app-shell">
+    <main ref={localizationRootRef} className="app-shell">
       <header className="hero">
         <div className="hero-topline">
           {/* The same component is built by Next/vinext and standalone Vite for Hostinger. */}
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img className="aps-logo" src="/brand/aps-logo.svg" alt="APS" width={132} height={52} />
-          <span className="update-stamp">Исследование обновлено 01.09.2026</span>
+          <div className="hero-actions">
+            <span className="update-stamp">Исследование обновлено 01.09.2026</span>
+            <div className="language-switch" role="group" aria-label="Выбор языка">
+              <button type="button" className={language === "ru" ? "active" : ""} aria-pressed={language === "ru"} onClick={() => setLanguage("ru")}>RU</button>
+              <button type="button" className={language === "en" ? "active" : ""} aria-pressed={language === "en"} onClick={() => setLanguage("en")}>EN</button>
+            </div>
+          </div>
         </div>
         <div className="hero-grid">
           <div>
@@ -543,7 +631,7 @@ export function MarketDashboard() {
               </div>
               <div className="panel-controls">
                 <select value={region} onChange={(event) => setRegion(event.target.value)} aria-label="Фильтр по региону">
-                  {regions.map((item) => <option key={item}>{item}</option>)}
+                  {regions.map((item) => <option key={item} value={item}>{item}</option>)}
                 </select>
               </div>
             </div>
@@ -772,11 +860,11 @@ export function MarketDashboard() {
             </div>
 
             <div className="acquisition-reach-grid">
-              <div><span>Пользователи интернета</span><strong>{selectedAcquisition.digital_reach.internet_users_m.toLocaleString("ru-RU")} млн</strong><small>январь 2025</small></div>
-              <div><span>Активные профили в соцсетях</span><strong>{selectedAcquisition.digital_reach.social_identities_m.toLocaleString("ru-RU")} млн</strong><small>{selectedAcquisition.digital_reach.social_pct_population.toLocaleString("ru-RU")}% населения</small></div>
-              <div><span>Рекламная аудитория Facebook</span><strong>{selectedAcquisition.digital_reach.facebook_ad_m.toLocaleString("ru-RU")} млн</strong><small>потенциальный охват</small></div>
-              <div><span>Рекламная аудитория YouTube</span><strong>{selectedAcquisition.digital_reach.youtube_ad_m.toLocaleString("ru-RU")} млн</strong><small>потенциальный охват</small></div>
-              <div><span>Рекламная аудитория TikTok 18+</span><strong>{selectedAcquisition.digital_reach.tiktok_adult_ad_m.toLocaleString("ru-RU")} млн</strong><small>потенциальный охват</small></div>
+              <div><span>Пользователи интернета</span><strong>{selectedAcquisition.digital_reach.internet_users_m.toLocaleString(locale)} млн</strong><small>январь 2025</small></div>
+              <div><span>Активные профили в соцсетях</span><strong>{selectedAcquisition.digital_reach.social_identities_m.toLocaleString(locale)} млн</strong><small>{selectedAcquisition.digital_reach.social_pct_population.toLocaleString(locale)}% населения</small></div>
+              <div><span>Рекламная аудитория Facebook</span><strong>{selectedAcquisition.digital_reach.facebook_ad_m.toLocaleString(locale)} млн</strong><small>потенциальный охват</small></div>
+              <div><span>Рекламная аудитория YouTube</span><strong>{selectedAcquisition.digital_reach.youtube_ad_m.toLocaleString(locale)} млн</strong><small>потенциальный охват</small></div>
+              <div><span>Рекламная аудитория TikTok 18+</span><strong>{selectedAcquisition.digital_reach.tiktok_adult_ad_m.toLocaleString(locale)} млн</strong><small>потенциальный охват</small></div>
             </div>
 
             <div className="acquisition-channels-heading">
@@ -943,9 +1031,9 @@ export function MarketDashboard() {
                 <div className="source-chips">{assessment.source_ids.map((id) => <SourceChip key={id} sourceId={id} />)}</div>
                 <div className="metric-stack">
                   <div className="metric-section-label"><span>КОЛИЧЕСТВЕННЫЙ КОНТЕКСТ</span></div>
-                  <div><span>Входящие переводы</span><strong>{formatMoney(market.metrics.remittance_in_usd)}</strong><small>{market.metrics.remittance_in_usd?.year ?? "нет данных"}</small></div>
-                  <div><span>Переводы / ВВП</span><strong>{formatPct(market.metrics.remittance_pct_gdp)}</strong><small>{market.metrics.remittance_pct_gdp?.year ?? "нет данных"}</small></div>
-                  <div><span>Население</span><strong>{formatPeople(market.metrics.population)}</strong><small>{market.metrics.population?.year ?? "нет данных"}</small></div>
+                  <div><span>Входящие переводы</span><strong>{formatMoney(market.metrics.remittance_in_usd, language)}</strong><small>{market.metrics.remittance_in_usd?.year ?? "нет данных"}</small></div>
+                  <div><span>Переводы / ВВП</span><strong>{formatPct(market.metrics.remittance_pct_gdp, language)}</strong><small>{market.metrics.remittance_pct_gdp?.year ?? "нет данных"}</small></div>
+                  <div><span>Население</span><strong>{formatPeople(market.metrics.population, language)}</strong><small>{market.metrics.population?.year ?? "нет данных"}</small></div>
                   <div><span>Account ownership</span><strong>{market.metrics.findex_2024.account_ownership_pct.toFixed(1)}%</strong><small>Findex 2024</small></div>
                   <div><span>Smartphone</span><strong>{market.metrics.findex_2024.smartphone_pct.toFixed(1)}%</strong><small>Findex 2024</small></div>
                   <div><span>Crypto adoption</span><strong>{market.metrics.chainalysis_rank_2025 ? `#${market.metrics.chainalysis_rank_2025}` : "вне top-20"}</strong><small>из 151 стран</small></div>
@@ -1014,12 +1102,12 @@ export function MarketDashboard() {
             <div className="market-report">
               {selectedReport.sections.map((section, index) => (
                 <section className="market-report-section" key={section.id}>
-                  <span className="report-index">0{index + 1}</span><div><h3>{section.title}</h3>{section.id === "audience" ? <AudienceGroups paragraphs={section.paragraphs} /> : section.paragraphs.map((paragraph, paragraphIndex) => <p key={paragraphIndex}>{paragraph}</p>)}<div className="source-chips">{section.source_ids.map((id) => <SourceChip key={id} sourceId={id} />)}</div></div>
+                  <span className="report-index">0{index + 1}</span><div><h3>{section.title}</h3>{section.id === "audience" ? <AudienceGroups paragraphs={section.paragraphs} language={language} /> : section.paragraphs.map((paragraph, paragraphIndex) => <p key={paragraphIndex}>{paragraph}</p>)}<div className="source-chips">{section.source_ids.map((id) => <SourceChip key={id} sourceId={id} />)}</div></div>
                 </section>
               ))}
             </div>
             <div className="numbers-strip">
-              <div><span>Переводы</span><strong>{formatMoney(selected.metrics.remittance_in_usd)}</strong><small>{selected.metrics.remittance_in_usd?.year}</small></div>
+              <div><span>Переводы</span><strong>{formatMoney(selected.metrics.remittance_in_usd, language)}</strong><small>{selected.metrics.remittance_in_usd?.year}</small></div>
               <div><span>Инфляция</span><strong>{selected.metrics.imf_weo.inflation_2025_pct.toFixed(1)}%</strong><small>IMF 2025</small></div>
               <div><span>Account ownership</span><strong>{selected.metrics.findex_2024.account_ownership_pct.toFixed(1)}%</strong><small>Findex 2024</small></div>
               <div><span>Crypto rank</span><strong>{selected.metrics.chainalysis_rank_2025 ? `#${selected.metrics.chainalysis_rank_2025}` : ">20"}</strong><small>Chainalysis 2025</small></div>
@@ -1314,9 +1402,9 @@ export function MarketDashboard() {
                     <td>{unified.block_scores.product_need.toFixed(2)}<small>35%</small></td>
                     <td>{unified.block_scores.commercial_viability.toFixed(2)}<small>30%</small></td>
                     <td>{unified.block_scores.entry_feasibility.toFixed(2)}<small>35%</small></td>
-                    <td>{formatMoney(market.metrics.remittance_in_usd)}<small>{market.metrics.remittance_in_usd?.year}</small></td>
-                    <td>{formatPct(market.metrics.remittance_pct_gdp)}<small>{market.metrics.remittance_pct_gdp?.year}</small></td>
-                    <td>{formatPeople(market.metrics.population)}<small>{market.metrics.population?.year}</small></td>
+                    <td>{formatMoney(market.metrics.remittance_in_usd, language)}<small>{market.metrics.remittance_in_usd?.year}</small></td>
+                    <td>{formatPct(market.metrics.remittance_pct_gdp, language)}<small>{market.metrics.remittance_pct_gdp?.year}</small></td>
+                    <td>{formatPeople(market.metrics.population, language)}<small>{market.metrics.population?.year}</small></td>
                     <td>{market.metrics.internet_users_pct ? `${market.metrics.internet_users_pct.value.toFixed(1)}%` : "нет данных"}<small>{market.metrics.internet_users_pct?.year}</small></td>
                     <td>{market.metrics.findex_2024.account_ownership_pct.toFixed(1)}%<small>2024</small></td>
                     <td>{market.metrics.findex_2024.digital_payment_pct == null ? "нет данных" : `${market.metrics.findex_2024.digital_payment_pct.toFixed(1)}%`}<small>2024</small></td>
@@ -1344,7 +1432,7 @@ export function MarketDashboard() {
               <div><span>05</span><strong>Жёсткие ограничители</strong><p>Неподтверждённый массовый спрос и критически нерешённая лицензия ограничивают максимум, даже если другие показатели сильны.</p></div>
               <div><span>06</span><strong>Уровень подтверждения</strong><p>Confidence остаётся отдельной пометкой качества доказательств и не является второй оценкой рынка.</p></div>
             </div>
-            <div className="formula-box"><code>{data.unified_scoring.formula}</code><p>Итог = сумма девяти баллов × их веса. Пример: Филиппины = 5×15% + 3,5×12% + 4,5×8% + 4×15% + 4×10% + 4,5×5% + 4×15% + 5×12% + 4,5×8% = 4,315 → <strong>4,32</strong>.</p></div>
+            <div className="formula-box"><code>{data.unified_scoring.formula}</code><p>Итог = сумма девяти баллов × их веса. Пример: Филиппины = 5×15% + 3,5×12% + 4,5×8% + 4×15% + 4×10% + 4,5×5% + 4×15% + 5×12% + 4,5×8% = 4,315 → <strong>{language === "en" ? "4.32" : "4,32"}</strong>.</p></div>
             <div className="method-blocks">
               {data.unified_scoring.blocks.map((block) => (
                 <article key={block.key}>

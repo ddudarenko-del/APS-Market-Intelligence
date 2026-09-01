@@ -82,3 +82,22 @@ test("keeps production metadata and documented market intelligence", async () =>
   assert.match(styles, /\.market-map-popup-value\.low \{ background: #f29a52; \}/);
   assert.doesNotMatch(page + layout, /codex-preview|_sites-preview/);
 });
+
+test("ships a reviewed RU / EN language layer without changing the Russian default", async () => {
+  const [dashboard, localization, translationJson] = await Promise.all([
+    readFile(new URL("../app/MarketDashboard.tsx", import.meta.url), "utf8"),
+    readFile(new URL("../app/localization.ts", import.meta.url), "utf8"),
+    readFile(new URL("../app/data/translations.en.json", import.meta.url), "utf8"),
+  ]);
+  const translations = JSON.parse(translationJson);
+
+  assert.match(dashboard, /useState<Language>\("ru"\)/);
+  assert.match(dashboard, /className="language-switch"/);
+  assert.match(dashboard, />RU<\/button>/);
+  assert.match(dashboard, />EN<\/button>/);
+  assert.ok(Object.keys(translations).length >= 1_000);
+  assert.equal(translations["Филиппины"], "Philippines");
+  assert.match(localization, /"Реализуемость входа": "Entry feasibility"/);
+  assert.match(localization, /"Незакрытая задача": "Unmet need"/);
+  assert.match(localization, /"Каналы привлечения": "Acquisition channels"/);
+});
