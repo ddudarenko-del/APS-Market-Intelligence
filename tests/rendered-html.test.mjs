@@ -48,6 +48,7 @@ test("keeps production metadata and documented market intelligence", async () =>
     readFile(new URL("../app/data/market_data.json", import.meta.url), "utf8"),
     readFile(new URL("../app/globals.css", import.meta.url), "utf8"),
   ]);
+  const parsedData = JSON.parse(data);
 
   assert.match(page, /<MarketDashboard \/>/);
   assert.match(layout, /APS Market Intelligence/);
@@ -61,6 +62,11 @@ test("keeps production metadata and documented market intelligence", async () =>
   assert.match(dashboard, /aps-map-score/);
   assert.doesNotMatch(dashboard, /bindPopup|openPopup|market-map-popup/);
   assert.match(dashboard, /atlas-legend-title/);
+  assert.match(dashboard, /Клик выбирает рынок и обновляет блок под картой/);
+  assert.doesNotMatch(dashboard, /Клик, тап или клавиатура/);
+  assert.match(dashboard, /В выигрыше может оказаться продукт, который не заменяет GCash/);
+  assert.match(dashboard, /Что уже работает или не работает/);
+  assert.doesNotMatch(dashboard, /Только конкретные компании и опубликованные факты/);
   assert.match(dashboard, /tabs-scroll-left/);
   assert.match(dashboard, /tabs\.scrollBy/);
   assert.match(dashboard, /disabled=\{!tabScroll\.left\}/);
@@ -76,6 +82,10 @@ test("keeps production metadata and documented market intelligence", async () =>
   assert.match(data, /"market_reports"/);
   assert.match(data, /"respondents"/);
   assert.match(data, /"case_lessons"/);
+  assert.equal(parsedData.market_assessments.find((item) => item.market_code === "IDN")?.confidence, "high");
+  const philippinesReport = parsedData.market_reports.find((item) => item.market_code === "PHL");
+  assert.match(philippinesReport.sections.find((section) => section.id === "product").paragraphs.join(" "), /суперприложения/);
+  assert.match(philippinesReport.sections.find((section) => section.id === "marketing").paragraphs.join(" "), /CALABARZON/);
   assert.match(data, /"Simple\.app"/);
   assert.match(dashboard, /\? "#40f785"[\s\S]*\? "#b7d85c"[\s\S]*\? "#f0cf57"[\s\S]*: "#f29a52"/);
   assert.match(styles, /\.attractiveness-badge\.low \{[^}]*#f29a52/);
