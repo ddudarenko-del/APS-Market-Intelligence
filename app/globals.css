@@ -117,7 +117,6 @@ a { color: inherit; }
 .ranking-list button:hover, .ranking-list button.active { background: #f7f4e6; }
 .rank-number { color: var(--ink-soft); font: 12px var(--font-plex-mono), monospace; }.rank-name { min-width: 0; }.rank-name strong, .rank-name small { display: block; overflow-wrap: break-word; }.rank-name strong { hyphens: auto; }.rank-name small { color: var(--ink-soft); font-size: 11px; margin-top: 3px; }
 .score-badge { min-width: 48px; padding: 7px 8px; text-align: center; border-radius: 999px; font: 700 13px var(--font-plex-mono), monospace; }.score-badge.high { background: var(--red); }.score-badge.mid { background: var(--yellow); }.score-badge.low { background: #b8e9b1; }
-.ranking-note { margin: 12px 18px 20px; padding: 16px; background: var(--aqua); border-radius: 13px; }.ranking-note p { margin: 6px 0 0; font-size: 13px; line-height: 1.5; color: #30405d; }
 
 .compare-layout, .method-layout { padding: 22px 8px 0; }
 .compare-picker { margin-bottom: 22px; }.market-pills { display: flex; flex-wrap: wrap; gap: 10px; padding: 18px 24px 22px; }.market-pills button { border: 1px solid var(--line); background: #fbf9ef; border-radius: 999px; padding: 10px 12px 10px 15px; cursor: pointer; }.market-pills button span { margin-left: 8px; padding: 3px 7px; background: white; border-radius: 999px; font: 600 11px var(--font-plex-mono), monospace; }.market-pills button.active { background: var(--ink); color: white; border-color: var(--ink); }
@@ -391,8 +390,6 @@ body {
 .score-badge.high { background: #40f785; }
 .score-badge.mid { background: #f0cf57; }
 .score-badge.low { background: #f29a52; }
-.ranking-note { background: #142b1d; }
-.ranking-note p { color: #b3c2b9; }
 
 .kast-layout { display: grid; gap: 18px; padding: 18px 8px 0; }
 .kast-benchmark { display: grid; grid-template-columns: minmax(0, 1fr) minmax(520px, 1.15fr); overflow: hidden; }

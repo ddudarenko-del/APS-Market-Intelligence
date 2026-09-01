@@ -619,10 +619,6 @@ export function MarketDashboard() {
                 </button>
               ))}
             </div>
-            <div className="ranking-note">
-              <strong>Ключевой вывод</strong>
-              <p>{scoreMode === "potential" ? "Это качественная группировка после интервью, а не новый расчетный рейтинг." : scoreMode === "aps" ? "Исходная формула и значения APS сохранены без изменений." : "KAST Fit остается отдельным справочным показателем и не объединяется с качественным выводом."}</p>
-            </div>
           </aside>
         </section>
       )}

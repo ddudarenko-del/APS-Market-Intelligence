@@ -35,6 +35,7 @@ test("server-renders the unified APS research workspace", async () => {
   assert.match(html, /Кейсы и уроки/);
   assert.match(html, /По предварительному потенциалу/);
   assert.doesNotMatch(html, /Три независимых слоя/);
+  assert.doesNotMatch(html, /Ключевой вывод/);
   assert.match(html, /Интерактивная карта рынков APS/);
   assert.doesNotMatch(html, /codex-preview|Your site is taking shape/);
 });
