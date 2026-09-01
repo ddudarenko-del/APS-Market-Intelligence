@@ -74,6 +74,9 @@ test("keeps production metadata and documented market intelligence", async () =>
   assert.match(dashboard, /function AudienceGroups/);
   assert.match(dashboard, /function RichReportContent/);
   assert.match(dashboard, /function RichInlineText/);
+  assert.match(dashboard, /Что важнее на этом рынке/);
+  assert.match(dashboard, /Конкретные основания решения/);
+  assert.match(dashboard, /Подтверждённый пример \/ свидетельство/);
   assert.match(dashboard, /data\.case_lessons/);
   assert.match(dashboard, /section\.id === "audience"/);
   assert.match(dashboard, /getUnifiedScore\(market\.code\)\.final_score/);

@@ -78,6 +78,10 @@ test("keeps competition, respondent and acquisition enums valid", () => {
     }
   }
   for (const row of data.acquisition_channels.rows) {
+    assert.ok(row.strategy.decision.priority && row.strategy.decision.brand_level && row.strategy.decision.primary_channel);
+    assert.ok(row.strategy.decision.brand && row.strategy.decision.sales && row.strategy.decision.avoid);
+    assert.ok(row.strategy.profile_evidence.length >= 3);
+    for (const item of row.strategy.profile_evidence) assert.ok(item.point && item.source_ids.length > 0);
     for (const channel of row.channels) {
       if (channel.phase) assert.ok(phases.has(channel.phase));
       if (channel.evidence_type) assert.ok(evidenceTypes.has(channel.evidence_type));
@@ -99,6 +103,7 @@ test("preserves the structured Indonesia country-detail report", () => {
   const sections = Object.fromEntries(report.sections.map((section) => [section.id, section]));
   assert.ok(sections.summary.paragraphs.every((paragraph) => paragraph.startsWith("::b0::")));
   assert.match(sections.product.paragraphs.join(" "), /Tangem Wallet/);
+  assert.match(sections.product.paragraphs.join(" "), /Стоимость физической карты — болевая точка/);
   assert.match(sections.marketing.paragraphs.join(" "), /Coinfest Asia/);
   assert.match(sections.marketing.paragraphs.join(" "), /::b2::\[AirdropFind\]/);
   assert.doesNotMatch(report.sections.flatMap((section) => section.paragraphs).join(" "), /чч|на уровне Филиппин/);

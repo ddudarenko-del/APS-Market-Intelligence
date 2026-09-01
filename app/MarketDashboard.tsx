@@ -860,6 +860,24 @@ export function MarketDashboard() {
               <strong>Методология</strong>
               <p>{data.acquisition_channels.method_note}</p>
             </div>
+            <div className="acquisition-priority-table-wrap">
+              <table className="acquisition-priority-table">
+                <thead><tr><th>Рынок</th><th>Что важнее</th><th>Роль бренда</th><th>Основной канал продаж</th></tr></thead>
+                <tbody>
+                  {data.acquisition_channels.rows.map((row) => {
+                    const market = data.markets.find((item) => item.code === row.market_code)!;
+                    return (
+                      <tr className={selected.code === row.market_code ? "active" : ""} key={row.market_code}>
+                        <td><button type="button" onClick={() => chooseMarket(row.market_code)}><span>{row.market_code}</span>{market.name_ru}</button></td>
+                        <td>{row.strategy.decision.priority}</td>
+                        <td><strong>{row.strategy.decision.brand_level}</strong></td>
+                        <td>{row.strategy.decision.primary_channel}</td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
           </article>
 
           <div className="acquisition-market-picker" aria-label="Выбор рынка для анализа каналов">
@@ -880,12 +898,23 @@ export function MarketDashboard() {
               <div className="acquisition-source-date">Проверено<br /><strong>{data.acquisition_channels.checked_at}</strong></div>
             </div>
 
-            <div className="acquisition-strategy-grid">
-              <div><span>Приоритетная аудитория</span><p>{selectedAcquisition.strategy.audience}</p></div>
-              <div><span>Основное сообщение</span><p>{selectedAcquisition.strategy.message}</p></div>
-              <div><span>Роль бренда</span><strong>{brandRoleLabels[selectedAcquisition.strategy.role.level]}</strong><p>{selectedAcquisition.strategy.role.explanation}</p></div>
-              <div><span>Принцип выхода</span><p>{selectedAssessment.market_principle}</p></div>
-              <div><span>Уровень подтверждения</span><strong>{confidenceLabels[selectedAssessment.confidence]}</strong><div className="source-chips">{selectedAssessment.source_ids.map((id) => <SourceChip key={id} sourceId={id} />)}</div></div>
+            <div className="acquisition-decision-grid">
+              <div className="acquisition-decision-lead"><span>Что важнее на этом рынке</span><strong>{selectedAcquisition.strategy.decision.priority}</strong></div>
+              <div><span>Брендинг</span><strong>{selectedAcquisition.strategy.decision.brand_level}</strong><p>{selectedAcquisition.strategy.decision.brand}</p></div>
+              <div><span>Каналы продаж</span><strong>{selectedAcquisition.strategy.decision.sales_level}</strong><p>{selectedAcquisition.strategy.decision.sales}</p></div>
+              <div className="acquisition-decision-avoid"><span>Не использовать как основу</span><p>{selectedAcquisition.strategy.decision.avoid}</p><div className="source-chips">{selectedAcquisition.strategy.decision.source_ids.map((id) => <SourceChip key={id} sourceId={id} />)}</div></div>
+            </div>
+
+            <div className="acquisition-profile-evidence">
+              <div className="acquisition-profile-evidence-head"><span className="section-kicker">ИЗ ПРОФИЛЯ И ИНТЕРВЬЮ</span><h3>Конкретные основания решения</h3></div>
+              <div className="acquisition-profile-evidence-list">
+                {selectedAcquisition.strategy.profile_evidence.map((item, index) => (
+                  <article key={item.point}>
+                    <span>0{index + 1}</span>
+                    <div><p>{item.point}</p><div className="source-chips">{item.source_ids.map((id) => <SourceChip key={id} sourceId={id} />)}</div></div>
+                  </article>
+                ))}
+              </div>
             </div>
 
             <div className="acquisition-reach-grid">
@@ -898,7 +927,7 @@ export function MarketDashboard() {
 
             <div className="acquisition-channels-heading">
               <div><span className="section-kicker">ПОТЕНЦИАЛ КАНАЛОВ</span><h3>Приоритетный набор для запуска</h3></div>
-              <p>Оценка 1–5 используется только внутри этой вкладки для сравнения каналов.</p>
+              <p>Только подтверждённые механики конкурентов, профили рынков и свидетельства интервью.</p>
             </div>
             <div className="acquisition-channel-grid">
               {selectedAcquisition.channels.map((channel, index) => (
@@ -917,11 +946,8 @@ export function MarketDashboard() {
                     </div>
                   )}
                   <h4>{channel.channel}</h4>
-                  <div className="channel-strategy"><span>Роль</span><p>{channel.role}</p></div>
-                  <div className="channel-strategy"><span>Аудитория</span><p>{channel.audience}</p></div>
-                  <div className="channel-strategy"><span>Сообщение</span><p>{channel.message}</p></div>
                   <div className="channel-reach"><span>Масштаб / контекст</span><p>{channel.reach}</p></div>
-                  <div className="channel-example"><span>Пример конкурента</span><strong>{channel.competitor}</strong><p>{channel.example}</p></div>
+                  <div className="channel-example"><span>Подтверждённый пример / свидетельство</span><strong>{channel.competitor}</strong><p>{channel.example}</p></div>
                   <div className="channel-playbook"><span>Как использовать новому игроку</span><p>{channel.playbook}</p></div>
                   <div className="source-chips">{channel.source_ids.map((id) => <SourceChip key={id} sourceId={id} />)}</div>
                 </article>
