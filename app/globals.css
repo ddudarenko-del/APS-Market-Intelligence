@@ -802,6 +802,44 @@ footer { border-top: 1px solid #1f2823; }
 .sources-list article { padding: 20px; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); }
 .sources-list article > .source-chip { display: inline-block; margin-top: 10px; }
 
+/* Keep every primary page surface aligned with the outer edge of the hero. */
+.tabs,
+.content-grid,
+.compare-layout,
+.profiles-layout,
+.kast-layout,
+.benchmark-panel,
+.barriers-layout,
+.acquisition-layout,
+.conclusions-layout,
+.respondents-layout,
+.data-panel,
+.method-layout,
+footer {
+  width: auto;
+  max-width: none;
+  margin-left: 8px;
+  margin-right: 8px;
+}
+
+.overview-grid,
+.compare-layout,
+.profiles-layout,
+.kast-layout,
+.barriers-layout,
+.acquisition-layout,
+.conclusions-layout,
+.respondents-layout,
+.method-layout {
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.data-panel {
+  margin-top: 18px;
+  border-radius: 24px;
+}
+
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   *, *::before, *::after { transition-duration: .01ms !important; }
@@ -826,7 +864,7 @@ footer { border-top: 1px solid #1f2823; }
   .aps-logo { width: 106px; }
   .hero-metrics { grid-template-columns: 1fr; }.hero-metrics div { border-right: 0; border-bottom: 1px solid var(--line); }.hero-metrics div:last-child { border-bottom: 0; }
   .tabs { margin: 16px 12px 0; }
-  .overview-grid, .compare-layout, .profiles-layout, .method-layout, .kast-layout, .barriers-layout, .acquisition-layout, .conclusions-layout, .respondents-layout { padding: 14px 12px 0; }.data-panel { margin: 0 12px; }
+  .overview-grid, .compare-layout, .profiles-layout, .method-layout, .kast-layout, .barriers-layout, .acquisition-layout, .conclusions-layout, .respondents-layout { margin-left: 0; margin-right: 0; padding: 14px 12px 0; }.data-panel { margin: 14px 12px 0; }
   .panel-heading { flex-direction: column; }.panel-controls { width: 100%; justify-content: stretch; }.metric-switch { flex: 1; }.metric-switch button { flex: 1; }.panel-heading select { width: 100%; }.map-frame, .real-map { min-height: 480px; height: 480px; }
   .selected-market { grid-template-columns: 1fr; }.selected-kpis { grid-template-columns: 1fr 1fr; }.ranking-list { grid-template-columns: 1fr; }
   .profiles-layout { grid-template-columns: 1fr; }.profile-nav { position: static; display: flex; overflow-x: auto; gap: 6px; }.profile-nav > .section-kicker { display: none; }.profile-nav button { min-width: 175px; border: 1px solid var(--line); }
