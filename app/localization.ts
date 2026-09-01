@@ -113,6 +113,7 @@ const reviewedTranslations: Record<string, string> = {
   "Глобальный доход → QRIS": "Global income → QRIS",
   "Сложный международный доход": "Complex international income",
   "Цвет отражает единую оценку привлекательности рынка для запуска KAST-подобного продукта. Карта открывается по клику, тапу и клавиатуре.": "Colour reflects the overall market-attractiveness score for launching a KAST-like product. Select a country by click, tap or keyboard.",
+  "Цвет отражает единую оценку привлекательности рынка для запуска KAST-подобного продукта. Клик, тап или клавиатура выбирают рынок и обновляют блок под картой.": "Colour reflects the overall market-attractiveness score for launching a KAST-like product. Click, tap or use the keyboard to select a market and update the panel below the map.",
   "Двусторонняя награда после KYC и первой международной выплаты; отдельные коды для OFW families и BPO-команд.": "Use a two-sided reward after KYC and the first international payment, with dedicated codes for OFW families and BPO teams.",
   "Профили и покрытие": "Profiles and coverage",
   "вся география": "all markets",

@@ -58,8 +58,8 @@ test("keeps production metadata and documented market intelligence", async () =>
   assert.match(dashboard, /\/data\/countries\.geojson/);
   assert.doesNotMatch(dashboard, /cartocdn|CARTO/i);
   assert.doesNotMatch(dashboard, /data-market-profile|onOpenProfileRef/);
-  assert.match(dashboard, /market-map-popup-value/);
-  assert.match(dashboard, /Итоговая привлекательность рынка/);
+  assert.match(dashboard, /aps-map-score/);
+  assert.doesNotMatch(dashboard, /bindPopup|openPopup|market-map-popup/);
   assert.match(dashboard, /atlas-legend-title/);
   assert.match(dashboard, /tabs-scroll-left/);
   assert.match(dashboard, /tabs\.scrollBy/);
@@ -79,7 +79,7 @@ test("keeps production metadata and documented market intelligence", async () =>
   assert.match(data, /"Simple\.app"/);
   assert.match(dashboard, /\? "#40f785"[\s\S]*\? "#b7d85c"[\s\S]*\? "#f0cf57"[\s\S]*: "#f29a52"/);
   assert.match(styles, /\.attractiveness-badge\.low \{[^}]*#f29a52/);
-  assert.match(styles, /\.market-map-popup-value\.low \{ background: #f29a52; \}/);
+  assert.match(styles, /\.aps-map-score\.low \{ background: #f29a52; \}/);
   assert.doesNotMatch(page + layout, /codex-preview|_sites-preview/);
 });
 

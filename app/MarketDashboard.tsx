@@ -392,16 +392,11 @@ function MarketMap({
             if (!market) return;
             const unified = getUnifiedScore(market.code);
             countryLayer.bindTooltip(
-              `<strong>${market.name_ru}</strong><small>${mapOpportunityLabels[market.code]}</small>`,
+              `<strong>${market.name_ru}</strong><small>${mapOpportunityLabels[market.code]}</small><span class="aps-map-score ${unified.level}">${unified.final_score.toFixed(2)} / 5 · ${unified.label}</span>`,
               { permanent: true, direction: "center", className: `aps-map-label aps-map-label-${market.code.toLowerCase()}`, opacity: 1 },
-            );
-            countryLayer.bindPopup(
-              `<section class="market-map-popup"><strong>${market.name_ru}</strong><small>Итоговая привлекательность рынка</small><span class="market-map-popup-value ${unified.level}">${unified.final_score.toFixed(2)} / 5 · ${unified.label}</span></section>`,
-              { maxWidth: 240, className: "aps-map-popup-shell" },
             );
             countryLayer.on("click", () => {
               onSelectRef.current(code);
-              countryLayer.openPopup();
             });
             countryLayer.on("mouseover", () => {
               countryLayer.bringToFront();
@@ -426,7 +421,6 @@ function MarketMap({
                 if (keyboardEvent.key !== "Enter" && keyboardEvent.key !== " ") return;
                 keyboardEvent.preventDefault();
                 onSelectRef.current(code);
-                countryLayer.openPopup();
               });
             });
           },
@@ -627,7 +621,7 @@ export function MarketDashboard() {
               <div>
                 <span className="section-kicker">MARKET ATLAS</span>
                 <h2>Восемь рынков в одном поле</h2>
-                <p>Цвет отражает единую оценку привлекательности рынка для запуска KAST-подобного продукта. Карта открывается по клику, тапу и клавиатуре.</p>
+                <p>Цвет отражает единую оценку привлекательности рынка для запуска KAST-подобного продукта. Клик, тап или клавиатура выбирают рынок и обновляют блок под картой.</p>
               </div>
               <div className="panel-controls">
                 <select value={region} onChange={(event) => setRegion(event.target.value)} aria-label="Фильтр по региону">
