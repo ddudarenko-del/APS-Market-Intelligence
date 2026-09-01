@@ -154,6 +154,36 @@ const sourceLabelOverrides: Record<string, string> = {
   kast_account_creation_2026: "KAST · регистрация",
 };
 
+const mapOpportunityLabels: Record<string, string> = {
+  PHL: "Зарубежный доход → локальные платежи",
+  ARG: "Сбережения и доход в цифровых долларах",
+  COL: "Цифровые доллары → COP",
+  MEX: "Зарубежный доход + налоговое сопровождение",
+  GBR: "Сложный международный доход",
+  IDN: "Глобальный доход → QRIS",
+  VNM: "Зарубежный доход → VND",
+  CAN: "Цифровые активы + CAD/USD + Interac",
+};
+
+function getCountryStyle(code: string, visibleCodes: string[], selectedCode: string) {
+  const unified = getUnifiedScore(code);
+  const visible = visibleCodes.includes(code);
+  const selected = code === selectedCode;
+  const fillColor = unified.level === "high"
+    ? "#40f785"
+    : unified.level === "medium_high"
+      ? "#b7d85c"
+      : unified.level === "medium"
+        ? "#f0cf57"
+        : "#f29a52";
+  return {
+    color: selected ? "#d9ffe7" : "#82948a",
+    weight: selected ? 2.4 : 1.2,
+    fillColor,
+    fillOpacity: visible ? (selected ? 1 : 0.86) : 0.16,
+  };
+}
+
 function SourceChip({ sourceId }: { sourceId: string }) {
   const source = data.sources.find((item) => item.id === sourceId);
   if (!source) return null;
@@ -225,11 +255,18 @@ function MarketMap({
   const mapRef = useRef<import("leaflet").Map | null>(null);
   const layerRef = useRef<import("leaflet").GeoJSON | null>(null);
   const onSelectRef = useRef(onSelect);
+  const selectedCodeRef = useRef(selectedCode);
+  const visibleCodesRef = useRef(visibleCodes);
   const [mapStatus, setMapStatus] = useState<"loading" | "ready" | "error">("loading");
 
   useEffect(() => {
     onSelectRef.current = onSelect;
   }, [onSelect]);
+
+  useEffect(() => {
+    selectedCodeRef.current = selectedCode;
+    visibleCodesRef.current = visibleCodes;
+  }, [selectedCode, visibleCodes]);
 
   useEffect(() => {
     let cancelled = false;
@@ -243,7 +280,7 @@ function MarketMap({
         const map = L.map(containerRef.current, {
           center: [18, 8],
           zoom: 2,
-          minZoom: 2,
+          minZoom: 0,
           maxZoom: 6,
           zoomControl: false,
           worldCopyJump: false,
@@ -276,8 +313,8 @@ function MarketMap({
             if (!market) return;
             const unified = getUnifiedScore(market.code);
             countryLayer.bindTooltip(
-              `<strong>${market.name_ru}</strong><br>Привлекательность: ${unified.final_score.toFixed(2)} / 5 · ${unified.label}`,
-              { sticky: true, direction: "top", className: "aps-map-tooltip" },
+              `<strong>${market.name_ru}</strong><small>${mapOpportunityLabels[market.code]}</small>`,
+              { permanent: true, direction: "center", className: `aps-map-label aps-map-label-${market.code.toLowerCase()}`, opacity: 1 },
             );
             countryLayer.bindPopup(
               `<section class="market-map-popup"><strong>${market.name_ru}</strong><small>Итоговая привлекательность рынка</small><span class="market-map-popup-value ${unified.level}">${unified.final_score.toFixed(2)} / 5 · ${unified.label}</span></section>`,
@@ -286,6 +323,18 @@ function MarketMap({
             countryLayer.on("click", () => {
               onSelectRef.current(code);
               countryLayer.openPopup();
+            });
+            countryLayer.on("mouseover", () => {
+              countryLayer.bringToFront();
+              countryLayer.setStyle({ color: "#effff4", weight: 3, fillOpacity: 1 });
+              countryLayer.getTooltip()?.getElement()?.classList.add("is-hovered");
+            });
+            countryLayer.on("mouseout", () => {
+              countryLayer.setStyle(getCountryStyle(code, visibleCodesRef.current, selectedCodeRef.current));
+              countryLayer.getTooltip()?.getElement()?.classList.remove("is-hovered");
+            });
+            countryLayer.on("tooltipopen", () => {
+              countryLayer.getTooltip()?.getElement()?.classList.toggle("is-selected", code === selectedCodeRef.current);
             });
             countryLayer.on("add", () => {
               const element = (countryLayer as import("leaflet").Path).getElement();
@@ -332,22 +381,8 @@ function MarketMap({
       if (!code) return;
       const market = data.markets.find((item) => item.code === code);
       if (!market) return;
-      const visible = visibleSet.has(code);
-      const selected = code === selectedCode;
-      const unified = getUnifiedScore(market.code);
-      const fillColor = unified.level === "high"
-        ? "#40f785"
-        : unified.level === "medium_high"
-          ? "#b7d85c"
-          : unified.level === "medium"
-            ? "#f0cf57"
-            : "#f29a52";
-      countryLayer.setStyle({
-        color: selected ? "#d9ffe7" : "#82948a",
-        weight: selected ? 2.4 : 1.2,
-        fillColor,
-        fillOpacity: visible ? (selected ? 1 : 0.86) : 0.16,
-      });
+      countryLayer.setStyle(getCountryStyle(code, [...visibleSet], selectedCode));
+      countryLayer.getTooltip()?.getElement()?.classList.toggle("is-selected", code === selectedCode);
     });
   }, [selectedCode, visibleCodes]);
 
