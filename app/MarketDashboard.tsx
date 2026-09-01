@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import Image from "next/image";
 import data from "./data/market_data.json";
 
 type Tab = "overview" | "conclusions" | "compare" | "profiles" | "competition" | "barriers" | "acquisition" | "respondents" | "data" | "method";
@@ -460,7 +459,9 @@ export function MarketDashboard() {
     <main className="app-shell">
       <header className="hero">
         <div className="hero-topline">
-          <Image className="aps-logo" src="/brand/aps-logo.svg" alt="APS" width={132} height={52} priority />
+          {/* The same component is built by Next/vinext and standalone Vite for Hostinger. */}
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img className="aps-logo" src="/brand/aps-logo.svg" alt="APS" width={132} height={52} />
           <span className="update-stamp">Исследование обновлено 01.09.2026</span>
         </div>
         <div className="hero-grid">
