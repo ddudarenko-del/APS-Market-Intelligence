@@ -384,6 +384,8 @@ function MarketMap({
 
 export function MarketDashboard() {
   const [tab, setTab] = useState<Tab>("overview");
+  const tabsRef = useRef<HTMLElement>(null);
+  const [tabScroll, setTabScroll] = useState({ left: false, right: false });
   const [scoreMode, setScoreMode] = useState<ScoreMode>("potential");
   const [selectedCode, setSelectedCode] = useState("PHL");
   const [compareCodes, setCompareCodes] = useState<string[]>(["PHL", "COL", "MEX"]);
@@ -444,6 +446,31 @@ export function MarketDashboard() {
     });
   }
 
+  useEffect(() => {
+    const tabs = tabsRef.current;
+    if (!tabs) return;
+    const updateScrollState = () => {
+      setTabScroll({
+        left: tabs.scrollLeft > 2,
+        right: tabs.scrollLeft + tabs.clientWidth < tabs.scrollWidth - 2,
+      });
+    };
+    updateScrollState();
+    tabs.addEventListener("scroll", updateScrollState, { passive: true });
+    const resizeObserver = new ResizeObserver(updateScrollState);
+    resizeObserver.observe(tabs);
+    return () => {
+      tabs.removeEventListener("scroll", updateScrollState);
+      resizeObserver.disconnect();
+    };
+  }, []);
+
+  function scrollTabs(direction: -1 | 1) {
+    const tabs = tabsRef.current;
+    if (!tabs) return;
+    tabs.scrollBy({ left: direction * Math.max(220, tabs.clientWidth * 0.72), behavior: "smooth" });
+  }
+
   return (
     <main className="app-shell">
       <header className="hero">
@@ -468,18 +495,22 @@ export function MarketDashboard() {
         </div>
       </header>
 
-      <nav className="tabs" aria-label="Разделы исследования">
-        {tabLabels.map((item) => (
-          <button
-            key={item.id}
-            type="button"
-            className={tab === item.id ? "active" : ""}
-            onClick={() => setTab(item.id)}
-          >
-            {item.label}
-          </button>
-        ))}
-      </nav>
+      <div className="tabs-shell">
+        <nav ref={tabsRef} className="tabs" aria-label="Разделы исследования">
+          {tabLabels.map((item) => (
+            <button
+              key={item.id}
+              type="button"
+              className={tab === item.id ? "active" : ""}
+              onClick={() => setTab(item.id)}
+            >
+              {item.label}
+            </button>
+          ))}
+        </nav>
+        {tabScroll.left && <button type="button" className="tabs-scroll tabs-scroll-left" aria-label="Показать предыдущие разделы" onClick={() => scrollTabs(-1)}>‹</button>}
+        {tabScroll.right && <button type="button" className="tabs-scroll tabs-scroll-right" aria-label="Показать следующие разделы" onClick={() => scrollTabs(1)}>›</button>}
+      </div>
 
       {tab === "overview" && (
         <section className="content-grid overview-grid">

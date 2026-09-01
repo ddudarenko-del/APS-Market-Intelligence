@@ -57,6 +57,8 @@ test("keeps production metadata and documented market intelligence", async () =>
   assert.match(dashboard, /market-map-popup-value/);
   assert.match(dashboard, /Предварительный потенциал рынка/);
   assert.match(dashboard, /atlas-legend-title/);
+  assert.match(dashboard, /tabs-scroll-left/);
+  assert.match(dashboard, /tabs\.scrollBy/);
   assert.match(dashboard, /scoreMode !== "potential" && <span className="rank-number">/);
   assert.match(dashboard, /potential-mode/);
   assert.match(data, /"kast_fit"/);
