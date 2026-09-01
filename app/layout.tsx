@@ -4,13 +4,13 @@ import "./globals.css";
 export const metadata: Metadata = {
   title: "APS Market Intelligence",
   description:
-    "Интерактивная сравнительная аналитика восьми рынков APS с отдельным KAST / Product Fit.",
+    "Интерактивное исследование продуктового соответствия stablecoin-powered global money app на восьми рынках.",
   openGraph: {
     title: "APS Market Intelligence",
     description:
-      "Проверенная сравнительная аналитика восьми рынков APS: исходный рейтинг, KAST / Product Fit и конкурентная среда.",
+      "Открытые данные, экспертные интервью, локальная конкуренция, барьеры входа и каналы привлечения на восьми рынках.",
     type: "website",
-    images: ["/og-kast-fit.png"],
+    images: ["/og.png"],
   },
 };
 

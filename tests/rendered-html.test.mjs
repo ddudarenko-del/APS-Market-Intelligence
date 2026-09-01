@@ -23,16 +23,17 @@ async function render() {
   );
 }
 
-test("server-renders the APS dashboard and the separate KAST Fit layer", async () => {
+test("server-renders the unified APS research workspace", async () => {
   const response = await render();
   assert.equal(response.status, 200);
   assert.match(response.headers.get("content-type") ?? "", /^text\/html\b/i);
 
   const html = await response.text();
   assert.match(html, /<title>APS Market Intelligence<\/title>/i);
-  assert.match(html, /KAST \/ Product Fit/);
-  assert.match(html, /APS \+ KAST Fit/);
-  assert.match(html, /Исходный APS-балл сохранён без изменений/);
+  assert.match(html, /Выводы/);
+  assert.match(html, /Респонденты/);
+  assert.match(html, /Предварительный потенциал/);
+  assert.match(html, /Исходные APS и KAST \/ Product Fit сохранены/);
   assert.match(html, /Интерактивная карта рынков APS/);
   assert.doesNotMatch(html, /codex-preview|Your site is taking shape/);
 });
@@ -47,10 +48,13 @@ test("keeps production metadata and documented market intelligence", async () =>
 
   assert.match(page, /<MarketDashboard \/>/);
   assert.match(layout, /APS Market Intelligence/);
-  assert.match(layout, /images:\s*\["\/og-kast-fit\.png"\]/);
+  assert.match(layout, /images:\s*\["\/og\.png"\]/);
   assert.match(dashboard, /KAST Fit = 30% USD need/);
   assert.match(dashboard, /data\.market_competitors/);
   assert.match(data, /"kast_fit"/);
   assert.match(data, /"market_competitors"/);
+  assert.match(data, /"market_assessments"/);
+  assert.match(data, /"market_reports"/);
+  assert.match(data, /"respondents"/);
   assert.doesNotMatch(page + layout, /codex-preview|_sites-preview/);
 });

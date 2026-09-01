@@ -1,11 +1,12 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import Image from "next/image";
 import data from "./data/market_data.json";
 
-type Tab = "overview" | "kastfit" | "barriers" | "acquisition" | "compare" | "profiles" | "competition" | "data" | "method";
-type ScoreMode = "aps" | "kast";
-type BarrierSort = "balance" | "driver" | "barrier";
+type Tab = "overview" | "conclusions" | "compare" | "profiles" | "competition" | "barriers" | "acquisition" | "respondents" | "data" | "method";
+type ScoreMode = "potential" | "aps" | "kast";
+type BarrierSort = "default" | "driver" | "barrier";
 type MetricValue = { value: number; year: number } | null;
 type Market = (typeof data.markets)[number];
 type AvailabilityStatus = "full" | "partial" | "unavailable" | "unconfirmed";
@@ -22,12 +23,13 @@ type CountryLayer = import("leaflet").Path & { feature?: CountryFeature };
 
 const tabLabels: Array<{ id: Tab; label: string }> = [
   { id: "overview", label: "Обзор" },
-  { id: "kastfit", label: "KAST / Product Fit" },
-  { id: "barriers", label: "Барьеры и драйверы" },
-  { id: "acquisition", label: "Каналы привлечения" },
+  { id: "conclusions", label: "Выводы" },
   { id: "compare", label: "Сравнение" },
   { id: "profiles", label: "Профили рынков" },
   { id: "competition", label: "Конкуренты / тарифы" },
+  { id: "barriers", label: "Барьеры и драйверы" },
+  { id: "acquisition", label: "Каналы привлечения" },
+  { id: "respondents", label: "Респонденты" },
   { id: "data", label: "Сырые данные" },
   { id: "method", label: "Методология / источники" },
 ];
@@ -55,8 +57,14 @@ const availabilityOrder: Record<AvailabilityStatus, number> = {
   unavailable: 3,
 };
 
-function getAvailability(competitor: (typeof data.market_competitors)[number], marketCode: string) {
-  return (competitor.availability as Record<string, Availability>)[marketCode];
+function getAvailability(competitor: (typeof data.market_competitors)[number], marketCode: string): Availability {
+  return (competitor.availability as Record<string, Availability> | null)?.[marketCode] ?? {
+    status: "unconfirmed",
+    account: null,
+    card: false,
+    note: "Локальная доступность не подтверждена.",
+    source_ids: [],
+  };
 }
 
 function AvailabilityBadge({ status, compact = false }: { status: AvailabilityStatus; compact?: boolean }) {
@@ -128,12 +136,48 @@ function ScoreBadge({ score }: { score: number }) {
 }
 
 function driverScoreLabel(score: number) {
-  return score === 5 ? "Структурный" : score === 4 ? "Сильный" : score === 3 ? "Сегментный" : score === 2 ? "Нишевой" : "Слабый";
+  return score === 5 ? "Очень сильная" : score === 4 ? "Сильная" : score === 3 ? "Сегментная" : score === 2 ? "Нишевая" : "Слабая";
 }
 
 function barrierScoreLabel(score: number) {
-  return score === 5 ? "Блокирующий" : score === 4 ? "Высокий" : score === 3 ? "Существенный" : score === 2 ? "Управляемый" : "Низкий";
+  return score === 5 ? "Критическая" : score === 4 ? "Высокая" : score === 3 ? "Существенная" : score === 2 ? "Управляемая" : "Низкая";
 }
+
+const potentialLabels: Record<string, string> = {
+  high: "Высокий",
+  medium_high: "Средне-высокий",
+  medium: "Средний",
+  low: "Низкий",
+};
+
+const confidenceLabels: Record<string, string> = {
+  high: "Хорошо подтверждено",
+  medium: "Требует дополнительной проверки",
+  hypothesis: "Гипотеза",
+};
+
+const brandRoleLabels: Record<string, string> = {
+  critical: "Критическая",
+  high: "Высокая",
+  medium: "Средняя",
+  secondary: "Вторичная",
+};
+
+const competitionGroupLabels: Record<string, string> = {
+  direct_analogue: "Прямые аналоги",
+  mass_finance: "Массовые финансовые сервисы",
+  crypto_service: "Криптосервисы",
+  specialist: "Специализированные решения",
+  local_payments: "Локальные платежи и инфраструктура",
+  traditional_bank: "Традиционные банки",
+};
+
+const competitionRoleLabels: Record<string, string> = {
+  active: "Активный конкурент",
+  reference: "Ориентир",
+  infrastructure: "Инфраструктура",
+  historical: "Исторический кейс",
+};
 
 const sourceLabelOverrides: Record<string, string> = {
   kast_series_a_2026: "KAST · показатели",
@@ -144,12 +188,16 @@ const sourceLabelOverrides: Record<string, string> = {
   kast_account_creation_2026: "KAST · регистрация",
 };
 
-function SourceLink({ sourceId }: { sourceId: string }) {
+function SourceChip({ sourceId }: { sourceId: string }) {
   const source = data.sources.find((item) => item.id === sourceId);
   if (!source) return null;
+  const label = source.type === "interview" ? "Экспертное интервью" : sourceLabelOverrides[sourceId] ?? source.publisher;
+  if (!source.url) {
+    return <span className="source-chip interview-source" title={source.title}>{label}</span>;
+  }
   return (
     <a href={source.url} target="_blank" rel="noreferrer" className="source-chip" title={`${source.publisher}: ${source.title}`}>
-      {sourceLabelOverrides[sourceId] ?? source.publisher}
+      {label}
     </a>
   );
 }
@@ -159,21 +207,25 @@ function MarketMap({
   visibleCodes,
   scoreMode,
   onSelect,
+  onOpenProfile,
 }: {
   selectedCode: string;
   visibleCodes: string[];
   scoreMode: ScoreMode;
   onSelect: (code: string) => void;
+  onOpenProfile: (code: string) => void;
 }) {
   const containerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<import("leaflet").Map | null>(null);
   const layerRef = useRef<import("leaflet").GeoJSON | null>(null);
   const onSelectRef = useRef(onSelect);
+  const onOpenProfileRef = useRef(onOpenProfile);
   const [mapStatus, setMapStatus] = useState<"loading" | "ready" | "error">("loading");
 
   useEffect(() => {
     onSelectRef.current = onSelect;
-  }, [onSelect]);
+    onOpenProfileRef.current = onOpenProfile;
+  }, [onSelect, onOpenProfile]);
 
   useEffect(() => {
     let cancelled = false;
@@ -203,13 +255,13 @@ function MarketMap({
 
         const response = await fetch("/data/countries.geojson");
         if (!response.ok) throw new Error("Country geometry unavailable");
-        const geometry = await response.json();
+        const geometry = await response.json() as GeoJSON.GeoJsonObject;
         if (cancelled) return;
 
         const marketByCode = new Map(data.markets.map((market) => [market.code, market]));
         const layer = L.geoJSON(geometry, {
           style: (feature?: CountryFeature) => {
-            const code = feature?.properties?.ADM0_A3;
+            const code = feature?.properties?.ADM0_A3 ?? "";
             const market = marketByCode.get(code);
             return {
               color: market ? "#7b8a82" : "#303a35",
@@ -220,14 +272,47 @@ function MarketMap({
           },
           onEachFeature: (feature: CountryFeature, countryLayer: import("leaflet").Layer) => {
             const code = feature?.properties?.ADM0_A3;
+            if (!code) return;
             const market = marketByCode.get(code);
             if (!market) return;
+            const assessment = data.market_assessments.find((item) => item.market_code === market.code);
             const score = scoreMode === "kast" ? getKastFit(market).score : market.weighted_score;
+            const tooltipText = scoreMode === "potential"
+              ? `${assessment?.potential.label ?? "Нет качественной оценки"}`
+              : `${scoreMode === "kast" ? "KAST Fit" : "APS"}: ${score.toFixed(2)} / 5`;
             countryLayer.bindTooltip(
-              `<strong>${market.name_ru}</strong><br>${scoreMode === "kast" ? "KAST Fit" : "APS"}: ${score.toFixed(2)} / 5`,
+              `<strong>${market.name_ru}</strong><br>${tooltipText}`,
               { sticky: true, direction: "top", className: "aps-map-tooltip" },
             );
-            countryLayer.on("click", () => onSelectRef.current(code));
+            if (assessment) {
+              countryLayer.bindPopup(
+                `<section class="market-map-popup"><strong>${market.name_ru}</strong><span>${assessment.potential.label}</span><p><b>Сила потребности:</b> ${assessment.need.score}/5</p><p><b>Сложность входа:</b> ${assessment.entry_complexity.score}/5</p><p>${assessment.headline}</p><p><b>Незакрытая задача:</b> ${assessment.market_gap}</p><small>${confidenceLabels[assessment.confidence]}</small><button type="button" data-market-profile="${code}">Открыть профиль</button></section>`,
+                { maxWidth: 320, className: "aps-map-popup-shell" },
+              );
+            }
+            countryLayer.on("click", () => {
+              onSelectRef.current(code);
+              countryLayer.openPopup();
+            });
+            countryLayer.on("popupopen", () => {
+              const popupElement = countryLayer.getPopup()?.getElement();
+              const button = popupElement?.querySelector<HTMLButtonElement>(`[data-market-profile="${code}"]`);
+              button?.addEventListener("click", () => onOpenProfileRef.current(code), { once: true });
+            });
+            countryLayer.on("add", () => {
+              const element = (countryLayer as import("leaflet").Path).getElement();
+              if (!element) return;
+              element.setAttribute("tabindex", "0");
+              element.setAttribute("role", "button");
+              element.setAttribute("aria-label", `Открыть данные рынка: ${market.name_ru}`);
+              element.addEventListener("keydown", (event) => {
+                const keyboardEvent = event as KeyboardEvent;
+                if (keyboardEvent.key !== "Enter" && keyboardEvent.key !== " ") return;
+                keyboardEvent.preventDefault();
+                onSelectRef.current(code);
+                countryLayer.openPopup();
+              });
+            });
           },
         }).addTo(map);
         layerRef.current = layer;
@@ -256,18 +341,29 @@ function MarketMap({
     layer.eachLayer((layerItem: import("leaflet").Layer) => {
       const countryLayer = layerItem as CountryLayer;
       const code = countryLayer.feature?.properties?.ADM0_A3;
+      if (!code) return;
       const market = data.markets.find((item) => item.code === code);
       if (!market) return;
       const visible = visibleSet.has(code);
       const selected = code === selectedCode;
+      const assessment = data.market_assessments.find((item) => item.market_code === market.code);
       const score = scoreMode === "kast" ? getKastFit(market).score : market.weighted_score;
+      const potentialColor = assessment?.potential.level === "high"
+        ? "#35e879"
+        : assessment?.potential.level === "medium_high"
+          ? "#62c77f"
+          : assessment?.potential.level === "medium"
+            ? "#a7c765"
+            : "#83908a";
       const fillColor = selected
         ? "#40f785"
-        : score >= 4
-          ? "#29a865"
-          : score >= 3.2
-            ? "#197a49"
-            : "#155c3a";
+        : scoreMode === "potential"
+          ? potentialColor
+          : score >= 4
+            ? "#29a865"
+            : score >= 3.2
+              ? "#197a49"
+              : "#155c3a";
       countryLayer.setStyle({
         color: selected ? "#d9ffe7" : "#82948a",
         weight: selected ? 2.4 : 1.2,
@@ -288,9 +384,11 @@ function MarketMap({
       {mapStatus === "error" && <div className="map-state error">Карта временно недоступна</div>}
       <button type="button" className="map-reset" onClick={resetView}>Весь мир</button>
       <div className="atlas-legend">
-        <span><i className="dot high" /> 4,0+</span>
-        <span><i className="dot mid" /> 3,2-3,99</span>
-        <span><i className="dot low" /> ниже 3,2</span>
+        {scoreMode === "potential" ? (
+          <><span><i className="dot high" /> высокий</span><span><i className="dot mid" /> средний</span><span><i className="dot low" /> низкий</span></>
+        ) : (
+          <><span><i className="dot high" /> 4,0+</span><span><i className="dot mid" /> 3,2-3,99</span><span><i className="dot low" /> ниже 3,2</span></>
+        )}
       </div>
     </div>
   );
@@ -298,14 +396,16 @@ function MarketMap({
 
 export function MarketDashboard() {
   const [tab, setTab] = useState<Tab>("overview");
-  const [scoreMode, setScoreMode] = useState<ScoreMode>("aps");
+  const [scoreMode, setScoreMode] = useState<ScoreMode>("potential");
   const [selectedCode, setSelectedCode] = useState("PHL");
   const [compareCodes, setCompareCodes] = useState<string[]>(["PHL", "COL", "MEX"]);
   const [region, setRegion] = useState("Все регионы");
   const [competitorMarket, setCompetitorMarket] = useState("ALL");
-  const [barrierSort, setBarrierSort] = useState<BarrierSort>("balance");
+  const [barrierSort, setBarrierSort] = useState<BarrierSort>("default");
 
   const selected = data.markets.find((market) => market.code === selectedCode) ?? data.markets[0];
+  const selectedAssessment = data.market_assessments.find((item) => item.market_code === selected.code) ?? data.market_assessments[0];
+  const selectedReport = data.market_reports.find((item) => item.market_code === selected.code) ?? data.market_reports[0];
   const regions = ["Все регионы", ...Array.from(new Set(data.markets.map((market) => market.region)))];
   const visibleMarkets = region === "Все регионы" ? data.markets : data.markets.filter((market) => market.region === region);
   const compareMarkets = compareCodes
@@ -313,14 +413,15 @@ export function MarketDashboard() {
     .filter(Boolean) as Market[];
   const selectedKastFit = getKastFit(selected);
   const selectedAcquisition = data.acquisition_channels.rows.find((row) => row.market_code === selected.code) ?? data.acquisition_channels.rows[0];
-  const kastRanking = [...data.markets]
-    .map((market) => ({ market, fit: getKastFit(market) }))
-    .sort((a, b) => b.fit.score - a.fit.score);
+  const selectedCompetition = competitorMarket === "ALL" ? null : data.competition_by_market.find((item) => item.market_code === competitorMarket) ?? null;
+  const selectedCompetitionAssessment = competitorMarket === "ALL" ? null : data.market_assessments.find((item) => item.market_code === competitorMarket) ?? null;
+  const globalCompetitors = data.market_competitors.filter((item) => item.scope === "global" && item.availability);
   const rankedVisibleMarkets = [...visibleMarkets].sort((a, b) => {
+    if (scoreMode === "potential") return 0;
     if (scoreMode === "kast") return getKastFit(b).score - getKastFit(a).score;
     return a.rank - b.rank;
   });
-  const visibleCompetitors = [...data.market_competitors].sort((a, b) => {
+  const visibleCompetitors = [...globalCompetitors].sort((a, b) => {
     if (competitorMarket === "ALL") return 0;
     return availabilityOrder[getAvailability(a, competitorMarket).status] - availabilityOrder[getAvailability(b, competitorMarket).status];
   });
@@ -330,16 +431,17 @@ export function MarketDashboard() {
         counts[getAvailability(item, competitorMarket).status] += 1;
         return counts;
       }, { full: 0, partial: 0, unavailable: 0, unconfirmed: 0 });
-  const barrierRows = data.barriers_drivers.rows
-    .map((row) => ({ row, market: data.markets.find((market) => market.code === row.market_code)! }))
+  const barrierRows = data.market_assessments
+    .map((assessment) => ({ assessment, market: data.markets.find((market) => market.code === assessment.market_code)! }))
     .sort((a, b) => {
-      if (barrierSort === "driver") return b.row.driver.score - a.row.driver.score || b.row.barrier.score - a.row.barrier.score;
-      if (barrierSort === "barrier") return b.row.barrier.score - a.row.barrier.score || b.row.driver.score - a.row.driver.score;
-      return (b.row.driver.score - b.row.barrier.score) - (a.row.driver.score - a.row.barrier.score) || b.row.driver.score - a.row.driver.score;
+      if (barrierSort === "driver") return b.assessment.need.score - a.assessment.need.score;
+      if (barrierSort === "barrier") return b.assessment.entry_complexity.score - a.assessment.entry_complexity.score;
+      return 0;
     });
-  const averageDriver = data.barriers_drivers.rows.reduce((sum, item) => sum + item.driver.score, 0) / data.barriers_drivers.rows.length;
-  const averageBarrier = data.barriers_drivers.rows.reduce((sum, item) => sum + item.barrier.score, 0) / data.barriers_drivers.rows.length;
-  const launchBlockingMarkets = data.barriers_drivers.rows.filter((item) => item.barrier.score === 5).length;
+  const strongNeedMarkets = data.market_assessments.filter((item) => item.need.score >= 4).length;
+  const highComplexityMarkets = data.market_assessments.filter((item) => item.entry_complexity.score >= 4).length;
+  const criticalComplexityMarkets = data.market_assessments.filter((item) => item.entry_complexity.score === 5).length;
+  const completedRespondents = data.respondents.filter((item) => item.status === "completed");
 
   function chooseMarket(code: string, nextTab?: Tab) {
     setSelectedCode(code);
@@ -358,21 +460,20 @@ export function MarketDashboard() {
     <main className="app-shell">
       <header className="hero">
         <div className="hero-topline">
-          <img className="aps-logo" src="./brand/aps-logo.svg" alt="APS" width={132} height={52} />
-          <span className="update-stamp">Market Intelligence / данные проверены 11.08.2026</span>
+          <Image className="aps-logo" src="/brand/aps-logo.svg" alt="APS" width={132} height={52} priority />
+          <span className="update-stamp">Исследование обновлено 01.09.2026</span>
         </div>
         <div className="hero-grid">
           <div>
-            <h1>Где APS может выиграть и на каких условиях</h1>
+            <h1>APS Market Intelligence</h1>
             <p>
-              Восемь рынков, исходный рейтинг APS и отдельный KAST / Product Fit
-              для stablecoin-powered global money app.
+              Анализ продуктового соответствия stablecoin-powered global money app на восьми рынках с учетом открытых данных и экспертных интервью.
             </p>
           </div>
           <div className="hero-metrics" aria-label="Сводка исследования">
             <div><strong>8</strong><span>рынков</span></div>
-            <div><strong>6+2</strong><span>APS + Fit + B/D</span></div>
-            <div><strong>{data.sources.length}</strong><span>базовых источников</span></div>
+            <div><strong>{completedRespondents.length}</strong><span>экспертных интервью</span></div>
+            <div><strong>{data.sources.length}</strong><span>источников</span></div>
           </div>
         </div>
       </header>
@@ -380,9 +481,8 @@ export function MarketDashboard() {
       <div className="method-banner">
         <span className="method-icon">i</span>
         <p>
-          <strong>Два независимых показателя.</strong> Исходный APS-балл сохранён без изменений.
-          KAST / Product Fit оценивает только сходство спроса и аудитории с моделью KAST;
-          регуляторный gate по-прежнему показан отдельно.
+          <strong>Три независимых слоя.</strong> Исходные APS и KAST / Product Fit сохранены как справочные оценки.
+          Предварительный потенциал после интервью является качественным выводом и не рассчитывается из их суммы.
         </p>
       </div>
 
@@ -406,10 +506,11 @@ export function MarketDashboard() {
               <div>
                 <span className="section-kicker">MARKET ATLAS</span>
                 <h2>Восемь рынков в одном поле</h2>
-                <p>Цвет страны отражает взвешенный балл. Нажмите на страну, чтобы открыть её показатели.</p>
+                <p>По умолчанию цвет отражает качественный вывод исследования. Карта открывается по клику, тапу и клавиатуре.</p>
               </div>
               <div className="panel-controls">
                 <div className="metric-switch" aria-label="Показатель карты">
+                  <button type="button" className={scoreMode === "potential" ? "active" : ""} onClick={() => setScoreMode("potential")}>Вывод исследования</button>
                   <button type="button" className={scoreMode === "aps" ? "active" : ""} onClick={() => setScoreMode("aps")}>APS</button>
                   <button type="button" className={scoreMode === "kast" ? "active" : ""} onClick={() => setScoreMode("kast")}>KAST Fit</button>
                 </div>
@@ -423,108 +524,90 @@ export function MarketDashboard() {
               visibleCodes={visibleMarkets.map((market) => market.code)}
               scoreMode={scoreMode}
               onSelect={chooseMarket}
+              onOpenProfile={(code) => chooseMarket(code, "profiles")}
             />
             <div className="selected-market">
               <div>
                 <span className="section-kicker">ВЫБРАННЫЙ РЫНОК</span>
                 <h3>{selected.name_ru}</h3>
-                <p>{selected.profile.demand}</p>
+                <span className={`potential-badge ${selectedAssessment.potential.level}`}>{selectedAssessment.potential.label}</span>
+                <p>{selectedAssessment.headline}</p>
+                <p className="market-gap"><strong>Незакрытая задача:</strong> {selectedAssessment.market_gap}</p>
               </div>
               <div className="selected-kpis">
-                <div><span>APS-балл</span><strong>{selected.weighted_score.toFixed(2)}</strong></div>
-                <div><span>KAST Fit</span><strong>{selectedKastFit.score.toFixed(2)}</strong></div>
-                <div><span>Переводы</span><strong>{formatMoney(selected.metrics.remittance_in_usd)}</strong></div>
+                <div><span>Сила потребности</span><strong>{selectedAssessment.need.score}/5</strong></div>
+                <div><span>Сложность входа</span><strong>{selectedAssessment.entry_complexity.score}/5</strong></div>
+                <div><span>Подтверждение</span><strong>{confidenceLabels[selectedAssessment.confidence]}</strong></div>
               </div>
-              <button type="button" className="primary-button" onClick={() => setTab("profiles")}>Открыть профиль →</button>
+              <button type="button" className="primary-button" onClick={() => setTab("profiles")}>Открыть профиль</button>
             </div>
           </div>
 
           <aside className="panel ranking-panel">
             <div className="panel-heading compact">
               <div>
-                <span className="section-kicker">РЕЙТИНГ</span>
-                <h2>{scoreMode === "aps" ? "По формуле ТЗ" : "По KAST / Product Fit"}</h2>
+                <span className="section-kicker">РЫНКИ</span>
+                <h2>{scoreMode === "potential" ? "По предварительному потенциалу" : scoreMode === "aps" ? "По формуле APS" : "По KAST / Product Fit"}</h2>
               </div>
               <span className="count-pill">8 рынков</span>
             </div>
             <div className="ranking-list">
               {rankedVisibleMarkets.map((market, index) => (
                 <button key={market.code} type="button" onClick={() => chooseMarket(market.code)} className={selectedCode === market.code ? "active" : ""}>
-                  <span className="rank-number">{scoreMode === "aps" ? market.rank : index + 1}</span>
+                  <span className="rank-number">{scoreMode === "potential" ? market.code : scoreMode === "aps" ? market.rank : index + 1}</span>
                   <span className="rank-name"><strong>{market.name_ru}</strong><small>{market.region}</small></span>
-                  <span className="gate-mini">{gateLabels[market.regulatory.gate]}</span>
-                  <ScoreBadge score={scoreMode === "aps" ? market.weighted_score : getKastFit(market).score} />
+                  {scoreMode === "potential" ? (
+                    <><span className="gate-mini">{data.market_assessments.find((item) => item.market_code === market.code)?.headline}</span><span className={`potential-dot ${data.market_assessments.find((item) => item.market_code === market.code)?.potential.level}`}>{potentialLabels[data.market_assessments.find((item) => item.market_code === market.code)?.potential.level ?? "low"]}</span></>
+                  ) : (
+                    <><span className="gate-mini">{gateLabels[market.regulatory.gate]}</span><ScoreBadge score={scoreMode === "aps" ? market.weighted_score : getKastFit(market).score} /></>
+                  )}
                 </button>
               ))}
             </div>
             <div className="ranking-note">
               <strong>Ключевой вывод</strong>
-              <p>{scoreMode === "aps" ? "Филиппины лидируют по исходной формуле. Аргентина и Колумбия близки по баллу, но требуют разных стратегий." : "Для модели KAST вверх поднимаются рынки, где одновременно видны USD-защита, crypto-аудитория, мобильная готовность и трансграничный сценарий."}</p>
+              <p>{scoreMode === "potential" ? "Это качественная группировка после интервью, а не новый расчетный рейтинг." : scoreMode === "aps" ? "Исходная формула и значения APS сохранены без изменений." : "KAST Fit остается отдельным справочным показателем и не объединяется с качественным выводом."}</p>
             </div>
           </aside>
         </section>
       )}
 
-      {tab === "kastfit" && (
-        <section className="kast-layout">
-          <article className="panel kast-benchmark">
-            <div className="kast-benchmark-copy">
-              <span className="section-kicker">PRODUCT REFERENCE</span>
-              <h2>KAST как точная продуктовая модель</h2>
-              <p>{data.kast_benchmark.positioning}. Показатель ниже отвечает только на вопрос: насколько каждый из восьми рынков похож на среду, где этот сценарий востребован.</p>
-              <div className="source-chips">{data.kast_benchmark.source_ids.map((id) => <SourceLink key={id} sourceId={id} />)}</div>
-            </div>
-            <div className="kast-benchmark-metrics">
-              <div><span>Пользователи</span><strong>{data.kast_benchmark.users}</strong><small>заявление KAST</small></div>
-              <div><span>Annualized volume</span><strong>{data.kast_benchmark.annualized_volume}</strong><small>заявление KAST</small></div>
-              <div><span>Приём карты</span><strong>{data.kast_benchmark.merchant_acceptance}</strong><small>merchant locations</small></div>
-              <div><span>Standard / USD spend</span><strong>{data.kast_benchmark.standard_card}</strong><small>{data.kast_benchmark.usd_spend_fee} комиссия</small></div>
-            </div>
+
+      {tab === "conclusions" && (
+        <section className="conclusions-layout">
+          <article className="panel research-conclusion">
+            <span className="section-kicker">ИТОГ ИССЛЕДОВАНИЯ</span>
+            <h2>Универсальный аналог KAST не дает достаточного отличия</h2>
+            <p>Карта, долларовый счет, хранение стейблкоинов и базовая конвертация уже воспринимаются как стандартный набор. Возможность возникает вокруг конкретной аудитории, незакрытой задачи и измеримого преимущества: курса, комиссии, доходности, локальной функции, платежного маршрута, налогового сопровождения или упрощения сложного финансового сценария.</p>
           </article>
-
-          <div className="kast-workspace">
-            <aside className="panel kast-ranking-panel">
-              <div className="panel-heading compact">
-                <div><span className="section-kicker">KAST FIT RANKING</span><h2>Отдельно от APS</h2></div>
-                <span className="count-pill">0–5</span>
-              </div>
-              <div className="kast-ranking-list">
-                {kastRanking.map(({ market, fit }, index) => (
-                  <button key={market.code} type="button" className={selectedCode === market.code ? "active" : ""} onClick={() => chooseMarket(market.code)}>
-                    <span className="rank-number">{index + 1}</span>
-                    <span className="rank-name"><strong>{market.name_ru}</strong><small>{fit.category}</small></span>
-                    <ScoreBadge score={fit.score} />
-                  </button>
-                ))}
-              </div>
-            </aside>
-
-            <article className="panel kast-detail">
-              <div className="kast-detail-head">
-                <div><span className="section-kicker">{selected.code} · PRODUCT FIT</span><h2>{selected.name_ru}</h2><p>{selectedKastFit.category} · исходный APS-балл {selected.weighted_score.toFixed(2)}</p></div>
-                <div className="profile-score kast-score"><strong>{selectedKastFit.score.toFixed(2)}</strong><span>из 5</span></div>
-              </div>
-              <div className="fit-component-list">
-                {selectedKastFit.components.map((component) => (
-                  <div className="fit-component" key={component.key}>
-                    <div className="fit-component-title"><strong>{component.label}</strong><span>{Math.round(component.weight * 100)}%</span></div>
-                    <div className="fit-bar"><span style={{ width: `${component.score * 20}%` }} /></div>
-                    <div className="fit-component-meta"><small>{component.evidence}</small><strong>{component.score.toFixed(2)}</strong></div>
-                  </div>
-                ))}
-              </div>
-              <div className="fit-reading">
-                <div><span className="section-kicker">ПРИОРИТЕТНАЯ АУДИТОРИЯ</span><p>{selected.profile.audience}</p></div>
-                <div><span className="section-kicker">СЦЕНАРИЙ KAST</span><p>{selected.profile.use_case}</p></div>
-              </div>
-            </article>
+          <div className="research-observations">
+            {[
+              ["Главный спрос - трансграничные деньги", "Зарубежный доход, семейные переводы и международные специалисты дают наиболее понятные сценарии."],
+              ["Базовый продукт больше не отличает", "Карта, кошелек и хранение стейблкоинов легко повторяются на общей инфраструктуре."],
+              ["Переключение требует ощутимой выгоды", "Пользователь должен видеть лучший курс, меньшую комиссию, локальную функцию или меньшее число сервисов."],
+              ["Регулирование и партнеры определяют реальный вход", "Потенциал спроса нельзя оценивать отдельно от разрешенной модели запуска."],
+            ].map(([title, copy]) => <article key={title}><h3>{title}</h3><p>{copy}</p></article>)}
           </div>
-
-          <article className="panel fit-method-summary">
-            <div><span className="section-kicker">ФОРМУЛА</span><h3>Пять наблюдаемых сигналов, без экспертной надбавки</h3></div>
-            <code>30% USD-защита + 20% cross-border + 25% crypto-аудитория + 15% mobile readiness + 10% access gap</code>
-            <p>Регуляторная возможность запуска и интенсивность конкуренции намеренно не входят в Product Fit: они остаются отдельными слоями и не подменяют наличие спроса.</p>
-          </article>
+          <div className="assessment-grid">
+            {data.markets.map((market) => {
+              const assessment = data.market_assessments.find((item) => item.market_code === market.code)!;
+              return (
+                <article className="panel assessment-card" key={market.code}>
+                  <div className="assessment-card-head"><span>{market.code}</span><strong>{market.name_ru}</strong></div>
+                  <span className={`potential-badge ${assessment.potential.level}`}>{assessment.potential.label}</span>
+                  <h3>{assessment.headline}</h3>
+                  <div className="qualitative-scores">
+                    <div><span>Сила потребности</span><strong>{assessment.need.score}/5</strong><small>{driverScoreLabel(assessment.need.score)}</small></div>
+                    <div><span>Сложность входа</span><strong>{assessment.entry_complexity.score}/5</strong><small>{barrierScoreLabel(assessment.entry_complexity.score)}</small></div>
+                  </div>
+                  <p><strong>Незакрытая задача:</strong> {assessment.market_gap}</p>
+                  <p className="confidence-line">Уровень подтверждения: {confidenceLabels[assessment.confidence]}</p>
+                  <div className="source-chips">{assessment.source_ids.map((id) => <SourceChip key={id} sourceId={id} />)}</div>
+                  <button type="button" onClick={() => chooseMarket(market.code, "profiles")}>Открыть профиль</button>
+                </article>
+              );
+            })}
+          </div>
         </section>
       )}
 
@@ -533,65 +616,61 @@ export function MarketDashboard() {
           <article className="panel barriers-summary">
             <div className="panel-heading">
               <div>
-                <span className="section-kicker">MARKET ENTRY REALITY</span>
+                <span className="section-kicker">РЕАЛЬНОСТЬ ВХОДА НА РЫНОК</span>
                 <h2>Сила потребности против сложности входа</h2>
-                <p>Две независимые экспертные оценки по шкале 1–5. Каждая опирается на опубликованные показатели, правила и продуктовые аналоги.</p>
+                <p>Две независимые качественные оценки по шкале 1–5. Это не формула рейтинга и не арифметический баланс.</p>
               </div>
               <div className="barrier-sort" aria-label="Сортировка рынков">
-                {(["balance", "driver", "barrier"] as const).map((sort) => (
+                {(["default", "driver", "barrier"] as const).map((sort) => (
                   <button key={sort} type="button" aria-pressed={barrierSort === sort} className={barrierSort === sort ? "active" : ""} onClick={() => setBarrierSort(sort)}>
-                    {sort === "balance" ? "По балансу" : sort === "driver" ? "По драйверу" : "По барьеру"}
+                    {sort === "default" ? "По рынкам" : sort === "driver" ? "По силе потребности" : "По сложности входа"}
                   </button>
                 ))}
               </div>
             </div>
             <div className="barriers-summary-metrics">
-              <div><span>Средний драйвер</span><strong>{averageDriver.toFixed(1)}</strong><small>из 5</small></div>
-              <div><span>Средний барьер</span><strong>{averageBarrier.toFixed(1)}</strong><small>из 5</small></div>
-              <div><span>Launch-blocking</span><strong>{launchBlockingMarkets}</strong><small>рынка с барьером 5</small></div>
+              <div><span>Сильная потребность</span><strong>{strongNeedMarkets}</strong><small>рынков с оценкой 4–5</small></div>
+              <div><span>Высокая сложность</span><strong>{highComplexityMarkets}</strong><small>рынков с оценкой 4–5</small></div>
+              <div><span>Критическая сложность</span><strong>{criticalComplexityMarkets}</strong><small>рынков с оценкой 5</small></div>
             </div>
-            <div className="barrier-method-note"><strong>Как читать:</strong><span>{data.barriers_drivers.method_note}</span></div>
+            <div className="barrier-method-note"><strong>Как читать:</strong><span>Сила потребности показывает выраженность пользовательской задачи. Сложность входа показывает конкуренцию, регулирование и требования к модели запуска. Одна оценка не вычитается из другой.</span></div>
           </article>
 
           <div className="barrier-matrix-head" aria-hidden="true">
-            <span>Рынок и аналоги</span><span>Драйвер категории</span><span>Ключевой барьер</span><span>Баланс</span>
+            <span>Рынок</span><span>Сила потребности</span><span>Сложность входа</span><span>Что это означает</span>
           </div>
           <div className="barrier-matrix">
-            {barrierRows.map(({ row, market }) => {
-              const balance = row.driver.score - row.barrier.score;
-              const decision = balance > 0 ? "Окно входа" : balance === 0 ? "Нужна точная модель входа" : "Сначала снять барьер";
+            {barrierRows.map(({ assessment, market }) => {
               return (
-                <article className="panel barrier-row" key={row.market_code}>
+                <article className="panel barrier-row" key={assessment.market_code}>
                   <div className="barrier-market">
                     <span className="section-kicker">{market.code} · {market.region}</span>
                     <h3>{market.name_ru}</h3>
-                    <div className="analog-list" aria-label="Подтверждённые аналоги">
-                      {row.analogs.map((analog) => <span key={analog}>{analog}</span>)}
-                    </div>
+                    <span className={`potential-badge ${assessment.potential.level}`}>{assessment.potential.label}</span>
                   </div>
                   <div className="evidence-column driver-column">
-                    <div className="evidence-score"><strong>{row.driver.score}</strong><span>{driverScoreLabel(row.driver.score)}</span></div>
-                    <h4>{row.driver.title}</h4>
-                    <p>{row.driver.explanation}</p>
-                    <div className="source-chips">{row.driver.source_ids.map((id) => <SourceLink key={id} sourceId={id} />)}</div>
+                    <div className="evidence-score"><strong>{assessment.need.score}</strong><span>{driverScoreLabel(assessment.need.score)}</span></div>
+                    <h4>{assessment.need.title}</h4>
+                    <p>{assessment.market_gap}</p>
+                    <div className="source-chips">{assessment.need.source_ids.map((id) => <SourceChip key={id} sourceId={id} />)}</div>
                   </div>
                   <div className="evidence-column barrier-column">
-                    <div className="evidence-score"><strong>{row.barrier.score}</strong><span>{barrierScoreLabel(row.barrier.score)}</span></div>
-                    <h4>{row.barrier.title}</h4>
-                    <p>{row.barrier.explanation}</p>
-                    <div className="source-chips">{row.barrier.source_ids.map((id) => <SourceLink key={id} sourceId={id} />)}</div>
+                    <div className="evidence-score"><strong>{assessment.entry_complexity.score}</strong><span>{barrierScoreLabel(assessment.entry_complexity.score)}</span></div>
+                    <h4>{assessment.entry_complexity.title}</h4>
+                    <p>{assessment.competition_summary}</p>
+                    <div className="source-chips">{assessment.entry_complexity.source_ids.map((id) => <SourceChip key={id} sourceId={id} />)}</div>
                   </div>
-                  <div className={`barrier-balance ${balance > 0 ? "positive" : balance < 0 ? "negative" : "neutral"}`}>
-                    <span>Драйвер − барьер</span>
-                    <strong>{balance > 0 ? `+${balance}` : balance}</strong>
-                    <p>{decision}</p>
+                  <div className="barrier-meaning">
+                    <span>Условие входа</span>
+                    <p>{assessment.entry_condition}</p>
+                    <small>Подтверждение: {confidenceLabels[assessment.confidence]}</small>
                     <button type="button" onClick={() => chooseMarket(market.code, "profiles")}>Открыть профиль</button>
                   </div>
                   <div className="barrier-cases">
                     <div className="barrier-cases-heading">
                       <div>
-                        <span className="section-kicker">РЕАЛЬНЫЕ ЗАПУСКИ</span>
-                        <h4>Какие компании подтвердили драйвер и барьер</h4>
+                        <span className="section-kicker">ПОДТВЕРЖДАЮЩИЕ ПРИМЕРЫ</span>
+                        <h4>Что рынок уже показал на практике</h4>
                       </div>
                       <p>Факт компании отделён от аналитического вывода APS.</p>
                     </div>
@@ -601,7 +680,7 @@ export function MarketDashboard() {
                         return (
                           <article key={kind} className={`barrier-case-card ${kind}`}>
                             <div className="barrier-case-topline">
-                              <span>{kind === "success" ? "Драйвер учтён" : "Барьер реализовался"}</span>
+                              <span>{kind === "success" ? "Что сработало" : "Что ограничило результат"}</span>
                               <small>{study.period}</small>
                             </div>
                             <h5>{study.company}</h5>
@@ -614,7 +693,7 @@ export function MarketDashboard() {
                               <span>Аналитический вывод APS</span>
                               <p>{study.lesson}</p>
                             </div>
-                            <div className="source-chips">{study.source_ids.map((id) => <SourceLink key={id} sourceId={id} />)}</div>
+                            <div className="source-chips">{study.source_ids.map((id) => <SourceChip key={id} sourceId={id} />)}</div>
                           </article>
                         );
                       })}
@@ -632,9 +711,9 @@ export function MarketDashboard() {
           <article className="panel acquisition-summary">
             <div className="panel-heading">
               <div>
-                <span className="section-kicker">CATEGORY ACQUISITION PLAYBOOK</span>
+                <span className="section-kicker">СТРАТЕГИЯ ПРИВЛЕЧЕНИЯ</span>
                 <h2>Какие каналы способны привести первых пользователей</h2>
-                <p>Локальный digital reach, реальные механики конкурентов и практический вывод для нового KAST-подобного игрока.</p>
+                <p>Локальный цифровой охват, подтверждённые механики конкурентов и стратегический вывод для нового игрока.</p>
               </div>
               <span className="independent-badge">Не влияет на рейтинг</span>
             </div>
@@ -662,16 +741,24 @@ export function MarketDashboard() {
               <div className="acquisition-source-date">Проверено<br /><strong>{data.acquisition_channels.checked_at}</strong></div>
             </div>
 
+            <div className="acquisition-strategy-grid">
+              <div><span>Приоритетная аудитория</span><p>{selectedAcquisition.strategy.audience}</p></div>
+              <div><span>Основное сообщение</span><p>{selectedAcquisition.strategy.message}</p></div>
+              <div><span>Роль бренда</span><strong>{brandRoleLabels[selectedAcquisition.strategy.role.level]}</strong><p>{selectedAcquisition.strategy.role.explanation}</p></div>
+              <div><span>Принцип выхода</span><p>{selectedAssessment.market_principle}</p></div>
+              <div><span>Уровень подтверждения</span><strong>{confidenceLabels[selectedAssessment.confidence]}</strong><div className="source-chips">{selectedAssessment.source_ids.map((id) => <SourceChip key={id} sourceId={id} />)}</div></div>
+            </div>
+
             <div className="acquisition-reach-grid">
-              <div><span>Internet users</span><strong>{selectedAcquisition.digital_reach.internet_users_m.toLocaleString("ru-RU")} млн</strong><small>январь 2025</small></div>
-              <div><span>Social identities</span><strong>{selectedAcquisition.digital_reach.social_identities_m.toLocaleString("ru-RU")} млн</strong><small>{selectedAcquisition.digital_reach.social_pct_population.toLocaleString("ru-RU")}% населения</small></div>
-              <div><span>Facebook ads</span><strong>{selectedAcquisition.digital_reach.facebook_ad_m.toLocaleString("ru-RU")} млн</strong><small>potential audience</small></div>
-              <div><span>YouTube ads</span><strong>{selectedAcquisition.digital_reach.youtube_ad_m.toLocaleString("ru-RU")} млн</strong><small>potential audience</small></div>
-              <div><span>TikTok ads 18+</span><strong>{selectedAcquisition.digital_reach.tiktok_adult_ad_m.toLocaleString("ru-RU")} млн</strong><small>potential audience</small></div>
+              <div><span>Пользователи интернета</span><strong>{selectedAcquisition.digital_reach.internet_users_m.toLocaleString("ru-RU")} млн</strong><small>январь 2025</small></div>
+              <div><span>Активные профили в соцсетях</span><strong>{selectedAcquisition.digital_reach.social_identities_m.toLocaleString("ru-RU")} млн</strong><small>{selectedAcquisition.digital_reach.social_pct_population.toLocaleString("ru-RU")}% населения</small></div>
+              <div><span>Рекламная аудитория Facebook</span><strong>{selectedAcquisition.digital_reach.facebook_ad_m.toLocaleString("ru-RU")} млн</strong><small>потенциальный охват</small></div>
+              <div><span>Рекламная аудитория YouTube</span><strong>{selectedAcquisition.digital_reach.youtube_ad_m.toLocaleString("ru-RU")} млн</strong><small>потенциальный охват</small></div>
+              <div><span>Рекламная аудитория TikTok 18+</span><strong>{selectedAcquisition.digital_reach.tiktok_adult_ad_m.toLocaleString("ru-RU")} млн</strong><small>потенциальный охват</small></div>
             </div>
 
             <div className="acquisition-channels-heading">
-              <div><span className="section-kicker">CHANNEL POTENTIAL</span><h3>Приоритетный mix для запуска</h3></div>
+              <div><span className="section-kicker">ПОТЕНЦИАЛ КАНАЛОВ</span><h3>Приоритетный набор для запуска</h3></div>
               <p>Оценка 1–5 используется только внутри этой вкладки для сравнения каналов.</p>
             </div>
             <div className="acquisition-channel-grid">
@@ -684,11 +771,20 @@ export function MarketDashboard() {
                     </div>
                     <strong>{channel.importance_label}</strong>
                   </div>
+                  {("phase" in channel || "evidence_type" in channel) && (
+                    <div className="channel-meta">
+                      {"phase" in channel && Boolean(channel.phase) && <span>Фаза: {String(channel.phase)}</span>}
+                      {"evidence_type" in channel && Boolean(channel.evidence_type) && <span>Основание: {String(channel.evidence_type)}</span>}
+                    </div>
+                  )}
                   <h4>{channel.channel}</h4>
+                  <div className="channel-strategy"><span>Роль</span><p>{channel.role}</p></div>
+                  <div className="channel-strategy"><span>Аудитория</span><p>{channel.audience}</p></div>
+                  <div className="channel-strategy"><span>Сообщение</span><p>{channel.message}</p></div>
                   <div className="channel-reach"><span>Масштаб / контекст</span><p>{channel.reach}</p></div>
                   <div className="channel-example"><span>Пример конкурента</span><strong>{channel.competitor}</strong><p>{channel.example}</p></div>
                   <div className="channel-playbook"><span>Как использовать новому игроку</span><p>{channel.playbook}</p></div>
-                  <div className="source-chips">{channel.source_ids.map((id) => <SourceLink key={id} sourceId={id} />)}</div>
+                  <div className="source-chips">{channel.source_ids.map((id) => <SourceChip key={id} sourceId={id} />)}</div>
                 </article>
               ))}
             </div>
@@ -714,20 +810,35 @@ export function MarketDashboard() {
                   className={compareCodes.includes(market.code) ? "active" : ""}
                   onClick={() => toggleCompare(market.code)}
                 >
-                  {market.name_ru}<span>{market.weighted_score.toFixed(2)}</span>
+                  {market.name_ru}<span>{potentialLabels[data.market_assessments.find((item) => item.market_code === market.code)?.potential.level ?? "low"]}</span>
                 </button>
               ))}
             </div>
           </div>
 
           <div className="comparison-cards">
-            {compareMarkets.map((market) => (
-              <article className="panel country-compare" key={market.code}>
+            {compareMarkets.map((market) => {
+              const assessment = data.market_assessments.find((item) => item.market_code === market.code)!;
+              return <article className="panel country-compare" key={market.code}>
                 <div className="country-card-head">
                   <div><span>{market.code}</span><h2>{market.name_ru}</h2><p>{market.region}</p></div>
-                  <div className="dual-score"><span>APS <ScoreBadge score={market.weighted_score} /></span><span>KAST <ScoreBadge score={getKastFit(market).score} /></span></div>
+                  <span className={`potential-badge ${assessment.potential.level}`}>{assessment.potential.label}</span>
                 </div>
+                <h3 className="compare-headline">{assessment.headline}</h3>
+                <div className="qualitative-scores compact">
+                  <div><span>Сила потребности</span><strong>{assessment.need.score}/5</strong><small>{driverScoreLabel(assessment.need.score)}</small></div>
+                  <div><span>Сложность входа</span><strong>{assessment.entry_complexity.score}/5</strong><small>{barrierScoreLabel(assessment.entry_complexity.score)}</small></div>
+                </div>
+                <div className="compare-qualitative">
+                  <p><span>Конкуренция</span>{assessment.competition_summary}</p>
+                  <p><span>Незакрытая задача</span>{assessment.market_gap}</p>
+                  <p><span>Условие входа</span>{assessment.entry_condition}</p>
+                  <p><span>Роль бренда</span>{brandRoleLabels[assessment.brand_role.level]}</p>
+                </div>
+                <div className="source-chips">{assessment.source_ids.map((id) => <SourceChip key={id} sourceId={id} />)}</div>
+                <div className="reference-scores"><span>Справочные оценки</span><strong>APS {market.weighted_score.toFixed(2)}</strong><strong>KAST Fit {getKastFit(market).score.toFixed(2)}</strong></div>
                 <div className="metric-stack">
+                  <div className="metric-section-label"><span>КОЛИЧЕСТВЕННЫЙ КОНТЕКСТ</span></div>
                   <div><span>KAST / Product Fit</span><strong>{getKastFit(market).score.toFixed(2)}</strong><small>{getKastFit(market).category}</small></div>
                   <div><span>Входящие переводы</span><strong>{formatMoney(market.metrics.remittance_in_usd)}</strong><small>{market.metrics.remittance_in_usd?.year ?? "нет данных"}</small></div>
                   <div><span>Переводы / ВВП</span><strong>{formatPct(market.metrics.remittance_pct_gdp)}</strong><small>{market.metrics.remittance_pct_gdp?.year ?? "нет данных"}</small></div>
@@ -737,12 +848,26 @@ export function MarketDashboard() {
                   <div><span>Crypto adoption</span><strong>{market.metrics.chainalysis_rank_2025 ? `#${market.metrics.chainalysis_rank_2025}` : "вне top-20"}</strong><small>из 151 стран</small></div>
                 </div>
                 <div className="gate-box"><span>Регуляторный gate</span><strong>{gateLabels[market.regulatory.gate]}</strong><p>{market.regulatory.status}</p></div>
-              </article>
-            ))}
+              </article>;
+            })}
+          </div>
+
+          <div className="panel key-comparison">
+            <div className="panel-heading compact"><div><span className="section-kicker">КЛЮЧЕВОЕ СРАВНЕНИЕ</span><h2>Качественные условия входа</h2></div></div>
+            <div className="table-scroll"><table><thead><tr><th>Критерий</th>{compareMarkets.map((market) => <th key={market.code}>{market.name_ru}</th>)}</tr></thead><tbody>
+              {[
+                ["Потенциал", (code: string) => data.market_assessments.find((item) => item.market_code === code)!.potential.label],
+                ["Потребность", (code: string) => `${data.market_assessments.find((item) => item.market_code === code)!.need.score}/5`],
+                ["Сложность входа", (code: string) => `${data.market_assessments.find((item) => item.market_code === code)!.entry_complexity.score}/5`],
+                ["Незакрытая задача", (code: string) => data.market_assessments.find((item) => item.market_code === code)!.market_gap],
+                ["Условие входа", (code: string) => data.market_assessments.find((item) => item.market_code === code)!.entry_condition],
+                ["Подтверждение", (code: string) => confidenceLabels[data.market_assessments.find((item) => item.market_code === code)!.confidence]],
+              ].map(([label, getter]) => <tr key={label as string}><th>{label as string}</th>{compareMarkets.map((market) => <td key={market.code}>{(getter as (code: string) => string)(market.code)}</td>)}</tr>)}
+            </tbody></table></div>
           </div>
 
           <div className="panel criteria-panel">
-            <div className="panel-heading"><div><span className="section-kicker">SCORE BREAKDOWN</span><h2>Шесть критериев</h2></div></div>
+            <div className="panel-heading"><div><span className="section-kicker">ИСХОДНАЯ ОЦЕНКА APS</span><h2>Шесть критериев</h2><p>Исходные критерии APS сохранены без изменений и не учитывают результаты экспертных интервью.</p></div></div>
             <div className="criteria-table">
               {data.metadata.criteria.map((criterion) => (
                 <div className="criteria-row" key={criterion.key}>
@@ -771,32 +896,30 @@ export function MarketDashboard() {
 
           <article className="panel profile-detail">
             <div className="profile-hero">
-              <div><span className="section-kicker">{selected.region} · {selected.currency}</span><h2>{selected.name_ru}</h2><p>{selected.category}</p></div>
-              <div className="profile-score-pair">
-                <div className="profile-score"><strong>{selected.weighted_score.toFixed(2)}</strong><span>APS</span></div>
-                <div className="profile-score kast-score"><strong>{selectedKastFit.score.toFixed(2)}</strong><span>KAST Fit</span></div>
-              </div>
+              <div><span className="section-kicker">{selected.region} · {selected.currency}</span><h2>{selected.name_ru}</h2><p>{selectedAssessment.headline}</p></div>
+              <span className={`potential-badge ${selectedAssessment.potential.level}`}>{selectedAssessment.potential.label}</span>
             </div>
-            <div className="profile-grid">
-              <div><span>Источник спроса</span><p>{selected.profile.demand}</p></div>
-              <div><span>Приоритетная аудитория</span><p>{selected.profile.audience}</p></div>
-              <div><span>Сценарий</span><p>{selected.profile.use_case}</p></div>
-              <div><span>Главный барьер</span><p>{selected.profile.barrier}</p></div>
-              <div className="wide"><span>Рекомендуемый вход</span><p>{selected.profile.entry}</p></div>
+            <div className="profile-assessment-grid">
+              <div><span>Сила потребности</span><strong>{selectedAssessment.need.score}/5</strong><p>{selectedAssessment.need.title}</p></div>
+              <div><span>Сложность входа</span><strong>{selectedAssessment.entry_complexity.score}/5</strong><p>{selectedAssessment.entry_complexity.title}</p></div>
+              <div><span>Незакрытая задача</span><p>{selectedAssessment.market_gap}</p></div>
+              <div><span>Условие входа</span><p>{selectedAssessment.entry_condition}</p></div>
+              <div><span>Приоритетная аудитория</span><p>{selectedAssessment.priority_audience}</p></div>
+              <div><span>Основное сообщение</span><p>{selectedAssessment.core_message}</p></div>
+            </div>
+            <div className="profile-confidence"><strong>Уровень подтверждения: {confidenceLabels[selectedAssessment.confidence]}</strong><div className="source-chips">{selectedAssessment.source_ids.map((id) => <SourceChip key={id} sourceId={id} />)}</div></div>
+            <div className="market-report">
+              {selectedReport.sections.map((section, index) => (
+                <section className="market-report-section" key={section.id}>
+                  <span className="report-index">0{index + 1}</span><div><h3>{section.title}</h3>{section.paragraphs.map((paragraph, paragraphIndex) => <p key={paragraphIndex}>{paragraph}</p>)}<div className="source-chips">{section.source_ids.map((id) => <SourceChip key={id} sourceId={id} />)}</div></div>
+                </section>
+              ))}
             </div>
             <div className="numbers-strip">
               <div><span>Переводы</span><strong>{formatMoney(selected.metrics.remittance_in_usd)}</strong><small>{selected.metrics.remittance_in_usd?.year}</small></div>
               <div><span>Инфляция</span><strong>{selected.metrics.imf_weo.inflation_2025_pct.toFixed(1)}%</strong><small>IMF 2025</small></div>
               <div><span>Account ownership</span><strong>{selected.metrics.findex_2024.account_ownership_pct.toFixed(1)}%</strong><small>Findex 2024</small></div>
               <div><span>Crypto rank</span><strong>{selected.metrics.chainalysis_rank_2025 ? `#${selected.metrics.chainalysis_rank_2025}` : ">20"}</strong><small>Chainalysis 2025</small></div>
-            </div>
-            <div className="profile-fit-section">
-              <div><span className="section-kicker">KAST / PRODUCT FIT</span><h3>{selectedKastFit.category}</h3><p>Отдельный показатель не меняет исходный APS-рейтинг.</p></div>
-              <div className="profile-fit-bars">
-                {selectedKastFit.components.map((component) => (
-                  <div key={component.key}><span>{component.label}</span><div><i style={{ width: `${component.score * 20}%` }} /></div><strong>{component.score.toFixed(1)}</strong></div>
-                ))}
-              </div>
             </div>
             <div className="case-studies-section">
               <div className="case-studies-heading">
@@ -816,7 +939,7 @@ export function MarketDashboard() {
                       <p className="case-study-product">{study.product}</p>
                       <div className="case-study-fact"><span>Факт</span><p>{study.evidence}</p></div>
                       <div className="case-study-lesson"><span>Вывод для APS</span><p>{study.lesson}</p></div>
-                      <div className="source-chips">{study.source_ids.map((id) => <SourceLink key={id} sourceId={id} />)}</div>
+                      <div className="source-chips">{study.source_ids.map((id) => <SourceChip key={id} sourceId={id} />)}</div>
                     </article>
                   );
                 })}
@@ -824,7 +947,15 @@ export function MarketDashboard() {
             </div>
             <div className="regulatory-section">
               <div><span className="section-kicker">REGULATORY GATE</span><h3>{gateLabels[selected.regulatory.gate]}</h3><p>{selected.regulatory.status}</p></div>
-              <div className="source-chips">{selected.regulatory.source_ids.map((id) => <SourceLink key={id} sourceId={id} />)}</div>
+              <div className="source-chips">{selected.regulatory.source_ids.map((id) => <SourceChip key={id} sourceId={id} />)}</div>
+            </div>
+            <div className="profile-fit-section reference-layer">
+              <div><span className="section-kicker">СПРАВОЧНЫЕ РАСЧЁТНЫЕ СЛОИ</span><h3>APS {selected.weighted_score.toFixed(2)} · KAST Fit {selectedKastFit.score.toFixed(2)}</h3><p>Обе оценки сохранены без изменений и не объединяются с качественным выводом.</p></div>
+              <div className="profile-fit-bars">
+                {selectedKastFit.components.map((component) => (
+                  <div key={component.key}><span>{component.label}</span><div><i style={{ width: `${component.score * 20}%` }} /></div><strong>{component.score.toFixed(1)}</strong></div>
+                ))}
+              </div>
             </div>
           </article>
         </section>
@@ -834,11 +965,11 @@ export function MarketDashboard() {
         <section className="panel benchmark-panel">
           <div className="panel-heading">
             <div>
-              <span className="section-kicker">MARKET AVAILABILITY · 11.08.2026</span>
-              <h2>Где конкурент доступен полностью, а где — частично</h2>
-              <p>Отдельно проверены основной сервис/аккаунт и выпуск карты для резидента. Waitlist и coming soon не считаются действующим присутствием.</p>
+              <span className="section-kicker">КОНКУРЕНТНАЯ СРЕДА · 01.09.2026</span>
+              <h2>Локальная структура рынка и доступность глобальных продуктов</h2>
+              <p>Сначала показана реальная конкурентная среда выбранной страны, затем — подтверждённая доступность глобальных сервисов.</p>
             </div>
-            <span className="count-pill">{data.market_competitors.length} конкурентов · {data.markets.length} рынков</span>
+            <span className="count-pill">{globalCompetitors.length} глобальных продуктов · {data.markets.length} рынков</span>
           </div>
           <div className="reference-note">
             <strong>{data.competition_availability.reference_product} — эталон и прямой конкурент</strong>
@@ -853,6 +984,30 @@ export function MarketDashboard() {
             <button type="button" className={competitorMarket === "ALL" ? "active" : ""} onClick={() => setCompetitorMarket("ALL")}>Все рынки</button>
             {data.markets.map((market) => <button key={market.code} type="button" className={competitorMarket === market.code ? "active" : ""} onClick={() => setCompetitorMarket(market.code)}>{market.name_ru}</button>)}
           </div>
+          {selectedCompetition && selectedCompetitionAssessment && (
+            <section className="local-competition">
+              <div className="local-competition-summary">
+                <span className="section-kicker">{competitorMarket} · ЛОКАЛЬНАЯ СТРУКТУРА</span>
+                <h3>{selectedCompetitionAssessment.competition_summary}</h3>
+                <p><strong>Незакрытая задача:</strong> {selectedCompetitionAssessment.market_gap}</p>
+                <p><strong>Условие входа:</strong> {selectedCompetitionAssessment.entry_condition}</p>
+                <div className="must-win-list">{selectedCompetitionAssessment.must_win_on.map((item) => <span key={item}>{item}</span>)}</div>
+                <div className="source-chips">{selectedCompetitionAssessment.source_ids.map((id) => <SourceChip key={id} sourceId={id} />)}</div>
+              </div>
+              <div className="local-competition-groups">
+                {selectedCompetition.group_order.map((group) => (
+                  <article key={group}>
+                    <h4>{competitionGroupLabels[group]}</h4>
+                    <div>{selectedCompetition.entities.filter((entity) => entity.group_type === group).map((entity) => {
+                      const competitor = data.market_competitors.find((item) => item.id === entity.competitor_id);
+                      return <span className={`local-entity ${entity.role}`} key={entity.competitor_id}><strong>{competitor?.provider ?? entity.competitor_id}</strong><small>{competitionRoleLabels[entity.role]}</small></span>;
+                    })}</div>
+                  </article>
+                ))}
+              </div>
+            </section>
+          )}
+          <div className="subsection-heading global-availability-heading"><div><span className="section-kicker">ДОСТУПНОСТЬ ГЛОБАЛЬНЫХ ПРОДУКТОВ</span><h2>Аккаунт, обмен и выпуск карты</h2><p>Waitlist и coming soon не считаются действующим присутствием. Частичная доступность показывается отдельно.</p></div></div>
           {selectedAvailabilityCounts && (
             <div className="availability-summary">
               {(Object.keys(availabilityLabels) as AvailabilityStatus[]).map((status) => (
@@ -871,7 +1026,7 @@ export function MarketDashboard() {
                   </tr>
                 </thead>
                 <tbody>
-                  {data.market_competitors.map((item) => (
+                  {globalCompetitors.map((item) => (
                     <tr key={item.provider}>
                       <td><strong>{item.provider}</strong></td>
                       <td><span>{item.profile}</span></td>
@@ -913,7 +1068,7 @@ export function MarketDashboard() {
                         <td><strong className={`support-value ${marketAvailability.account === null ? "unknown" : marketAvailability.account ? "yes" : "no"}`}>{supportLabel(marketAvailability.account)}</strong></td>
                         <td><strong className={`support-value ${marketAvailability.card ? "yes" : "no"}`}>{supportLabel(marketAvailability.card)}</strong></td>
                         <td><p className="availability-note-cell">{marketAvailability.note}</p></td>
-                        <td><div className="source-chips">{marketAvailability.source_ids.map((id) => <SourceLink key={id} sourceId={id} />)}</div></td>
+                        <td><div className="source-chips">{marketAvailability.source_ids.map((id) => <SourceChip key={id} sourceId={id} />)}</div></td>
                       </tr>
                     );
                   })}
@@ -949,7 +1104,7 @@ export function MarketDashboard() {
                       <p>{selectedAvailability.note}</p>
                       <div className="selected-availability-sources">
                         <span>Источники по рынку</span>
-                        <div className="source-chips">{selectedAvailability.source_ids.map((id) => <SourceLink key={id} sourceId={id} />)}</div>
+                        <div className="source-chips">{selectedAvailability.source_ids.map((id) => <SourceChip key={id} sourceId={id} />)}</div>
                       </div>
                     </div>
                   ) : (
@@ -961,7 +1116,7 @@ export function MarketDashboard() {
                   <h3>{item.product}</h3>
                   <p>{item.evidence}</p>
                   <div className="competitor-terms"><span>Публичные условия</span><strong>{item.public_terms}</strong></div>
-                  <div className="source-chips">{item.source_ids.map((id) => <SourceLink key={id} sourceId={id} />)}</div>
+                  <div className="source-chips">{item.source_ids.map((id) => <SourceChip key={id} sourceId={id} />)}</div>
                 </article>
               );
             })}
@@ -985,8 +1140,8 @@ export function MarketDashboard() {
                   <h3>{item.value}</h3>
                   {item.note && <p className="benchmark-note">{item.note}</p>}
                   <div className="benchmark-sources">
-                    {source && <a href={source.url} target="_blank" rel="noreferrer">Официальные условия ↗</a>}
-                    {"secondary_source_id" in item && item.secondary_source_id && <SourceLink sourceId={item.secondary_source_id} />}
+                    {source && <SourceChip sourceId={source.id} />}
+                    {"secondary_source_id" in item && item.secondary_source_id && <SourceChip sourceId={item.secondary_source_id} />}
                   </div>
                 </article>
               );
@@ -995,6 +1150,33 @@ export function MarketDashboard() {
           <div className="benchmark-conclusion">
             <strong>Что это означает для APS</strong>
             <p>Сравнивать нужно effective cost полного сценария: funding → conversion → card/QR spend → cash-out. Headline «0%» без fair-use, FX и withdrawal cost недостаточен.</p>
+          </div>
+        </section>
+      )}
+
+      {tab === "respondents" && (
+        <section className="respondents-layout">
+          <article className="panel respondents-intro">
+            <span className="section-kicker">ЭКСПЕРТНАЯ ПРОВЕРКА</span>
+            <h2>Кто помог проверить рыночные гипотезы</h2>
+            <p>В публичной версии показываются только роль и область опыта. Имена и контактные данные не раскрываются без отдельного подтверждения.</p>
+            <div className="respondent-metrics"><div><strong>{completedRespondents.length}</strong><span>завершённых интервью</span></div><div><strong>{data.markets.length}</strong><span>рынков в охвате</span></div><div><strong>3</strong><span>критерия отбора</span></div></div>
+          </article>
+          <div className="respondent-criteria">
+            <article><span>01</span><h3>Практический опыт</h3><p>Работа в финтехе, платежах, crypto/Web3 или запуске продуктов на релевантном рынке.</p></article>
+            <article><span>02</span><h3>Рыночная близость</h3><p>Знание локальной инфраструктуры, регулирования, поведения пользователей или каналов входа.</p></article>
+            <article><span>03</span><h3>Проверяемость</h3><p>Интервью используется как экспертный слой и не подменяет официальные цифры и документы.</p></article>
+          </div>
+          <div className="respondent-grid">
+            {completedRespondents.map((respondent) => (
+              <article className="panel respondent-card" key={respondent.id}>
+                <div><span className="respondent-status">Интервью завершено</span><small>{respondent.scope === "cross_market" ? "несколько рынков" : "локальный рынок"}</small></div>
+                <h3>{respondent.display_name}</h3>
+                <p className="respondent-role">{respondent.role}</p>
+                <dl><div><dt>Область опыта</dt><dd>{respondent.expertise}</dd></div><div><dt>Основание выбора</dt><dd>{respondent.selection_rationale}</dd></div><div><dt>Рынки</dt><dd>{respondent.market_codes.join(" · ")}</dd></div></dl>
+                <div className="source-chips"><SourceChip sourceId={respondent.source_id} /></div>
+              </article>
+            ))}
           </div>
         </section>
       )}
@@ -1037,10 +1219,11 @@ export function MarketDashboard() {
             <h2>Факты, оценки и gate не смешиваются</h2>
             <div className="method-steps">
               <div><span>01</span><strong>Фактический слой</strong><p>World Bank, Global Findex, IMF, Chainalysis и регуляторы. Год хранится рядом с каждым значением.</p></div>
-              <div><span>02</span><strong>Экспертные баллы</strong><p>Шесть баллов из исходного APS.docx сохранены как аналитические оценки; итог пересчитан по весам ТЗ.</p></div>
-              <div><span>03</span><strong>Регуляторный gate</strong><p>Отдельный статус показывает, возможен ли direct launch, нужен партнёр или допустим только fiat-wrapper.</p></div>
-              <div><span>04</span><strong>KAST / Product Fit</strong><p>Новый независимый балл использует инфляцию IMF, переводы World Bank, crypto rank Chainalysis и показатели Findex. Ручная экспертная надбавка не применяется.</p></div>
-              <div><span>05</span><strong>Барьеры и драйверы</strong><p>Два отдельных экспертных балла 1–5: сила подтверждённой продуктовой потребности и тяжесть market-entry барьера. Факты и источники показаны рядом с каждой оценкой.</p></div>
+              <div><span>02</span><strong>Предварительный потенциал</strong><p>Качественный вывод после интервью. Он не рассчитывается из APS, KAST Fit, силы потребности или сложности входа.</p></div>
+              <div><span>03</span><strong>Исходная оценка APS</strong><p>Шесть баллов и их веса сохранены без изменений как отдельный справочный слой.</p></div>
+              <div><span>04</span><strong>KAST / Product Fit</strong><p>Независимый расчёт использует инфляцию IMF, переводы World Bank, crypto rank Chainalysis и показатели Findex.</p></div>
+              <div><span>05</span><strong>Регуляторная модель</strong><p>Отдельный статус показывает, возможен ли прямой запуск, нужен партнёр или допустима только ограниченная модель.</p></div>
+              <div><span>06</span><strong>Интервью</strong><p>Экспертные свидетельства помечены отдельно, не имеют внешней ссылки и не подменяют официальные источники.</p></div>
             </div>
             <div className="formula-box"><code>Σ (балл критерия × вес) = итог из 5</code><p>Пример: Филиппины = 5×25% + 5×20% + 5×15% + 3×15% + 4×15% + 5×10% = <strong>4,55</strong>.</p></div>
             <div className="formula-box kast-formula"><code>KAST Fit = 30% USD need + 20% cross-border + 25% crypto audience + 15% mobile readiness + 10% access gap</code><p>Инфляция: 5 баллов от 25%, 4 от 10%, 3 от 5%, 2 от 3%, иначе 1. Cross-border — среднее баллов по абсолютному объёму переводов и доле ВВП. Crypto: top-10 = 5, #11–20 = 4, вне опубликованного top-20 = 2. Mobile readiness — среднее smartphone и recent internet use, делённое на 20. Access gap = (100% − account ownership) / 20.</p><p>Для Вьетнама входящие переводы 2024 рассчитаны как 3,4% от опубликованного World Bank ВВП 2024; это производное значение отмечено в данных.</p></div>
@@ -1050,12 +1233,13 @@ export function MarketDashboard() {
             <div className="panel-heading compact"><div><span className="section-kicker">SOURCE REGISTER</span><h2>{data.sources.length} базовых источников</h2></div></div>
             <div className="sources-list">
               {data.sources.map((source) => (
-                <a key={source.id} href={source.url} target="_blank" rel="noreferrer">
+                <article key={source.id}>
                   <span className="source-tier">{source.tier.replaceAll("_", " ")}</span>
                   <strong>{source.title}</strong>
                   <p>{source.publisher} · {source.period}</p>
-                  <small>Проверено {source.accessed} ↗</small>
-                </a>
+                  <small>Проверено {source.accessed}</small>
+                  <SourceChip sourceId={source.id} />
+                </article>
               ))}
             </div>
           </article>
