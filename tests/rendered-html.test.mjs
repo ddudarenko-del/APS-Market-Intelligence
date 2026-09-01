@@ -40,11 +40,12 @@ test("server-renders the unified APS research workspace", async () => {
 });
 
 test("keeps production metadata and documented market intelligence", async () => {
-  const [page, layout, dashboard, data] = await Promise.all([
+  const [page, layout, dashboard, data, styles] = await Promise.all([
     readFile(new URL("../app/page.tsx", import.meta.url), "utf8"),
     readFile(new URL("../app/layout.tsx", import.meta.url), "utf8"),
     readFile(new URL("../app/MarketDashboard.tsx", import.meta.url), "utf8"),
     readFile(new URL("../app/data/market_data.json", import.meta.url), "utf8"),
+    readFile(new URL("../app/globals.css", import.meta.url), "utf8"),
   ]);
 
   assert.match(page, /<MarketDashboard \/>/);
@@ -74,5 +75,8 @@ test("keeps production metadata and documented market intelligence", async () =>
   assert.match(data, /"respondents"/);
   assert.match(data, /"case_lessons"/);
   assert.match(data, /"Simple\.app"/);
+  assert.match(dashboard, /\? "#40f785"[\s\S]*\? "#b7d85c"[\s\S]*\? "#f0cf57"[\s\S]*: "#f29a52"/);
+  assert.match(styles, /\.potential-badge\.low \{[^}]*#f29a52/);
+  assert.match(styles, /\.market-map-popup-value\.low \{ background: #f29a52; \}/);
   assert.doesNotMatch(page + layout, /codex-preview|_sites-preview/);
 });

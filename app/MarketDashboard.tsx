@@ -379,15 +379,13 @@ function MarketMap({
       const assessment = data.market_assessments.find((item) => item.market_code === market.code);
       const score = scoreMode === "kast" ? getKastFit(market).score : market.weighted_score;
       const potentialColor = assessment?.potential.level === "high"
-        ? "#35e879"
-        : assessment?.potential.level === "medium_high"
-          ? "#62c77f"
-          : assessment?.potential.level === "medium"
-            ? "#a7c765"
-            : "#83908a";
-      const fillColor = selected
         ? "#40f785"
-        : scoreMode === "potential"
+        : assessment?.potential.level === "medium_high"
+          ? "#b7d85c"
+          : assessment?.potential.level === "medium"
+            ? "#f0cf57"
+            : "#f29a52";
+      const fillColor = scoreMode === "potential"
           ? potentialColor
           : score >= 4
             ? "#29a865"
