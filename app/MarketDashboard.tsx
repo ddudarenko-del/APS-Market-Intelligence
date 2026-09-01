@@ -496,6 +496,7 @@ export function MarketDashboard() {
       </header>
 
       <div className="tabs-shell">
+        <button type="button" className="tabs-scroll tabs-scroll-left" aria-label="Показать предыдущие разделы" disabled={!tabScroll.left} onClick={() => scrollTabs(-1)}>‹</button>
         <nav ref={tabsRef} className="tabs" aria-label="Разделы исследования">
           {tabLabels.map((item) => (
             <button
@@ -508,8 +509,7 @@ export function MarketDashboard() {
             </button>
           ))}
         </nav>
-        {tabScroll.left && <button type="button" className="tabs-scroll tabs-scroll-left" aria-label="Показать предыдущие разделы" onClick={() => scrollTabs(-1)}>‹</button>}
-        {tabScroll.right && <button type="button" className="tabs-scroll tabs-scroll-right" aria-label="Показать следующие разделы" onClick={() => scrollTabs(1)}>›</button>}
+        <button type="button" className="tabs-scroll tabs-scroll-right" aria-label="Показать следующие разделы" disabled={!tabScroll.right} onClick={() => scrollTabs(1)}>›</button>
       </div>
 
       {tab === "overview" && (
