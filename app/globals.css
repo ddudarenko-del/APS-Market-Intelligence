@@ -767,6 +767,11 @@ footer { border-top: 1px solid #1f2823; }
 .market-report-section h3 { margin: 0 0 14px; font-size: 25px; }
 .market-report-section p { max-width: 920px; margin: 0 0 14px; color: #cbd4cf; font-size: 13px; line-height: 1.72; }
 .market-report-section .source-chips { justify-content: flex-start; margin-top: 13px; }
+.audience-groups { display: grid; gap: 4px; max-width: 920px; margin-top: 18px; }
+.audience-group { padding: 18px 0 4px; border-top: 1px dashed var(--line); }
+.audience-group h4 { max-width: 840px; margin: 0 0 10px; color: var(--ink); font-size: 18px; font-weight: 780; line-height: 1.42; letter-spacing: -.015em; }
+.audience-group p { margin: 0 0 12px; }
+.audience-intro { color: #e0e7e2 !important; font-size: 14px !important; }
 .reference-layer { border-top: 1px solid var(--line); background: #0b100d; }
 
 .local-competition { margin: 18px 22px 4px; overflow: hidden; border: 1px solid #365143; border-radius: 16px; }
@@ -914,4 +919,5 @@ footer {
   .qualitative-scores, .respondent-metrics { grid-template-columns: 1fr; }
   .respondent-metrics div { border-right: 0; border-bottom: 1px solid var(--line); }
   .market-report-section { grid-template-columns: 1fr; }
+  .audience-group h4 { font-size: 19px; line-height: 1.38; }
 }

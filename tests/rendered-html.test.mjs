@@ -61,6 +61,8 @@ test("keeps production metadata and documented market intelligence", async () =>
   assert.match(dashboard, /tabs\.scrollBy/);
   assert.match(dashboard, /disabled=\{!tabScroll\.left\}/);
   assert.match(dashboard, /disabled=\{!tabScroll\.right\}/);
+  assert.match(dashboard, /function AudienceGroups/);
+  assert.match(dashboard, /section\.id === "audience"/);
   assert.match(dashboard, /scoreMode !== "potential" && <span className="rank-number">/);
   assert.match(dashboard, /potential-mode/);
   assert.match(data, /"kast_fit"/);

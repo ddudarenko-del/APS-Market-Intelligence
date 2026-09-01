@@ -201,6 +201,50 @@ function SourceChip({ sourceId }: { sourceId: string }) {
   );
 }
 
+function splitAudienceLead(paragraph: string) {
+  const isGroupLead = /^(?:Группа \d+\.|Опция \d+\.|Первая(?: и [^—]+)? аудитория\s+—|Вторая аудитория\s+—|Третья(?: и [^—]+)? аудитория\s+—|Третья гипотеза\s+—|Четвертая гипотеза\s+—|Наиболее интересная гипотеза\s+—)/.test(paragraph);
+  if (!isGroupLead) return null;
+  const numberedPrefix = paragraph.match(/^(?:Группа \d+\.|Опция \d+\.)\s*/)?.[0].length ?? 0;
+  const sentenceEnd = paragraph.indexOf(". ", numberedPrefix);
+  if (sentenceEnd === -1) return { title: paragraph, detail: "" };
+  return {
+    title: paragraph.slice(0, sentenceEnd + 1),
+    detail: paragraph.slice(sentenceEnd + 2),
+  };
+}
+
+function AudienceGroups({ paragraphs }: { paragraphs: string[] }) {
+  const intro: string[] = [];
+  const groups: Array<{ title: string; details: string[] }> = [];
+  let currentGroup: { title: string; details: string[] } | null = null;
+
+  for (const paragraph of paragraphs) {
+    const lead = splitAudienceLead(paragraph);
+    if (lead) {
+      currentGroup = { title: lead.title, details: lead.detail ? [lead.detail] : [] };
+      groups.push(currentGroup);
+    } else if (currentGroup) {
+      currentGroup.details.push(paragraph);
+    } else {
+      intro.push(paragraph);
+    }
+  }
+
+  return (
+    <div className="audience-content">
+      {intro.map((paragraph, index) => <p className="audience-intro" key={`intro-${index}`}>{paragraph}</p>)}
+      <div className="audience-groups">
+        {groups.map((group, index) => (
+          <article className="audience-group" key={`${group.title}-${index}`}>
+            <h4>{group.title}</h4>
+            {group.details.map((detail, detailIndex) => <p key={detailIndex}>{detail}</p>)}
+          </article>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 function MarketMap({
   selectedCode,
   visibleCodes,
@@ -923,7 +967,7 @@ export function MarketDashboard() {
             <div className="market-report">
               {selectedReport.sections.map((section, index) => (
                 <section className="market-report-section" key={section.id}>
-                  <span className="report-index">0{index + 1}</span><div><h3>{section.title}</h3>{section.paragraphs.map((paragraph, paragraphIndex) => <p key={paragraphIndex}>{paragraph}</p>)}<div className="source-chips">{section.source_ids.map((id) => <SourceChip key={id} sourceId={id} />)}</div></div>
+                  <span className="report-index">0{index + 1}</span><div><h3>{section.title}</h3>{section.id === "audience" ? <AudienceGroups paragraphs={section.paragraphs} /> : section.paragraphs.map((paragraph, paragraphIndex) => <p key={paragraphIndex}>{paragraph}</p>)}<div className="source-chips">{section.source_ids.map((id) => <SourceChip key={id} sourceId={id} />)}</div></div>
                 </section>
               ))}
             </div>
