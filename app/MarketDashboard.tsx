@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import data from "./data/market_data.json";
 
-type Tab = "overview" | "conclusions" | "compare" | "profiles" | "competition" | "barriers" | "acquisition" | "respondents" | "data" | "method";
+type Tab = "overview" | "conclusions" | "compare" | "profiles" | "competition" | "barriers" | "cases" | "acquisition" | "respondents" | "data" | "method";
 type ScoreMode = "potential" | "aps" | "kast";
 type BarrierSort = "default" | "driver" | "barrier";
 type MetricValue = { value: number; year: number } | null;
@@ -27,6 +27,7 @@ const tabLabels: Array<{ id: Tab; label: string }> = [
   { id: "profiles", label: "Профили рынков" },
   { id: "competition", label: "Конкуренты / тарифы" },
   { id: "barriers", label: "Барьеры и драйверы" },
+  { id: "cases", label: "Кейсы и уроки" },
   { id: "acquisition", label: "Каналы привлечения" },
   { id: "respondents", label: "Респонденты" },
   { id: "data", label: "Сырые данные" },
@@ -842,6 +843,87 @@ export function MarketDashboard() {
                   <div className="channel-playbook"><span>Как использовать новому игроку</span><p>{channel.playbook}</p></div>
                   <div className="source-chips">{channel.source_ids.map((id) => <SourceChip key={id} sourceId={id} />)}</div>
                 </article>
+              ))}
+            </div>
+          </article>
+        </section>
+      )}
+
+      {tab === "cases" && (
+        <section className="cases-layout">
+          <article className="panel cases-intro">
+            <div>
+              <span className="section-kicker">КЕЙСЫ И УРОКИ</span>
+              <h2>{data.case_lessons.title}</h2>
+              <p>{data.case_lessons.intro}</p>
+            </div>
+            <div className="cases-intro-metrics" aria-label="Состав анализа">
+              <div><strong>1</strong><span>подробный разбор</span></div>
+              <div><strong>{data.case_lessons.supporting_cases.length}</strong><span>дополнительных кейсов</span></div>
+              <div><strong>{data.case_lessons.patterns.length}</strong><span>повторяющихся причин</span></div>
+            </div>
+          </article>
+
+          <article className="panel primary-case">
+            <div className="primary-case-heading">
+              <div>
+                <span className="case-evidence-type">{data.case_lessons.primary_case.evidence_type}</span>
+                <h2>{data.case_lessons.primary_case.company}</h2>
+                <p>{data.case_lessons.primary_case.title}</p>
+              </div>
+              <div className="source-chips">{data.case_lessons.primary_case.source_ids.map((id) => <SourceChip key={id} sourceId={id} />)}</div>
+            </div>
+
+            <div className="case-trajectory">
+              {[data.case_lessons.primary_case.proof, data.case_lessons.primary_case.expansion].map((stage, index) => (
+                <article key={stage.market} className={index === 0 ? "worked" : "stopped"}>
+                  <div className="case-stage-topline"><span>{stage.label}</span><strong>{stage.market}</strong></div>
+                  <h3>{stage.headline}</h3>
+                  <p>{stage.body}</p>
+                  <small>{stage.status}</small>
+                </article>
+              ))}
+            </div>
+
+            <div className="case-reasons-heading">
+              <span className="section-kicker">ПОЧЕМУ НЕ СОСТОЯЛСЯ ВЫХОД В LATAM</span>
+              <h3>Шесть ограничений, которые сложились в один стоп-сценарий</h3>
+            </div>
+            <div className="case-reasons-grid">
+              {data.case_lessons.primary_case.reasons.map((reason, index) => (
+                <article key={reason.title}>
+                  <span>{String(index + 1).padStart(2, "0")}</span>
+                  <div><h4>{reason.title}</h4><p>{reason.body}</p></div>
+                </article>
+              ))}
+            </div>
+            <div className="case-main-lesson"><span>Главный урок</span><p>{data.case_lessons.primary_case.lesson}</p></div>
+          </article>
+
+          <div className="cases-section-heading">
+            <div><span className="section-kicker">ДОПОЛНИТЕЛЬНЫЕ ПРИМЕРЫ</span><h2>Один и тот же риск проявляется по-разному</h2></div>
+            <p>Факт или свидетельство отделены от аналитического вывода APS.</p>
+          </div>
+          <div className="supporting-cases-grid">
+            {data.case_lessons.supporting_cases.map((study) => (
+              <article className="panel supporting-case" key={`${study.company}-${study.market}`}>
+                <div className="supporting-case-topline"><span>{study.evidence_type}</span><strong>{study.market}</strong></div>
+                <h3>{study.company}</h3>
+                <div className="case-fact"><span>Что произошло</span><p>{study.outcome}</p></div>
+                <div className="case-fact constraint"><span>Что ограничило результат</span><p>{study.constraint}</p></div>
+                <div className="source-chips">{study.source_ids.map((id) => <SourceChip key={id} sourceId={id} />)}</div>
+                <div className="case-fact lesson"><span>Урок для нового игрока</span><p>{study.lesson}</p></div>
+              </article>
+            ))}
+          </div>
+
+          <article className="panel case-patterns">
+            <div className="cases-section-heading compact">
+              <div><span className="section-kicker">ПОВТОРЯЮЩИЕСЯ ПРИЧИНЫ НЕУДАЧ</span><h2>Что проверять до выбора рынка</h2></div>
+            </div>
+            <div className="case-patterns-grid">
+              {data.case_lessons.patterns.map((pattern, index) => (
+                <article key={pattern.title}><span>0{index + 1}</span><h3>{pattern.title}</h3><p>{pattern.body}</p></article>
               ))}
             </div>
           </article>

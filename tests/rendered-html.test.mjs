@@ -32,6 +32,7 @@ test("server-renders the unified APS research workspace", async () => {
   assert.match(html, /<title>APS Market Intelligence<\/title>/i);
   assert.match(html, /Выводы/);
   assert.match(html, /Респонденты/);
+  assert.match(html, /Кейсы и уроки/);
   assert.match(html, /По предварительному потенциалу/);
   assert.doesNotMatch(html, /Три независимых слоя/);
   assert.match(html, /Интерактивная карта рынков APS/);
@@ -62,6 +63,7 @@ test("keeps production metadata and documented market intelligence", async () =>
   assert.match(dashboard, /disabled=\{!tabScroll\.left\}/);
   assert.match(dashboard, /disabled=\{!tabScroll\.right\}/);
   assert.match(dashboard, /function AudienceGroups/);
+  assert.match(dashboard, /data\.case_lessons/);
   assert.match(dashboard, /section\.id === "audience"/);
   assert.match(dashboard, /scoreMode !== "potential" && <span className="rank-number">/);
   assert.match(dashboard, /potential-mode/);
@@ -70,5 +72,7 @@ test("keeps production metadata and documented market intelligence", async () =>
   assert.match(data, /"market_assessments"/);
   assert.match(data, /"market_reports"/);
   assert.match(data, /"respondents"/);
+  assert.match(data, /"case_lessons"/);
+  assert.match(data, /"Simple\.app"/);
   assert.doesNotMatch(page + layout, /codex-preview|_sites-preview/);
 });
