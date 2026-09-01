@@ -51,6 +51,8 @@ test("keeps production metadata and documented market intelligence", async () =>
   assert.match(layout, /images:\s*\["\/og\.png"\]/);
   assert.match(dashboard, /KAST Fit = 30% USD need/);
   assert.match(dashboard, /data\.market_competitors/);
+  assert.match(dashboard, /\/data\/countries\.geojson/);
+  assert.doesNotMatch(dashboard, /cartocdn|CARTO/i);
   assert.match(data, /"kast_fit"/);
   assert.match(data, /"market_competitors"/);
   assert.match(data, /"market_assessments"/);

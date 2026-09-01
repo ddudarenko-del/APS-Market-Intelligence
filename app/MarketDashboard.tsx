@@ -241,16 +241,11 @@ function MarketMap({
           minZoom: 2,
           maxZoom: 6,
           zoomControl: false,
-          worldCopyJump: true,
-          attributionControl: true,
+          worldCopyJump: false,
+          attributionControl: false,
         });
         mapRef.current = map;
         L.control.zoom({ position: "topright" }).addTo(map);
-        L.tileLayer("https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png", {
-          attribution: "&copy; OpenStreetMap contributors &copy; CARTO",
-          subdomains: "abcd",
-          maxZoom: 20,
-        }).addTo(map);
 
         const response = await fetch("/data/countries.geojson");
         if (!response.ok) throw new Error("Country geometry unavailable");
