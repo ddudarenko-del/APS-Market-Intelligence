@@ -102,7 +102,7 @@ test("preserves the structured Indonesia country-detail report", () => {
   assert.ok(report);
   const sections = Object.fromEntries(report.sections.map((section) => [section.id, section]));
   assert.ok(sections.summary.paragraphs.every((paragraph) => paragraph.startsWith("::b0::")));
-  assert.match(sections.summary.paragraphs.join(" "), /QRIS — главный локальный продуктовый аргумент/);
+  assert.match(sections.summary.paragraphs.join(" "), /QRIS фактически решил задачу повседневных платежей/);
   assert.match(sections.audience.paragraphs.join(" "), /активные пользователи криптоактивов|Уже существующие пользователи криптоактивов/);
   assert.match(sections.product.paragraphs.join(" "), /Tangem Wallet/);
   assert.match(sections.product.paragraphs.join(" "), /Стоимость физической карты — болевая точка/);
@@ -116,6 +116,27 @@ test("preserves the structured Indonesia country-detail report", () => {
   assert.ok(sections.competition.source_ids.includes("interview_id_marketing_2026"));
   assert.ok(sections.regulation.source_ids.includes("interview_id_treasury_2026"));
   assert.doesNotMatch(report.sections.flatMap((section) => section.paragraphs).join(" "), /чч|на уровне Филиппин/);
+});
+
+test("uses the expanded brief conclusions in every market profile", () => {
+  const expectedHeadlines = {
+    GBR: "Нишевый рынок без массовой потребности",
+    ARG: "Сильный спрос, но рынок уже перенасыщен",
+    MEX: "Налоговая сложность одновременно сдерживает рынок и создает нишу",
+    COL: "Сильная потребность в защите сбережений, но конкуренция растет",
+    CAN: "Консервативный финансовый рынок",
+    PHL: "Рынок огромного трансграничного спроса",
+    IDN: "Цифровой рынок, где важно не повторять кошельки",
+    VNM: "Рынок сильного криптоинтереса и денег из-за рубежа",
+  };
+
+  for (const report of data.market_reports) {
+    const summary = report.sections.find((section) => section.id === "summary");
+    assert.ok(summary, `${report.market_code}: missing summary`);
+    assert.ok(summary.paragraphs.length >= 4, `${report.market_code}: summary is not expanded`);
+    assert.ok(summary.paragraphs.every((paragraph) => paragraph.startsWith("::b0::")), `${report.market_code}: rich paragraph marker`);
+    assert.match(summary.paragraphs[0], new RegExp(expectedHeadlines[report.market_code]));
+  }
 });
 
 test("integrates both Indonesia interviews into positioning, acquisition and competitors", () => {
