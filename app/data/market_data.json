@@ -4564,6 +4564,36 @@
       "url": null
     },
     {
+      "id": "interview_ph_crossborder_2026",
+      "type": "interview",
+      "tier": "expert_interview",
+      "title": "Филиппины: stablecoins, трансграничные платежи и партнёрства",
+      "publisher": "Экспертное интервью",
+      "period": "август 2026",
+      "accessed": "2026-09-01",
+      "url": null
+    },
+    {
+      "id": "interview_id_treasury_2026",
+      "type": "interview",
+      "tier": "expert_interview",
+      "title": "Индонезия: казначейство, платежи, fiat и stablecoins",
+      "publisher": "Экспертное интервью",
+      "period": "август 2026",
+      "accessed": "2026-09-01",
+      "url": null
+    },
+    {
+      "id": "interview_id_marketing_2026",
+      "type": "interview",
+      "tier": "expert_interview",
+      "title": "Индонезия: маркетинг blockchain- и fintech-продуктов",
+      "publisher": "Экспертное интервью",
+      "period": "август 2026",
+      "accessed": "2026-09-01",
+      "url": null
+    },
+    {
       "id": "ph_bsp_remittances_2025",
       "type": "official_data",
       "tier": "official_data",
@@ -5825,7 +5855,7 @@
   "respondents": [
     {
       "id": "respondent_cross_market_01",
-      "display_name": "Кросс-рыночный эксперт",
+      "display_name": "Artem N.",
       "market_codes": [
         "PHL",
         "ARG",
@@ -5837,90 +5867,135 @@
         "CAN"
       ],
       "scope": "cross_market",
-      "role": "Эксперт по финтех-инфраструктуре и рыночным нишам",
-      "expertise": "Fintech, VC, B2B fintech; общая оценка инфраструктуры и ниш",
-      "selection_rationale": "Кросс-рыночный опыт оценки финтех-инфраструктуры и продуктовых ниш",
+      "role": "CEO B2B-финтеха и венчурный инвестор; работает в Великобритании",
+      "expertise": "Финтех, венчурные инвестиции и операционное управление B2B-финтех-компанией",
+      "selection_rationale": "Сочетает инвестиционный и управленческий взгляд на инфраструктуру, бизнес-модели и рыночные ниши",
       "interview_date": null,
       "status": "completed",
       "source_id": "interview_cross_market_2026",
-      "visibility": "role_only"
+      "visibility": "name_initial"
     },
     {
       "id": "respondent_uk_01",
-      "display_name": "Эксперт британского финтеха",
+      "display_name": "Dmitry V.",
       "market_codes": [
         "GBR"
       ],
       "scope": "market",
-      "role": "Эксперт по B2B wallet, платежам и финтеху",
-      "expertise": "Anna Money / B2B wallet, платежи и финтех",
-      "selection_rationale": "Практический опыт британского финтех-рынка",
+      "role": "Эксперт по B2B-кошелькам и британскому финтеху",
+      "expertise": "Опыт с ANNA Money — B2B-кошельком и финансовым сервисом для бизнеса в Великобритании",
+      "selection_rationale": "Практический опыт британского B2B-финтех-рынка и повседневных финансовых сценариев малого бизнеса",
       "interview_date": null,
       "status": "completed",
       "source_id": "interview_uk_fintech_2026",
-      "visibility": "role_only"
+      "visibility": "name_initial"
     },
     {
       "id": "respondent_uk_02",
-      "display_name": "Эксперт британского EMI",
+      "display_name": "Daniel B.",
       "market_codes": [
         "GBR"
       ],
       "scope": "market",
-      "role": "Эксперт британского EMI",
-      "expertise": "P3 Money, платежи, compliance, специализированные клиенты",
-      "selection_rationale": "Участвует в платежных и compliance-процессах британского EMI",
+      "role": "Эксперт британского необанкинга и EMI",
+      "expertise": "P3 Money: британский необанк, платежи, compliance и обслуживание специализированных клиентских сегментов",
+      "selection_rationale": "Практический опыт регулируемых платежных и compliance-процессов британского EMI",
       "interview_date": null,
       "status": "completed",
       "source_id": "interview_uk_emi_2026",
-      "visibility": "role_only"
+      "visibility": "name_initial"
     },
     {
       "id": "respondent_latam_01",
-      "display_name": "Эксперт по LATAM",
+      "display_name": "Kate G.",
       "market_codes": [
         "ARG",
         "COL",
         "MEX"
       ],
       "scope": "cross_market",
-      "role": "Эксперт по запуску crypto- и fintech-продуктов в LATAM",
-      "expertise": "Запуск крипто- и финтех-продукта Simple в LATAM",
-      "selection_rationale": "Практический опыт запуска продукта в регионе",
+      "role": "Эксперт по запуску crypto- и fintech-продуктов в Латинской Америке",
+      "expertise": "Участвовала в запуске Simple.app в Аргентине, Мексике и Колумбии",
+      "selection_rationale": "Практический опыт локализации, маркетинга и регуляторных ограничений при запуске одного продукта на нескольких рынках LATAM",
       "interview_date": null,
       "status": "completed",
       "source_id": "interview_latam_2026",
-      "visibility": "role_only"
+      "visibility": "name_initial"
     },
     {
       "id": "respondent_canada_01",
-      "display_name": "Эксперт канадского рынка",
+      "display_name": "Bez M.",
       "market_codes": [
         "CAN"
       ],
       "scope": "market",
-      "role": "Эксперт по Web3 и канадскому крипторынку",
-      "expertise": "Web3 strategy, tokenomics и канадский крипторынок",
-      "selection_rationale": "Практический опыт оценки Web3-продуктов в Канаде",
+      "role": "Архитектор Web3-стратегии и токеномики",
+      "expertise": "Web3-стратегия, токеномика и особенности канадского рынка цифровых активов",
+      "selection_rationale": "Практический опыт оценки Web3-продуктов, пользовательского спроса и условий выхода на рынок Канады",
       "interview_date": null,
       "status": "completed",
       "source_id": "interview_canada_2026",
-      "visibility": "role_only"
+      "visibility": "name_initial"
     },
     {
       "id": "respondent_ph_01",
-      "display_name": "Эксперт рынка Филиппин",
+      "display_name": "Akim B.",
       "market_codes": [
         "PHL"
       ],
       "scope": "market",
-      "role": "Эксперт по банковским и crypto/fintech-продуктам",
-      "expertise": "Crypto/fintech product; банковский продукт на Филиппинах",
-      "selection_rationale": "Практический продуктовый опыт на рынке Филиппин",
+      "role": "Владелец crypto- и fintech-продуктов; создаёт банк на Филиппинах",
+      "expertise": "Продуктовое управление в crypto и fintech, а также создание банковского продукта на Филиппинах",
+      "selection_rationale": "Практический опыт разработки финансового продукта и банковской инфраструктуры непосредственно на рынке Филиппин",
       "interview_date": null,
       "status": "completed",
       "source_id": "interview_ph_2026",
-      "visibility": "role_only"
+      "visibility": "name_initial"
+    },
+    {
+      "id": "respondent_ph_02",
+      "display_name": "Vincent T.",
+      "market_codes": [
+        "PHL"
+      ],
+      "scope": "market",
+      "role": "Эксперт по стратегическому развитию бизнеса и партнёрств",
+      "expertise": "Stablecoins, трансграничные платежи, стратегические партнёрства и развитие бизнеса",
+      "selection_rationale": "Практический опыт построения партнёрской модели и развития решений для международных платежей",
+      "interview_date": null,
+      "status": "completed",
+      "source_id": "interview_ph_crossborder_2026",
+      "visibility": "name_initial"
+    },
+    {
+      "id": "respondent_id_01",
+      "display_name": "Aldi P.",
+      "market_codes": [
+        "IDN"
+      ],
+      "scope": "market",
+      "role": "Эксперт по казначейству и платёжной инфраструктуре",
+      "expertise": "Казначейство, платежи, fiat и stablecoins; ранее работал в Bybit",
+      "selection_rationale": "Практический опыт управления fiat- и stablecoin-потоками внутри крупной криптоплатформы",
+      "interview_date": null,
+      "status": "completed",
+      "source_id": "interview_id_treasury_2026",
+      "visibility": "name_initial"
+    },
+    {
+      "id": "respondent_id_02",
+      "display_name": "Jamie T.",
+      "market_codes": [
+        "IDN"
+      ],
+      "scope": "market",
+      "role": "Маркетинговый специалист в blockchain и fintech",
+      "expertise": "Маркетинг blockchain- и fintech-продуктов на индонезийском рынке",
+      "selection_rationale": "Локальный опыт коммуникации, привлечения аудитории и продвижения технологических финансовых продуктов",
+      "interview_date": null,
+      "status": "completed",
+      "source_id": "interview_id_marketing_2026",
+      "visibility": "name_initial"
     }
   ],
   "competition_by_market": [

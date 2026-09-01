@@ -1297,7 +1297,7 @@ export function MarketDashboard() {
           <article className="panel respondents-intro">
             <span className="section-kicker">ЭКСПЕРТНАЯ ПРОВЕРКА</span>
             <h2>Кто помог проверить рыночные гипотезы</h2>
-            <p>В публичной версии показываются только роль и область опыта. Имена и контактные данные не раскрываются без отдельного подтверждения.</p>
+            <p>Имена приведены в формате «имя + инициал фамилии». Контактные данные не публикуются; роль и опыт переведены на русский с сохранением конкретики интервью.</p>
             <div className="respondent-metrics"><div><strong>{completedRespondents.length}</strong><span>завершённых интервью</span></div><div><strong>{data.markets.length}</strong><span>рынков в охвате</span></div><div><strong>3</strong><span>критерия отбора</span></div></div>
           </article>
           <div className="respondent-criteria">
@@ -1311,7 +1311,7 @@ export function MarketDashboard() {
                 <div><span className="respondent-status">Интервью завершено</span><small>{respondent.scope === "cross_market" ? "несколько рынков" : "локальный рынок"}</small></div>
                 <h3>{respondent.display_name}</h3>
                 <p className="respondent-role">{respondent.role}</p>
-                <dl><div><dt>Область опыта</dt><dd>{respondent.expertise}</dd></div><div><dt>Основание выбора</dt><dd>{respondent.selection_rationale}</dd></div><div><dt>Рынки</dt><dd>{respondent.market_codes.join(" · ")}</dd></div></dl>
+                <dl><div><dt>Область опыта</dt><dd>{respondent.expertise}</dd></div><div><dt>Почему включён в исследование</dt><dd>{respondent.selection_rationale}</dd></div><div><dt>Рынки</dt><dd>{respondent.market_codes.map((code) => data.markets.find((market) => market.code === code)?.name_ru ?? code).join(" · ")}</dd></div></dl>
                 <div className="source-chips"><SourceChip sourceId={respondent.source_id} /></div>
               </article>
             ))}

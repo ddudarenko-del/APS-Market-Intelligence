@@ -88,8 +88,9 @@ test("keeps competition, respondent and acquisition enums valid", () => {
 });
 
 test("publishes only completed respondents and current ARQ naming", () => {
-  assert.ok(data.respondents.length > 0);
-  assert.ok(data.respondents.every((respondent) => respondent.status === "completed" && respondent.visibility === "role_only"));
+  assert.equal(data.respondents.length, 9);
+  assert.ok(data.respondents.every((respondent) => respondent.status === "completed" && respondent.visibility === "name_initial"));
+  assert.ok(data.respondents.every((respondent) => /^[A-Z][A-Za-z]+ [A-Z]\.$/.test(respondent.display_name)));
   assert.ok(data.respondents.every((respondent) => sourceIds.has(respondent.source_id)));
   assert.ok(data.market_competitors.every((competitor) => competitor.provider !== "DolarApp"));
 });
