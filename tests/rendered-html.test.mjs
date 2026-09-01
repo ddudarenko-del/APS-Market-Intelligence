@@ -33,7 +33,7 @@ test("server-renders the unified APS research workspace", async () => {
   assert.match(html, /Выводы/);
   assert.match(html, /Респонденты/);
   assert.match(html, /Кейсы и уроки/);
-  assert.match(html, /По предварительному потенциалу/);
+  assert.match(html, /Единый рейтинг/);
   assert.doesNotMatch(html, /Три независимых слоя/);
   assert.doesNotMatch(html, /Ключевой вывод/);
   assert.match(html, /Интерактивная карта рынков APS/);
@@ -52,13 +52,14 @@ test("keeps production metadata and documented market intelligence", async () =>
   assert.match(page, /<MarketDashboard \/>/);
   assert.match(layout, /APS Market Intelligence/);
   assert.match(layout, /images:\s*\["\/og\.png"\]/);
-  assert.match(dashboard, /KAST Fit = 30% USD need/);
+  assert.match(dashboard, /data\.unified_scoring/);
+  assert.match(dashboard, /ЕДИНАЯ ОЦЕНКА/i);
   assert.match(dashboard, /data\.market_competitors/);
   assert.match(dashboard, /\/data\/countries\.geojson/);
   assert.doesNotMatch(dashboard, /cartocdn|CARTO/i);
   assert.doesNotMatch(dashboard, /data-market-profile|onOpenProfileRef/);
   assert.match(dashboard, /market-map-popup-value/);
-  assert.match(dashboard, /Предварительный потенциал рынка/);
+  assert.match(dashboard, /Итоговая привлекательность рынка/);
   assert.match(dashboard, /atlas-legend-title/);
   assert.match(dashboard, /tabs-scroll-left/);
   assert.match(dashboard, /tabs\.scrollBy/);
@@ -67,9 +68,9 @@ test("keeps production metadata and documented market intelligence", async () =>
   assert.match(dashboard, /function AudienceGroups/);
   assert.match(dashboard, /data\.case_lessons/);
   assert.match(dashboard, /section\.id === "audience"/);
-  assert.match(dashboard, /scoreMode !== "potential" && <span className="rank-number">/);
-  assert.match(dashboard, /potential-mode/);
-  assert.match(data, /"kast_fit"/);
+  assert.match(dashboard, /getUnifiedScore\(market\.code\)\.final_score/);
+  assert.doesNotMatch(dashboard, /ScoreMode|scoreMode|getKastFit|По формуле APS|По KAST \/ Product Fit/);
+  assert.match(data, /"unified_scoring"/);
   assert.match(data, /"market_competitors"/);
   assert.match(data, /"market_assessments"/);
   assert.match(data, /"market_reports"/);
@@ -77,7 +78,7 @@ test("keeps production metadata and documented market intelligence", async () =>
   assert.match(data, /"case_lessons"/);
   assert.match(data, /"Simple\.app"/);
   assert.match(dashboard, /\? "#40f785"[\s\S]*\? "#b7d85c"[\s\S]*\? "#f0cf57"[\s\S]*: "#f29a52"/);
-  assert.match(styles, /\.potential-badge\.low \{[^}]*#f29a52/);
+  assert.match(styles, /\.attractiveness-badge\.low \{[^}]*#f29a52/);
   assert.match(styles, /\.market-map-popup-value\.low \{ background: #f29a52; \}/);
   assert.doesNotMatch(page + layout, /codex-preview|_sites-preview/);
 });

@@ -4,10 +4,10 @@ import { useEffect, useRef, useState } from "react";
 import data from "./data/market_data.json";
 
 type Tab = "overview" | "conclusions" | "compare" | "profiles" | "competition" | "barriers" | "cases" | "acquisition" | "respondents" | "data" | "method";
-type ScoreMode = "potential" | "aps" | "kast";
 type BarrierSort = "default" | "driver" | "barrier";
 type MetricValue = { value: number; year: number } | null;
 type Market = (typeof data.markets)[number];
+type UnifiedScore = (typeof data.unified_scoring.rows)[number];
 type AvailabilityStatus = "full" | "partial" | "unavailable" | "unconfirmed";
 type Availability = {
   status: AvailabilityStatus;
@@ -93,45 +93,12 @@ function formatPeople(metric: MetricValue) {
   return `${(metric.value / 1_000_000).toLocaleString("ru-RU", { maximumFractionDigits: 1 })} млн`;
 }
 
-function bandScore(value: number, bands: Array<[number, number]>) {
-  for (const [threshold, score] of bands) {
-    if (value >= threshold) return score;
-  }
-  return 1;
-}
-
-function getKastFit(market: Market) {
-  const metrics = market.metrics;
-  const inflation = metrics.imf_weo.inflation_2025_pct;
-  const remittanceIn = metrics.remittance_in_usd?.value ?? 0;
-  const remittanceGdp = metrics.remittance_pct_gdp?.value ?? 0;
-  const cryptoRank = metrics.chainalysis_rank_2025;
-
-  const usdNeed = bandScore(inflation, [[25, 5], [10, 4], [5, 3], [3, 2]]);
-  const remittanceVolume = bandScore(remittanceIn, [[50_000_000_000, 5], [20_000_000_000, 4], [10_000_000_000, 3], [1_000_000_000, 2]]);
-  const remittanceIntensity = bandScore(remittanceGdp, [[5, 5], [3, 4], [1, 3], [0.25, 2]]);
-  const crossBorder = (remittanceVolume + remittanceIntensity) / 2;
-  const cryptoAudience = cryptoRank == null ? 2 : cryptoRank <= 10 ? 5 : cryptoRank <= 20 ? 4 : 2;
-  const mobileReadiness = Math.min(5, ((metrics.findex_2024.smartphone_pct + metrics.findex_2024.recent_internet_use_pct) / 2) / 20);
-  const accessGap = Math.min(5, (100 - metrics.findex_2024.account_ownership_pct) / 20);
-
-  const components = [
-    { key: "usd_need", label: "USD-защита", score: usdNeed, weight: 0.3, evidence: `${inflation.toFixed(1)}% инфляция` },
-    { key: "cross_border", label: "Cross-border", score: crossBorder, weight: 0.2, evidence: `${formatMoney(metrics.remittance_in_usd)} · ${formatPct(metrics.remittance_pct_gdp)} ВВП` },
-    { key: "crypto_audience", label: "Crypto-аудитория", score: cryptoAudience, weight: 0.25, evidence: cryptoRank ? `#${cryptoRank} Chainalysis` : "вне опубликованного top-20" },
-    { key: "mobile_readiness", label: "Mobile readiness", score: mobileReadiness, weight: 0.15, evidence: `${metrics.findex_2024.smartphone_pct.toFixed(1)}% smartphone · ${metrics.findex_2024.recent_internet_use_pct.toFixed(1)}% internet` },
-    { key: "access_gap", label: "Access gap", score: accessGap, weight: 0.1, evidence: `${metrics.findex_2024.account_ownership_pct.toFixed(1)}% имеют счёт` },
-  ];
-  const score = components.reduce((total, component) => total + component.score * component.weight, 0);
-  return {
-    score,
-    category: score >= 3.2 ? "Высокий fit" : score >= 2.6 ? "Средний fit" : "Низкий fit",
-    components,
-  };
+function getUnifiedScore(marketCode: string): UnifiedScore {
+  return data.unified_scoring.rows.find((row) => row.market_code === marketCode) ?? data.unified_scoring.rows[0];
 }
 
 function ScoreBadge({ score }: { score: number }) {
-  const tone = score >= 4 ? "high" : score >= 3.2 ? "mid" : "low";
+  const tone = score >= 4 ? "high" : score >= 3.4 ? "medium-high" : score >= 2.8 ? "mid" : "low";
   return <span className={`score-badge ${tone}`}>{score.toFixed(2)}</span>;
 }
 
@@ -143,18 +110,17 @@ function barrierScoreLabel(score: number) {
   return score === 5 ? "Критическая" : score === 4 ? "Высокая" : score === 3 ? "Существенная" : score === 2 ? "Управляемая" : "Низкая";
 }
 
-const potentialLabels: Record<string, string> = {
-  high: "Высокий",
-  medium_high: "Средне-высокий",
-  medium: "Средний",
-  low: "Низкий",
-};
-
 const confidenceLabels: Record<string, string> = {
   high: "Хорошо подтверждено",
   medium: "Требует дополнительной проверки",
   hypothesis: "Гипотеза",
 };
+
+const unifiedCriteria = data.unified_scoring.blocks.flatMap((block) => block.criteria);
+
+function getUnifiedCriterion(key: string) {
+  return unifiedCriteria.find((criterion) => criterion.key === key) ?? unifiedCriteria[0];
+}
 
 const brandRoleLabels: Record<string, string> = {
   critical: "Критическая",
@@ -249,12 +215,10 @@ function AudienceGroups({ paragraphs }: { paragraphs: string[] }) {
 function MarketMap({
   selectedCode,
   visibleCodes,
-  scoreMode,
   onSelect,
 }: {
   selectedCode: string;
   visibleCodes: string[];
-  scoreMode: ScoreMode;
   onSelect: (code: string) => void;
 }) {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -310,21 +274,15 @@ function MarketMap({
             if (!code) return;
             const market = marketByCode.get(code);
             if (!market) return;
-            const assessment = data.market_assessments.find((item) => item.market_code === market.code);
-            const score = scoreMode === "kast" ? getKastFit(market).score : market.weighted_score;
-            const tooltipText = scoreMode === "potential"
-              ? `${assessment?.potential.label ?? "Нет качественной оценки"}`
-              : `${scoreMode === "kast" ? "KAST Fit" : "APS"}: ${score.toFixed(2)} / 5`;
+            const unified = getUnifiedScore(market.code);
             countryLayer.bindTooltip(
-              `<strong>${market.name_ru}</strong><br>${tooltipText}`,
+              `<strong>${market.name_ru}</strong><br>Привлекательность: ${unified.final_score.toFixed(2)} / 5 · ${unified.label}`,
               { sticky: true, direction: "top", className: "aps-map-tooltip" },
             );
-            if (assessment) {
-              countryLayer.bindPopup(
-                `<section class="market-map-popup"><strong>${market.name_ru}</strong><small>Предварительный потенциал рынка</small><span class="market-map-popup-value ${assessment.potential.level}">${potentialLabels[assessment.potential.level]}</span></section>`,
-                { maxWidth: 240, className: "aps-map-popup-shell" },
-              );
-            }
+            countryLayer.bindPopup(
+              `<section class="market-map-popup"><strong>${market.name_ru}</strong><small>Итоговая привлекательность рынка</small><span class="market-map-popup-value ${unified.level}">${unified.final_score.toFixed(2)} / 5 · ${unified.label}</span></section>`,
+              { maxWidth: 240, className: "aps-map-popup-shell" },
+            );
             countryLayer.on("click", () => {
               onSelectRef.current(code);
               countryLayer.openPopup();
@@ -362,7 +320,7 @@ function MarketMap({
         layerRef.current = null;
       }
     };
-  }, [scoreMode]);
+  }, []);
 
   useEffect(() => {
     const layer = layerRef.current;
@@ -376,22 +334,14 @@ function MarketMap({
       if (!market) return;
       const visible = visibleSet.has(code);
       const selected = code === selectedCode;
-      const assessment = data.market_assessments.find((item) => item.market_code === market.code);
-      const score = scoreMode === "kast" ? getKastFit(market).score : market.weighted_score;
-      const potentialColor = assessment?.potential.level === "high"
+      const unified = getUnifiedScore(market.code);
+      const fillColor = unified.level === "high"
         ? "#40f785"
-        : assessment?.potential.level === "medium_high"
+        : unified.level === "medium_high"
           ? "#b7d85c"
-          : assessment?.potential.level === "medium"
+          : unified.level === "medium"
             ? "#f0cf57"
             : "#f29a52";
-      const fillColor = scoreMode === "potential"
-          ? potentialColor
-          : score >= 4
-            ? "#29a865"
-            : score >= 3.2
-              ? "#197a49"
-              : "#155c3a";
       countryLayer.setStyle({
         color: selected ? "#d9ffe7" : "#82948a",
         weight: selected ? 2.4 : 1.2,
@@ -399,7 +349,7 @@ function MarketMap({
         fillOpacity: visible ? (selected ? 1 : 0.86) : 0.16,
       });
     });
-  }, [selectedCode, visibleCodes, scoreMode]);
+  }, [selectedCode, visibleCodes]);
 
   function resetView() {
     mapRef.current?.fitBounds([[-56, -168], [76, 178]], { padding: [12, 12] });
@@ -412,14 +362,11 @@ function MarketMap({
       {mapStatus === "error" && <div className="map-state error">Карта временно недоступна</div>}
       <button type="button" className="map-reset" onClick={resetView}>Весь мир</button>
       <div className="atlas-legend">
-        <strong className="atlas-legend-title">
-          {scoreMode === "potential" ? "Предварительный потенциал рынка" : scoreMode === "aps" ? "Оценка APS" : "KAST / Product Fit"}
-        </strong>
-        {scoreMode === "potential" ? (
-          <><span><i className="dot high" /> высокий</span><span><i className="dot mid" /> средний</span><span><i className="dot low" /> низкий</span></>
-        ) : (
-          <><span><i className="dot high" /> 4,0+</span><span><i className="dot mid" /> 3,2-3,99</span><span><i className="dot low" /> ниже 3,2</span></>
-        )}
+        <strong className="atlas-legend-title">Итоговая привлекательность рынка</strong>
+        <span><i className="dot high" /> высокий · 4,00+</span>
+        <span><i className="dot medium-high" /> средне-высокий · 3,40–3,99</span>
+        <span><i className="dot mid" /> средний · 2,80–3,39</span>
+        <span><i className="dot low" /> низкий · ниже 2,80</span>
       </div>
     </div>
   );
@@ -429,7 +376,6 @@ export function MarketDashboard() {
   const [tab, setTab] = useState<Tab>("overview");
   const tabsRef = useRef<HTMLElement>(null);
   const [tabScroll, setTabScroll] = useState({ left: false, right: false });
-  const [scoreMode, setScoreMode] = useState<ScoreMode>("potential");
   const [selectedCode, setSelectedCode] = useState("PHL");
   const [compareCodes, setCompareCodes] = useState<string[]>(["PHL", "COL", "MEX"]);
   const [region, setRegion] = useState("Все регионы");
@@ -438,22 +384,18 @@ export function MarketDashboard() {
 
   const selected = data.markets.find((market) => market.code === selectedCode) ?? data.markets[0];
   const selectedAssessment = data.market_assessments.find((item) => item.market_code === selected.code) ?? data.market_assessments[0];
+  const selectedUnified = getUnifiedScore(selected.code);
   const selectedReport = data.market_reports.find((item) => item.market_code === selected.code) ?? data.market_reports[0];
   const regions = ["Все регионы", ...Array.from(new Set(data.markets.map((market) => market.region)))];
   const visibleMarkets = region === "Все регионы" ? data.markets : data.markets.filter((market) => market.region === region);
   const compareMarkets = compareCodes
     .map((code) => data.markets.find((market) => market.code === code))
     .filter(Boolean) as Market[];
-  const selectedKastFit = getKastFit(selected);
   const selectedAcquisition = data.acquisition_channels.rows.find((row) => row.market_code === selected.code) ?? data.acquisition_channels.rows[0];
   const selectedCompetition = competitorMarket === "ALL" ? null : data.competition_by_market.find((item) => item.market_code === competitorMarket) ?? null;
   const selectedCompetitionAssessment = competitorMarket === "ALL" ? null : data.market_assessments.find((item) => item.market_code === competitorMarket) ?? null;
   const globalCompetitors = data.market_competitors.filter((item) => item.scope === "global" && item.availability);
-  const rankedVisibleMarkets = [...visibleMarkets].sort((a, b) => {
-    if (scoreMode === "potential") return 0;
-    if (scoreMode === "kast") return getKastFit(b).score - getKastFit(a).score;
-    return a.rank - b.rank;
-  });
+  const rankedVisibleMarkets = [...visibleMarkets].sort((a, b) => getUnifiedScore(a.code).rank - getUnifiedScore(b.code).rank);
   const visibleCompetitors = [...globalCompetitors].sort((a, b) => {
     if (competitorMarket === "ALL") return 0;
     return availabilityOrder[getAvailability(a, competitorMarket).status] - availabilityOrder[getAvailability(b, competitorMarket).status];
@@ -562,14 +504,9 @@ export function MarketDashboard() {
               <div>
                 <span className="section-kicker">MARKET ATLAS</span>
                 <h2>Восемь рынков в одном поле</h2>
-                <p>По умолчанию цвет отражает качественный вывод исследования. Карта открывается по клику, тапу и клавиатуре.</p>
+                <p>Цвет отражает единую оценку привлекательности рынка для запуска KAST-подобного продукта. Карта открывается по клику, тапу и клавиатуре.</p>
               </div>
               <div className="panel-controls">
-                <div className="metric-switch" aria-label="Показатель карты">
-                  <button type="button" className={scoreMode === "potential" ? "active" : ""} onClick={() => setScoreMode("potential")}>Вывод исследования</button>
-                  <button type="button" className={scoreMode === "aps" ? "active" : ""} onClick={() => setScoreMode("aps")}>APS</button>
-                  <button type="button" className={scoreMode === "kast" ? "active" : ""} onClick={() => setScoreMode("kast")}>KAST Fit</button>
-                </div>
                 <select value={region} onChange={(event) => setRegion(event.target.value)} aria-label="Фильтр по региону">
                   {regions.map((item) => <option key={item}>{item}</option>)}
                 </select>
@@ -578,21 +515,21 @@ export function MarketDashboard() {
             <MarketMap
               selectedCode={selectedCode}
               visibleCodes={visibleMarkets.map((market) => market.code)}
-              scoreMode={scoreMode}
               onSelect={chooseMarket}
             />
             <div className="selected-market">
               <div>
                 <span className="section-kicker">ВЫБРАННЫЙ РЫНОК</span>
                 <h3>{selected.name_ru}</h3>
-                <span className={`potential-badge ${selectedAssessment.potential.level}`}>{selectedAssessment.potential.label}</span>
+                <span className={`attractiveness-badge ${selectedUnified.level}`}>{selectedUnified.label} · {selectedUnified.final_score.toFixed(2)} / 5</span>
                 <p>{selectedAssessment.headline}</p>
                 <p className="market-gap"><strong>Незакрытая задача:</strong> {selectedAssessment.market_gap}</p>
+                <p className="selected-confidence">Подтверждение: {confidenceLabels[selectedAssessment.confidence]}</p>
               </div>
               <div className="selected-kpis">
-                <div><span>Сила потребности</span><strong>{selectedAssessment.need.score}/5</strong></div>
-                <div><span>Сложность входа</span><strong>{selectedAssessment.entry_complexity.score}/5</strong></div>
-                <div><span>Подтверждение</span><strong>{confidenceLabels[selectedAssessment.confidence]}</strong></div>
+                <div><span>Потребность</span><strong>{selectedUnified.block_scores.product_need.toFixed(2)}</strong></div>
+                <div><span>Коммерческий потенциал</span><strong>{selectedUnified.block_scores.commercial_viability.toFixed(2)}</strong></div>
+                <div><span>Реализуемость входа</span><strong>{selectedUnified.block_scores.entry_feasibility.toFixed(2)}</strong></div>
               </div>
               <button type="button" className="primary-button" onClick={() => setTab("profiles")}>Открыть профиль</button>
             </div>
@@ -602,20 +539,17 @@ export function MarketDashboard() {
             <div className="panel-heading compact">
               <div>
                 <span className="section-kicker">РЫНКИ</span>
-                <h2>{scoreMode === "potential" ? "По предварительному потенциалу" : scoreMode === "aps" ? "По формуле APS" : "По KAST / Product Fit"}</h2>
+                <h2>Единый рейтинг</h2>
               </div>
               <span className="count-pill">8 рынков</span>
             </div>
             <div className="ranking-list">
               {rankedVisibleMarkets.map((market, index) => (
-                <button key={market.code} type="button" onClick={() => chooseMarket(market.code)} className={`${selectedCode === market.code ? "active " : ""}${scoreMode === "potential" ? "potential-mode" : ""}`.trim()}>
-                  {scoreMode !== "potential" && <span className="rank-number">{scoreMode === "aps" ? market.rank : index + 1}</span>}
+                <button key={market.code} type="button" onClick={() => chooseMarket(market.code)} className={selectedCode === market.code ? "active" : ""}>
+                  <span className="rank-number">{index + 1}</span>
                   <span className="rank-name"><strong>{market.name_ru}</strong><small>{market.region}</small></span>
-                  {scoreMode === "potential" ? (
-                    <><span className="gate-mini">{data.market_assessments.find((item) => item.market_code === market.code)?.headline}</span><span className={`potential-dot ${data.market_assessments.find((item) => item.market_code === market.code)?.potential.level}`}>{potentialLabels[data.market_assessments.find((item) => item.market_code === market.code)?.potential.level ?? "low"]}</span></>
-                  ) : (
-                    <><span className="gate-mini">{gateLabels[market.regulatory.gate]}</span><ScoreBadge score={scoreMode === "aps" ? market.weighted_score : getKastFit(market).score} /></>
-                  )}
+                  <span className="gate-mini">{gateLabels[market.regulatory.gate]}</span>
+                  <ScoreBadge score={getUnifiedScore(market.code).final_score} />
                 </button>
               ))}
             </div>
@@ -642,10 +576,11 @@ export function MarketDashboard() {
           <div className="assessment-grid">
             {data.markets.map((market) => {
               const assessment = data.market_assessments.find((item) => item.market_code === market.code)!;
+              const unified = getUnifiedScore(market.code);
               return (
                 <article className="panel assessment-card" key={market.code}>
                   <div className="assessment-card-head"><span>{market.code}</span><strong>{market.name_ru}</strong></div>
-                  <span className={`potential-badge ${assessment.potential.level}`}>{assessment.potential.label}</span>
+                  <span className={`attractiveness-badge ${unified.level}`}>{unified.label} · {unified.final_score.toFixed(2)} / 5</span>
                   <h3>{assessment.headline}</h3>
                   <div className="qualitative-scores">
                     <div><span>Сила потребности</span><strong>{assessment.need.score}/5</strong><small>{driverScoreLabel(assessment.need.score)}</small></div>
@@ -692,12 +627,13 @@ export function MarketDashboard() {
           </div>
           <div className="barrier-matrix">
             {barrierRows.map(({ assessment, market }) => {
+              const unified = getUnifiedScore(market.code);
               return (
                 <article className="panel barrier-row" key={assessment.market_code}>
                   <div className="barrier-market">
                     <span className="section-kicker">{market.code} · {market.region}</span>
                     <h3>{market.name_ru}</h3>
-                    <span className={`potential-badge ${assessment.potential.level}`}>{assessment.potential.label}</span>
+                    <span className={`attractiveness-badge ${unified.level}`}>{unified.label} · {unified.final_score.toFixed(2)} / 5</span>
                   </div>
                   <div className="evidence-column driver-column">
                     <div className="evidence-score"><strong>{assessment.need.score}</strong><span>{driverScoreLabel(assessment.need.score)}</span></div>
@@ -942,7 +878,7 @@ export function MarketDashboard() {
                   className={compareCodes.includes(market.code) ? "active" : ""}
                   onClick={() => toggleCompare(market.code)}
                 >
-                  {market.name_ru}<span>{potentialLabels[data.market_assessments.find((item) => item.market_code === market.code)?.potential.level ?? "low"]}</span>
+                  {market.name_ru}<span>{getUnifiedScore(market.code).final_score.toFixed(2)}</span>
                 </button>
               ))}
             </div>
@@ -951,15 +887,17 @@ export function MarketDashboard() {
           <div className="comparison-cards">
             {compareMarkets.map((market) => {
               const assessment = data.market_assessments.find((item) => item.market_code === market.code)!;
+              const unified = getUnifiedScore(market.code);
               return <article className="panel country-compare" key={market.code}>
                 <div className="country-card-head">
                   <div><span>{market.code}</span><h2>{market.name_ru}</h2><p>{market.region}</p></div>
-                  <span className={`potential-badge ${assessment.potential.level}`}>{assessment.potential.label}</span>
+                  <span className={`attractiveness-badge ${unified.level}`}>{unified.label} · {unified.final_score.toFixed(2)} / 5</span>
                 </div>
                 <h3 className="compare-headline">{assessment.headline}</h3>
-                <div className="qualitative-scores compact">
-                  <div><span>Сила потребности</span><strong>{assessment.need.score}/5</strong><small>{driverScoreLabel(assessment.need.score)}</small></div>
-                  <div><span>Сложность входа</span><strong>{assessment.entry_complexity.score}/5</strong><small>{barrierScoreLabel(assessment.entry_complexity.score)}</small></div>
+                <div className="qualitative-scores unified-blocks compact">
+                  <div><span>Потребность</span><strong>{unified.block_scores.product_need.toFixed(2)}</strong><small>35% итога</small></div>
+                  <div><span>Коммерческий потенциал</span><strong>{unified.block_scores.commercial_viability.toFixed(2)}</strong><small>30% итога</small></div>
+                  <div><span>Реализуемость входа</span><strong>{unified.block_scores.entry_feasibility.toFixed(2)}</strong><small>35% итога</small></div>
                 </div>
                 <div className="compare-qualitative">
                   <p><span>Конкуренция</span>{assessment.competition_summary}</p>
@@ -968,10 +906,8 @@ export function MarketDashboard() {
                   <p><span>Роль бренда</span>{brandRoleLabels[assessment.brand_role.level]}</p>
                 </div>
                 <div className="source-chips">{assessment.source_ids.map((id) => <SourceChip key={id} sourceId={id} />)}</div>
-                <div className="reference-scores"><span>Справочные оценки</span><strong>APS {market.weighted_score.toFixed(2)}</strong><strong>KAST Fit {getKastFit(market).score.toFixed(2)}</strong></div>
                 <div className="metric-stack">
                   <div className="metric-section-label"><span>КОЛИЧЕСТВЕННЫЙ КОНТЕКСТ</span></div>
-                  <div><span>KAST / Product Fit</span><strong>{getKastFit(market).score.toFixed(2)}</strong><small>{getKastFit(market).category}</small></div>
                   <div><span>Входящие переводы</span><strong>{formatMoney(market.metrics.remittance_in_usd)}</strong><small>{market.metrics.remittance_in_usd?.year ?? "нет данных"}</small></div>
                   <div><span>Переводы / ВВП</span><strong>{formatPct(market.metrics.remittance_pct_gdp)}</strong><small>{market.metrics.remittance_pct_gdp?.year ?? "нет данных"}</small></div>
                   <div><span>Население</span><strong>{formatPeople(market.metrics.population)}</strong><small>{market.metrics.population?.year ?? "нет данных"}</small></div>
@@ -988,7 +924,7 @@ export function MarketDashboard() {
             <div className="panel-heading compact"><div><span className="section-kicker">КЛЮЧЕВОЕ СРАВНЕНИЕ</span><h2>Качественные условия входа</h2></div></div>
             <div className="table-scroll"><table><thead><tr><th>Критерий</th>{compareMarkets.map((market) => <th key={market.code}>{market.name_ru}</th>)}</tr></thead><tbody>
               {[
-                ["Потенциал", (code: string) => data.market_assessments.find((item) => item.market_code === code)!.potential.label],
+                ["Итоговая привлекательность", (code: string) => `${getUnifiedScore(code).final_score.toFixed(2)} / 5 · ${getUnifiedScore(code).label}`],
                 ["Потребность", (code: string) => `${data.market_assessments.find((item) => item.market_code === code)!.need.score}/5`],
                 ["Сложность входа", (code: string) => `${data.market_assessments.find((item) => item.market_code === code)!.entry_complexity.score}/5`],
                 ["Незакрытая задача", (code: string) => data.market_assessments.find((item) => item.market_code === code)!.market_gap],
@@ -999,13 +935,13 @@ export function MarketDashboard() {
           </div>
 
           <div className="panel criteria-panel">
-            <div className="panel-heading"><div><span className="section-kicker">ИСХОДНАЯ ОЦЕНКА APS</span><h2>Шесть критериев</h2><p>Исходные критерии APS сохранены без изменений и не учитывают результаты экспертных интервью.</p></div></div>
+            <div className="panel-heading"><div><span className="section-kicker">ЕДИНАЯ ОЦЕНКА</span><h2>Три блока привлекательности</h2><p>Блоки не пересекаются: потребность, коммерческий потенциал и реализуемость входа.</p></div></div>
             <div className="criteria-table">
               {data.metadata.criteria.map((criterion) => (
                 <div className="criteria-row" key={criterion.key}>
                   <div className="criteria-label"><strong>{criterion.label}</strong><span>{Math.round(criterion.weight * 100)}%</span></div>
                   {compareMarkets.map((market) => {
-                    const value = market.scores[criterion.key as keyof typeof market.scores];
+                    const value = getUnifiedScore(market.code).block_scores[criterion.key as keyof UnifiedScore["block_scores"]];
                     return <div className="criteria-value" key={market.code}><span style={{ width: `${value * 20}%` }} /><strong>{value}</strong></div>;
                   })}
                 </div>
@@ -1021,7 +957,7 @@ export function MarketDashboard() {
             <span className="section-kicker">COUNTRY PROFILES</span>
             {data.markets.map((market) => (
               <button key={market.code} type="button" className={selectedCode === market.code ? "active" : ""} onClick={() => chooseMarket(market.code)}>
-                <span>{market.code}</span><strong>{market.name_ru}</strong><small>{market.weighted_score.toFixed(2)}</small>
+                <span>{market.code}</span><strong>{market.name_ru}</strong><small>{getUnifiedScore(market.code).final_score.toFixed(2)}</small>
               </button>
             ))}
           </aside>
@@ -1029,11 +965,11 @@ export function MarketDashboard() {
           <article className="panel profile-detail">
             <div className="profile-hero">
               <div><span className="section-kicker">{selected.region} · {selected.currency}</span><h2>{selected.name_ru}</h2><p>{selectedAssessment.headline}</p></div>
-              <span className={`potential-badge ${selectedAssessment.potential.level}`}>{selectedAssessment.potential.label}</span>
+              <span className={`attractiveness-badge ${selectedUnified.level}`}>{selectedUnified.label} · {selectedUnified.final_score.toFixed(2)} / 5</span>
             </div>
             <div className="profile-assessment-grid">
-              <div><span>Сила потребности</span><strong>{selectedAssessment.need.score}/5</strong><p>{selectedAssessment.need.title}</p></div>
-              <div><span>Сложность входа</span><strong>{selectedAssessment.entry_complexity.score}/5</strong><p>{selectedAssessment.entry_complexity.title}</p></div>
+              <div><span>Итоговая привлекательность</span><strong>{selectedUnified.final_score.toFixed(2)} / 5</strong><p>{selectedUnified.label}</p></div>
+              <div><span>Ограничитель</span><strong>{selectedUnified.gate ? `до ${selectedUnified.gate.cap.toFixed(2)}` : "Нет"}</strong><p>{selectedUnified.gate?.explanation ?? "Итог равен взвешенному расчёту без верхнего ограничения."}</p></div>
               <div><span>Незакрытая задача</span><p>{selectedAssessment.market_gap}</p></div>
               <div><span>Условие входа</span><p>{selectedAssessment.entry_condition}</p></div>
               <div><span>Приоритетная аудитория</span><p>{selectedAssessment.priority_audience}</p></div>
@@ -1081,12 +1017,25 @@ export function MarketDashboard() {
               <div><span className="section-kicker">REGULATORY GATE</span><h3>{gateLabels[selected.regulatory.gate]}</h3><p>{selected.regulatory.status}</p></div>
               <div className="source-chips">{selected.regulatory.source_ids.map((id) => <SourceChip key={id} sourceId={id} />)}</div>
             </div>
-            <div className="profile-fit-section reference-layer">
-              <div><span className="section-kicker">СПРАВОЧНЫЕ РАСЧЁТНЫЕ СЛОИ</span><h3>APS {selected.weighted_score.toFixed(2)} · KAST Fit {selectedKastFit.score.toFixed(2)}</h3><p>Обе оценки сохранены без изменений и не объединяются с качественным выводом.</p></div>
-              <div className="profile-fit-bars">
-                {selectedKastFit.components.map((component) => (
-                  <div key={component.key}><span>{component.label}</span><div><i style={{ width: `${component.score * 20}%` }} /></div><strong>{component.score.toFixed(1)}</strong></div>
+            <div className="profile-fit-section unified-score-detail">
+              <div className="unified-score-intro"><span className="section-kicker">ЕДИНАЯ ОЦЕНКА</span><h3>{selectedUnified.final_score.toFixed(2)} / 5 · {selectedUnified.label}</h3><p>{data.unified_scoring.formula}</p></div>
+              <div className="unified-block-summary">
+                {data.unified_scoring.blocks.map((block) => (
+                  <div key={block.key}><span>{block.label}</span><strong>{selectedUnified.block_scores[block.key as keyof UnifiedScore["block_scores"]].toFixed(2)}</strong><small>{Math.round(block.weight * 100)}% итога</small></div>
                 ))}
+              </div>
+              <div className="unified-criteria-list">
+                {Object.entries(selectedUnified.components).map(([key, component]) => {
+                  const criterion = getUnifiedCriterion(key);
+                  return (
+                    <article key={key}>
+                      <div className="unified-criterion-head"><strong>{criterion.label}</strong><span>{component.score.toFixed(1)} / 5</span></div>
+                      <div className="unified-criterion-bar"><i style={{ width: `${component.score * 20}%` }} /></div>
+                      <p>{component.evidence}</p>
+                      <div className="source-chips">{component.source_ids.map((id) => <SourceChip key={id} sourceId={id} />)}</div>
+                    </article>
+                  );
+                })}
               </div>
             </div>
           </article>
@@ -1320,13 +1269,16 @@ export function MarketDashboard() {
           </div>
           <div className="table-scroll">
             <table>
-              <thead><tr><th>Рынок</th><th>APS</th><th>KAST Fit</th><th>Входящие переводы</th><th>% ВВП</th><th>Население</th><th>Интернет</th><th>Account ownership</th><th>Digital payments</th><th>Smartphone</th><th>Инфляция 2025</th><th>Crypto rank</th></tr></thead>
+              <thead><tr><th>Рынок</th><th>Итог</th><th>Потребность</th><th>Коммерческий потенциал</th><th>Реализуемость входа</th><th>Входящие переводы</th><th>% ВВП</th><th>Население</th><th>Интернет</th><th>Account ownership</th><th>Digital payments</th><th>Smartphone</th><th>Инфляция 2025</th><th>Crypto rank</th></tr></thead>
               <tbody>
-                {data.markets.map((market) => (
-                  <tr key={market.code} onClick={() => chooseMarket(market.code, "profiles")}>
+                {data.markets.map((market) => {
+                  const unified = getUnifiedScore(market.code);
+                  return <tr key={market.code} onClick={() => chooseMarket(market.code, "profiles")}>
                     <td><strong>{market.name_ru}</strong><small>{market.code}</small></td>
-                    <td>{market.weighted_score.toFixed(2)}</td>
-                    <td>{getKastFit(market).score.toFixed(2)}<small>{getKastFit(market).category}</small></td>
+                    <td>{unified.final_score.toFixed(2)}<small>{unified.label}</small></td>
+                    <td>{unified.block_scores.product_need.toFixed(2)}<small>35%</small></td>
+                    <td>{unified.block_scores.commercial_viability.toFixed(2)}<small>30%</small></td>
+                    <td>{unified.block_scores.entry_feasibility.toFixed(2)}<small>35%</small></td>
                     <td>{formatMoney(market.metrics.remittance_in_usd)}<small>{market.metrics.remittance_in_usd?.year}</small></td>
                     <td>{formatPct(market.metrics.remittance_pct_gdp)}<small>{market.metrics.remittance_pct_gdp?.year}</small></td>
                     <td>{formatPeople(market.metrics.population)}<small>{market.metrics.population?.year}</small></td>
@@ -1336,8 +1288,8 @@ export function MarketDashboard() {
                     <td>{market.metrics.findex_2024.smartphone_pct.toFixed(1)}%<small>2024</small></td>
                     <td>{market.metrics.imf_weo.inflation_2025_pct.toFixed(1)}%<small>2025</small></td>
                     <td>{market.metrics.chainalysis_rank_2025 ? `#${market.metrics.chainalysis_rank_2025}` : ">20"}<small>2025</small></td>
-                  </tr>
-                ))}
+                  </tr>;
+                })}
               </tbody>
             </table>
           </div>
@@ -1348,17 +1300,25 @@ export function MarketDashboard() {
         <section className="method-layout">
           <article className="panel methodology-card">
             <span className="section-kicker">METHODOLOGY</span>
-            <h2>Факты, оценки и gate не смешиваются</h2>
+            <h2>Одна оценка, девять непересекающихся критериев</h2>
             <div className="method-steps">
               <div><span>01</span><strong>Фактический слой</strong><p>World Bank, Global Findex, IMF, Chainalysis и регуляторы. Год хранится рядом с каждым значением.</p></div>
-              <div><span>02</span><strong>Предварительный потенциал</strong><p>Качественный вывод после интервью. Он не рассчитывается из APS, KAST Fit, силы потребности или сложности входа.</p></div>
-              <div><span>03</span><strong>Исходная оценка APS</strong><p>Шесть баллов и их веса сохранены без изменений как отдельный справочный слой.</p></div>
-              <div><span>04</span><strong>KAST / Product Fit</strong><p>Независимый расчёт использует инфляцию IMF, переводы World Bank, crypto rank Chainalysis и показатели Findex.</p></div>
-              <div><span>05</span><strong>Регуляторная модель</strong><p>Отдельный статус показывает, возможен ли прямой запуск, нужен партнёр или допустима только ограниченная модель.</p></div>
-              <div><span>06</span><strong>Интервью</strong><p>Экспертные свидетельства помечены отдельно, не имеют внешней ссылки и не подменяют официальные источники.</p></div>
+              <div><span>02</span><strong>Единая рубрика 1–5</strong><p>Одинаковые определения применены ко всем восьми рынкам. Балл — нормированная аналитическая оценка, а не внешняя статистика.</p></div>
+              <div><span>03</span><strong>Полная конкурентная среда</strong><p>Учитываются KAST, прямые аналоги, exchanges, банки, кошельки и локальные платёжные сервисы.</p></div>
+              <div><span>04</span><strong>Качественная проверка</strong><p>Интервью уточняют незакрытые задачи, экономику переключения и практический путь входа, но не добавляются отдельным бонусом.</p></div>
+              <div><span>05</span><strong>Жёсткие ограничители</strong><p>Неподтверждённый массовый спрос и критически нерешённая лицензия ограничивают максимум, даже если другие показатели сильны.</p></div>
+              <div><span>06</span><strong>Уровень подтверждения</strong><p>Confidence остаётся отдельной пометкой качества доказательств и не является второй оценкой рынка.</p></div>
             </div>
-            <div className="formula-box"><code>Σ (балл критерия × вес) = итог из 5</code><p>Пример: Филиппины = 5×25% + 5×20% + 5×15% + 3×15% + 4×15% + 5×10% = <strong>4,55</strong>.</p></div>
-            <div className="formula-box kast-formula"><code>KAST Fit = 30% USD need + 20% cross-border + 25% crypto audience + 15% mobile readiness + 10% access gap</code><p>Инфляция: 5 баллов от 25%, 4 от 10%, 3 от 5%, 2 от 3%, иначе 1. Cross-border — среднее баллов по абсолютному объёму переводов и доле ВВП. Crypto: top-10 = 5, #11–20 = 4, вне опубликованного top-20 = 2. Mobile readiness — среднее smartphone и recent internet use, делённое на 20. Access gap = (100% − account ownership) / 20.</p><p>Для Вьетнама входящие переводы 2024 рассчитаны как 3,4% от опубликованного World Bank ВВП 2024; это производное значение отмечено в данных.</p></div>
+            <div className="formula-box"><code>{data.unified_scoring.formula}</code><p>Итог = сумма девяти баллов × их веса. Пример: Филиппины = 5×15% + 3,5×12% + 4,5×8% + 4×15% + 4×10% + 4,5×5% + 4×15% + 5×12% + 4,5×8% = 4,315 → <strong>4,32</strong>.</p></div>
+            <div className="method-blocks">
+              {data.unified_scoring.blocks.map((block) => (
+                <article key={block.key}>
+                  <div><span>{Math.round(block.weight * 100)}%</span><h3>{block.label}</h3></div>
+                  {block.criteria.map((criterion) => <p key={criterion.key}><strong>{Math.round(criterion.weight * 100)}% · {criterion.label}</strong>{criterion.definition}</p>)}
+                </article>
+              ))}
+            </div>
+            <div className="formula-box gate-formula"><code>Итог = min(взвешенный балл, применимый gate)</code>{data.unified_scoring.gates.map((gate) => <p key={gate.key}><strong>Максимум {gate.cap.toFixed(2)}:</strong> {gate.rule}</p>)}<p>Для Вьетнама входящие переводы 2024 рассчитаны как 3,4% от опубликованного World Bank ВВП 2024; производное значение отмечено в данных.</p></div>
           </article>
 
           <article className="panel sources-card">

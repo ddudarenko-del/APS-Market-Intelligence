@@ -33,11 +33,9 @@ test("contains one complete qualitative assessment and six report sections per m
 });
 
 test("keeps supported enums and all qualitative content populated", () => {
-  const potentialLevels = new Set(["high", "medium_high", "medium", "low"]);
   const confidenceLevels = new Set(["high", "medium", "hypothesis"]);
   for (const assessment of data.market_assessments) {
     assert.ok(marketCodes.has(assessment.market_code));
-    assert.ok(potentialLevels.has(assessment.potential.level));
     assert.ok(confidenceLevels.has(assessment.confidence));
     assert.ok(assessment.headline && assessment.market_gap && assessment.entry_condition);
     assert.ok(assessment.competition_summary && assessment.priority_audience && assessment.core_message && assessment.market_principle);
@@ -93,4 +91,32 @@ test("publishes only completed respondents and current ARQ naming", () => {
   assert.ok(data.respondents.every((respondent) => /^[A-Z][A-Za-z]+ [A-Z]\.$/.test(respondent.display_name)));
   assert.ok(data.respondents.every((respondent) => sourceIds.has(respondent.source_id)));
   assert.ok(data.market_competitors.every((competitor) => competitor.provider !== "DolarApp"));
+});
+
+test("calculates one unified market score from nine non-overlapping criteria", () => {
+  const weights = Object.fromEntries(
+    data.unified_scoring.blocks.flatMap((block) => block.criteria.map((criterion) => [criterion.key, criterion.weight])),
+  );
+  assert.ok(Math.abs(data.unified_scoring.blocks.reduce((sum, block) => sum + block.weight, 0) - 1) < 1e-9);
+  assert.ok(Math.abs(Object.values(weights).reduce((sum, weight) => sum + weight, 0) - 1) < 1e-9);
+  assert.equal(data.unified_scoring.rows.length, data.markets.length);
+
+  const ranks = [];
+  for (const row of data.unified_scoring.rows) {
+    assert.ok(marketCodes.has(row.market_code));
+    assert.deepEqual(Object.keys(row.components).sort(), Object.keys(weights).sort());
+    for (const component of Object.values(row.components)) assert.ok(component.score >= 1 && component.score <= 5);
+
+    const raw = Object.entries(row.components).reduce((sum, [key, component]) => sum + component.score * weights[key], 0);
+    assert.equal(row.raw_score, Number(raw.toFixed(3)), `${row.market_code}: raw score`);
+    const expectedFinal = Math.round(Math.min(row.raw_score, row.gate?.cap ?? 5) * 100) / 100;
+    assert.equal(row.final_score, expectedFinal, `${row.market_code}: final score`);
+
+    const expectedLevel = row.final_score >= 4 ? "high" : row.final_score >= 3.4 ? "medium_high" : row.final_score >= 2.8 ? "medium" : "low";
+    assert.equal(row.level, expectedLevel, `${row.market_code}: level`);
+    ranks.push(row.rank);
+  }
+
+  assert.deepEqual(ranks, [1, 2, 3, 4, 5, 6, 7, 8]);
+  assert.deepEqual(data.unified_scoring.rows.map((row) => row.market_code), ["PHL", "COL", "IDN", "ARG", "VNM", "CAN", "GBR", "MEX"]);
 });

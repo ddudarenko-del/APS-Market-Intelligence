@@ -5,70 +5,356 @@
     "countries": 8,
     "criteria": [
       {
-        "key": "market",
-        "label": "Потенциал рынка",
-        "weight": 0.25
+        "key": "product_need",
+        "label": "Потребность в продукте",
+        "weight": 0.35
       },
       {
-        "key": "need",
-        "label": "Выраженность потребности",
-        "weight": 0.2
+        "key": "commercial_viability",
+        "label": "Коммерческий потенциал",
+        "weight": 0.3
       },
       {
-        "key": "audience",
-        "label": "Потенциал аудиторий",
-        "weight": 0.15
-      },
-      {
-        "key": "competition",
-        "label": "Конкурентные возможности",
-        "weight": 0.15
-      },
-      {
-        "key": "access",
-        "label": "Доступность рынка",
-        "weight": 0.15
-      },
-      {
-        "key": "entry",
-        "label": "Возможность выхода",
-        "weight": 0.1
+        "key": "entry_feasibility",
+        "label": "Реализуемость входа",
+        "weight": 0.35
       }
     ],
-    "method_note": "Исходные APS и KAST / Product Fit сохранены как независимые справочные оценки. Предварительный потенциал после интервью является качественным выводом и не рассчитывается из их суммы.",
-    "kast_fit": {
-      "label": "KAST / Product Fit",
-      "scale": "0-5",
-      "weights": [
-        {
-          "key": "usd_need",
-          "label": "Потребность в защите через USD",
-          "weight": 0.3
-        },
-        {
-          "key": "cross_border",
-          "label": "Трансграничная потребность",
-          "weight": 0.2
-        },
-        {
-          "key": "crypto_audience",
-          "label": "Crypto / stablecoin-аудитория",
-          "weight": 0.25
-        },
-        {
-          "key": "mobile_readiness",
-          "label": "Мобильная готовность",
-          "weight": 0.15
-        },
-        {
-          "key": "access_gap",
-          "label": "Разрыв финансового доступа",
-          "weight": 0.1
-        }
-      ],
-      "method_note": "Отдельный диагностический показатель для продукта, полностью повторяющего KAST. Он не изменяет исходный рейтинг APS и рассчитывается только из сопоставимых опубликованных данных."
-    },
+    "method_note": "Единая оценка привлекательности рынка для запуска продукта, функционально повторяющего KAST. Она объединяет количественные показатели, подтверждённые конкурентные факты и качественное исследование без двойного учёта одних и тех же факторов.",
     "research_updated": "2026-09-01"
+  },
+  "unified_scoring": {
+    "label": "Единая привлекательность рынка",
+    "scale": "1–5",
+    "formula": "35% потребность в продукте + 30% коммерческий потенциал + 35% реализуемость входа",
+    "method_note": "Каждый критерий нормирован на шкалу 1–5 по единой рубрике. Опубликованные данные задают измеримую основу; интервью, подтверждённые действия конкурентов и регуляторные документы уточняют только те критерии, которые нельзя корректно измерить одной статистикой. Качественный вывод не добавляется отдельным баллом.",
+    "thresholds": [
+      {
+        "level": "high",
+        "label": "Высокий",
+        "min": 4
+      },
+      {
+        "level": "medium_high",
+        "label": "Средне-высокий",
+        "min": 3.4
+      },
+      {
+        "level": "medium",
+        "label": "Средний",
+        "min": 2.8
+      },
+      {
+        "level": "low",
+        "label": "Низкий",
+        "min": 1
+      }
+    ],
+    "blocks": [
+      {
+        "key": "product_need",
+        "label": "Потребность в продукте",
+        "weight": 0.35,
+        "criteria": [
+          {
+            "key": "cross_border",
+            "label": "Трансграничные деньги",
+            "weight": 0.15,
+            "definition": "Повторяемость и масштаб получения зарубежного дохода и переводов, а не только абсолютный размер страны."
+          },
+          {
+            "key": "stable_value_need",
+            "label": "Потребность в стабильной валюте",
+            "weight": 0.12,
+            "definition": "Подтверждённая потребность хранить доход или сбережения в USD/stablecoins и защищать покупательную способность."
+          },
+          {
+            "key": "audience_readiness",
+            "label": "Готовность целевой аудитории",
+            "weight": 0.08,
+            "definition": "Цифровая и mobile-готовность вместе с фактическим использованием crypto/stablecoin-сервисов."
+          }
+        ]
+      },
+      {
+        "key": "commercial_viability",
+        "label": "Коммерческий потенциал",
+        "weight": 0.3,
+        "criteria": [
+          {
+            "key": "competitive_whitespace",
+            "label": "Конкурентное окно",
+            "weight": 0.15,
+            "definition": "Наличие незакрытого сценария после учёта прямых аналогов, банков, кошельков, exchanges и локальных платёжных сервисов."
+          },
+          {
+            "key": "user_economics",
+            "label": "Экономика пользователя",
+            "weight": 0.1,
+            "definition": "Вероятность заметной выгоды на курсе, комиссиях, доходности или сокращении числа посредников."
+          },
+          {
+            "key": "acquisition_feasibility",
+            "label": "Доступность привлечения",
+            "weight": 0.05,
+            "definition": "Наличие подтверждённых каналов и партнёрских маршрутов до конкретных целевых сегментов."
+          }
+        ]
+      },
+      {
+        "key": "entry_feasibility",
+        "label": "Реализуемость входа",
+        "weight": 0.35,
+        "criteria": [
+          {
+            "key": "regulatory_feasibility",
+            "label": "Регуляторная реализуемость",
+            "weight": 0.15,
+            "definition": "Насколько понятен и практически достижим разрешённый путь запуска продукта с crypto/stablecoin-функциями."
+          },
+          {
+            "key": "payment_infrastructure",
+            "label": "Платёжная инфраструктура",
+            "weight": 0.12,
+            "definition": "Готовность локальных rails для пополнения, вывода и повседневного использования средств."
+          },
+          {
+            "key": "partner_operability",
+            "label": "Партнёрская реализуемость",
+            "weight": 0.08,
+            "definition": "Доступность лицензированного, банковского, карточного или платёжного партнёра для целевой модели."
+          }
+        ]
+      }
+    ],
+    "gates": [
+      {
+        "key": "unconfirmed_mass_need",
+        "label": "Не подтверждён массовый спрос",
+        "cap": 2.7,
+        "rule": "Если интервью и рыночные кейсы не подтверждают повторяемую массовую задачу, итог не может быть выше низкой категории до отдельной валидации спроса."
+      },
+      {
+        "key": "critical_unresolved_license",
+        "label": "Критический нерешённый регуляторный барьер",
+        "cap": 3.19,
+        "rule": "Если разрешённая операционная модель остаётся пилотной или требует ещё не найденного крупного локального партнёра, рынок не может перейти в средне-высокую категорию."
+      }
+    ],
+    "rows": [
+      {
+        "market_code": "PHL",
+        "rank": 1,
+        "raw_score": 4.315,
+        "final_score": 4.32,
+        "level": "high",
+        "label": "Высокий",
+        "gate": null,
+        "block_scores": {
+          "product_need": 4.37,
+          "commercial_viability": 4.08,
+          "entry_feasibility": 4.46
+        },
+        "components": {
+          "cross_border": { "score": 5, "evidence": "$41,6 млрд входящих переводов в 2025 году, 8,53% ВВП; повторяющиеся потоки OFW и моряков.", "source_ids": ["wb_api", "ph_bsp_remittances_2025", "ph_psa_ofw_2024"] },
+          "stable_value_need": { "score": 3.5, "evidence": "Долларовый зарубежный доход важен целевым сегментам, хотя общерыночная инфляция в 2025 году была 1,66%.", "source_ids": ["imf_weo_2026", "interview_ph_crossborder_2026"] },
+          "audience_readiness": { "score": 4.5, "evidence": "Филиппины занимают 9-е место в индексе crypto adoption; 69% взрослых имеют smartphone.", "source_ids": ["chainalysis_2025", "wb_findex_2025"] },
+          "competitive_whitespace": { "score": 4, "evidence": "GCash, Maya и Coins.ph закрывают локальные платежи; окно остаётся в получении зарубежного дохода и его дешёвом выводе в эти rails.", "source_ids": ["ph_bsp_epayments_2025", "coins_higlobe_2026", "interview_ph_2026"] },
+          "user_economics": { "score": 4, "evidence": "Большой регулярный поток переводов создаёт измеримую экономию при сокращении посредников и конвертаций.", "source_ids": ["ph_bsp_remittances_2025", "interview_ph_crossborder_2026"] },
+          "acquisition_feasibility": { "score": 4.5, "evidence": "Coins.ph подтверждает рабочие referral, affiliate и payroll-партнёрства; цифровые каналы имеют широкий охват.", "source_ids": ["coins_affiliate_2026", "coins_referral_2026", "coins_higlobe_2026"] },
+          "regulatory_feasibility": { "score": 4, "evidence": "BSP публикует перечень лицензированных VASP; практический вход возможен через лицензированного партнёра.", "source_ids": ["ph_bsp_vasp"] },
+          "payment_infrastructure": { "score": 5, "evidence": "Цифровые платежи и QR Ph имеют массовый масштаб, поэтому локальный вывод можно строить на готовой инфраструктуре.", "source_ids": ["ph_bsp_epayments_2025"] },
+          "partner_operability": { "score": 4.5, "evidence": "Рынок показывает реальные связки VASP/EMI, payroll и локальных payout-партнёров.", "source_ids": ["ph_bsp_vasp", "coins_higlobe_2026"] }
+        }
+      },
+      {
+        "market_code": "COL",
+        "rank": 2,
+        "raw_score": 3.635,
+        "final_score": 3.64,
+        "level": "medium_high",
+        "label": "Средне-высокий",
+        "gate": null,
+        "block_scores": {
+          "product_need": 3.5,
+          "commercial_viability": 4,
+          "entry_feasibility": 3.46
+        },
+        "components": {
+          "cross_border": { "score": 3.5, "evidence": "$13,1 млрд входящих переводов в 2025 году, 2,87% ВВП.", "source_ids": ["wb_api"] },
+          "stable_value_need": { "score": 3.5, "evidence": "Инфляция 5,14% и интервью подтверждают сегментную потребность в более стабильной валюте.", "source_ids": ["imf_weo_2026", "interview_latam_2026"] },
+          "audience_readiness": { "score": 3.5, "evidence": "73,28% взрослых имеют smartphone, 80,69% недавно пользовались интернетом; опубликованного места в top-20 Chainalysis нет.", "source_ids": ["wb_findex_2025", "chainalysis_2025"] },
+          "competitive_whitespace": { "score": 4, "evidence": "Littio и другие игроки подтверждают спрос, но сценарий объединения digital dollars, международного дохода и локальной траты ещё не полностью закрыт.", "source_ids": ["littio_card_2026", "littio_colombia_guide_2026", "interview_latam_2026"] },
+          "user_economics": { "score": 4, "evidence": "Выгода строится на сохранении стоимости и сокращении издержек международного получения и конвертации.", "source_ids": ["littio_card_multicurrency_2024", "interview_latam_2026"] },
+          "acquisition_feasibility": { "score": 4, "evidence": "Littio использует creators, сегментные landing pages и партнёрство Mastercard.", "source_ids": ["littio_creators_2026", "littio_colombia_guide_2026", "littio_partners_2023"] },
+          "regulatory_feasibility": { "score": 3, "evidence": "Отдельного режима для cryptoassets нет; практическая модель требует лицензированного финансового партнёра.", "source_ids": ["co_sfc_crypto", "co_sfc_pilot"] },
+          "payment_infrastructure": { "score": 4, "evidence": "Карточный и банковский вывод реализуем через локальных финансовых партнёров.", "source_ids": ["littio_partners_2023", "littio_card_multicurrency_2024"] },
+          "partner_operability": { "score": 3.5, "evidence": "Реальные партнёрские карточные модели существуют, но crypto-часть требует аккуратной структуры.", "source_ids": ["littio_partners_2023", "co_sfc_crypto"] }
+        }
+      },
+      {
+        "market_code": "IDN",
+        "rank": 3,
+        "raw_score": 3.525,
+        "final_score": 3.53,
+        "level": "medium_high",
+        "label": "Средне-высокий",
+        "gate": null,
+        "block_scores": {
+          "product_need": 3.17,
+          "commercial_viability": 4,
+          "entry_feasibility": 3.47
+        },
+        "components": {
+          "cross_border": { "score": 3, "evidence": "$17,6 млрд входящих переводов в 2025 году, 1,22% ВВП.", "source_ids": ["wb_api", "id_remittances_2025"] },
+          "stable_value_need": { "score": 2.5, "evidence": "Инфляция 1,91%; основной сценарий связан с международными деньгами, а не массовой защитой от инфляции.", "source_ids": ["imf_weo_2026", "interview_id_treasury_2026"] },
+          "audience_readiness": { "score": 4.5, "evidence": "Индонезия занимает 7-е место в индексе crypto adoption; 73,74% взрослых имеют smartphone.", "source_ids": ["chainalysis_2025", "wb_findex_2025"] },
+          "competitive_whitespace": { "score": 4, "evidence": "Локальные платежи зрелые, но остаётся окно для регулируемого входа глобального дохода в QRIS.", "source_ids": ["id_qris_2026", "interview_id_treasury_2026"] },
+          "user_economics": { "score": 4, "evidence": "Ценность возникает при прямом переводе зарубежного дохода в локальные QRIS/банковские расходы без лишних посредников.", "source_ids": ["id_remittances_2025", "interview_id_treasury_2026"] },
+          "acquisition_feasibility": { "score": 4, "evidence": "Pintu подтверждает рабочую комбинацию education, referral и community/partner activations.", "source_ids": ["pintu_academy_2026", "pintu_referral_2026", "pintu_rrq_2026"] },
+          "regulatory_feasibility": { "score": 2.5, "evidence": "Надзор за digital financial assets передан OJK; crypto не является платёжным средством, поэтому нужен fiat-wrapper.", "source_ids": ["id_ojk_transition", "id_ojk_2026", "id_bi_virtual_currency"] },
+          "payment_infrastructure": { "score": 5, "evidence": "QRIS достиг массового пользовательского и торгового охвата.", "source_ids": ["id_qris_2026"] },
+          "partner_operability": { "score": 3, "evidence": "Локальные rails доступны, но операционная связка должна разделять регулируемый crypto-контур и fiat-платежи.", "source_ids": ["id_ojk_transition", "id_bi_virtual_currency", "interview_id_treasury_2026"] }
+        }
+      },
+      {
+        "market_code": "ARG",
+        "rank": 4,
+        "raw_score": 3.22,
+        "final_score": 3.22,
+        "level": "medium",
+        "label": "Средний",
+        "gate": null,
+        "block_scores": {
+          "product_need": 3.6,
+          "commercial_viability": 2,
+          "entry_feasibility": 3.89
+        },
+        "components": {
+          "cross_border": { "score": 2, "evidence": "$0,92 млрд входящих переводов в 2025 году, 0,13% ВВП.", "source_ids": ["wb_api"] },
+          "stable_value_need": { "score": 5, "evidence": "Инфляция 41,92% в 2025 году и интервью подтверждают сильную потребность в сохранении стоимости.", "source_ids": ["imf_weo_2026", "interview_latam_2026"] },
+          "audience_readiness": { "score": 4.5, "evidence": "Аргентина занимает 20-е место в индексе crypto adoption; интернетом недавно пользовались 88,13% взрослых.", "source_ids": ["chainalysis_2025", "wb_findex_2025"] },
+          "competitive_whitespace": { "score": 1.5, "evidence": "KAST, Lemon, ARQ и другие решения уже предлагают близкие digital-dollar и card-сценарии; интервью характеризуют рынок как перенасыщенный.", "source_ids": ["kast_country_availability_2026", "lemon_series_b_2025", "dolarapp_markets", "interview_latam_2026"] },
+          "user_economics": { "score": 2, "evidence": "Боль сильная, но новому игроку трудно показать выгоду поверх многочисленных близких предложений.", "source_ids": ["lemon_arg_fees", "interview_latam_2026"] },
+          "acquisition_feasibility": { "score": 3.5, "evidence": "Lemon подтверждает рабочие social, referral и финансовые партнёрства, но стоимость переключения на новый бренд остаётся высокой.", "source_ids": ["lemon_social_arg_2026", "lemon_referral_2026", "lemon_galicia_2026"] },
+          "regulatory_feasibility": { "score": 4, "evidence": "CNV ведёт формальный реестр PSAV, поэтому путь регистрации определён.", "source_ids": ["ar_cnv_psav"] },
+          "payment_infrastructure": { "score": 4, "evidence": "Локальные digital-dollar игроки уже подтверждают работоспособность card и peso-rails.", "source_ids": ["lemon_arg_fees", "lemon_galicia_2026", "dolarapp_card"] },
+          "partner_operability": { "score": 3.5, "evidence": "Партнёрские модели с локальными финансовыми организациями существуют, но требуют конкурентоспособной экономики.", "source_ids": ["lemon_galicia_2026", "ar_cnv_psav"] }
+        }
+      },
+      {
+        "market_code": "VNM",
+        "rank": 5,
+        "raw_score": 3.27,
+        "final_score": 3.19,
+        "level": "medium",
+        "label": "Средний",
+        "gate": {
+          "key": "critical_unresolved_license",
+          "cap": 3.19,
+          "applied": true,
+          "explanation": "Пилотный режим и критически сложная лицензированная модель ограничивают итог до средней категории.",
+          "source_ids": ["vn_digital_assets_law", "vn_crypto_pilot"]
+        },
+        "block_scores": {
+          "product_need": 3.89,
+          "commercial_viability": 3.67,
+          "entry_feasibility": 2.31
+        },
+        "components": {
+          "cross_border": { "score": 4, "evidence": "Оценка входящих переводов за 2024 год — $16,2 млрд, или 3,4% ВВП.", "source_ids": ["wb_vietnam_data", "vn_remittances_2025"] },
+          "stable_value_need": { "score": 3, "evidence": "Инфляция 3,31%; спрос связан главным образом с международными потоками и цифровыми активами.", "source_ids": ["imf_weo_2026", "vn_remittances_2025"] },
+          "audience_readiness": { "score": 5, "evidence": "Вьетнам занимает 4-е место в индексе crypto adoption; 85,44% взрослых имеют smartphone.", "source_ids": ["chainalysis_2025", "wb_findex_2025"] },
+          "competitive_whitespace": { "score": 4, "evidence": "Высокая crypto-готовность подтверждена, но универсальный регулируемый stablecoin-account с локальным выводом ещё не стал массовым стандартом.", "source_ids": ["chainalysis_2025", "coin98_wallet_2025", "vn_crypto_pilot"] },
+          "user_economics": { "score": 3.5, "evidence": "Потенциальная выгода есть в международном получении и конвертации, но fiat-операции зависят от разрешённой локальной модели.", "source_ids": ["vn_remittances_2025", "vn_crypto_pilot"] },
+          "acquisition_feasibility": { "score": 3, "evidence": "Coin98 подтверждает community, ambassador и hackathon-каналы; массовое paid-привлечение ограничено регуляторной неопределённостью.", "source_ids": ["coin98_titans_2026", "coin98_community_2026", "coin98_solana_hackathon_2026"] },
+          "regulatory_feasibility": { "score": 1, "evidence": "Действует пилотный режим cryptoasset market; разрешённая модель ограничена и требует местной лицензированной структуры.", "source_ids": ["vn_digital_assets_law", "vn_crypto_pilot"] },
+          "payment_infrastructure": { "score": 4.5, "evidence": "Цифровая и mobile-инфраструктура развита, но crypto не может бесшовно использоваться как обычное платёжное средство.", "source_ids": ["wb_findex_2025", "vn_crypto_pilot"] },
+          "partner_operability": { "score": 1.5, "evidence": "Для запуска нужен крупный местный участник внутри пилотной модели; подтверждённого универсального пути нет.", "source_ids": ["vn_crypto_pilot", "vn_digital_assets_law"] }
+        }
+      },
+      {
+        "market_code": "CAN",
+        "rank": 6,
+        "raw_score": 2.915,
+        "final_score": 2.92,
+        "level": "medium",
+        "label": "Средний",
+        "gate": null,
+        "block_scores": {
+          "product_need": 1.63,
+          "commercial_viability": 3,
+          "entry_feasibility": 4.13
+        },
+        "components": {
+          "cross_border": { "score": 1, "evidence": "$0,83 млрд входящих переводов в 2025 году, 0,04% ВВП.", "source_ids": ["wb_api"] },
+          "stable_value_need": { "score": 1.5, "evidence": "Инфляция 2,08% и зрелый CAD/USD-банкинг не создают широкой потребности в защите через stablecoins.", "source_ids": ["imf_weo_2026", "interview_canada_2026"] },
+          "audience_readiness": { "score": 3, "evidence": "84,06% взрослых имеют smartphone и 95,05% недавно пользовались интернетом, но Канада не вошла в опубликованный top-20 crypto adoption.", "source_ids": ["wb_findex_2025", "chainalysis_2025"] },
+          "competitive_whitespace": { "score": 3, "evidence": "Массовые задачи закрыты банками и fintech; остаётся сегментная связка CAD/USD, Interac и цифровых активов.", "source_ids": ["interview_canada_2026", "cryptocom_canada_card_2026"] },
+          "user_economics": { "score": 3, "evidence": "Экономическая выгода возможна в международных и crypto-сценариях, но не подтверждена как массовая.", "source_ids": ["interview_canada_2026", "cryptocom_canada_card_2026"] },
+          "acquisition_feasibility": { "score": 3, "evidence": "Crypto.com использует referral, affiliate, brand и партнёрские кампании, но новому бренду нужен высокий уровень доверия.", "source_ids": ["cryptocom_referral_can_2026", "cryptocom_affiliate_2026", "cryptocom_brand_campaign_2026"] },
+          "regulatory_feasibility": { "score": 3.5, "evidence": "Федеральные требования к PSP и stablecoin-эмитентам определяют понятный, хотя и строгий путь авторизации.", "source_ids": ["ca_boc_stablecoins", "ca_boc_rpaa"] },
+          "payment_infrastructure": { "score": 5, "evidence": "Практически универсальные account ownership и internet use поддерживают зрелую банковскую и Interac-инфраструктуру.", "source_ids": ["wb_findex_2025", "interview_canada_2026"] },
+          "partner_operability": { "score": 4, "evidence": "Crypto.com подтверждает, что зарегистрированная модель и локальная карточная программа операционно возможны.", "source_ids": ["cryptocom_canada_registration_2025", "cryptocom_canada_card_2026"] }
+        }
+      },
+      {
+        "market_code": "GBR",
+        "rank": 7,
+        "raw_score": 2.77,
+        "final_score": 2.77,
+        "level": "low",
+        "label": "Низкий",
+        "gate": null,
+        "block_scores": {
+          "product_need": 2.29,
+          "commercial_viability": 2,
+          "entry_feasibility": 3.91
+        },
+        "components": {
+          "cross_border": { "score": 2, "evidence": "$5,36 млрд входящих переводов в 2025 году, 0,13% ВВП; релевантны отдельные диаспоры и международные специалисты.", "source_ids": ["wb_api", "interview_uk_fintech_2026"] },
+          "stable_value_need": { "score": 1.5, "evidence": "Инфляция 3,37%, а массовые GBP/USD/EUR-сценарии уже закрыты банками и fintech.", "source_ids": ["imf_weo_2026", "interview_uk_emi_2026"] },
+          "audience_readiness": { "score": 4, "evidence": "Великобритания занимает 11-е место в индексе crypto adoption; 85,44% взрослых имеют smartphone.", "source_ids": ["chainalysis_2025", "wb_findex_2025"] },
+          "competitive_whitespace": { "score": 1.5, "evidence": "Revolut, Wise, Wirex, Coinbase, Crypto.com, Bleap и другие решения закрывают основные массовые и crypto-сценарии.", "source_ids": ["revolut_supported_2026", "wise_service_countries_2026", "wirex_supported_2026", "interview_uk_fintech_2026"] },
+          "user_economics": { "score": 2, "evidence": "Переход оправдан только для узких сложных международных сценариев; базовый продукт недостаточно отличается.", "source_ids": ["interview_uk_emi_2026", "interview_uk_fintech_2026"] },
+          "acquisition_feasibility": { "score": 3.5, "evidence": "Referral, affiliate и co-brand каналы подтверждены Wirex, но доверие к новому финансовому бренду дорого формировать.", "source_ids": ["wirex_referral_uk_2026", "wirex_affiliate_2026", "wirex_cobranded_2026"] },
+          "regulatory_feasibility": { "score": 3, "evidence": "FCA описала новый режим и gateway; запуск требует авторизации или партнёра и переходного планирования.", "source_ids": ["uk_fca_regime"] },
+          "payment_infrastructure": { "score": 5, "evidence": "99,28% взрослых имеют счёт, 96,15% недавно пользовались интернетом; локальные rails зрелые.", "source_ids": ["wb_findex_2025"] },
+          "partner_operability": { "score": 4, "evidence": "На рынке работают EMI, card и co-brand модели, хотя требования к onboarding и compliance высоки.", "source_ids": ["wirex_cobranded_2026", "interview_uk_emi_2026"] }
+        }
+      },
+      {
+        "market_code": "MEX",
+        "rank": 8,
+        "raw_score": 2.955,
+        "final_score": 2.7,
+        "level": "low",
+        "label": "Низкий",
+        "gate": {
+          "key": "unconfirmed_mass_need",
+          "cap": 2.7,
+          "applied": true,
+          "explanation": "Большой объём переводов сам по себе не подтверждает спрос на KAST-подобный продукт; интервью оставляют ключевой сценарий гипотезой.",
+          "source_ids": ["wb_api", "interview_latam_2026"]
+        },
+        "block_scores": {
+          "product_need": 3.51,
+          "commercial_viability": 2.42,
+          "entry_feasibility": 2.86
+        },
+        "components": {
+          "cross_border": { "score": 5, "evidence": "$64,4 млрд входящих переводов в 2025 году, 3,51% ВВП.", "source_ids": ["wb_api"] },
+          "stable_value_need": { "score": 2, "evidence": "Инфляция 3,82%; интервью не подтверждают массовую потребность хранить средства в stablecoins.", "source_ids": ["imf_weo_2026", "interview_latam_2026"] },
+          "audience_readiness": { "score": 3, "evidence": "64,51% взрослых имеют smartphone, 77,52% недавно пользовались интернетом; опубликованного места в top-20 Chainalysis нет.", "source_ids": ["wb_findex_2025", "chainalysis_2025"] },
+          "competitive_whitespace": { "score": 2, "evidence": "Bitso и Revolut уже закрывают заметную часть exchange, SPEI, account и card-сценариев; незакрытая массовая задача не подтверждена.", "source_ids": ["bitso_mexico_guide_2026", "revolut_mexico_2026", "interview_latam_2026"] },
+          "user_economics": { "score": 2.5, "evidence": "Потенциальная выгода в US–Mexico corridor велика, но налоговый и продуктовый сценарий нового игрока требует отдельной проверки.", "source_ids": ["wb_api", "interview_latam_2026"] },
+          "acquisition_feasibility": { "score": 3.5, "evidence": "Bitso подтверждает KOL, referral и educational acquisition; каналы доступны, но спрос на конкретный продукт не доказан.", "source_ids": ["bitso_kol_2026", "bitso_referral_2026", "bitso_mexico_guide_2026"] },
+          "regulatory_feasibility": { "score": 2, "evidence": "Banxico ограничивает операции с virtual assets для финансовых организаций; практический вход требует IFPE/банка и разделения контуров.", "source_ids": ["mx_cnbv_warning", "mx_banxico_virtual_assets"] },
+          "payment_infrastructure": { "score": 4.5, "evidence": "SPEI даёт зрелую локальную инфраструктуру переводов.", "source_ids": ["mx_spei_2026"] },
+          "partner_operability": { "score": 2, "evidence": "Необходим IFPE или банк; партнёрская структура достижима, но существенно ограничивает независимый запуск.", "source_ids": ["mx_spei_2026", "mx_banxico_virtual_assets"] }
+        }
+      }
+    ]
   },
   "markets": [
     {
@@ -100,16 +386,6 @@
           ]
         }
       },
-      "scores": {
-        "market": 5,
-        "need": 5,
-        "audience": 5,
-        "competition": 3,
-        "access": 4,
-        "entry": 5
-      },
-      "weighted_score": 4.55,
-      "category": "Приоритетный для запуска",
       "regulatory": {
         "status": "Лицензируемые VASP/EMI",
         "gate": "licensed_partner",
@@ -165,8 +441,7 @@
         "wb_findex_2025",
         "imf_weo_2026",
         "chainalysis_2025"
-      ],
-      "rank": 1
+      ]
     },
     {
       "code": "ARG",
@@ -196,16 +471,6 @@
           ]
         }
       },
-      "scores": {
-        "market": 5,
-        "need": 5,
-        "audience": 5,
-        "competition": 2,
-        "access": 4,
-        "entry": 5
-      },
-      "weighted_score": 4.4,
-      "category": "Приоритетный для запуска",
       "regulatory": {
         "status": "Регистрация PSAV",
         "gate": "registration",
@@ -261,8 +526,7 @@
         "wb_findex_2025",
         "imf_weo_2026",
         "chainalysis_2025"
-      ],
-      "rank": 2
+      ]
     },
     {
       "code": "COL",
@@ -293,16 +557,6 @@
           ]
         }
       },
-      "scores": {
-        "market": 5,
-        "need": 5,
-        "audience": 5,
-        "competition": 3,
-        "access": 3,
-        "entry": 5
-      },
-      "weighted_score": 4.4,
-      "category": "Приоритетный для запуска",
       "regulatory": {
         "status": "Нет отдельного режима",
         "gate": "licensed_partner",
@@ -359,8 +613,7 @@
         "wb_findex_2025",
         "imf_weo_2026",
         "chainalysis_2025"
-      ],
-      "rank": 3
+      ]
     },
     {
       "code": "MEX",
@@ -392,16 +645,6 @@
           ]
         }
       },
-      "scores": {
-        "market": 5,
-        "need": 5,
-        "audience": 5,
-        "competition": 3,
-        "access": 2,
-        "entry": 4
-      },
-      "weighted_score": 4.15,
-      "category": "Приоритетный для запуска",
       "regulatory": {
         "status": "Ограниченный режим",
         "gate": "ifpe_or_bank",
@@ -458,8 +701,7 @@
         "wb_findex_2025",
         "imf_weo_2026",
         "chainalysis_2025"
-      ],
-      "rank": 4
+      ]
     },
     {
       "code": "GBR",
@@ -489,16 +731,6 @@
           ]
         }
       },
-      "scores": {
-        "market": 4,
-        "need": 3,
-        "audience": 4,
-        "competition": 3,
-        "access": 3,
-        "entry": 4
-      },
-      "weighted_score": 3.5,
-      "category": "Перспективный для тестирования",
       "regulatory": {
         "status": "Переходный режим",
         "gate": "partner_or_authorisation",
@@ -554,8 +786,7 @@
         "wb_findex_2025",
         "imf_weo_2026",
         "chainalysis_2025"
-      ],
-      "rank": 5
+      ]
     },
     {
       "code": "IDN",
@@ -585,16 +816,6 @@
           ]
         }
       },
-      "scores": {
-        "market": 5,
-        "need": 3,
-        "audience": 4,
-        "competition": 3,
-        "access": 2,
-        "entry": 3
-      },
-      "weighted_score": 3.5,
-      "category": "Перспективный для тестирования",
       "regulatory": {
         "status": "OJK регулирует торговлю активами",
         "gate": "fiat_wrapper_only",
@@ -651,8 +872,7 @@
         "wb_findex_2025",
         "imf_weo_2026",
         "chainalysis_2025"
-      ],
-      "rank": 6
+      ]
     },
     {
       "code": "VNM",
@@ -684,16 +904,6 @@
           ]
         }
       },
-      "scores": {
-        "market": 5,
-        "need": 4,
-        "audience": 4,
-        "competition": 3,
-        "access": 1,
-        "entry": 2
-      },
-      "weighted_score": 3.45,
-      "category": "Перспективный для тестирования",
       "regulatory": {
         "status": "Закон + пилот рынка активов",
         "gate": "fiat_wrapper_only",
@@ -748,8 +958,7 @@
         "wb_findex_2025",
         "imf_weo_2026",
         "chainalysis_2025"
-      ],
-      "rank": 7
+      ]
     },
     {
       "code": "CAN",
@@ -780,16 +989,6 @@
           ]
         }
       },
-      "scores": {
-        "market": 3,
-        "need": 3,
-        "audience": 3,
-        "competition": 3,
-        "access": 4,
-        "entry": 3
-      },
-      "weighted_score": 3.15,
-      "category": "Нишевой",
       "regulatory": {
         "status": "Федеральный режим stablecoin",
         "gate": "authorisation",
@@ -846,8 +1045,7 @@
         "wb_findex_2025",
         "imf_weo_2026",
         "chainalysis_2025"
-      ],
-      "rank": 8
+      ]
     }
   ],
   "kast_benchmark": {
@@ -867,7 +1065,7 @@
   "competition_availability": {
     "checked_at": "2026-08-11",
     "reference_product": "KAST",
-    "reference_note": "KAST используется как продуктовый эталон для Product Fit и одновременно включён в конкурентную матрицу как прямой конкурент APS.",
+    "reference_note": "KAST задаёт целевую продуктовую модель и одновременно включён в конкурентную матрицу как прямой конкурент APS.",
     "definitions": {
       "full": "Доступны сервис/аккаунт и выпуск карты для резидента рынка.",
       "partial": "Доступен аккаунт, exchange, переводы или иной ключевой сервис, но карта в стране не выпускается.",
@@ -877,7 +1075,7 @@
   },
   "acquisition_channels": {
     "checked_at": "2026-08-11",
-    "method_note": "Вкладка не влияет на APS-рейтинг, KAST / Product Fit или оценки барьеров. Важность канала 1–5 является экспертной оценкой только для планирования acquisition: учитываются доступный цифровой охват, подтверждённое использование конкурентами и соответствие категории. Social-media identities и рекламные аудитории платформ не равны уникальным людям и используются как индикатор масштаба канала.",
+    "method_note": "Вкладка не влияет на единый рейтинг привлекательности или оценки барьеров. Важность канала 1–5 является экспертной оценкой только для планирования acquisition: учитываются доступный цифровой охват, подтверждённое использование конкурентами и соответствие категории. Social-media identities и рекламные аудитории платформ не равны уникальным людям и используются как индикатор масштаба канала.",
     "rows": [
       {
         "market_code": "PHL",
@@ -4658,10 +4856,6 @@
     {
       "market_code": "GBR",
       "headline": "Зрелый рынок без массовой незакрытой потребности",
-      "potential": {
-        "label": "Низкий для массового запуска, средний для узкой ниши",
-        "level": "low"
-      },
       "need": {
         "score": 2,
         "label": "Нишевая",
@@ -4713,10 +4907,6 @@
     {
       "market_code": "ARG",
       "headline": "Сильный спрос, но рынок уже перенасыщен",
-      "potential": {
-        "label": "Средний",
-        "level": "medium"
-      },
       "need": {
         "score": 5,
         "label": "Очень сильная",
@@ -4765,10 +4955,6 @@
     {
       "market_code": "COL",
       "headline": "Сильная потребность в защите сбережений при растущей конкуренции",
-      "potential": {
-        "label": "Средне-высокий",
-        "level": "medium_high"
-      },
       "need": {
         "score": 5,
         "label": "Очень сильная",
@@ -4814,10 +5000,6 @@
     {
       "market_code": "MEX",
       "headline": "Налоговая сложность может создать нишу, но спрос пока не подтвержден",
-      "potential": {
-        "label": "Низкий до подтверждения гипотезы",
-        "level": "low"
-      },
       "need": {
         "score": 2,
         "label": "Нишевая",
@@ -4861,10 +5043,6 @@
     {
       "market_code": "CAN",
       "headline": "Зрелый банковский рынок, где возможность строится вокруг CAD/USD, Interac и доверия",
-      "potential": {
-        "label": "Средний",
-        "level": "medium"
-      },
       "need": {
         "score": 3,
         "label": "Сегментная",
@@ -4910,10 +5088,6 @@
     {
       "market_code": "PHL",
       "headline": "Очень большой трансграничный спрос при уже развитых локальных платежах",
-      "potential": {
-        "label": "Высокий при партнерской модели",
-        "level": "high"
-      },
       "need": {
         "score": 5,
         "label": "Очень сильная",
@@ -4964,10 +5138,6 @@
     {
       "market_code": "IDN",
       "headline": "Возможность — не новый кошелек, а вход глобальных денег в QRIS",
-      "potential": {
-        "label": "Средне-высокий при партнерской модели",
-        "level": "medium_high"
-      },
       "need": {
         "score": 4,
         "label": "Сильная",
@@ -5018,10 +5188,6 @@
     {
       "market_code": "VNM",
       "headline": "Сильные международные потоки и интерес к цифровым активам при критическом регуляторном барьере",
-      "potential": {
-        "label": "Средний, только через крупного местного партнера",
-        "level": "medium"
-      },
       "need": {
         "score": 4,
         "label": "Сильная",
