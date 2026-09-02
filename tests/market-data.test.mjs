@@ -3,6 +3,7 @@ import { readFile } from "node:fs/promises";
 import test from "node:test";
 
 const data = JSON.parse(await readFile(new URL("../app/data/market_data.json", import.meta.url), "utf8"));
+const task5Conclusions = JSON.parse(await readFile(new URL("../app/data/task5_conclusions.json", import.meta.url), "utf8"));
 const marketCodes = new Set(data.markets.map((market) => market.code));
 const sourceIds = new Set(data.sources.map((source) => source.id));
 const competitorIds = new Set(data.market_competitors.map((competitor) => competitor.id));
@@ -138,6 +139,18 @@ test("uses the expanded brief conclusions in every market profile", () => {
     assert.ok(summary.paragraphs.every((paragraph) => paragraph.startsWith("::b0::")), `${report.market_code}: rich paragraph marker`);
     assert.match(summary.paragraphs[0], new RegExp(expectedHeadlines[report.market_code]));
   }
+});
+
+test("adds the complete task-five content to the conclusions tab", () => {
+  assert.equal(task5Conclusions.cross_market.length, 8);
+  assert.deepEqual(new Set(Object.keys(task5Conclusions.markets)), marketCodes);
+  assert.equal(Object.values(task5Conclusions.markets).flat().length, 80);
+  assert.ok(task5Conclusions.cross_market.every((item) => item.title && item.body));
+  assert.ok(Object.values(task5Conclusions.markets).flat().every((item) => item.title));
+  assert.match(task5Conclusions.cross_market.map((item) => item.title).join(" "), /конкретный денежный коридор/);
+  assert.match(task5Conclusions.markets.IDN.map((item) => `${item.title} ${item.body}`).join(" "), /QRIS как основа продукта/);
+  assert.match(task5Conclusions.markets.PHL.map((item) => `${item.title} ${item.body}`).join(" "), /основного кормильца/);
+  assert.match(task5Conclusions.markets.CAN.map((item) => `${item.title} ${item.body}`).join(" "), /Interac критически важен/);
 });
 
 test("integrates both Indonesia interviews into positioning, acquisition and competitors", () => {

@@ -4,6 +4,7 @@ import ts from "typescript";
 
 const projectRoot = path.resolve(import.meta.dirname, "..");
 const dataPath = path.join(projectRoot, "app/data/market_data.json");
+const task5ConclusionsPath = path.join(projectRoot, "app/data/task5_conclusions.json");
 const componentPath = path.join(projectRoot, "app/MarketDashboard.tsx");
 const outputPath = path.join(projectRoot, "app/data/translations.en.json");
 const cyrillic = /[А-Яа-яЁё]/;
@@ -56,6 +57,7 @@ function collectComponentStrings(source, output) {
 
 const strings = new Set();
 collectJsonStrings(JSON.parse(fs.readFileSync(dataPath, "utf8")), strings);
+collectJsonStrings(JSON.parse(fs.readFileSync(task5ConclusionsPath, "utf8")), strings);
 collectComponentStrings(fs.readFileSync(componentPath, "utf8"), strings);
 
 const existing = fs.existsSync(outputPath) ? JSON.parse(fs.readFileSync(outputPath, "utf8")) : {};

@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import data from "./data/market_data.json";
+import task5Conclusions from "./data/task5_conclusions.json";
 import { type Language, translateCompositeText, translateText, translateTextNode } from "./localization";
 
 type Tab = "overview" | "conclusions" | "compare" | "profiles" | "competition" | "barriers" | "cases" | "acquisition" | "respondents" | "data" | "method";
@@ -22,6 +23,8 @@ type CountryFeature = GeoJSON.Feature<GeoJSON.Geometry, CountryProperties>;
 type CountryLayer = import("leaflet").Path & { feature?: CountryFeature };
 
 const translatableAttributes = ["aria-label", "title", "placeholder"] as const;
+const conclusionMarketOrder = ["IDN", "PHL", "CAN", "MEX", "COL", "ARG", "GBR", "VNM"];
+const marketConclusionItems = task5Conclusions.markets as Record<string, Array<{ title: string; body: string }>>;
 
 function useDomLocalization(language: Language) {
   const rootRef = useRef<HTMLElement>(null);
@@ -725,6 +728,26 @@ export function MarketDashboard() {
               ["Регулирование и партнеры определяют реальный вход", "Потенциал спроса нельзя оценивать отдельно от разрешенной модели запуска."],
             ].map(([title, copy]) => <article key={title}><h3>{title}</h3><p>{copy}</p></article>)}
           </div>
+          <section className="panel cross-market-insights">
+            <div className="conclusions-section-heading">
+              <div>
+                <span className="section-kicker">СКВОЗНЫЕ ИНСАЙТЫ</span>
+                <h2>Что повторяется между рынками</h2>
+              </div>
+              <span className="count-pill">8 выводов</span>
+            </div>
+            <div className="cross-market-insights-grid">
+              {task5Conclusions.cross_market.map((insight, index) => (
+                <article key={insight.title}>
+                  <span>{String(index + 1).padStart(2, "0")}</span>
+                  <div>
+                    <h3>{insight.title}</h3>
+                    <p>{insight.body}</p>
+                  </div>
+                </article>
+              ))}
+            </div>
+          </section>
           <div className="assessment-grid">
             {data.markets.map((market) => {
               const assessment = data.market_assessments.find((item) => item.market_code === market.code)!;
@@ -746,6 +769,38 @@ export function MarketDashboard() {
               );
             })}
           </div>
+          <section className="panel market-conclusions">
+            <div className="conclusions-section-heading">
+              <div>
+                <span className="section-kicker">ВЫВОДЫ ПО РЫНКАМ</span>
+                <h2>Продуктовые и коммуникационные направления</h2>
+                <p>Разверните рынок, чтобы увидеть полный набор выводов.</p>
+              </div>
+              <span className="count-pill">8 рынков</span>
+            </div>
+            <div className="market-conclusions-list">
+              {conclusionMarketOrder.map((code, index) => {
+                const market = data.markets.find((item) => item.code === code)!;
+                const items = marketConclusionItems[code] ?? [];
+                return (
+                  <details key={code} open={index === 0}>
+                    <summary>
+                      <span>{code}</span>
+                      <strong>{market.name_ru}</strong>
+                      <small>{items.length} выводов</small>
+                    </summary>
+                    <ul>
+                      {items.map((item) => (
+                        <li key={`${code}-${item.title}`}>
+                          <strong>{item.title}</strong>{item.body ? <>{/^[,.;:!?]/.test(item.body) ? "" : " "}{item.body}</> : null}
+                        </li>
+                      ))}
+                    </ul>
+                  </details>
+                );
+              })}
+            </div>
+          </section>
         </section>
       )}
 
