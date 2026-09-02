@@ -431,22 +431,39 @@ function MarketMap({
             const unified = getUnifiedScore(market.code);
             countryLayer.bindTooltip(
               `<strong>${market.name_ru}</strong><small>${mapOpportunityLabels[market.code]}</small><span class="aps-map-score ${unified.level}">${unified.final_score.toFixed(2)} / 5 · ${unified.label}</span>`,
-              { permanent: true, direction: "center", className: `aps-map-label aps-map-label-${market.code.toLowerCase()}`, opacity: 1 },
+              { permanent: true, direction: "center", className: `aps-map-label aps-map-label-${market.code.toLowerCase()}`, opacity: 1, interactive: true },
             );
-            countryLayer.on("click", () => {
-              onSelectRef.current(code);
-            });
-            countryLayer.on("mouseover", () => {
+            const selectCountry = () => onSelectRef.current(code);
+            const highlightCountry = () => {
               countryLayer.bringToFront();
               countryLayer.setStyle({ color: "#effff4", weight: 3, fillOpacity: 1 });
               countryLayer.getTooltip()?.getElement()?.classList.add("is-hovered");
-            });
-            countryLayer.on("mouseout", () => {
+            };
+            const resetCountryHighlight = () => {
               countryLayer.setStyle(getCountryStyle(code, visibleCodesRef.current, selectedCodeRef.current));
               countryLayer.getTooltip()?.getElement()?.classList.remove("is-hovered");
-            });
+            };
+            countryLayer.on("click", selectCountry);
+            countryLayer.on("mouseover", highlightCountry);
+            countryLayer.on("mouseout", resetCountryHighlight);
+            const tooltip = countryLayer.getTooltip();
+            tooltip?.on("click", selectCountry);
+            tooltip?.on("mouseover", highlightCountry);
+            tooltip?.on("mouseout", resetCountryHighlight);
             countryLayer.on("tooltipopen", () => {
-              countryLayer.getTooltip()?.getElement()?.classList.toggle("is-selected", code === selectedCodeRef.current);
+              const tooltipElement = countryLayer.getTooltip()?.getElement();
+              if (!tooltipElement) return;
+              tooltipElement.classList.toggle("is-selected", code === selectedCodeRef.current);
+              tooltipElement.setAttribute("tabindex", "0");
+              tooltipElement.setAttribute("role", "button");
+              tooltipElement.setAttribute("aria-label", `Выбрать рынок: ${market.name_ru}`);
+              if (tooltipElement.dataset.keyboardReady === "true") return;
+              tooltipElement.dataset.keyboardReady = "true";
+              tooltipElement.addEventListener("keydown", (event) => {
+                if (event.key !== "Enter" && event.key !== " ") return;
+                event.preventDefault();
+                selectCountry();
+              });
             });
             countryLayer.on("add", () => {
               const element = (countryLayer as import("leaflet").Path).getElement();

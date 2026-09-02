@@ -72,6 +72,8 @@ test("keeps production metadata and documented market intelligence", async () =>
   assert.doesNotMatch(dashboard, /меньшее число сервисов/);
   assert.doesNotMatch(dashboard, /className="gate-mini"/);
   assert.match(dashboard, /hero-compact/);
+  assert.match(dashboard, /interactive: true/);
+  assert.match(dashboard, /tooltip\?\.on\("click", selectCountry\)/);
   assert.match(dashboard, /Что уже работает или не работает/);
   assert.doesNotMatch(dashboard, /Только конкретные компании и опубликованные факты/);
   assert.match(dashboard, /tabs-scroll-left/);
@@ -104,6 +106,7 @@ test("keeps production metadata and documented market intelligence", async () =>
   assert.match(styles, /\.attractiveness-badge\.low \{[^}]*#f29a52/);
   assert.match(styles, /\.aps-map-score\.low \{ background: #f29a52; \}/);
   assert.match(styles, /\.leaflet-tooltip\.aps-map-label \{[\s\S]*white-space: normal;/);
+  assert.match(styles, /\.leaflet-tooltip\.aps-map-label \{[\s\S]*pointer-events: auto;/);
   assert.match(styles, /\.aps-map-label small \{[^}]*overflow-wrap: break-word;/);
   assert.doesNotMatch(page + layout, /codex-preview|_sites-preview/);
 });

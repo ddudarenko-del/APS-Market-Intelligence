@@ -373,9 +373,14 @@ body {
   color: #f1f6f2;
   box-shadow: 0 8px 22px rgba(0, 0, 0, .28);
   white-space: normal;
-  pointer-events: none;
+  pointer-events: auto;
+  cursor: pointer;
   transform: translate(-50%, -50%);
   transition: border-color .16s ease, background-color .16s ease, box-shadow .16s ease, opacity .16s ease;
+}
+.leaflet-tooltip.aps-map-label:focus-visible {
+  outline: 2px solid var(--lime);
+  outline-offset: 3px;
 }
 .leaflet-tooltip.aps-map-label::before { display: none; }
 .aps-map-label strong, .aps-map-label small, .aps-map-score { display: block; }
