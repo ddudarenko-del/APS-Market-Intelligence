@@ -364,6 +364,7 @@ body {
 }
 .leaflet-control-attribution a { color: #91cfa8 !important; }
 .leaflet-tooltip.aps-map-label {
+  box-sizing: border-box;
   width: 158px;
   margin: 0;
   padding: 9px 10px 10px;
@@ -372,6 +373,7 @@ body {
   background: rgba(9, 14, 11, .88);
   color: #f1f6f2;
   box-shadow: 0 8px 22px rgba(0, 0, 0, .28);
+  white-space: normal;
   pointer-events: none;
   transform: translate(-50%, -50%);
   transition: border-color .16s ease, background-color .16s ease, box-shadow .16s ease, opacity .16s ease;
@@ -379,9 +381,10 @@ body {
 .leaflet-tooltip.aps-map-label::before { display: none; }
 .aps-map-label strong, .aps-map-label small, .aps-map-score { display: block; }
 .aps-map-label strong { color: #f4faf6; font-size: 12px; line-height: 1.2; }
-.aps-map-label small { margin-top: 4px; color: #b8c5bd; font-size: 10px; line-height: 1.3; }
+.aps-map-label small { margin-top: 4px; overflow-wrap: break-word; color: #b8c5bd; font-size: 10px; line-height: 1.3; }
 .aps-map-score {
   width: fit-content;
+  max-width: 100%;
   margin-top: 7px;
   padding: 4px 7px;
   border-radius: 999px;
@@ -389,6 +392,7 @@ body {
   font-size: 9px;
   font-weight: 800;
   line-height: 1.2;
+  white-space: nowrap;
 }
 .aps-map-score.high { background: #40f785; }
 .aps-map-score.medium_high { background: #b7d85c; }

@@ -99,6 +99,8 @@ test("keeps production metadata and documented market intelligence", async () =>
   assert.match(dashboard, /\? "#40f785"[\s\S]*\? "#b7d85c"[\s\S]*\? "#f0cf57"[\s\S]*: "#f29a52"/);
   assert.match(styles, /\.attractiveness-badge\.low \{[^}]*#f29a52/);
   assert.match(styles, /\.aps-map-score\.low \{ background: #f29a52; \}/);
+  assert.match(styles, /\.leaflet-tooltip\.aps-map-label \{[\s\S]*white-space: normal;/);
+  assert.match(styles, /\.aps-map-label small \{[^}]*overflow-wrap: break-word;/);
   assert.doesNotMatch(page + layout, /codex-preview|_sites-preview/);
 });
 
