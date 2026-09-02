@@ -88,9 +88,8 @@ a { color: inherit; }
 .panel-heading p { margin: 7px 0 0; color: var(--ink-soft); font-size: 14px; line-height: 1.45; }
 .panel-heading select { min-width: 190px; border: 1px solid var(--line); background: white; border-radius: 12px; padding: 10px 34px 10px 12px; color: var(--ink); }
 .section-kicker { color: #4f5e7b; }
-.count-pill, .gate-mini { border: 1px solid var(--line); background: #fbf8e9; border-radius: 999px; padding: 6px 10px; font-size: 11px; color: var(--ink-soft); }
+.count-pill { border: 1px solid var(--line); background: #fbf8e9; border-radius: 999px; padding: 6px 10px; font-size: 11px; color: var(--ink-soft); }
 .count-pill { white-space: nowrap; }
-.gate-mini { width: 112px; max-width: 100%; min-width: 0; white-space: normal; text-align: center; line-height: 1.18; overflow-wrap: anywhere; }
 
 .atlas { position: relative; height: 590px; overflow: hidden; background-color: #dfe8e8; background-image: linear-gradient(rgba(255,255,255,.45) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.45) 1px, transparent 1px), radial-gradient(ellipse at 24% 48%, rgba(255,255,255,.92) 0 16%, transparent 16.4%), radial-gradient(ellipse at 32% 75%, rgba(255,255,255,.92) 0 11%, transparent 11.4%), radial-gradient(ellipse at 52% 35%, rgba(255,255,255,.92) 0 9%, transparent 9.4%), radial-gradient(ellipse at 58% 63%, rgba(255,255,255,.92) 0 15%, transparent 15.4%), radial-gradient(ellipse at 80% 48%, rgba(255,255,255,.92) 0 20%, transparent 20.4%), radial-gradient(ellipse at 88% 81%, rgba(255,255,255,.92) 0 8%, transparent 8.4%); background-size: 8% 12%, 8% 12%, auto, auto, auto, auto, auto, auto; border-bottom: 1px solid var(--line); }
 .atlas::after { content: "Схематичное положение рынков · не картографическая проекция"; position: absolute; top: 18px; right: 20px; font: 10px var(--font-plex-mono), monospace; color: rgba(10,23,51,.52); }
@@ -117,7 +116,7 @@ a { color: inherit; }
 .primary-button { border: 0; border-radius: 12px; background: var(--ink); color: white; padding: 13px 17px; cursor: pointer; white-space: nowrap; }
 
 .ranking-list { min-width: 0; padding: 8px 14px; }
-.ranking-list button { width: 100%; min-width: 0; display: grid; grid-template-columns: 28px minmax(0, 1fr) minmax(86px, 112px) auto; gap: 10px; align-items: center; border: 0; border-bottom: 1px dashed var(--line); background: transparent; padding: 14px 8px; text-align: left; cursor: pointer; border-radius: 10px; }
+.ranking-list button { width: 100%; min-width: 0; display: grid; grid-template-columns: 28px minmax(0, 1fr) auto; gap: 10px; align-items: center; border: 0; border-bottom: 1px dashed var(--line); background: transparent; padding: 14px 8px; text-align: left; cursor: pointer; border-radius: 10px; }
 .ranking-list button:hover, .ranking-list button.active { background: #f7f4e6; }
 .rank-number { color: var(--ink-soft); font: 12px var(--font-plex-mono), monospace; }.rank-name { min-width: 0; }.rank-name strong, .rank-name small { display: block; overflow-wrap: break-word; }.rank-name strong { hyphens: auto; }.rank-name small { color: var(--ink-soft); font-size: 11px; margin-top: 3px; }
 .score-badge { min-width: 48px; padding: 7px 8px; text-align: center; border-radius: 999px; font: 700 13px var(--font-plex-mono), monospace; }.score-badge.high { background: var(--red); }.score-badge.mid { background: var(--yellow); }.score-badge.low { background: #b8e9b1; }
@@ -336,7 +335,7 @@ body {
 
 .panel-controls { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; justify-content: flex-end; }
 
-.count-pill, .gate-mini {
+.count-pill {
   border-color: #3a463f;
   background: #161e19;
   color: #b4c1b9;
@@ -404,14 +403,14 @@ body {
   box-shadow: 0 0 0 2px rgba(64, 247, 133, .16), 0 10px 28px rgba(0, 0, 0, .38);
 }
 .leaflet-tooltip.aps-map-label.is-hovered strong, .leaflet-tooltip.aps-map-label.is-selected strong { color: var(--lime); }
-.leaflet-tooltip.aps-map-label-phl { margin-left: 48px; margin-top: -10px; }
-.leaflet-tooltip.aps-map-label-vnm { margin-left: -56px; margin-top: -16px; }
-.leaflet-tooltip.aps-map-label-idn { margin-left: 6px; margin-top: 30px; }
-.leaflet-tooltip.aps-map-label-gbr { margin-left: -54px; margin-top: -22px; }
-.leaflet-tooltip.aps-map-label-mex { margin-left: -12px; margin-top: 30px; }
-.leaflet-tooltip.aps-map-label-col { margin-left: 35px; margin-top: 17px; }
-.leaflet-tooltip.aps-map-label-arg { margin-left: 47px; margin-top: 8px; }
-.leaflet-tooltip.aps-map-label-can { margin-left: 22px; margin-top: 5px; }
+.leaflet-tooltip.aps-map-label-phl { margin-left: 99px; margin-top: -61px; }
+.leaflet-tooltip.aps-map-label-vnm { margin-left: -80px; margin-top: -34px; }
+.leaflet-tooltip.aps-map-label-idn { margin-left: 66px; margin-top: 86px; }
+.leaflet-tooltip.aps-map-label-gbr { margin-left: 1px; margin-top: -57px; }
+.leaflet-tooltip.aps-map-label-mex { margin-left: -58px; margin-top: 45px; }
+.leaflet-tooltip.aps-map-label-col { margin-left: 75px; margin-top: 48px; }
+.leaflet-tooltip.aps-map-label-arg { margin-left: -63px; margin-top: 37px; }
+.leaflet-tooltip.aps-map-label-can { margin-left: -52px; margin-top: -34px; }
 
 @media (max-width: 780px) {
   .leaflet-tooltip.aps-map-label {
@@ -1144,10 +1143,9 @@ footer {
   .profile-hero { align-items: flex-start; flex-direction: column; gap: 20px; }
   .selected-kpis { grid-template-columns: 1fr; }
   .ranking-list { padding-inline: 10px; }
-  .ranking-list button { grid-template-columns: 24px minmax(0, 1fr) 48px; grid-template-areas: "rank name score" ". gate score"; column-gap: 8px; row-gap: 7px; padding-inline: 6px; }
+  .ranking-list button { grid-template-columns: 24px minmax(0, 1fr) 48px; grid-template-areas: "rank name score"; column-gap: 8px; row-gap: 7px; padding-inline: 6px; }
   .ranking-list .rank-number { grid-area: rank; }
   .ranking-list .rank-name { grid-area: name; }
-  .ranking-list .gate-mini { grid-area: gate; justify-self: start; width: auto; max-width: 150px; }
   .ranking-list .score-badge { grid-area: score; }
   .research-conclusion, .respondents-intro { padding: 24px 20px; }
   .qualitative-scores, .respondent-metrics { grid-template-columns: 1fr; }
@@ -1160,4 +1158,174 @@ footer {
   .report-rich-bullet.level-3 { margin-left: 42px; }
   .audience-group h4 { font-size: 19px; line-height: 1.38; }
   .cases-intro > div:first-child { padding: 25px 20px; }.cases-intro-metrics { grid-template-columns: 1fr; }.cases-intro-metrics div { padding: 17px 20px; border-top: 1px solid var(--line); border-left: 0; }.cases-intro-metrics div:first-child { border-top: 0; }.primary-case-heading { align-items: flex-start; flex-direction: column; padding: 25px 20px; }.primary-case-heading .source-chips { justify-content: flex-start; }.case-trajectory, .case-reasons-grid, .supporting-cases-grid, .case-patterns-grid { grid-template-columns: 1fr; }.case-trajectory article, .case-reasons-heading { padding: 22px 20px; }.case-main-lesson { grid-template-columns: 1fr; gap: 9px; padding: 22px 20px; }.cases-section-heading { align-items: flex-start; flex-direction: column; padding: 20px 4px 4px; }.cases-section-heading > p { text-align: left; }.supporting-case:last-child { grid-column: auto; }.cases-section-heading.compact { padding: 22px 20px 17px; }
+}
+
+/* Desktop readability pass for live presentation and shared-screen use. */
+@media (min-width: 781px) {
+  .app-shell { width: min(1360px, calc(100% - 48px)); }
+
+  .hero-compact { padding: 12px 24px 15px; border-radius: 22px; }
+  .hero-compact .hero-topline { min-height: 34px; padding: 0 2px; }
+  .hero-compact .aps-logo { width: 92px; }
+  .hero-compact .hero-grid { grid-template-columns: minmax(0, 1fr) minmax(320px, 390px); gap: 28px; margin-top: 7px; }
+  .hero-compact h1 { font-size: 30px; letter-spacing: -.045em; }
+  .hero-compact .hero-grid > div:first-child > p { display: none; }
+  .hero-compact .hero-metrics { border-radius: 15px; }
+  .hero-compact .hero-metrics div { padding: 8px 13px; }
+  .hero-compact .hero-metrics strong { font-size: 20px; }
+  .hero-compact .hero-metrics span { margin-top: 2px; font-size: 9.5px; }
+
+  .tabs-shell { position: sticky; top: 8px; z-index: 900; margin-top: 14px; padding: 4px 0; border-radius: 24px; background: #030504; }
+  .tabs { gap: 2px; padding: 5px 6px; }
+  .tabs button { min-height: 46px; padding: 10px 12px; font-size: 14px; }
+  .tabs-scroll { width: 38px; height: 38px; }
+
+  .panel-heading > div:first-child,
+  .research-conclusion p,
+  .market-report-section > div:last-child,
+  .local-competition-summary,
+  .acquisition-country-head > div:first-child { max-width: 78ch; }
+
+  .panel-heading p,
+  .subsection-heading p { font-size: 14px; line-height: 1.55; }
+  .hero-metrics span, .update-stamp { font-size: 11px; }
+
+  .ranking-list button { grid-template-columns: 28px minmax(0, 1fr) auto; padding-block: 15px; }
+  .rank-name strong { font-size: 16px; }
+  .rank-name small, .rank-number { font-size: 12px; }
+  .score-badge { min-width: 54px; font-size: 14px; }
+
+  .market-gap { font-size: 14px; line-height: 1.55; }
+  .selected-confidence, .attractiveness-badge { font-size: 11px; }
+  .selected-kpis span,
+  .metric-stack span,
+  .profile-grid span,
+  .numbers-strip span,
+  .gate-box span { font-size: 12px; }
+  .selected-kpis span small { font-size: 10.5px; }
+
+  .leaflet-tooltip.aps-map-label { width: 170px; padding: 10px 11px 11px; }
+  .aps-map-label strong { font-size: 13px; }
+  .aps-map-label small { font-size: 11px; line-height: 1.35; overflow-wrap: anywhere; }
+  .aps-map-score { font-size: 10px; }
+  .atlas-legend-title { font-size: 10px; }
+  .atlas-legend span { font-size: 12px; }
+
+  .research-observations p,
+  .cross-market-insights-grid p,
+  .market-conclusions-list li,
+  .assessment-card > p,
+  .gate-box p,
+  .compare-qualitative p,
+  .profile-assessment-grid p,
+  .local-competition-summary p,
+  .benchmark-note,
+  .benchmark-card a { font-size: 14px; }
+  .research-observations h3, .cross-market-insights-grid h3 { font-size: 18px; }
+  .conclusions-section-heading p,
+  .market-conclusions-list summary > small,
+  .qualitative-scores span,
+  .qualitative-scores small,
+  .profile-assessment-grid span { font-size: 11px; }
+
+  .key-comparison th, .key-comparison td { font-size: 13px; line-height: 1.55; }
+  .market-report-section p { max-width: 78ch; font-size: 15px; line-height: 1.7; }
+
+  .must-win-list span,
+  .local-entity small,
+  .competitor-card-head span,
+  .availability-badge,
+  .support-checks span { font-size: 11px; }
+  .local-entity strong,
+  .competitor-markets,
+  .selected-availability p,
+  .availability-note-cell,
+  .competitor-terms strong,
+  .availability-legend span:last-child,
+  .reference-note span { font-size: 13px; }
+  .availability-table thead th { font-size: 11px; }
+  .availability-table thead small { font-size: 10px; }
+  .availability-table td > span, .support-value { font-size: 12px !important; }
+
+  .barrier-matrix-head,
+  .barrier-row { grid-template-columns: 230px minmax(270px, 1fr) minmax(270px, 1fr) 190px; }
+  .barrier-market h3 { font-size: 22px; hyphens: auto; overflow-wrap: anywhere; }
+  .evidence-column { padding-left: 122px !important; }
+  .evidence-score { width: 90px; }
+  .evidence-score strong { margin-inline: auto; }
+  .evidence-score span,
+  .barrier-balance > span,
+  .barrier-meaning > span,
+  .barrier-meaning small { font-size: 10px; line-height: 1.3; }
+  .barrier-method-note span,
+  .evidence-column p,
+  .barrier-case-product,
+  .barrier-cases-heading > p { font-size: 13px; }
+  .barrier-meaning p,
+  .barrier-case-copy p { font-size: 14px; line-height: 1.58; }
+  .barrier-balance p,
+  .barrier-balance button,
+  .barrier-meaning button { font-size: 12px; }
+
+  .acquisition-method-note p,
+  .acquisition-decision-grid p,
+  .acquisition-profile-evidence-list p,
+  .acquisition-channels-heading > p,
+  .channel-reach p,
+  .channel-example p,
+  .channel-playbook p,
+  .acquisition-strategy-grid p,
+  .channel-strategy p { font-size: 14px; line-height: 1.58; }
+  .acquisition-country-head p { font-size: 15px; }
+  .acquisition-priority-table th { font-size: 11px; }
+  .acquisition-priority-table td { font-size: 13px; line-height: 1.5; }
+  .acquisition-reach-grid span,
+  .acquisition-reach-grid small,
+  .channel-reach > span,
+  .channel-example > span,
+  .channel-playbook > span,
+  .channel-meta span,
+  .channel-strategy > span { font-size: 10px; }
+
+  .case-trajectory p,
+  .case-reasons-grid p,
+  .cases-section-heading > p,
+  .case-fact p,
+  .case-patterns-grid p,
+  .case-study-product { font-size: 14px; }
+  .case-stage-topline span,
+  .case-trajectory small,
+  .supporting-case-topline span,
+  .case-fact > span,
+  .case-study-fact > span,
+  .case-study-lesson > span { font-size: 10px; }
+
+  .respondent-metrics span,
+  .respondent-criteria span,
+  .respondent-status,
+  .respondent-card small,
+  .respondent-card dt { font-size: 11px; }
+  .respondent-criteria p,
+  .respondent-card dd { font-size: 14px; line-height: 1.58; }
+
+  .method-blocks p,
+  .method-blocks p strong,
+  .unified-criteria-list article > p,
+  .sources-list p,
+  .sources-list small { font-size: 13px; }
+  .source-tier { font-size: 10px; }
+}
+
+@media (min-width: 781px) and (max-width: 1180px) {
+  .hero-compact .hero-grid { grid-template-columns: minmax(0, 1fr) minmax(300px, 360px); }
+  .barrier-matrix-head { display: none; }
+  .barrier-row { grid-template-columns: 210px minmax(0, 1fr) minmax(0, 1fr); }
+}
+
+@media (max-width: 780px) {
+  .hero-compact { padding-bottom: 16px; }
+  .hero-compact .hero-grid { margin-top: 10px; }
+  .hero-compact .hero-grid > div:first-child > p,
+  .hero-compact .hero-metrics { display: none; }
+  .hero-compact h1 { font-size: 30px; }
 }

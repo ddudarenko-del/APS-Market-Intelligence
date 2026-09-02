@@ -32,7 +32,7 @@ test("server-renders the unified APS research workspace", async () => {
   assert.match(html, /<title>APS Market Intelligence<\/title>/i);
   assert.match(html, /Выводы/);
   assert.match(html, /Респонденты/);
-  assert.match(html, /Кейсы и уроки/);
+  assert.match(html, />Кейсы<\/button>/);
   assert.match(html, /Единый рейтинг/);
   assert.doesNotMatch(html, /Три независимых слоя/);
   assert.doesNotMatch(html, /Ключевой вывод/);
@@ -68,6 +68,10 @@ test("keeps production metadata and documented market intelligence", async () =>
   assert.match(dashboard, /Клик выбирает рынок и обновляет блок под картой/);
   assert.doesNotMatch(dashboard, /Клик, тап или клавиатура/);
   assert.match(dashboard, /В выигрыше может оказаться продукт, который не заменяет GCash/);
+  assert.match(dashboard, /Пользователь должен видеть лучший курс, меньшую комиссию или локальную функцию/);
+  assert.doesNotMatch(dashboard, /меньшее число сервисов/);
+  assert.doesNotMatch(dashboard, /className="gate-mini"/);
+  assert.match(dashboard, /hero-compact/);
   assert.match(dashboard, /Что уже работает или не работает/);
   assert.doesNotMatch(dashboard, /Только конкретные компании и опубликованные факты/);
   assert.match(dashboard, /tabs-scroll-left/);

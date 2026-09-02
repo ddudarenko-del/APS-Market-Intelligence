@@ -103,14 +103,14 @@ const tabLabels: Array<{ id: Tab; label: string }> = [
   { id: "overview", label: "Обзор" },
   { id: "conclusions", label: "Выводы" },
   { id: "compare", label: "Сравнение" },
-  { id: "profiles", label: "Профили рынков" },
-  { id: "competition", label: "Конкуренты / тарифы" },
-  { id: "barriers", label: "Барьеры и драйверы" },
-  { id: "cases", label: "Кейсы и уроки" },
-  { id: "acquisition", label: "Каналы привлечения" },
+  { id: "profiles", label: "Профили" },
+  { id: "competition", label: "Конкуренты" },
+  { id: "barriers", label: "Барьеры" },
+  { id: "cases", label: "Кейсы" },
+  { id: "acquisition", label: "Каналы" },
   { id: "respondents", label: "Респонденты" },
-  { id: "data", label: "Сырые данные" },
-  { id: "method", label: "Методология / источники" },
+  { id: "data", label: "Данные" },
+  { id: "method", label: "Методология" },
 ];
 
 const gateLabels: Record<string, string> = {
@@ -607,7 +607,7 @@ export function MarketDashboard() {
 
   return (
     <main ref={localizationRootRef} className="app-shell">
-      <header className="hero">
+      <header className={`hero ${tab === "overview" ? "" : "hero-compact"}`}>
         <div className="hero-topline">
           {/* The same component is built by Next/vinext and standalone Vite for Hostinger. */}
           {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -703,7 +703,6 @@ export function MarketDashboard() {
                 <button key={market.code} type="button" onClick={() => chooseMarket(market.code)} className={selectedCode === market.code ? "active" : ""}>
                   <span className="rank-number">{index + 1}</span>
                   <span className="rank-name"><strong>{market.name_ru}</strong><small>{market.region}</small></span>
-                  <span className="gate-mini">{gateLabels[market.regulatory.gate]}</span>
                   <ScoreBadge score={getUnifiedScore(market.code).final_score} />
                 </button>
               ))}
@@ -724,7 +723,7 @@ export function MarketDashboard() {
             {[
               ["Главный спрос - трансграничные деньги", "Зарубежный доход, семейные переводы и международные специалисты дают наиболее понятные сценарии."],
               ["Базовый продукт больше не отличает", "В выигрыше может оказаться продукт, который не заменяет GCash, QRIS или локальный банк, а становится для них «входом глобальных денег». На Филиппинах и в Индонезии это особенно выражено."],
-              ["Переключение требует ощутимой выгоды", "Пользователь должен видеть лучший курс, меньшую комиссию, локальную функцию или меньшее число сервисов."],
+              ["Переключение требует ощутимой выгоды", "Пользователь должен видеть лучший курс, меньшую комиссию или локальную функцию."],
               ["Регулирование и партнеры определяют реальный вход", "Потенциал спроса нельзя оценивать отдельно от разрешенной модели запуска."],
             ].map(([title, copy]) => <article key={title}><h3>{title}</h3><p>{copy}</p></article>)}
           </div>
