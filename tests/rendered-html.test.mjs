@@ -71,7 +71,8 @@ test("keeps production metadata and documented market intelligence", async () =>
   assert.match(dashboard, /Пользователь должен видеть лучший курс, меньшую комиссию или локальную функцию/);
   assert.doesNotMatch(dashboard, /меньшее число сервисов/);
   assert.doesNotMatch(dashboard, /className="gate-mini"/);
-  assert.match(dashboard, /hero-compact/);
+  assert.match(dashboard, /className="hero hero-compact"/);
+  assert.doesNotMatch(dashboard, /tab === "overview" \? "" : "hero-compact"/);
   assert.match(dashboard, /interactive: true/);
   assert.match(dashboard, /tooltip\?\.on\("click", selectCountry\)/);
   assert.match(dashboard, /Что уже работает или не работает/);

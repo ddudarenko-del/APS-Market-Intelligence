@@ -624,7 +624,7 @@ export function MarketDashboard() {
 
   return (
     <main ref={localizationRootRef} className="app-shell">
-      <header className={`hero ${tab === "overview" ? "" : "hero-compact"}`}>
+      <header className="hero hero-compact">
         <div className="hero-topline">
           {/* The same component is built by Next/vinext and standalone Vite for Hostinger. */}
           {/* eslint-disable-next-line @next/next/no-img-element */}
