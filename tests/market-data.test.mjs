@@ -90,6 +90,7 @@ test("keeps competition, respondent and acquisition enums valid", () => {
 });
 
 test("publishes only completed respondents and current ARQ naming", () => {
+  assert.equal(data.metadata.interviews_conducted, 14);
   assert.equal(data.respondents.length, 9);
   assert.ok(data.respondents.every((respondent) => respondent.status === "completed" && respondent.visibility === "name_initial"));
   assert.ok(data.respondents.every((respondent) => /^[A-Z][A-Za-z]+ [A-Z]\.$/.test(respondent.display_name)));

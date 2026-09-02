@@ -626,7 +626,7 @@ export function MarketDashboard() {
           </div>
           <div className="hero-metrics" aria-label="Сводка исследования">
             <div><strong>8</strong><span>рынков</span></div>
-            <div><strong>{completedRespondents.length}</strong><span>экспертных интервью</span></div>
+            <div><strong>{data.metadata.interviews_conducted}</strong><span>экспертных интервью</span></div>
             <div><strong>{data.sources.length}</strong><span>источников</span></div>
           </div>
         </div>
@@ -1418,7 +1418,7 @@ export function MarketDashboard() {
             <span className="section-kicker">ЭКСПЕРТНАЯ ПРОВЕРКА</span>
             <h2>Кто помог проверить рыночные гипотезы</h2>
             <p>Имена приведены в формате «имя + инициал фамилии». Контактные данные не публикуются; роль и опыт переведены на русский с сохранением конкретики интервью.</p>
-            <div className="respondent-metrics"><div><strong>{completedRespondents.length}</strong><span>завершённых интервью</span></div><div><strong>{data.markets.length}</strong><span>рынков в охвате</span></div><div><strong>3</strong><span>критерия отбора</span></div></div>
+            <div className="respondent-metrics"><div><strong>{data.metadata.interviews_conducted}</strong><span>завершённых интервью</span></div><div><strong>{data.markets.length}</strong><span>рынков в охвате</span></div><div><strong>3</strong><span>критерия отбора</span></div></div>
           </article>
           <div className="respondent-criteria">
             <article><span>01</span><h3>Практический опыт</h3><p>Работа в финтехе, платежах, crypto/Web3 или запуске продуктов на релевантном рынке.</p></article>
