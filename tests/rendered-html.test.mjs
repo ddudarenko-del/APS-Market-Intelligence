@@ -73,6 +73,8 @@ test("keeps production metadata and documented market intelligence", async () =>
   assert.doesNotMatch(dashboard, /className="gate-mini"/);
   assert.match(dashboard, /className="hero hero-compact"/);
   assert.doesNotMatch(dashboard, /tab === "overview" \? "" : "hero-compact"/);
+  assert.match(dashboard, /Исследование обновлено 02\.09\.2026/);
+  assert.doesNotMatch(dashboard, /Исследование обновлено 01\.09\.2026/);
   assert.match(dashboard, /interactive: true/);
   assert.match(dashboard, /tooltip\?\.on\("click", selectCountry\)/);
   assert.match(dashboard, /Что уже работает или не работает/);

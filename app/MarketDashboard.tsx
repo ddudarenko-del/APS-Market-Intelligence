@@ -630,7 +630,7 @@ export function MarketDashboard() {
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img className="aps-logo" src="/brand/aps-logo.svg" alt="APS" width={132} height={52} />
           <div className="hero-actions">
-            <span className="update-stamp">Исследование обновлено 01.09.2026</span>
+            <span className="update-stamp">Исследование обновлено 02.09.2026</span>
             <div className="language-switch" role="group" aria-label="Выбор языка">
               <button type="button" className={language === "ru" ? "active" : ""} aria-pressed={language === "ru"} onClick={() => setLanguage("ru")}>RU</button>
               <button type="button" className={language === "en" ? "active" : ""} aria-pressed={language === "en"} onClick={() => setLanguage("en")}>EN</button>

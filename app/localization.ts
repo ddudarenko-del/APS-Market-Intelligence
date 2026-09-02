@@ -127,7 +127,7 @@ const reviewedTranslations: Record<string, string> = {
   "Хорошо подтверждено": "Well-supported",
   "Требует дополнительной проверки": "Requires further validation",
   "Диагностический инструмент, не юридическое заключение": "Diagnostic tool, not legal advice",
-  "Исследование обновлено 01.09.2026": "Study updated 1 Sep 2026",
+  "Исследование обновлено 02.09.2026": "Study updated 2 Sep 2026",
   "КОНКУРЕНТНАЯ СРЕДА · 01.09.2026": "COMPETITIVE LANDSCAPE · 1 SEP 2026",
   "Анализ продуктового соответствия stablecoin-powered global money app на восьми рынках с учетом открытых данных и экспертных интервью.": "Product-market fit assessment for a stablecoin-powered global money app across eight markets, based on open data and expert interviews.",
   "Восемь рынков в одном поле": "Eight markets at a glance",
