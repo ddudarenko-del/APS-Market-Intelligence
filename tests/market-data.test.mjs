@@ -119,6 +119,25 @@ test("publishes only completed respondents and current ARQ naming", () => {
   assert.ok(data.market_competitors.every((competitor) => competitor.provider !== "DolarApp"));
 });
 
+test("connects the four supplied interview transcripts to the research evidence", () => {
+  const transcriptIds = [
+    "interview_ph_web3_community_2026",
+    "interview_canada_gtm_2026",
+    "interview_vietnam_web3_marketing_2026",
+    "interview_asia_crypto_payments_2026",
+  ];
+  const reportEvidence = new Set(data.market_reports.flatMap((report) => report.sections.flatMap((section) => section.source_ids)));
+  for (const id of transcriptIds) {
+    const source = data.sources.find((item) => item.id === id);
+    assert.ok(source, `missing transcript source ${id}`);
+    assert.equal(source.type, "interview");
+    assert.equal(source.tier, "expert_interview");
+    assert.equal(source.period, "сентябрь 2026");
+    assert.equal(source.accessed, "2026-09-24");
+    assert.ok(reportEvidence.has(id), `transcript is not connected to report evidence: ${id}`);
+  }
+});
+
 test("preserves the structured Indonesia country-detail report", () => {
   const report = data.market_reports.find((item) => item.market_code === "IDN");
   assert.ok(report);

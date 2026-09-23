@@ -380,9 +380,9 @@
           "cross_border": { "score": 5, "evidence": "$41,6 млрд входящих переводов в 2025 году, 8,53% ВВП; повторяющиеся потоки OFW и моряков.", "source_ids": ["wb_api", "ph_bsp_remittances_2025", "ph_psa_ofw_2024"] },
           "stable_value_need": { "score": 3.5, "evidence": "Долларовый зарубежный доход важен целевым сегментам, хотя общерыночная инфляция в 2025 году была 1,66%.", "source_ids": ["imf_weo_2026", "interview_ph_crossborder_2026"] },
           "audience_readiness": { "score": 4.5, "evidence": "Филиппины занимают 9-е место в индексе crypto adoption; 69% взрослых имеют smartphone.", "source_ids": ["chainalysis_2025", "wb_findex_2025"] },
-          "competitive_whitespace": { "score": 4, "evidence": "GCash, Maya и Coins.ph закрывают локальные платежи; окно остаётся в получении зарубежного дохода и его дешёвом выводе в эти rails.", "source_ids": ["ph_bsp_epayments_2025", "coins_higlobe_2026", "interview_ph_2026"] },
+          "competitive_whitespace": { "score": 4, "evidence": "GCash, Maya и Coins.ph закрывают локальные платежи; окно остаётся в получении зарубежного дохода и его дешёвом выводе в эти rails.", "source_ids": ["ph_bsp_epayments_2025", "coins_higlobe_2026", "interview_ph_2026", "interview_asia_crypto_payments_2026"] },
           "user_economics": { "score": 4, "evidence": "Большой регулярный поток переводов создаёт измеримую экономию при сокращении посредников и конвертаций.", "source_ids": ["ph_bsp_remittances_2025", "interview_ph_crossborder_2026"] },
-          "acquisition_feasibility": { "score": 4.5, "evidence": "Coins.ph подтверждает рабочие referral, affiliate и payroll-партнёрства; цифровые каналы имеют широкий охват.", "source_ids": ["coins_affiliate_2026", "coins_referral_2026", "coins_higlobe_2026"] },
+          "acquisition_feasibility": { "score": 4.5, "evidence": "Coins.ph подтверждает рабочие referral, affiliate и payroll-партнёрства; цифровые каналы имеют широкий охват.", "source_ids": ["coins_affiliate_2026", "coins_referral_2026", "coins_higlobe_2026", "interview_ph_web3_community_2026"] },
           "regulatory_feasibility": { "score": 4, "evidence": "BSP публикует перечень лицензированных VASP; практический вход возможен через лицензированного партнёра.", "source_ids": ["ph_bsp_vasp"] },
           "payment_infrastructure": { "score": 5, "evidence": "Цифровые платежи и QR Ph имеют массовый масштаб, поэтому локальный вывод можно строить на готовой инфраструктуре.", "source_ids": ["ph_bsp_epayments_2025"] },
           "partner_operability": { "score": 4.5, "evidence": "Рынок показывает реальные связки VASP/EMI, payroll и локальных payout-партнёров.", "source_ids": ["ph_bsp_vasp", "coins_higlobe_2026"] }
@@ -488,10 +488,10 @@
           "audience_readiness": { "score": 5, "evidence": "Вьетнам занимает 4-е место в индексе crypto adoption; 85,44% взрослых имеют smartphone.", "source_ids": ["chainalysis_2025", "wb_findex_2025"] },
           "competitive_whitespace": { "score": 4, "evidence": "Высокая crypto-готовность подтверждена, но универсальный регулируемый stablecoin-account с локальным выводом ещё не стал массовым стандартом.", "source_ids": ["chainalysis_2025", "coin98_wallet_2025", "vn_crypto_pilot"] },
           "user_economics": { "score": 3.5, "evidence": "Потенциальная выгода есть в международном получении и конвертации, но fiat-операции зависят от разрешённой локальной модели.", "source_ids": ["vn_remittances_2025", "vn_crypto_pilot"] },
-          "acquisition_feasibility": { "score": 3, "evidence": "Coin98 подтверждает community, ambassador и hackathon-каналы; массовое paid-привлечение ограничено регуляторной неопределённостью.", "source_ids": ["coin98_titans_2026", "coin98_community_2026", "coin98_solana_hackathon_2026"] },
-          "regulatory_feasibility": { "score": 1, "evidence": "Действует пилотный режим cryptoasset market; разрешённая модель ограничена и требует местной лицензированной структуры.", "source_ids": ["vn_digital_assets_law", "vn_crypto_pilot"] },
-          "payment_infrastructure": { "score": 4.5, "evidence": "Цифровая и mobile-инфраструктура развита, но crypto не может бесшовно использоваться как обычное платёжное средство.", "source_ids": ["wb_findex_2025", "vn_crypto_pilot"] },
-          "partner_operability": { "score": 1.5, "evidence": "Для запуска нужен крупный местный участник внутри пилотной модели; подтверждённого универсального пути нет.", "source_ids": ["vn_crypto_pilot", "vn_digital_assets_law"] }
+          "acquisition_feasibility": { "score": 3, "evidence": "Coin98 подтверждает community, ambassador и hackathon-каналы; массовое paid-привлечение ограничено регуляторной неопределённостью.", "source_ids": ["coin98_titans_2026", "coin98_community_2026", "coin98_solana_hackathon_2026", "interview_vietnam_web3_marketing_2026", "interview_asia_crypto_payments_2026"] },
+          "regulatory_feasibility": { "score": 1, "evidence": "Действует пилотный режим cryptoasset market; разрешённая модель ограничена и требует местной лицензированной структуры.", "source_ids": ["vn_digital_assets_law", "vn_crypto_pilot", "interview_vietnam_web3_marketing_2026", "interview_asia_crypto_payments_2026"] },
+          "payment_infrastructure": { "score": 4.5, "evidence": "Цифровая и mobile-инфраструктура развита, но crypto не может бесшовно использоваться как обычное платёжное средство.", "source_ids": ["wb_findex_2025", "vn_crypto_pilot", "interview_vietnam_web3_marketing_2026", "interview_asia_crypto_payments_2026"] },
+          "partner_operability": { "score": 1.5, "evidence": "Для запуска нужен крупный местный участник внутри пилотной модели; подтверждённого универсального пути нет.", "source_ids": ["vn_crypto_pilot", "vn_digital_assets_law", "interview_vietnam_web3_marketing_2026", "interview_asia_crypto_payments_2026"] }
         }
       },
       {
@@ -509,12 +509,12 @@
         },
         "components": {
           "cross_border": { "score": 1, "evidence": "$0,83 млрд входящих переводов в 2025 году, 0,04% ВВП.", "source_ids": ["wb_api"] },
-          "stable_value_need": { "score": 1.5, "evidence": "Инфляция 2,08% и зрелый CAD/USD-банкинг не создают широкой потребности в защите через stablecoins.", "source_ids": ["imf_weo_2026", "interview_canada_2026"] },
+          "stable_value_need": { "score": 1.5, "evidence": "Инфляция 2,08% и зрелый CAD/USD-банкинг не создают широкой потребности в защите через stablecoins.", "source_ids": ["imf_weo_2026", "interview_canada_2026", "interview_canada_gtm_2026"] },
           "audience_readiness": { "score": 3, "evidence": "84,06% взрослых имеют smartphone и 95,05% недавно пользовались интернетом, но Канада не вошла в опубликованный top-20 crypto adoption.", "source_ids": ["wb_findex_2025", "chainalysis_2025"] },
-          "competitive_whitespace": { "score": 3, "evidence": "Массовые задачи закрыты банками и fintech; остаётся сегментная связка CAD/USD, Interac и цифровых активов.", "source_ids": ["interview_canada_2026", "cryptocom_canada_card_2026"] },
-          "user_economics": { "score": 3, "evidence": "Экономическая выгода возможна в международных и crypto-сценариях, но не подтверждена как массовая.", "source_ids": ["interview_canada_2026", "cryptocom_canada_card_2026"] },
+          "competitive_whitespace": { "score": 3, "evidence": "Массовые задачи закрыты банками и fintech; остаётся сегментная связка CAD/USD, Interac и цифровых активов.", "source_ids": ["interview_canada_2026", "interview_canada_gtm_2026", "cryptocom_canada_card_2026"] },
+          "user_economics": { "score": 3, "evidence": "Экономическая выгода возможна в международных и crypto-сценариях, но не подтверждена как массовая.", "source_ids": ["interview_canada_2026", "interview_canada_gtm_2026", "cryptocom_canada_card_2026"] },
           "acquisition_feasibility": { "score": 3, "evidence": "Crypto.com использует referral, affiliate, brand и партнёрские кампании, но новому бренду нужен высокий уровень доверия.", "source_ids": ["cryptocom_referral_can_2026", "cryptocom_affiliate_2026", "cryptocom_brand_campaign_2026"] },
-          "regulatory_feasibility": { "score": 3.5, "evidence": "Федеральные требования к PSP и stablecoin-эмитентам определяют понятный, хотя и строгий путь авторизации.", "source_ids": ["ca_boc_stablecoins", "ca_boc_rpaa"] },
+          "regulatory_feasibility": { "score": 3.5, "evidence": "Федеральные требования к PSP и stablecoin-эмитентам определяют понятный, хотя и строгий путь авторизации.", "source_ids": ["ca_boc_stablecoins", "ca_boc_rpaa", "interview_canada_gtm_2026"] },
           "payment_infrastructure": { "score": 5, "evidence": "Практически универсальные account ownership и internet use поддерживают зрелую банковскую и Interac-инфраструктуру.", "source_ids": ["wb_findex_2025", "interview_canada_2026"] },
           "partner_operability": { "score": 4, "evidence": "Crypto.com подтверждает, что зарегистрированная модель и локальная карточная программа операционно возможны.", "source_ids": ["cryptocom_canada_registration_2025", "cryptocom_canada_card_2026"] }
         }
@@ -3796,7 +3796,8 @@
         "constraint": "Эксперт связывает кейс с регуляторной сложностью и ограниченным массовым пониманием продукта.",
         "lesson": "Наличие crypto-аудитории не означает массовый спрос на отдельный финансовый продукт.",
         "source_ids": [
-          "interview_canada_2026"
+          "interview_canada_2026",
+          "interview_canada_gtm_2026"
         ]
       },
       {
@@ -3807,7 +3808,8 @@
         "constraint": "Локальная модель допуска и регуляторная экономика изменили приоритет рынка.",
         "lesson": "Даже технически доступный рынок может стать второстепенным, если модель входа слишком сложна.",
         "source_ids": [
-          "interview_canada_2026"
+          "interview_canada_2026",
+          "interview_canada_gtm_2026"
         ]
       },
       {
@@ -5207,40 +5209,40 @@
       "id": "interview_ph_web3_community_2026",
       "type": "interview",
       "tier": "expert_interview",
-      "title": "Филиппины: Web3-маркетинг и развитие сообществ",
+      "title": "Филиппины: Web3-маркетинг, криптоплатежи и развитие сообществ",
       "publisher": "Экспертное интервью",
-      "period": "2026",
-      "accessed": "2026-09-23",
+      "period": "сентябрь 2026",
+      "accessed": "2026-09-24",
       "url": null
     },
     {
       "id": "interview_canada_gtm_2026",
       "type": "interview",
       "tier": "expert_interview",
-      "title": "Канада: go-to-market, лицензирование и crypto-продукты",
+      "title": "Канада и кросс-рыночный анализ: лицензирование и экономика crypto-платежей",
       "publisher": "Экспертное интервью",
-      "period": "2026",
-      "accessed": "2026-09-23",
+      "period": "сентябрь 2026",
+      "accessed": "2026-09-24",
       "url": null
     },
     {
       "id": "interview_vietnam_web3_marketing_2026",
       "type": "interview",
       "tier": "expert_interview",
-      "title": "Вьетнам: Web3-маркетинг, партнёрства и сообщества",
+      "title": "Вьетнам: stablecoin-платежи, регулирование и Web3-маркетинг",
       "publisher": "Экспертное интервью",
-      "period": "2026",
-      "accessed": "2026-09-23",
+      "period": "сентябрь 2026",
+      "accessed": "2026-09-24",
       "url": null
     },
     {
       "id": "interview_asia_crypto_payments_2026",
       "type": "interview",
       "tier": "expert_interview",
-      "title": "Азия: stablecoin-платежи и платёжные crypto-продукты",
+      "title": "Азия и кросс-рыночный анализ: stablecoin-платежи и платёжные crypto-продукты",
       "publisher": "Экспертное интервью",
-      "period": "2026",
-      "accessed": "2026-09-23",
+      "period": "сентябрь 2026",
+      "accessed": "2026-09-24",
       "url": null
     },
     {
@@ -5531,7 +5533,8 @@
         "title": "Международные операции и простое использование цифровых активов",
         "explanation": "",
         "source_ids": [
-          "interview_canada_2026"
+          "interview_canada_2026",
+          "interview_canada_gtm_2026"
         ]
       },
       "entry_complexity": {
@@ -5540,7 +5543,8 @@
         "title": "Нет острой массовой боли и высок порог доверия",
         "explanation": "",
         "source_ids": [
-          "interview_canada_2026"
+          "interview_canada_2026",
+          "interview_canada_gtm_2026"
         ]
       },
       "competition_summary": "Высокая. Конкуренция идет прежде всего с банками, картами и Interac, а не с другой криптокартой.",
@@ -5564,7 +5568,8 @@
       "market_principle": "Привлекать пользователя в момент конкретной финансовой проблемы; не начинать с массового охвата всего рынка.",
       "confidence": "medium",
       "source_ids": [
-        "interview_canada_2026"
+        "interview_canada_2026",
+        "interview_canada_gtm_2026"
       ]
     },
     {
@@ -5578,7 +5583,9 @@
         "source_ids": [
           "ph_bsp_remittances_2025",
           "ph_psa_ofw_2024",
-          "ph_bsp_epayments_2025"
+          "ph_bsp_epayments_2025",
+          "interview_ph_web3_community_2026",
+          "interview_asia_crypto_payments_2026"
         ]
       },
       "entry_complexity": {
@@ -5589,7 +5596,9 @@
         "source_ids": [
           "ph_bsp_remittances_2025",
           "ph_psa_ofw_2024",
-          "ph_bsp_epayments_2025"
+          "ph_bsp_epayments_2025",
+          "interview_ph_web3_community_2026",
+          "interview_asia_crypto_payments_2026"
         ]
       },
       "competition_summary": "Очень высокая в повседневных платежах, но слабее до момента входа зарубежных денег в локальную систему.",
@@ -5614,7 +5623,9 @@
       "source_ids": [
         "ph_bsp_remittances_2025",
         "ph_psa_ofw_2024",
-        "ph_bsp_epayments_2025"
+        "ph_bsp_epayments_2025",
+        "interview_ph_web3_community_2026",
+        "interview_asia_crypto_payments_2026"
       ]
     },
     {
@@ -5681,7 +5692,9 @@
         "source_ids": [
           "vn_remittances_2025",
           "vn_digital_assets_law",
-          "vn_crypto_pilot"
+          "vn_crypto_pilot",
+          "interview_vietnam_web3_marketing_2026",
+          "interview_asia_crypto_payments_2026"
         ]
       },
       "entry_complexity": {
@@ -5692,7 +5705,9 @@
         "source_ids": [
           "vn_remittances_2025",
           "vn_digital_assets_law",
-          "vn_crypto_pilot"
+          "vn_crypto_pilot",
+          "interview_vietnam_web3_marketing_2026",
+          "interview_asia_crypto_payments_2026"
         ]
       },
       "competition_summary": "Высокая в локальных цифровых платежах. VietQR, банки и местные приложения уже решают ежедневные задачи.",
@@ -5717,7 +5732,9 @@
       "source_ids": [
         "vn_remittances_2025",
         "vn_digital_assets_law",
-        "vn_crypto_pilot"
+        "vn_crypto_pilot",
+        "interview_vietnam_web3_marketing_2026",
+        "interview_asia_crypto_payments_2026"
       ]
     }
   ],
@@ -5844,7 +5861,9 @@
             "wb_api",
             "wb_findex_2025",
             "imf_weo_2026",
-            "chainalysis_2025"
+            "chainalysis_2025",
+            "interview_ph_web3_community_2026",
+            "interview_asia_crypto_payments_2026"
           ]
         },
         {
@@ -5880,7 +5899,9 @@
             "wb_api",
             "wb_findex_2025",
             "imf_weo_2026",
-            "chainalysis_2025"
+            "chainalysis_2025",
+            "interview_ph_web3_community_2026",
+            "interview_asia_crypto_payments_2026"
           ]
         },
         {
@@ -5901,7 +5922,9 @@
             "ph_psa_ofw_2024",
             "ph_bsp_epayments_2025",
             "interview_ph_2026",
-            "interview_ph_crossborder_2026"
+            "interview_ph_crossborder_2026",
+            "interview_ph_web3_community_2026",
+            "interview_asia_crypto_payments_2026"
           ]
         },
         {
@@ -5940,7 +5963,9 @@
             "ph_bsp_epayments_2025",
             "datareportal_ph_2025",
             "interview_ph_2026",
-            "interview_ph_crossborder_2026"
+            "interview_ph_crossborder_2026",
+            "interview_ph_web3_community_2026",
+            "interview_asia_crypto_payments_2026"
           ]
         }
       ]
@@ -6246,7 +6271,8 @@
             "wb_api",
             "wb_findex_2025",
             "imf_weo_2026",
-            "chainalysis_2025"
+            "chainalysis_2025",
+            "interview_canada_gtm_2026"
           ]
         },
         {
@@ -6259,7 +6285,8 @@
             "История Binance, DigiFinex и других игроков показывает, что даже крупные криптокомпании сталкивались с сочетанием регуляторной сложности и ограниченного понимания продукта пользователями."
           ],
           "source_ids": [
-            "interview_canada_2026"
+            "interview_canada_2026",
+            "interview_canada_gtm_2026"
           ]
         },
         {
@@ -6276,7 +6303,8 @@
             "wb_api",
             "wb_findex_2025",
             "imf_weo_2026",
-            "chainalysis_2025"
+            "chainalysis_2025",
+            "interview_canada_gtm_2026"
           ]
         },
         {
@@ -6290,7 +6318,8 @@
             "Продукт должен восприниматься не как криптоприложение для технически подготовленных людей, а как обычный финансовый инструмент, внутри которого криптовалюта работает незаметно."
           ],
           "source_ids": [
-            "interview_canada_2026"
+            "interview_canada_2026",
+            "interview_canada_gtm_2026"
           ]
         },
         {
@@ -6304,7 +6333,8 @@
           "source_ids": [
             "ca_boc_stablecoins",
             "ca_boc_rpaa",
-            "interview_canada_2026"
+            "interview_canada_2026",
+            "interview_canada_gtm_2026"
           ]
         },
         {
@@ -6319,7 +6349,8 @@
             "Поиск и появление в ответах ИИ также становятся важными в момент, когда человек уже столкнулся с проблемой и активно ищет решение."
           ],
           "source_ids": [
-            "interview_canada_2026"
+            "interview_canada_2026",
+            "interview_canada_gtm_2026"
           ]
         }
       ]
@@ -6513,7 +6544,9 @@
             "wb_api",
             "wb_findex_2025",
             "imf_weo_2026",
-            "chainalysis_2025"
+            "chainalysis_2025",
+            "interview_vietnam_web3_marketing_2026",
+            "interview_asia_crypto_payments_2026"
           ]
         },
         {
@@ -6527,7 +6560,9 @@
           "source_ids": [
             "vn_remittances_2025",
             "vn_digital_assets_law",
-            "vn_crypto_pilot"
+            "vn_crypto_pilot",
+            "interview_vietnam_web3_marketing_2026",
+            "interview_asia_crypto_payments_2026"
           ]
         },
         {
@@ -6547,7 +6582,9 @@
             "wb_api",
             "wb_findex_2025",
             "imf_weo_2026",
-            "chainalysis_2025"
+            "chainalysis_2025",
+            "interview_vietnam_web3_marketing_2026",
+            "interview_asia_crypto_payments_2026"
           ]
         },
         {
@@ -6563,7 +6600,9 @@
           "source_ids": [
             "vn_remittances_2025",
             "vn_digital_assets_law",
-            "vn_crypto_pilot"
+            "vn_crypto_pilot",
+            "interview_vietnam_web3_marketing_2026",
+            "interview_asia_crypto_payments_2026"
           ]
         },
         {
@@ -6579,7 +6618,9 @@
           "source_ids": [
             "vn_digital_assets_law",
             "vn_crypto_pilot",
-            "vn_remittances_2025"
+            "vn_remittances_2025",
+            "interview_vietnam_web3_marketing_2026",
+            "interview_asia_crypto_payments_2026"
           ]
         },
         {
@@ -6595,7 +6636,9 @@
           "source_ids": [
             "vn_remittances_2025",
             "vn_digital_assets_law",
-            "vn_crypto_pilot"
+            "vn_crypto_pilot",
+            "interview_vietnam_web3_marketing_2026",
+            "interview_asia_crypto_payments_2026"
           ]
         }
       ]
