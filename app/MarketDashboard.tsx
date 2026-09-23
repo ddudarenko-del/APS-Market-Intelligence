@@ -180,7 +180,7 @@ function getStrategicRating(marketCode: string): StrategicRating {
 
 function getStrategicRatingClass(rating: string) {
   if (rating === "Priority Market") return "priority";
-  if (rating === "Priority Subject to Licensing") return "conditional";
+  if (rating === "Priority Subject to Licensing" || rating === "Conditional Opportunity") return "conditional";
   if (rating === "High-Potential, High-Risk Test") return "test";
   if (rating === "Secondary Opportunity") return "secondary";
   return "long-term";
@@ -234,17 +234,6 @@ const sourceLabelOverrides: Record<string, string> = {
   kast_physical_card_shipping_2026: "KAST · доставка карт",
   kast_country_availability_2026: "KAST · география",
   kast_account_creation_2026: "KAST · регистрация",
-};
-
-const mapOpportunityLabels: Record<string, string> = {
-  PHL: "Зарубежный доход → локальные платежи",
-  ARG: "Сбережения и доход в цифровых долларах",
-  COL: "Цифровые доллары → COP",
-  MEX: "Зарубежный доход + налоговое сопровождение",
-  GBR: "Сложный международный доход",
-  IDN: "Глобальный доход → QRIS",
-  VNM: "Зарубежный доход → VND",
-  CAN: "Цифровые активы + CAD/USD + Interac",
 };
 
 function getCountryStyle(code: string, visibleCodes: string[], selectedCode: string) {
@@ -360,6 +349,17 @@ function RichReportContent({ paragraphs, language }: { paragraphs: string[]; lan
   );
 }
 
+function StrategicDetail({ text }: { text: string }) {
+  const separator = text.indexOf(":");
+  if (separator < 0) return <>{text}</>;
+  return (
+    <>
+      <strong>{text.slice(0, separator)}</strong>
+      <span>{text.slice(separator + 1).trim()}</span>
+    </>
+  );
+}
+
 function MarketMap({
   selectedCode,
   visibleCodes,
@@ -440,8 +440,9 @@ function MarketMap({
             const market = marketByCode.get(code);
             if (!market) return;
             const unified = getUnifiedScore(market.code);
+            const hashtags = getStrategicRating(market.code).hashtags;
             countryLayer.bindTooltip(
-              `<strong>${market.name_ru}</strong><small>${mapOpportunityLabels[market.code]}</small><span class="aps-map-score ${unified.level}">${unified.final_score.toFixed(2)} / 5</span>`,
+              `<strong>${market.name_ru}</strong><small class="aps-map-tags">${hashtags.map((tag) => `<span>${tag}</span>`).join("")}</small><span class="aps-map-score ${unified.level}">${unified.final_score.toFixed(2)} / 5</span>`,
               { permanent: true, direction: "center", className: `aps-map-label aps-map-label-${market.code.toLowerCase()}`, opacity: 1, interactive: true },
             );
             const selectCountry = () => onSelectRef.current(code);
@@ -706,7 +707,7 @@ export function MarketDashboard() {
                     <span className={`strategic-rating-label ${getStrategicRatingClass(selectedStrategic.rating)}`}>{selectedStrategic.rating}</span>
                   </div>
                   <ul className="strategic-market-details">
-                    {(language === "en" ? selectedStrategic.details_en : selectedStrategic.details_ru).map((item) => <li key={item}>{item}</li>)}
+                    {(language === "en" ? selectedStrategic.details_en : selectedStrategic.details_ru).map((item) => <li key={item}><StrategicDetail text={item} /></li>)}
                   </ul>
                 </article>
               ) : null}
@@ -1469,7 +1470,6 @@ export function MarketDashboard() {
 
       <footer>
         <span>APS Market Intelligence · research workspace</span>
-        <span>Диагностический инструмент, не юридическое заключение</span>
       </footer>
     </main>
   );

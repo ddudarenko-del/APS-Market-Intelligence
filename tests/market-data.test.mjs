@@ -39,9 +39,14 @@ test("keeps one source-grounded strategic rating for every market", () => {
   for (const row of data.strategic_ranking.rows) {
     assert.ok(marketCodes.has(row.market_code));
     assert.ok(row.rating);
-    assert.ok(row.details_en.length >= 5);
+    assert.equal(row.details_en.length, 9);
     assert.equal(row.details_en.length, row.details_ru.length);
+    assert.ok(row.hashtags.length >= 2);
+    assert.ok(row.hashtags.every((tag) => tag.startsWith("#")));
   }
+  assert.deepEqual(data.strategic_ranking.rows.find((row) => row.market_code === "PHL").hashtags, ["#MaritimePayroll", "#FemaleFinancialIndependence"]);
+  assert.match(data.strategic_ranking.rows.find((row) => row.market_code === "PHL").details_en.join(" "), /maritime B2B Proofs of Concept/);
+  assert.match(data.strategic_ranking.rows.find((row) => row.market_code === "VNM").details_en.join(" "), /B2B payment-gateway/);
 });
 
 test("keeps supported enums and all qualitative content populated", () => {

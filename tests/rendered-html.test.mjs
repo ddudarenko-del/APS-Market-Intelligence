@@ -44,6 +44,7 @@ test("server-renders the unified APS research workspace", async () => {
   assert.doesNotMatch(html, /ВЫБРАННЫЙ РЫНОК/);
   assert.doesNotMatch(html, /Три независимых слоя/);
   assert.doesNotMatch(html, /Ключевой вывод/);
+  assert.doesNotMatch(html, /Диагностический инструмент, не юридическое заключение/);
   assert.match(html, /Интерактивная карта рынков APS/);
   assert.doesNotMatch(html, /class="selected-market"/);
   assert.match(html, />18<\/strong><span>экспертных интервью<\/span>/);
@@ -88,7 +89,9 @@ test("keeps production metadata and documented market intelligence", async () =>
   assert.match(dashboard, /className="map-region-select"/);
   assert.match(dashboard, /strategicOverlayOpen/);
   assert.match(dashboard, /ВЫБРАННЫЙ РЫНОК/);
+  assert.match(dashboard, /getStrategicRating\(market\.code\)\.hashtags/);
   assert.match(styles, /@keyframes strategic-overlay-in/);
+  assert.match(styles, /\.strategic-market-panel\.strategic-market-overlay \{[\s\S]*inset: 0;[\s\S]*width: 100%;[\s\S]*height: 100%;/);
   assert.match(styles, /\.map-frame \.leaflet-top\.leaflet-right \{ top: 58px; \}/);
   assert.doesNotMatch(dashboard, /className="selected-market"/);
   assert.match(dashboard, /Исследование рыночного потенциала криптофинансовой платформы для платежей и управления цифровыми активами с функцией выпуска крипто-связанных платежных карт/);
@@ -144,7 +147,9 @@ test("keeps production metadata and documented market intelligence", async () =>
   assert.match(styles, /\.aps-map-score\.low \{ background: #f29a52; \}/);
   assert.match(styles, /\.leaflet-tooltip\.aps-map-label \{[\s\S]*white-space: normal;/);
   assert.match(styles, /\.leaflet-tooltip\.aps-map-label \{[\s\S]*pointer-events: auto;/);
-  assert.match(styles, /\.aps-map-label small \{[^}]*overflow-wrap: break-word;/);
+  assert.match(styles, /\.aps-map-label small \{[^}]*overflow-wrap: anywhere;/);
+  assert.match(styles, /\.aps-map-tags \{[^}]*flex-wrap: wrap;/);
+  assert.doesNotMatch(dashboard, /Диагностический инструмент, не юридическое заключение/);
   assert.doesNotMatch(page + layout, /codex-preview|_sites-preview/);
 });
 

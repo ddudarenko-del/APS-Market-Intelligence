@@ -29,153 +29,217 @@
       {
         "market_code": "PHL",
         "rating": "Priority Market",
+        "hashtags": ["#MaritimePayroll", "#FemaleFinancialIndependence"],
         "details_en": [
-          "Focus: Validate regulation and licensing, then proceed to a Proof of Concept.",
-          "Audiences: Seafarers and their families, overseas workers, existing crypto users and women interested in accessible financial products.",
-          "Product: Remittances and everyday crypto payments; explore a female-friendly product built around simplicity, safety, education and community support.",
-          "Channels: Seafarer networks, women-led crypto communities, KOLs and referral programmes.",
-          "Corridors: Philippines ↔ UAE, Saudi Arabia, Singapore, Hong Kong, the UK and North America.",
-          "Geographies: Metro Manila, Cebu and Davao."
+          "Core hypothesis: Embed the product into recurring family transfers and international income while helping women gain greater control over their earnings, savings and financial future. Complement familiar local wallets rather than trying to replace them.",
+          "Entry focus: Validate licensing and local payment integrations, then run B2C and maritime B2B Proofs of Concept. Confirm the full journey from receiving stablecoins to paying through QR or withdrawing to a Philippine wallet or bank.",
+          "Priority audiences: Seafarers and their families, OFWs, freelancers, virtual assistants, female entrepreneurs, Web3 users and women seeking financial independence. B2B audiences include shipping companies, crewing agencies and maritime payroll providers.",
+          "Product: Remittances, international income, stablecoin savings and everyday QR payments. Add personal savings goals, emergency funds, automatic income allocation and simple security controls. Develop a payroll solution that allows shipping companies to pay seafarers and allocate part of their salaries to family members.",
+          "Priority corridors: Philippines ↔ Gulf countries, Singapore, Hong Kong, Canada, the UK and the US.",
+          "Focus geographies: Metro Manila, Clark, Cebu, Iloilo and Davao, with family recipients across Luzon, Visayas and Mindanao.",
+          "Communities and channels: Seafarer and OFW networks, crewing agencies, maritime schools, freelancer communities, universities, Bitskwela, YGG, women-led communities, Facebook, TikTok, X and Telegram.",
+          "Activation: Maritime payroll pilots, paired family onboarding, workshops for female freelancers and complete payment-journey demonstrations.",
+          "Entry implication: Differentiate through international utility, financial independence and direct connection to local spending. A payment ring can provide additional launch visibility."
         ],
         "details_ru": [
-          "Фокус: подтвердить регуляторный и лицензионный маршрут, затем перейти к Proof of Concept.",
-          "Аудитории: моряки и их семьи, работающие за рубежом, действующие пользователи криптовалют и женщины, заинтересованные в доступных финансовых продуктах.",
-          "Продукт: переводы и повседневные криптоплатежи; протестировать понятный и безопасный продукт для женщин с образовательной и комьюнити-поддержкой.",
-          "Каналы: сообщества моряков, женские криптосообщества, KOL и реферальные программы.",
-          "Коридоры: Филиппины ↔ ОАЭ, Саудовская Аравия, Сингапур, Гонконг, Великобритания и Северная Америка.",
-          "География: Метро Манила, Себу и Давао."
+          "Основная гипотеза: встроить продукт в регулярные семейные переводы и получение международного дохода, одновременно помогая женщинам лучше контролировать заработок, сбережения и финансовое будущее. Дополнять привычные локальные кошельки, а не пытаться заменить их.",
+          "Фокус входа: проверить лицензирование и интеграции с локальными платёжными системами, затем провести B2C-пилоты и B2B-пилоты в морской отрасли. Подтвердить весь путь от получения стейблкоинов до оплаты через QR или вывода средств в филиппинский кошелёк либо банк.",
+          "Приоритетные аудитории: моряки и их семьи, OFW, фрилансеры, виртуальные ассистенты, женщины-предприниматели, пользователи Web3 и женщины, стремящиеся к финансовой независимости. B2B-аудитории включают судоходные компании, крюинговые агентства и провайдеров зарплатных выплат в морской отрасли.",
+          "Продукт: переводы, международный доход, сбережения в стейблкоинах и повседневные QR-платежи. Добавить персональные цели накопления, резервные фонды, автоматическое распределение дохода и простые настройки безопасности. Создать зарплатное решение, которое позволит судоходным компаниям платить морякам и направлять часть их зарплаты членам семьи.",
+          "Приоритетные коридоры: Филиппины ↔ страны Персидского залива, Сингапур, Гонконг, Канада, Великобритания и США.",
+          "Фокусная география: Метро Манила, Кларк, Себу, Илоило и Давао, получатели семейных переводов по всему Лусону, Висайским островам и Минданао.",
+          "Сообщества и каналы: сети моряков и OFW, крюинговые агентства, морские учебные заведения, сообщества фрилансеров, университеты, Bitskwela, YGG, женские сообщества, Facebook, TikTok, X и Telegram.",
+          "Активация: пилоты зарплатных выплат морякам, совместный онбординг членов семьи, воркшопы для женщин-фрилансеров и демонстрации полного платёжного пути.",
+          "Условие входа: дифференцироваться за счёт международной пользы, финансовой независимости и прямой связи с локальными расходами. Платёжное кольцо может дополнительно повысить заметность запуска."
         ]
       },
       {
         "market_code": "COL",
         "rating": "Priority Market",
+        "hashtags": ["#PesoVolatility", "#FreelancerIncome", "#MigrantTransfers"],
         "details_en": [
-          "Focus: Confirm the licensing route, payment integrations and potential for an early market entry.",
-          "Audiences: International earners, freelancers, crypto holders and people protecting savings from peso volatility.",
-          "Product: Stablecoin savings, international transfers and utility payments.",
-          "Corridors: Colombia ↔ the US and Spain.",
-          "Geographies: Bogotá, Medellín and Cali."
+          "Core hypothesis: Build trust by making the complete transaction visible, including the exchange rate, fees, timing and final amount received.",
+          "Entry focus: Confirm the licensing route, local fiat integrations, stablecoin conversion model and access to local payment infrastructure before an early market launch.",
+          "Priority audiences: International earners, freelancers, crypto holders, Venezuelan migrants, tourism merchants and households protecting savings from peso volatility.",
+          "Product: Stablecoin savings, international transfers, crypto-to-local spending and utility payments. The interface should show the complete movement of money and make every cost understandable before the user confirms a transaction.",
+          "Priority corridors: Colombia ↔ the US, Spain and Venezuela.",
+          "Focus geographies: Bogotá and Medellín for professional and technology audiences, Cali and the coffee region for families, Cartagena and Santa Marta for tourism-related payments.",
+          "Communities and channels: Venezuelan and Colombian diaspora networks, Ruta N, StartCo, freelancer communities, tourism businesses, entrepreneur organisations, local fintech media and trusted financial educators.",
+          "Activation: Traceable family-transfer demonstrations, end-to-end international income journeys and merchant pilots in tourism locations.",
+          "Entry implication: Transparency should serve as the main competitive advantage. The proposition must prove that stablecoins provide more control or better economics than existing transfer and banking options."
         ],
         "details_ru": [
-          "Фокус: подтвердить лицензионный маршрут, платежные интеграции и возможность раннего выхода на рынок.",
-          "Аудитории: получатели международного дохода, фрилансеры, владельцы криптоактивов и люди, защищающие сбережения от волатильности песо.",
-          "Продукт: сбережения в стейблкоинах, международные переводы и оплата повседневных услуг.",
-          "Коридоры: Колумбия ↔ США и Испания.",
-          "География: Богота, Медельин и Кали."
+          "Основная гипотеза: выстроить доверие, показывая весь путь транзакции, включая обменный курс, комиссии, срок и итоговую сумму получения.",
+          "Фокус входа: до раннего запуска подтвердить лицензионный маршрут, локальные fiat-интеграции, модель конвертации стейблкоинов и доступ к местной платёжной инфраструктуре.",
+          "Приоритетные аудитории: получатели международного дохода, фрилансеры, владельцы криптоактивов, мигранты из Венесуэлы, туристические компании и семьи, защищающие сбережения от волатильности песо.",
+          "Продукт: сбережения в стейблкоинах, международные переводы, расходование криптовалюты в локальной системе и оплата услуг. Интерфейс должен показывать весь путь денег и объяснять каждую стоимость до подтверждения операции.",
+          "Приоритетные коридоры: Колумбия ↔ США, Испания и Венесуэла.",
+          "Фокусная география: Богота и Медельин для профессиональной и технологической аудитории, Кали и кофейный регион для семей, Картахена и Санта-Марта для платежей в туристической сфере.",
+          "Сообщества и каналы: сети венесуэльской и колумбийской диаспор, Ruta N, StartCo, сообщества фрилансеров, туристический бизнес, предпринимательские организации, локальные fintech-медиа и доверенные финансовые эксперты.",
+          "Активация: демонстрации отслеживаемых семейных переводов, полного пути международного дохода и пилоты с продавцами в туристических локациях.",
+          "Условие входа: прозрачность должна стать главным конкурентным преимуществом. Предложение должно доказать, что стейблкоины дают больше контроля или лучшую экономику, чем существующие банковские решения и сервисы переводов."
         ]
       },
       {
         "market_code": "IDN",
         "rating": "Priority Subject to Licensing",
+        "hashtags": ["#PaymentInnovation", "#MigrantFamilies", "#PaymentRing", "#QRInfrastructure"],
         "details_en": [
-          "Focus: Confirm OJK requirements, local ownership rules and access to on-ramp, off-ramp and QR payments.",
-          "Audiences: Young crypto users, traders, freelancers and technology-oriented consumers.",
-          "Product: Everyday crypto payments with a distinctive lifestyle layer, such as a payment ring or membership benefits.",
-          "Channels: KOLs, YouTube and crypto communities.",
-          "Corridors: Indonesia ↔ Singapore, Malaysia, Hong Kong and the Middle East.",
-          "Geographies: Jakarta, Bali, Surabaya and Bandung."
+          "Core hypothesis: Combine practical value for migrant families and crypto earners with a distinctive innovation that gives the product cultural and technological visibility.",
+          "Entry focus: Confirm OJK requirements, local ownership rules and access to compliant on-ramp, off-ramp and QR-payment infrastructure.",
+          "Priority audiences: Young crypto users, traders, freelancers, technology-oriented consumers, migrant workers and family members receiving money in Indonesia.",
+          "Product: International transfers and everyday crypto payments with a visible lifestyle layer, such as a payment ring, membership benefits or health-related functionality. The innovation should provide a reason to switch while the core product solves real transfer and spending needs.",
+          "Priority corridors: Indonesia ↔ Malaysia, Singapore, Taiwan, Hong Kong and Gulf countries.",
+          "Focus geographies: Jakarta for crypto and professional audiences, Bali for international communities, Surabaya and Bandung as urban hubs, and migrant-origin areas across Java for family transfers.",
+          "Communities and channels: Crypto KOLs, YouTube, Telegram, university clubs, vocational schools, pre-departure programmes, migrant alumni networks and family WhatsApp groups.",
+          "Activation: Family-payment education, demonstrations of international transfers and an influencer-led launch of a tangible innovation such as a payment ring.",
+          "Entry implication: Product novelty can attract attention, but compliant access to local payments determines feasibility. The innovation must strengthen utility rather than function as a standalone gadget."
         ],
         "details_ru": [
-          "Фокус: подтвердить требования OJK, правила локального владения и доступ к on-ramp, off-ramp и QR-платежам.",
-          "Аудитории: молодые пользователи криптовалют, трейдеры, фрилансеры и технологически ориентированные потребители.",
-          "Продукт: повседневные криптоплатежи с заметным lifestyle-слоем — например, платежным кольцом или преимуществами для участников.",
-          "Каналы: KOL, YouTube и криптосообщества.",
-          "Коридоры: Индонезия ↔ Сингапур, Малайзия, Гонконг и Ближний Восток.",
-          "География: Джакарта, Бали, Сурабая и Бандунг."
+          "Основная гипотеза: объединить практическую ценность для семей мигрантов и получателей дохода в криптовалюте с заметной инновацией, которая даст продукту культурную и технологическую узнаваемость.",
+          "Фокус входа: подтвердить требования OJK, правила локального владения и доступ к соответствующей требованиям инфраструктуре on-ramp, off-ramp и QR-платежей.",
+          "Приоритетные аудитории: молодые пользователи криптовалют, трейдеры, фрилансеры, технологически ориентированные потребители, трудовые мигранты и члены семей, получающие деньги в Индонезии.",
+          "Продукт: международные переводы и повседневные криптоплатежи с заметным lifestyle-слоем, например платёжным кольцом, преимуществами для участников или функциями, связанными со здоровьем. Инновация должна давать причину переключиться, а основной продукт решать реальные задачи переводов и расходов.",
+          "Приоритетные коридоры: Индонезия ↔ Малайзия, Сингапур, Тайвань, Гонконг и страны Персидского залива.",
+          "Фокусная география: Джакарта для крипто- и профессиональной аудитории, Бали для международных сообществ, Сурабая и Бандунг как городские центры, регионы происхождения мигрантов на Яве для семейных переводов.",
+          "Сообщества и каналы: крипто-KOL, YouTube, Telegram, университетские клубы, профессиональные училища, программы подготовки к отъезду, сети бывших мигрантов и семейные группы в WhatsApp.",
+          "Активация: обучение семейным платежам, демонстрации международных переводов и запуск заметной инновации, например платёжного кольца, с помощью инфлюенсеров.",
+          "Условие входа: продуктовая новизна может привлечь внимание, но реализуемость определяет соответствующий требованиям доступ к локальным платежам. Инновация должна усиливать пользу, а не быть отдельным гаджетом."
         ]
       },
       {
         "market_code": "MEX",
         "rating": "High-Potential, High-Risk Test",
+        "hashtags": ["#USMexicoCorridor", "#DollarSavings", "#FreelancerPayments", "#SPEIIntegration", "#LargeOpportunity", "#ComplianceRisk"],
         "details_en": [
-          "Focus: Confirm Mexican fiat methods and the legal boundaries of the operating model before testing acquisition.",
-          "Audiences: Cross-border workers, freelancers, crypto earners and internationally connected households.",
-          "Product: Dollar-based value storage, cross-border transfers and crypto-to-fiat access.",
-          "Channels: Facebook, TikTok, YouTube, KOLs and referral programmes.",
-          "Corridors: Mexico ↔ the US.",
-          "Geographies: Mexico City, Monterrey, Guadalajara and major US-border cities."
+          "Core hypothesis: Build separate acquisition and product journeys for remittance families and people receiving professional income from abroad.",
+          "Entry focus: Confirm the legal operating model and integrations with Mexican fiat methods, including SPEI and other locally relevant payment rails, before testing acquisition.",
+          "Priority audiences: Cross-border workers, remittance families, freelancers, crypto earners, ecommerce sellers and internationally connected households.",
+          "Product: Dollar-based value storage, family transfers, receipt of international professional income and crypto-to-fiat access. Avoid making tax management the central proposition until demand and the required local integrations have been validated.",
+          "Priority corridors: US ↔ Mexico for family remittances, with the US and Europe ↔ Mexico for professional and freelance income.",
+          "Focus geographies: Mexico City, Guadalajara and Monterrey, along with border cities and migrant-origin regions receiving regular transfers from the US.",
+          "Communities and channels: Hometown associations, family networks, Espacio Cripto, entrepreneur organisations, freelancer communities, Facebook, TikTok, YouTube, KOLs and referral programmes.",
+          "Activation: Transparent remittance-cost comparisons, freelancer payment workshops and pilots with cross-border merchants or ecommerce sellers.",
+          "Entry implication: The opportunity is large, but licensing and local payment access must guide the test. Remittances and international income should remain distinct audience journeys."
         ],
         "details_ru": [
-          "Фокус: подтвердить локальные fiat-методы и юридические границы операционной модели до тестирования привлечения.",
-          "Аудитории: трансграничные работники, фрилансеры, получатели дохода в криптовалюте и семьи с международными связями.",
-          "Продукт: хранение стоимости в долларах, трансграничные переводы и доступ к выводу из криптовалюты в fiat.",
-          "Каналы: Facebook, TikTok, YouTube, KOL и реферальные программы.",
-          "Коридоры: Мексика ↔ США.",
-          "География: Мехико, Монтеррей, Гвадалахара и крупные города на границе с США."
+          "Основная гипотеза: создать отдельные пути привлечения и использования продукта для семей, получающих переводы, и людей, получающих профессиональный доход из-за рубежа.",
+          "Фокус входа: до тестирования привлечения подтвердить юридическую операционную модель и интеграции с мексиканскими fiat-методами, включая SPEI и другие значимые локальные платёжные рельсы.",
+          "Приоритетные аудитории: трансграничные работники, семьи, получающие переводы, фрилансеры, получатели дохода в криптовалюте, продавцы в электронной коммерции и семьи с международными связями.",
+          "Продукт: хранение стоимости в долларах, семейные переводы, получение международного профессионального дохода и доступ к выводу из криптовалюты в fiat. Не делать управление налогами центральным предложением, пока не подтверждены спрос и необходимые локальные интеграции.",
+          "Приоритетные коридоры: США ↔ Мексика для семейных переводов, США и Европа ↔ Мексика для профессионального дохода и оплаты фриланса.",
+          "Фокусная география: Мехико, Гвадалахара и Монтеррей, а также приграничные города и регионы происхождения мигрантов, регулярно получающие переводы из США.",
+          "Сообщества и каналы: землячества, семейные сети, Espacio Cripto, предпринимательские организации, сообщества фрилансеров, Facebook, TikTok, YouTube, KOL и реферальные программы.",
+          "Активация: прозрачные сравнения стоимости переводов, воркшопы по выплатам фрилансерам и пилоты с трансграничными продавцами или участниками электронной коммерции.",
+          "Условие входа: возможность велика, но тест должен определяться лицензированием и доступом к локальным платежам. Переводы и международный доход должны оставаться отдельными пользовательскими сценариями."
         ]
       },
       {
         "market_code": "ARG",
         "rating": "Secondary Opportunity",
+        "hashtags": ["#CryptoMaturity", "#InternationalIncome", "#TransparentConversion", "#UtilityPayments", "#SaturatedMarket", "#HighAcquisitionCost"],
         "details_en": [
-          "Focus: Enter only with a clearly superior core offer in a highly saturated market.",
-          "Audiences: International earners, freelancers, expatriates and households using crypto as a practical financial tool.",
-          "Product: Receiving foreign income, transfers and utility payments in one application.",
-          "Corridors: Argentina ↔ the US, Spain, Brazil and Uruguay.",
-          "Geographies: Buenos Aires, Córdoba, Rosario and Mendoza."
+          "Core hypothesis: Turn widespread familiarity with cryptocurrency into a more convenient tool for receiving international income, converting funds transparently and making regular payments.",
+          "Entry focus: Enter only with a clearly superior core offer in a mature and highly saturated crypto market.",
+          "Priority audiences: International earners, developers, freelancers, creative professionals, expatriates, ecommerce businesses and households already using stablecoins as a practical financial tool.",
+          "Product: Receipt of foreign income, international and regional transfers, transparent conversion and utility payments within one application. The product should reduce the need to move funds manually between wallets, exchanges and payment services.",
+          "Priority corridors: US and Europe ↔ Argentina for professional income, with Argentina ↔ Brazil, Uruguay and neighbouring countries for travel and commerce.",
+          "Focus geographies: Buenos Aires, Córdoba and Rosario for professional audiences, with Mendoza and Bariloche for tourism and international transactions.",
+          "Communities and channels: Bitcoin Argentina, Aleph and Crecimiento, LABITCONF, developer and creative communities, ecommerce networks, expatriate groups, local media and physical events.",
+          "Activation: International-income demonstrations, conversion comparisons, utility-payment scenarios and merchant experiences in tourism locations.",
+          "Entry implication: Crypto familiarity reduces the education barrier but increases competitive pressure. KOL activity alone will not create sufficient scale and may require conventional media, outdoor visibility and a physical market presence."
         ],
         "details_ru": [
-          "Фокус: выходить только с явно превосходящим базовым предложением на высоконасыщенный рынок.",
-          "Аудитории: получатели международного дохода, фрилансеры, экспаты и семьи, использующие криптовалюту как практический финансовый инструмент.",
-          "Продукт: получение зарубежного дохода, переводы и оплата повседневных услуг в одном приложении.",
-          "Коридоры: Аргентина ↔ США, Испания, Бразилия и Уругвай.",
-          "География: Буэнос-Айрес, Кордова, Росарио и Мендоса."
+          "Основная гипотеза: превратить широкое знакомство с криптовалютой в более удобный инструмент получения международного дохода, прозрачной конвертации и регулярных платежей.",
+          "Фокус входа: выходить только с явно превосходящим базовым предложением на зрелый и высоконасыщенный крипторынок.",
+          "Приоритетные аудитории: получатели международного дохода, разработчики, фрилансеры, креативные специалисты, экспаты, компании электронной коммерции и семьи, уже использующие стейблкоины как практический финансовый инструмент.",
+          "Продукт: получение зарубежного дохода, международные и региональные переводы, прозрачная конвертация и оплата услуг в одном приложении. Продукт должен сократить необходимость вручную перемещать средства между кошельками, биржами и платёжными сервисами.",
+          "Приоритетные коридоры: США и Европа ↔ Аргентина для профессионального дохода, Аргентина ↔ Бразилия, Уругвай и соседние страны для поездок и торговли.",
+          "Фокусная география: Буэнос-Айрес, Кордова и Росарио для профессиональной аудитории, Мендоса и Барилоче для туризма и международных транзакций.",
+          "Сообщества и каналы: Bitcoin Argentina, Aleph и Crecimiento, LABITCONF, сообщества разработчиков и креативных специалистов, сети электронной коммерции, группы экспатов, локальные медиа и офлайн-мероприятия.",
+          "Активация: демонстрации получения международного дохода, сравнения конвертации, сценарии оплаты услуг и пользовательский опыт у продавцов в туристических локациях.",
+          "Условие входа: знакомство с криптовалютой снижает образовательный барьер, но усиливает конкурентное давление. Одной активности KOL недостаточно для масштаба, могут потребоваться традиционные медиа, наружная реклама и физическое присутствие на рынке."
         ]
       },
       {
         "market_code": "CAN",
-        "rating": "Longer-Term Opportunity",
+        "rating": "Longer-Term, Corridor-Specific Opportunity",
+        "hashtags": ["#DiasporaRemittances", "#CorridorStrategy", "#PairedOnboarding", "#MSBLimitations", "#CustodyLicence", "#DevelopedMarketCompetition", "#TraditionalMarket", "#UniversityDiasporas"],
         "details_en": [
-          "Focus: Wait for an inbound collection method and clarity on custody regulation.",
-          "Audiences: South Asian, Filipino, Nigerian, Caribbean and Latin American communities, particularly students and service workers.",
-          "Product: Cross-border payments and remittances, subject to licensing and infrastructure.",
-          "Channels: University societies, religious organisations and diaspora communities.",
-          "Corridors: Canada ↔ India, the Philippines, Nigeria, the Caribbean and Latin America.",
-          "Geographies: Toronto and the GTA, particularly Mississauga and Brampton; also Surrey and Vancouver."
+          "Core hypothesis: Diaspora relationships create recurring cross-border payment needs and trusted routes to acquisition. Success depends on delivering a measurable advantage within a specific corridor.",
+          "Entry focus: Confirm what the Canadian MSB and Bank of Canada registrations permit, including fiat collection, stablecoin conversion and money transmission. Verify whether holding client crypto assets requires a separate brokerage or custodial licence. A foreign licence cannot replace Canadian authorisation.",
+          "Priority audiences: Filipino, South Asian, Nigerian, Caribbean and Latin American communities, particularly internationally connected workers, students and families with recurring remittance needs.",
+          "Product: Cross-border family transfers with transparent fees, exchange rates and final received amounts. Consider a non-custodial or instant-conversion model if the existing registrations do not permit custody. Provide familiar local payout and paired onboarding for senders and recipients.",
+          "Priority corridors: Initially validate Canada ↔ the Philippines, India and Nigeria, followed by Caribbean and Latin American corridors where payout economics are favourable.",
+          "Focus geographies: Toronto and the GTA, especially Mississauga and Brampton, as well as Surrey, Vancouver, Winnipeg and Calgary.",
+          "Communities and channels: Diaspora business networks, festivals, cargo services, universities, professional groups, religious organisations and community media.",
+          "Activation: Pilot one corridor through paired onboarding and demonstrate all fees, delivery time and the amount received in local currency.",
+          "Entry implication: Canada remains a longer-term opportunity until custody rights, fiat collection and recipient-country payout infrastructure are confirmed."
         ],
         "details_ru": [
-          "Фокус: дождаться доступного метода входящих пополнений и ясности в регулировании хранения активов.",
-          "Аудитории: южноазиатские, филиппинские, нигерийские, карибские и латиноамериканские сообщества, особенно студенты и работники сферы услуг.",
-          "Продукт: трансграничные платежи и переводы при наличии необходимой лицензии и инфраструктуры.",
-          "Каналы: университетские сообщества, религиозные организации и диаспоры.",
-          "Коридоры: Канада ↔ Индия, Филиппины, Нигерия, Карибский регион и Латинская Америка.",
-          "География: Торонто и GTA, особенно Миссиссога и Брамптон; также Суррей и Ванкувер."
+          "Основная гипотеза: связи внутри диаспор создают регулярную потребность в трансграничных платежах и доверенные пути привлечения. Успех зависит от измеримого преимущества в конкретном коридоре.",
+          "Фокус входа: подтвердить, что разрешают регистрации канадского MSB и Банка Канады, включая сбор fiat-средств, конвертацию стейблкоинов и денежные переводы. Проверить, нужна ли отдельная брокерская или кастодиальная лицензия для хранения криптоактивов клиентов. Иностранная лицензия не заменяет канадскую авторизацию.",
+          "Приоритетные аудитории: филиппинские, южноазиатские, нигерийские, карибские и латиноамериканские сообщества, особенно работники с международными связями, студенты и семьи с регулярной потребностью в переводах.",
+          "Продукт: трансграничные семейные переводы с прозрачными комиссиями, курсами и итоговой суммой получения. Если текущие регистрации не разрешают хранение активов, рассмотреть некастодиальную модель или мгновенную конвертацию. Обеспечить привычный локальный вывод и парный онбординг отправителя и получателя.",
+          "Приоритетные коридоры: сначала проверить Канада ↔ Филиппины, Индия и Нигерия, затем карибские и латиноамериканские направления с благоприятной экономикой выплат.",
+          "Фокусная география: Торонто и GTA, особенно Миссиссога и Брамптон, а также Суррей, Ванкувер, Виннипег и Калгари.",
+          "Сообщества и каналы: деловые сети диаспор, фестивали, грузовые сервисы, университеты, профессиональные группы, религиозные организации и медиа сообществ.",
+          "Активация: запустить пилот одного коридора через парный онбординг и показать все комиссии, срок доставки и сумму получения в локальной валюте.",
+          "Условие входа: Канада остаётся долгосрочной возможностью, пока не подтверждены права на хранение активов, сбор fiat-средств и инфраструктура выплат в стране получателя."
         ]
       },
       {
         "market_code": "GBR",
-        "rating": "Longer-Term Opportunity",
+        "rating": "Longer-Term, Corridor-Specific Opportunity",
+        "hashtags": ["#HealthcareDiaspora", "#WorkplaceAcquisition", "#RemittanceCorridors", "#RevolutCompetition", "#FCARequirements", "#CustodyRisk"],
         "details_en": [
-          "Focus: Clarify licensing, capital requirements and which services can be offered without custody.",
-          "Audiences: Indian, Nigerian, Filipino healthcare, Caribbean and Latin American communities; digital nomads and crypto earners.",
-          "Product: Remittances, off-ramp services and potentially higher transaction limits.",
-          "Corridors: UK ↔ India, Nigeria, the Philippines, the Caribbean and Latin America.",
-          "Geographies: London, Birmingham, Manchester and cities with large NHS and diaspora communities."
+          "Core hypothesis: Reach diaspora audiences through professional networks, workplaces and family relationships, focusing on corridors where mainstream banking and transfer services leave a clear gap.",
+          "Entry focus: Clarify UK licensing, capital requirements, custody permissions and which payment or conversion services can be offered under the proposed operating model.",
+          "Priority audiences: Indian, Nigerian, Filipino healthcare and care workers, Caribbean and Latin American communities, digital nomads and people receiving income in cryptocurrency.",
+          "Product: Cross-border family transfers, off-ramp services and potentially higher transaction limits for verified users. The product must demonstrate a concrete advantage over banks, Revolut, Wise and established remittance providers.",
+          "Priority corridors: UK ↔ India, Nigeria, the Philippines, the Caribbean and Latin America.",
+          "Focus geographies: London, Birmingham, Manchester and Leicester, together with cities and towns that have major healthcare employers and concentrated diaspora communities.",
+          "Communities and channels: Indian professional groups, Nigerian business and student networks, Filipino NHS and care-worker communities, diaspora media, cultural organisations, workplaces and religious institutions.",
+          "Activation: Workplace financial-education sessions, paired family onboarding and transparent comparisons of fees, exchange rates and final received amounts.",
+          "Entry implication: The mainstream market is highly competitive and well served. Entry should follow evidence of a corridor-specific gap rather than a broad stablecoin-wallet launch."
         ],
         "details_ru": [
-          "Фокус: уточнить лицензирование, требования к капиталу и перечень сервисов, которые можно предлагать без хранения активов.",
-          "Аудитории: индийские, нигерийские, филиппинские медицинские, карибские и латиноамериканские сообщества; цифровые кочевники и получатели дохода в криптовалюте.",
-          "Продукт: переводы, off-ramp-сервисы и потенциально более высокие лимиты операций.",
-          "Коридоры: Великобритания ↔ Индия, Нигерия, Филиппины, Карибский регион и Латинская Америка.",
-          "География: Лондон, Бирмингем, Манчестер и города с крупными сообществами NHS и диаспор."
+          "Основная гипотеза: привлекать диаспоры через профессиональные сети, рабочие места и семейные связи, фокусируясь на коридорах, где массовые банковские сервисы и переводы оставляют заметный пробел.",
+          "Фокус входа: уточнить британское лицензирование, требования к капиталу, разрешения на хранение активов и перечень платёжных или конверсионных сервисов в предлагаемой операционной модели.",
+          "Приоритетные аудитории: индийские, нигерийские и филиппинские медицинские и социальные работники, карибские и латиноамериканские сообщества, цифровые кочевники и люди, получающие доход в криптовалюте.",
+          "Продукт: трансграничные семейные переводы, off-ramp-сервисы и потенциально более высокие лимиты для верифицированных пользователей. Продукт должен показать конкретное преимущество перед банками, Revolut, Wise и известными провайдерами переводов.",
+          "Приоритетные коридоры: Великобритания ↔ Индия, Нигерия, Филиппины, Карибский регион и Латинская Америка.",
+          "Фокусная география: Лондон, Бирмингем, Манчестер и Лестер, а также города с крупными работодателями в здравоохранении и концентрированными сообществами диаспор.",
+          "Сообщества и каналы: индийские профессиональные группы, нигерийские деловые и студенческие сети, сообщества филиппинских работников NHS и сферы ухода, медиа диаспор, культурные организации, рабочие места и религиозные учреждения.",
+          "Активация: сессии финансового образования на рабочих местах, парный семейный онбординг и прозрачные сравнения комиссий, курсов и итоговых сумм получения.",
+          "Условие входа: массовый рынок крайне конкурентен и хорошо обслуживается. Выход должен опираться на доказанный пробел в конкретном коридоре, а не на широкий запуск кошелька со стейблкоинами."
         ]
       },
       {
         "market_code": "VNM",
-        "rating": "Further Validation Required",
+        "rating": "Conditional Opportunity",
+        "hashtags": ["#CryptoNativeUsers", "#USDTtoQR", "#GamingPayments", "#LocalPartner", "#PhishingRisk", "#RegulatoryUncertainty"],
         "details_en": [
-          "Focus: Verify regulation and identify a credible local partner or licensed financial institution.",
-          "Audiences: Existing crypto holders, former play-to-earn users, freelancers and Russian-speaking residents.",
-          "Product: Crypto spending, conversion and cross-border transfers.",
-          "Corridors: Vietnam ↔ the US, Japan, South Korea, Singapore and Australia.",
-          "Geographies: Ho Chi Minh City, Hanoi and Da Nang."
+          "Core hypothesis: Start with crypto-native users who already hold or earn stablecoins and need a direct route from USDT to everyday local spending without manual P2P exchange.",
+          "Entry focus: Verify the regulatory framework and secure a credible local partner connected to licensed financial infrastructure. Confirm whether stablecoin conversion, Vietnamese-dong settlement and local QR payments are legally possible.",
+          "Priority audiences: Traders, Web3 developers and marketers, crypto-paid professionals, DeFi and airdrop participants, blockchain gamers and technology-oriented investors under 40.",
+          "Product: Direct stablecoin spending through Vietnamese QR payments, local-currency conversion, family transfers and international-income management. Apple Pay or a similarly simple tap-to-pay experience could strengthen daily utility. A B2B payment-gateway offer for gaming and Web3 ecosystems provides an additional route to scale.",
+          "Priority corridors: Vietnam ↔ Singapore, Thailand, South Korea, Japan and Taiwan, subject to further validation of actual transfer volumes.",
+          "Focus geographies: Ho Chi Minh City and Hanoi for technology and professional audiences, with Da Nang as an international and digital-work hub.",
+          "Communities and channels: Telegram, X, Coin68, 5 Phút Crypto, developer groups, gaming ecosystems and specialist KOL communities.",
+          "Activation: Recruit trusted KOLs as early testers and demonstrate the complete journey from receiving USDT to paying a merchant or transferring money to family.",
+          "Entry implication: Regulation, local partnership and trust are prerequisites. Verified outreach is essential because users are highly alert to phishing and wallet theft."
         ],
         "details_ru": [
-          "Фокус: проверить регулирование и найти надежного локального партнера или лицензированную финансовую организацию.",
-          "Аудитории: действующие владельцы криптовалют, бывшие пользователи play-to-earn, фрилансеры и русскоязычные резиденты.",
-          "Продукт: расходование криптовалюты, конвертация и трансграничные переводы.",
-          "Коридоры: Вьетнам ↔ США, Япония, Южная Корея, Сингапур и Австралия.",
-          "География: Хошимин, Ханой и Дананг."
+          "Основная гипотеза: начать с crypto-native пользователей, которые уже хранят или зарабатывают стейблкоины и нуждаются в прямом пути от USDT к повседневным локальным расходам без ручного P2P-обмена.",
+          "Фокус входа: проверить регуляторную среду и привлечь надёжного локального партнёра, подключённого к лицензированной финансовой инфраструктуре. Подтвердить юридическую возможность конвертации стейблкоинов, расчётов во вьетнамских донгах и локальных QR-платежей.",
+          "Приоритетные аудитории: трейдеры, разработчики и маркетологи Web3, специалисты с оплатой в криптовалюте, участники DeFi и airdrop, blockchain-геймеры и технологически ориентированные инвесторы младше 40 лет.",
+          "Продукт: прямое расходование стейблкоинов через вьетнамские QR-платежи, конвертация в локальную валюту, семейные переводы и управление международным доходом. Apple Pay или столь же простой tap-to-pay-сценарий может усилить повседневную пользу. B2B-платёжный шлюз для gaming- и Web3-экосистем создаёт дополнительный путь масштабирования.",
+          "Приоритетные коридоры: Вьетнам ↔ Сингапур, Таиланд, Южная Корея, Япония и Тайвань, при условии дополнительной проверки реальных объёмов переводов.",
+          "Фокусная география: Хошимин и Ханой для технологической и профессиональной аудитории, Дананг как международный центр цифровой работы.",
+          "Сообщества и каналы: Telegram, X, Coin68, 5 Phút Crypto, группы разработчиков, gaming-экосистемы и специализированные сообщества KOL.",
+          "Активация: привлечь доверенных KOL в качестве ранних тестировщиков и показать полный путь от получения USDT до оплаты продавцу или перевода семье.",
+          "Условие входа: регулирование, локальное партнёрство и доверие обязательны. Верифицированная коммуникация критична, поскольку пользователи особенно внимательны к фишингу и краже средств из кошельков."
         ]
       }
     ]
