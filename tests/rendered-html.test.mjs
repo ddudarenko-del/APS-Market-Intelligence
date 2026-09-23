@@ -33,7 +33,11 @@ test("server-renders the unified APS research workspace", async () => {
   assert.match(html, /Выводы/);
   assert.match(html, /Респонденты/);
   assert.match(html, />Кейсы<\/button>/);
-  assert.match(html, /Единый рейтинг/);
+  assert.match(html, />Рейтинг</);
+  assert.match(html, />Базовый</);
+  assert.match(html, />Стратегический</);
+  assert.match(html, /Priority Market/);
+  assert.match(html, /ВЫБРАННЫЙ РЫНОК/);
   assert.doesNotMatch(html, /Три независимых слоя/);
   assert.doesNotMatch(html, /Ключевой вывод/);
   assert.match(html, /Интерактивная карта рынков APS/);
@@ -58,6 +62,8 @@ test("keeps production metadata and documented market intelligence", async () =>
   assert.match(dashboard, /data\.unified_scoring/);
   assert.equal((dashboard.match(/data\.metadata\.interviews_conducted/g) ?? []).length, 2);
   assert.equal(parsedData.metadata.interviews_conducted, 18);
+  assert.equal(parsedData.metadata.updated, "2026-09-23");
+  assert.equal(parsedData.strategic_ranking.rows.length, 8);
   assert.match(dashboard, /ЕДИНАЯ ОЦЕНКА/i);
   assert.match(dashboard, /data\.market_competitors/);
   assert.match(dashboard, /\/data\/countries\.geojson/);

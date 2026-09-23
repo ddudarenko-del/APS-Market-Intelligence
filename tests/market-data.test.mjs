@@ -33,6 +33,19 @@ test("contains one complete qualitative assessment and six report sections per m
   }
 });
 
+test("keeps one source-grounded strategic rating for every market", () => {
+  assert.equal(data.strategic_ranking.source_title, "Задание Денису");
+  assert.match(data.strategic_ranking.source_url, /docs\.google\.com\/document\/d\/1cWtavyTTl7_dARpfDPVvTu3ExhX66xsVRDXIqZtAoLM/);
+  assert.equal(data.strategic_ranking.rows.length, 8);
+  assert.equal(new Set(data.strategic_ranking.rows.map((row) => row.market_code)).size, 8);
+  for (const row of data.strategic_ranking.rows) {
+    assert.ok(marketCodes.has(row.market_code));
+    assert.ok(row.rating);
+    assert.ok(row.details_en.length >= 5);
+    assert.equal(row.details_en.length, row.details_ru.length);
+  }
+});
+
 test("keeps supported enums and all qualitative content populated", () => {
   const confidenceLevels = new Set(["high", "medium", "hypothesis"]);
   for (const assessment of data.market_assessments) {

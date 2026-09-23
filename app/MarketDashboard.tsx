@@ -10,6 +10,7 @@ type BarrierSort = "default" | "driver" | "barrier";
 type MetricValue = { value: number; year: number } | null;
 type Market = (typeof data.markets)[number];
 type UnifiedScore = (typeof data.unified_scoring.rows)[number];
+type StrategicRating = (typeof data.strategic_ranking.rows)[number];
 type AvailabilityStatus = "full" | "partial" | "unavailable" | "unconfirmed";
 type Availability = {
   status: AvailabilityStatus;
@@ -176,6 +177,18 @@ function formatPeople(metric: MetricValue, language: Language) {
 
 function getUnifiedScore(marketCode: string): UnifiedScore {
   return data.unified_scoring.rows.find((row) => row.market_code === marketCode) ?? data.unified_scoring.rows[0];
+}
+
+function getStrategicRating(marketCode: string): StrategicRating {
+  return data.strategic_ranking.rows.find((row) => row.market_code === marketCode) ?? data.strategic_ranking.rows[0];
+}
+
+function getStrategicRatingClass(rating: string) {
+  if (rating === "Priority Market") return "priority";
+  if (rating === "Priority Subject to Licensing") return "conditional";
+  if (rating === "High-Potential, High-Risk Test") return "test";
+  if (rating === "Secondary Opportunity") return "secondary";
+  return "long-term";
 }
 
 function ScoreBadge({ score }: { score: number }) {
@@ -551,6 +564,7 @@ export function MarketDashboard() {
   const selected = data.markets.find((market) => market.code === selectedCode) ?? data.markets[0];
   const selectedAssessment = data.market_assessments.find((item) => item.market_code === selected.code) ?? data.market_assessments[0];
   const selectedUnified = getUnifiedScore(selected.code);
+  const selectedStrategic = getStrategicRating(selected.code);
   const selectedReport = data.market_reports.find((item) => item.market_code === selected.code) ?? data.market_reports[0];
   const regions = ["Все регионы", ...Array.from(new Set(data.markets.map((market) => market.region)))];
   const visibleMarkets = region === "Все регионы" ? data.markets : data.markets.filter((market) => market.region === region);
@@ -671,39 +685,60 @@ export function MarketDashboard() {
 
       {tab === "overview" && (
         <section className="content-grid overview-grid">
-          <div className="panel atlas-panel">
-            <div className="panel-heading">
-              <div>
-                <span className="section-kicker">MARKET ATLAS</span>
-                <h2>Исследование рыночного потенциала криптофинансовой платформы для платежей и управления цифровыми активами с функцией выпуска крипто-связанных платежных карт</h2>
+          <div className="overview-main">
+            <div className="panel atlas-panel">
+              <div className="panel-heading">
+                <div>
+                  <span className="section-kicker">MARKET ATLAS</span>
+                  <h2>Исследование рыночного потенциала криптофинансовой платформы для платежей и управления цифровыми активами с функцией выпуска крипто-связанных платежных карт</h2>
+                </div>
+                <div className="panel-controls">
+                  <select value={region} onChange={(event) => setRegion(event.target.value)} aria-label="Фильтр по региону">
+                    {regions.map((item) => <option key={item} value={item}>{item}</option>)}
+                  </select>
+                </div>
               </div>
-              <div className="panel-controls">
-                <select value={region} onChange={(event) => setRegion(event.target.value)} aria-label="Фильтр по региону">
-                  {regions.map((item) => <option key={item} value={item}>{item}</option>)}
-                </select>
-              </div>
+              <MarketMap
+                selectedCode={selectedCode}
+                visibleCodes={visibleMarkets.map((market) => market.code)}
+                onSelect={chooseMarket}
+              />
             </div>
-            <MarketMap
-              selectedCode={selectedCode}
-              visibleCodes={visibleMarkets.map((market) => market.code)}
-              onSelect={chooseMarket}
-            />
+
+            <article className="panel strategic-market-panel" aria-live="polite">
+              <div className="strategic-market-heading">
+                <div>
+                  <span className="section-kicker">ВЫБРАННЫЙ РЫНОК</span>
+                  <h2>{selected.name_ru}</h2>
+                </div>
+                <span className={`strategic-rating-label ${getStrategicRatingClass(selectedStrategic.rating)}`}>{selectedStrategic.rating}</span>
+              </div>
+              <ul className="strategic-market-details">
+                {(language === "en" ? selectedStrategic.details_en : selectedStrategic.details_ru).map((item) => <li key={item}>{item}</li>)}
+              </ul>
+              <a className="strategic-source-link" href={data.strategic_ranking.source_url} target="_blank" rel="noreferrer">Источник: {data.strategic_ranking.source_title}</a>
+            </article>
           </div>
 
           <aside className="panel ranking-panel">
             <div className="panel-heading compact">
               <div>
                 <span className="section-kicker">РЫНКИ</span>
-                <h2>Единый рейтинг</h2>
+                <h2>Рейтинг</h2>
               </div>
               <span className="count-pill">8 рынков</span>
             </div>
+            <div className="ranking-columns" aria-hidden="true">
+              <span>Страна</span>
+              <span>Базовый</span>
+              <span>Стратегический</span>
+            </div>
             <div className="ranking-list">
-              {rankedVisibleMarkets.map((market, index) => (
+              {rankedVisibleMarkets.map((market) => (
                 <button key={market.code} type="button" onClick={() => chooseMarket(market.code)} className={selectedCode === market.code ? "active" : ""}>
-                  <span className="rank-number">{index + 1}</span>
                   <span className="rank-name"><strong>{market.name_ru}</strong><small>{market.region}</small></span>
                   <ScoreBadge score={getUnifiedScore(market.code).final_score} />
+                  <span className={`strategic-rating-label ${getStrategicRatingClass(getStrategicRating(market.code).rating)}`}>{getStrategicRating(market.code).rating}</span>
                 </button>
               ))}
             </div>

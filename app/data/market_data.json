@@ -1,7 +1,7 @@
 {
   "metadata": {
     "title": "APS Market Intelligence",
-    "updated": "2026-09-01",
+    "updated": "2026-09-23",
     "countries": 8,
     "interviews_conducted": 18,
     "criteria": [
@@ -22,7 +22,166 @@
       }
     ],
     "method_note": "Единая оценка привлекательности рынка для запуска продукта, функционально повторяющего KAST. Она объединяет количественные показатели, подтверждённые конкурентные факты и качественное исследование без двойного учёта одних и тех же факторов.",
-    "research_updated": "2026-09-01"
+    "research_updated": "2026-09-23"
+  },
+  "strategic_ranking": {
+    "source_title": "Задание Денису",
+    "source_url": "https://docs.google.com/document/d/1cWtavyTTl7_dARpfDPVvTu3ExhX66xsVRDXIqZtAoLM/edit?tab=t.0",
+    "source_revision": "ANLCKQn0Lo_5Xtl40Nq_0qoSLC0Abj4uIT1eWiBKbd1fWbCU4rZStkkMIHM5TWG_i-Ncb4Ajx_4SYTaPlSfBxi2vyT-YuoOwYGwpJoSQZ9w",
+    "rows": [
+      {
+        "market_code": "PHL",
+        "rating": "Priority Market",
+        "details_en": [
+          "Focus: Validate regulation and licensing, then proceed to a Proof of Concept.",
+          "Audiences: Seafarers and their families, overseas workers, existing crypto users and women interested in accessible financial products.",
+          "Product: Remittances and everyday crypto payments; explore a female-friendly product built around simplicity, safety, education and community support.",
+          "Channels: Seafarer networks, women-led crypto communities, KOLs and referral programmes.",
+          "Corridors: Philippines ↔ UAE, Saudi Arabia, Singapore, Hong Kong, the UK and North America.",
+          "Geographies: Metro Manila, Cebu and Davao."
+        ],
+        "details_ru": [
+          "Фокус: подтвердить регуляторный и лицензионный маршрут, затем перейти к Proof of Concept.",
+          "Аудитории: моряки и их семьи, работающие за рубежом, действующие пользователи криптовалют и женщины, заинтересованные в доступных финансовых продуктах.",
+          "Продукт: переводы и повседневные криптоплатежи; протестировать понятный и безопасный продукт для женщин с образовательной и комьюнити-поддержкой.",
+          "Каналы: сообщества моряков, женские криптосообщества, KOL и реферальные программы.",
+          "Коридоры: Филиппины ↔ ОАЭ, Саудовская Аравия, Сингапур, Гонконг, Великобритания и Северная Америка.",
+          "География: Метро Манила, Себу и Давао."
+        ]
+      },
+      {
+        "market_code": "COL",
+        "rating": "Priority Market",
+        "details_en": [
+          "Focus: Confirm the licensing route, payment integrations and potential for an early market entry.",
+          "Audiences: International earners, freelancers, crypto holders and people protecting savings from peso volatility.",
+          "Product: Stablecoin savings, international transfers and utility payments.",
+          "Corridors: Colombia ↔ the US and Spain.",
+          "Geographies: Bogotá, Medellín and Cali."
+        ],
+        "details_ru": [
+          "Фокус: подтвердить лицензионный маршрут, платежные интеграции и возможность раннего выхода на рынок.",
+          "Аудитории: получатели международного дохода, фрилансеры, владельцы криптоактивов и люди, защищающие сбережения от волатильности песо.",
+          "Продукт: сбережения в стейблкоинах, международные переводы и оплата повседневных услуг.",
+          "Коридоры: Колумбия ↔ США и Испания.",
+          "География: Богота, Медельин и Кали."
+        ]
+      },
+      {
+        "market_code": "IDN",
+        "rating": "Priority Subject to Licensing",
+        "details_en": [
+          "Focus: Confirm OJK requirements, local ownership rules and access to on-ramp, off-ramp and QR payments.",
+          "Audiences: Young crypto users, traders, freelancers and technology-oriented consumers.",
+          "Product: Everyday crypto payments with a distinctive lifestyle layer, such as a payment ring or membership benefits.",
+          "Channels: KOLs, YouTube and crypto communities.",
+          "Corridors: Indonesia ↔ Singapore, Malaysia, Hong Kong and the Middle East.",
+          "Geographies: Jakarta, Bali, Surabaya and Bandung."
+        ],
+        "details_ru": [
+          "Фокус: подтвердить требования OJK, правила локального владения и доступ к on-ramp, off-ramp и QR-платежам.",
+          "Аудитории: молодые пользователи криптовалют, трейдеры, фрилансеры и технологически ориентированные потребители.",
+          "Продукт: повседневные криптоплатежи с заметным lifestyle-слоем — например, платежным кольцом или преимуществами для участников.",
+          "Каналы: KOL, YouTube и криптосообщества.",
+          "Коридоры: Индонезия ↔ Сингапур, Малайзия, Гонконг и Ближний Восток.",
+          "География: Джакарта, Бали, Сурабая и Бандунг."
+        ]
+      },
+      {
+        "market_code": "MEX",
+        "rating": "High-Potential, High-Risk Test",
+        "details_en": [
+          "Focus: Confirm Mexican fiat methods and the legal boundaries of the operating model before testing acquisition.",
+          "Audiences: Cross-border workers, freelancers, crypto earners and internationally connected households.",
+          "Product: Dollar-based value storage, cross-border transfers and crypto-to-fiat access.",
+          "Channels: Facebook, TikTok, YouTube, KOLs and referral programmes.",
+          "Corridors: Mexico ↔ the US.",
+          "Geographies: Mexico City, Monterrey, Guadalajara and major US-border cities."
+        ],
+        "details_ru": [
+          "Фокус: подтвердить локальные fiat-методы и юридические границы операционной модели до тестирования привлечения.",
+          "Аудитории: трансграничные работники, фрилансеры, получатели дохода в криптовалюте и семьи с международными связями.",
+          "Продукт: хранение стоимости в долларах, трансграничные переводы и доступ к выводу из криптовалюты в fiat.",
+          "Каналы: Facebook, TikTok, YouTube, KOL и реферальные программы.",
+          "Коридоры: Мексика ↔ США.",
+          "География: Мехико, Монтеррей, Гвадалахара и крупные города на границе с США."
+        ]
+      },
+      {
+        "market_code": "ARG",
+        "rating": "Secondary Opportunity",
+        "details_en": [
+          "Focus: Enter only with a clearly superior core offer in a highly saturated market.",
+          "Audiences: International earners, freelancers, expatriates and households using crypto as a practical financial tool.",
+          "Product: Receiving foreign income, transfers and utility payments in one application.",
+          "Corridors: Argentina ↔ the US, Spain, Brazil and Uruguay.",
+          "Geographies: Buenos Aires, Córdoba, Rosario and Mendoza."
+        ],
+        "details_ru": [
+          "Фокус: выходить только с явно превосходящим базовым предложением на высоконасыщенный рынок.",
+          "Аудитории: получатели международного дохода, фрилансеры, экспаты и семьи, использующие криптовалюту как практический финансовый инструмент.",
+          "Продукт: получение зарубежного дохода, переводы и оплата повседневных услуг в одном приложении.",
+          "Коридоры: Аргентина ↔ США, Испания, Бразилия и Уругвай.",
+          "География: Буэнос-Айрес, Кордова, Росарио и Мендоса."
+        ]
+      },
+      {
+        "market_code": "CAN",
+        "rating": "Longer-Term Opportunity",
+        "details_en": [
+          "Focus: Wait for an inbound collection method and clarity on custody regulation.",
+          "Audiences: South Asian, Filipino, Nigerian, Caribbean and Latin American communities, particularly students and service workers.",
+          "Product: Cross-border payments and remittances, subject to licensing and infrastructure.",
+          "Channels: University societies, religious organisations and diaspora communities.",
+          "Corridors: Canada ↔ India, the Philippines, Nigeria, the Caribbean and Latin America.",
+          "Geographies: Toronto and the GTA, particularly Mississauga and Brampton; also Surrey and Vancouver."
+        ],
+        "details_ru": [
+          "Фокус: дождаться доступного метода входящих пополнений и ясности в регулировании хранения активов.",
+          "Аудитории: южноазиатские, филиппинские, нигерийские, карибские и латиноамериканские сообщества, особенно студенты и работники сферы услуг.",
+          "Продукт: трансграничные платежи и переводы при наличии необходимой лицензии и инфраструктуры.",
+          "Каналы: университетские сообщества, религиозные организации и диаспоры.",
+          "Коридоры: Канада ↔ Индия, Филиппины, Нигерия, Карибский регион и Латинская Америка.",
+          "География: Торонто и GTA, особенно Миссиссога и Брамптон; также Суррей и Ванкувер."
+        ]
+      },
+      {
+        "market_code": "GBR",
+        "rating": "Longer-Term Opportunity",
+        "details_en": [
+          "Focus: Clarify licensing, capital requirements and which services can be offered without custody.",
+          "Audiences: Indian, Nigerian, Filipino healthcare, Caribbean and Latin American communities; digital nomads and crypto earners.",
+          "Product: Remittances, off-ramp services and potentially higher transaction limits.",
+          "Corridors: UK ↔ India, Nigeria, the Philippines, the Caribbean and Latin America.",
+          "Geographies: London, Birmingham, Manchester and cities with large NHS and diaspora communities."
+        ],
+        "details_ru": [
+          "Фокус: уточнить лицензирование, требования к капиталу и перечень сервисов, которые можно предлагать без хранения активов.",
+          "Аудитории: индийские, нигерийские, филиппинские медицинские, карибские и латиноамериканские сообщества; цифровые кочевники и получатели дохода в криптовалюте.",
+          "Продукт: переводы, off-ramp-сервисы и потенциально более высокие лимиты операций.",
+          "Коридоры: Великобритания ↔ Индия, Нигерия, Филиппины, Карибский регион и Латинская Америка.",
+          "География: Лондон, Бирмингем, Манчестер и города с крупными сообществами NHS и диаспор."
+        ]
+      },
+      {
+        "market_code": "VNM",
+        "rating": "Further Validation Required",
+        "details_en": [
+          "Focus: Verify regulation and identify a credible local partner or licensed financial institution.",
+          "Audiences: Existing crypto holders, former play-to-earn users, freelancers and Russian-speaking residents.",
+          "Product: Crypto spending, conversion and cross-border transfers.",
+          "Corridors: Vietnam ↔ the US, Japan, South Korea, Singapore and Australia.",
+          "Geographies: Ho Chi Minh City, Hanoi and Da Nang."
+        ],
+        "details_ru": [
+          "Фокус: проверить регулирование и найти надежного локального партнера или лицензированную финансовую организацию.",
+          "Аудитории: действующие владельцы криптовалют, бывшие пользователи play-to-earn, фрилансеры и русскоязычные резиденты.",
+          "Продукт: расходование криптовалюты, конвертация и трансграничные переводы.",
+          "Коридоры: Вьетнам ↔ США, Япония, Южная Корея, Сингапур и Австралия.",
+          "География: Хошимин, Ханой и Дананг."
+        ]
+      }
+    ]
   },
   "unified_scoring": {
     "label": "Единая привлекательность рынка",
