@@ -64,6 +64,8 @@ test("keeps production metadata and documented market intelligence", async () =>
   assert.doesNotMatch(dashboard, /cartocdn|CARTO/i);
   assert.doesNotMatch(dashboard, /data-market-profile|onOpenProfileRef/);
   assert.match(dashboard, /aps-map-score/);
+  assert.match(dashboard, /\$\{unified\.final_score\.toFixed\(2\)\} \/ 5<\/span>/);
+  assert.doesNotMatch(dashboard, /\/ 5 · \$\{unified\.label\}<\/span>/);
   assert.doesNotMatch(dashboard, /bindPopup|openPopup|market-map-popup/);
   assert.match(dashboard, /atlas-legend-title/);
   assert.doesNotMatch(dashboard, /className="selected-market"/);

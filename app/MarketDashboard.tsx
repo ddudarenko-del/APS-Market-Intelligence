@@ -430,7 +430,7 @@ function MarketMap({
             if (!market) return;
             const unified = getUnifiedScore(market.code);
             countryLayer.bindTooltip(
-              `<strong>${market.name_ru}</strong><small>${mapOpportunityLabels[market.code]}</small><span class="aps-map-score ${unified.level}">${unified.final_score.toFixed(2)} / 5 · ${unified.label}</span>`,
+              `<strong>${market.name_ru}</strong><small>${mapOpportunityLabels[market.code]}</small><span class="aps-map-score ${unified.level}">${unified.final_score.toFixed(2)} / 5</span>`,
               { permanent: true, direction: "center", className: `aps-map-label aps-map-label-${market.code.toLowerCase()}`, opacity: 1, interactive: true },
             );
             const selectCountry = () => onSelectRef.current(code);
