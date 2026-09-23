@@ -5,10 +5,8 @@ import data from "./data/market_data.json";
 import task5Conclusions from "./data/task5_conclusions.json";
 import { type Language, translateCompositeText, translateText, translateTextNode } from "./localization";
 
-type Tab = "overview" | "profiles" | "competition" | "barriers" | "cases" | "acquisition" | "respondents" | "data" | "method";
-type BarrierSort = "default" | "driver" | "barrier";
+type Tab = "overview" | "profiles" | "competition" | "cases" | "acquisition" | "respondents" | "data" | "method";
 type MetricValue = { value: number; year: number } | null;
-type Market = (typeof data.markets)[number];
 type UnifiedScore = (typeof data.unified_scoring.rows)[number];
 type StrategicRating = (typeof data.strategic_ranking.rows)[number];
 type AvailabilityStatus = "full" | "partial" | "unavailable" | "unconfirmed";
@@ -104,7 +102,6 @@ const tabLabels: Array<{ id: Tab; label: string }> = [
   { id: "overview", label: "Обзор" },
   { id: "profiles", label: "Профили" },
   { id: "competition", label: "Конкуренты" },
-  { id: "barriers", label: "Барьеры" },
   { id: "cases", label: "Кейсы" },
   { id: "acquisition", label: "Каналы" },
   { id: "respondents", label: "Респонденты" },
@@ -565,7 +562,6 @@ export function MarketDashboard() {
   const [selectedCode, setSelectedCode] = useState("PHL");
   const [region, setRegion] = useState("Все регионы");
   const [competitorMarket, setCompetitorMarket] = useState("ALL");
-  const [barrierSort, setBarrierSort] = useState<BarrierSort>("default");
   const [strategicOverlayOpen, setStrategicOverlayOpen] = useState(false);
 
   const selected = data.markets.find((market) => market.code === selectedCode) ?? data.markets[0];
@@ -590,16 +586,10 @@ export function MarketDashboard() {
         counts[getAvailability(item, competitorMarket).status] += 1;
         return counts;
       }, { full: 0, partial: 0, unavailable: 0, unconfirmed: 0 });
-  const barrierRows = data.market_assessments
-    .map((assessment) => ({ assessment, market: data.markets.find((market) => market.code === assessment.market_code)! }))
-    .sort((a, b) => {
-      if (barrierSort === "driver") return b.assessment.need.score - a.assessment.need.score;
-      if (barrierSort === "barrier") return b.assessment.entry_complexity.score - a.assessment.entry_complexity.score;
-      return 0;
-    });
-  const strongNeedMarkets = data.market_assessments.filter((item) => item.need.score >= 4).length;
-  const highComplexityMarkets = data.market_assessments.filter((item) => item.entry_complexity.score >= 4).length;
-  const criticalComplexityMarkets = data.market_assessments.filter((item) => item.entry_complexity.score === 5).length;
+  const marketCaseRows = data.markets.map((market) => ({
+    market,
+    assessment: data.market_assessments.find((assessment) => assessment.market_code === market.code) ?? data.market_assessments[0],
+  }));
   const completedRespondents = data.respondents.filter((item) => item.status === "completed");
 
   function chooseMarket(code: string, nextTab?: Tab) {
@@ -842,102 +832,6 @@ export function MarketDashboard() {
         </section>
       )}
 
-      {tab === "barriers" && (
-        <section className="barriers-layout">
-          <article className="panel barriers-summary">
-            <div className="panel-heading">
-              <div>
-                <span className="section-kicker">РЕАЛЬНОСТЬ ВХОДА НА РЫНОК</span>
-                <h2>Сила потребности против сложности входа</h2>
-                <p>Две независимые качественные оценки по шкале 1–5. Это не формула рейтинга и не арифметический баланс.</p>
-              </div>
-              <div className="barrier-sort" aria-label="Сортировка рынков">
-                {(["default", "driver", "barrier"] as const).map((sort) => (
-                  <button key={sort} type="button" aria-pressed={barrierSort === sort} className={barrierSort === sort ? "active" : ""} onClick={() => setBarrierSort(sort)}>
-                    {sort === "default" ? "По рынкам" : sort === "driver" ? "По силе потребности" : "По сложности входа"}
-                  </button>
-                ))}
-              </div>
-            </div>
-            <div className="barriers-summary-metrics">
-              <div><span>Сильная потребность</span><strong>{strongNeedMarkets}</strong><small>рынков с оценкой 4–5</small></div>
-              <div><span>Высокая сложность</span><strong>{highComplexityMarkets}</strong><small>рынков с оценкой 4–5</small></div>
-              <div><span>Критическая сложность</span><strong>{criticalComplexityMarkets}</strong><small>рынков с оценкой 5</small></div>
-            </div>
-            <div className="barrier-method-note"><strong>Как читать:</strong><span>Сила потребности показывает выраженность пользовательской задачи. Сложность входа показывает конкуренцию, регулирование и требования к модели запуска. Одна оценка не вычитается из другой.</span></div>
-          </article>
-
-          <div className="barrier-matrix-head" aria-hidden="true">
-            <span>Рынок</span><span>Сила потребности</span><span>Сложность входа</span><span>Что это означает</span>
-          </div>
-          <div className="barrier-matrix">
-            {barrierRows.map(({ assessment, market }) => {
-              const unified = getUnifiedScore(market.code);
-              return (
-                <article className="panel barrier-row" key={assessment.market_code}>
-                  <div className="barrier-market">
-                    <span className="section-kicker">{market.code} · {market.region}</span>
-                    <h3>{market.name_ru}</h3>
-                    <span className={`attractiveness-badge ${unified.level}`}>{unified.label} · {unified.final_score.toFixed(2)} / 5</span>
-                  </div>
-                  <div className="evidence-column driver-column">
-                    <div className="evidence-score"><strong>{assessment.need.score}</strong><span>{driverScoreLabel(assessment.need.score)}</span></div>
-                    <h4>{assessment.need.title}</h4>
-                    <p>{assessment.market_gap}</p>
-                    <div className="source-chips">{assessment.need.source_ids.map((id) => <SourceChip key={id} sourceId={id} />)}</div>
-                  </div>
-                  <div className="evidence-column barrier-column">
-                    <div className="evidence-score"><strong>{assessment.entry_complexity.score}</strong><span>{barrierScoreLabel(assessment.entry_complexity.score)}</span></div>
-                    <h4>{assessment.entry_complexity.title}</h4>
-                    <p>{assessment.competition_summary}</p>
-                    <div className="source-chips">{assessment.entry_complexity.source_ids.map((id) => <SourceChip key={id} sourceId={id} />)}</div>
-                  </div>
-                  <div className="barrier-meaning">
-                    <span>Условие входа</span>
-                    <p>{assessment.entry_condition}</p>
-                    <small>Подтверждение: {confidenceLabels[assessment.confidence]}</small>
-                    <button type="button" onClick={() => chooseMarket(market.code, "profiles")}>Открыть профиль</button>
-                  </div>
-                  <div className="barrier-cases">
-                    <div className="barrier-cases-heading">
-                      <div>
-                        <span className="section-kicker">ПОДТВЕРЖДАЮЩИЕ ПРИМЕРЫ</span>
-                        <h4>Что рынок уже показал на практике</h4>
-                      </div>
-                      <p>Факт компании отделён от аналитического вывода APS.</p>
-                    </div>
-                    <div className="barrier-cases-grid">
-                      {(["success", "failure"] as const).map((kind) => {
-                        const study = market.case_studies[kind];
-                        return (
-                          <article key={kind} className={`barrier-case-card ${kind}`}>
-                            <div className="barrier-case-topline">
-                              <span>{kind === "success" ? "Что сработало" : "Что ограничило результат"}</span>
-                              <small>{study.period}</small>
-                            </div>
-                            <h5>{study.company}</h5>
-                            <p className="barrier-case-product">{study.product}</p>
-                            <div className="barrier-case-copy">
-                              <span>Подтверждённый факт</span>
-                              <p>{study.evidence}</p>
-                            </div>
-                            <div className="barrier-case-copy lesson">
-                              <span>Аналитический вывод APS</span>
-                              <p>{study.lesson}</p>
-                            </div>
-                            <div className="source-chips">{study.source_ids.map((id) => <SourceChip key={id} sourceId={id} />)}</div>
-                          </article>
-                        );
-                      })}
-                    </div>
-                  </div>
-                </article>
-              );
-            })}
-          </div>
-        </section>
-      )}
-
       {tab === "acquisition" && (
         <section className="acquisition-layout">
           <article className="panel acquisition-summary">
@@ -1060,7 +954,7 @@ export function MarketDashboard() {
             </div>
             <div className="cases-intro-metrics" aria-label="Состав анализа">
               <div><strong>1</strong><span>подробный разбор</span></div>
-              <div><strong>{data.case_lessons.supporting_cases.length}</strong><span>дополнительных кейсов</span></div>
+              <div><strong>{data.case_lessons.supporting_cases.length + marketCaseRows.length * 2}</strong><span>кейсов и примеров</span></div>
               <div><strong>{data.case_lessons.patterns.length}</strong><span>повторяющихся причин</span></div>
             </div>
           </article>
@@ -1115,6 +1009,60 @@ export function MarketDashboard() {
                 <div className="source-chips">{study.source_ids.map((id) => <SourceChip key={id} sourceId={id} />)}</div>
                 <div className="case-fact lesson"><span>Урок для нового игрока</span><p>{study.lesson}</p></div>
               </article>
+            ))}
+          </div>
+
+          <div className="cases-section-heading market-cases-heading">
+            <div><span className="section-kicker">КЕЙСЫ ПО РЫНКАМ</span><h2>Барьеры и драйверы в реальных запусках</h2></div>
+            <p>По каждой стране собраны подтверждённые примеры того, что сработало и что ограничило результат.</p>
+          </div>
+          <div className="market-cases-list">
+            {marketCaseRows.map(({ market, assessment }, index) => (
+              <details className="panel market-cases-market" key={market.code} open={index === 0}>
+                <summary>
+                  <div className="market-cases-title">
+                    <span>{market.code} / {market.region}</span>
+                    <h3>{market.name_ru}</h3>
+                  </div>
+                  <div className="market-case-signals" aria-label="Контекст рынка">
+                    <span><small>Сила потребности</small><strong>{assessment.need.score} / 5</strong></span>
+                    <span><small>Сложность входа</small><strong>{assessment.entry_complexity.score} / 5</strong></span>
+                  </div>
+                  <div className="market-case-names">
+                    <span><small>Сработало</small><strong>{market.case_studies.success.company}</strong></span>
+                    <span><small>Ограничило результат</small><strong>{market.case_studies.failure.company}</strong></span>
+                  </div>
+                  <span className="market-cases-toggle" aria-hidden="true">+</span>
+                </summary>
+                <div className="barrier-cases-grid">
+                  {(["success", "failure"] as const).map((kind) => {
+                    const study = market.case_studies[kind];
+                    return (
+                      <article key={kind} className={`barrier-case-card ${kind}`}>
+                        <div className="barrier-case-topline">
+                          <span>{kind === "success" ? "Что сработало" : "Что ограничило результат"}</span>
+                          <small>{study.period}</small>
+                        </div>
+                        <h5>{study.company}</h5>
+                        <p className="barrier-case-product">{study.product}</p>
+                        <div className="barrier-case-copy">
+                          <span>Подтверждённый факт</span>
+                          <p>{study.evidence}</p>
+                        </div>
+                        <div className="barrier-case-copy lesson">
+                          <span>Аналитический вывод APS</span>
+                          <p>{study.lesson}</p>
+                        </div>
+                        <div className="source-chips">{study.source_ids.map((id) => <SourceChip key={id} sourceId={id} />)}</div>
+                      </article>
+                    );
+                  })}
+                </div>
+                <div className="market-cases-footer">
+                  <p><strong>Условие входа:</strong> {assessment.entry_condition}</p>
+                  <button type="button" onClick={() => chooseMarket(market.code, "profiles")}>Открыть профиль</button>
+                </div>
+              </details>
             ))}
           </div>
 

@@ -915,6 +915,32 @@ footer { border-top: 1px solid #1f2823; }
 .case-fact.lesson p { font-weight: 650; }
 .supporting-case > .source-chips { justify-content: flex-start; margin: 15px 0; }
 
+.market-cases-heading { padding-top: 30px; }
+.market-cases-list { display: grid; gap: 10px; }
+.market-cases-market { overflow: hidden; box-shadow: none; }
+.market-cases-market > summary { display: grid; grid-template-columns: minmax(170px, .75fr) minmax(240px, .85fr) minmax(300px, 1.4fr) 32px; gap: 22px; align-items: center; min-height: 104px; padding: 20px 24px; cursor: pointer; list-style: none; transition: background-color .18s ease; }
+.market-cases-market > summary::-webkit-details-marker { display: none; }
+.market-cases-market > summary:hover { background: #101913; }
+.market-cases-market > summary:focus-visible { outline: 2px solid var(--lime); outline-offset: -3px; }
+.market-cases-market[open] > summary { border-bottom: 1px solid var(--line); background: #101913; }
+.market-cases-title > span { color: var(--lime); font: 700 9px var(--font-plex-mono); letter-spacing: .07em; text-transform: uppercase; }
+.market-cases-title h3 { margin: 7px 0 0; font-size: 23px; letter-spacing: -.03em; }
+.market-case-signals, .market-case-names { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1px; background: var(--line); }
+.market-case-signals > span, .market-case-names > span { min-width: 0; padding: 10px 13px; background: #0c120e; }
+.market-case-signals small, .market-case-names small { display: block; margin-bottom: 5px; color: var(--ink-soft); font-size: 8px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; }
+.market-case-signals strong { color: var(--lime); font: 700 17px var(--font-plex-mono); }
+.market-case-names strong { display: block; overflow-wrap: anywhere; font-size: 12px; line-height: 1.35; }
+.market-case-names > span:last-child strong { color: #f2aaa3; }
+.market-cases-toggle { display: grid; width: 30px; height: 30px; place-items: center; border: 1px solid #36423b; border-radius: 8px; color: var(--ink-soft); font-size: 22px; line-height: 1; transition: transform .18s ease, border-color .18s ease, color .18s ease; }
+.market-cases-market[open] .market-cases-toggle { transform: rotate(45deg); border-color: var(--lime); color: var(--lime); }
+.market-cases-market .barrier-cases-grid { border-top: 0; }
+.market-cases-footer { display: flex; align-items: center; justify-content: space-between; gap: 22px; padding: 16px 22px; border-top: 1px solid var(--line); background: #0a100c; }
+.market-cases-footer p { max-width: 920px; margin: 0; color: var(--ink-soft); font-size: 12px; line-height: 1.55; }
+.market-cases-footer p strong { color: var(--ink); }
+.market-cases-footer button { flex: 0 0 auto; padding: 9px 13px; border: 1px solid #3a493f; border-radius: 9px; background: transparent; color: var(--ink); font-weight: 700; cursor: pointer; white-space: nowrap; }
+.market-cases-footer button:hover { border-color: var(--lime); color: var(--lime); }
+.market-cases-footer button:active { transform: translateY(1px); }
+
 .case-patterns { overflow: hidden; box-shadow: none; }
 .cases-section-heading.compact { padding: 25px 28px 19px; }
 .case-patterns-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1px; border-top: 1px solid var(--line); background: var(--line); }
@@ -1151,6 +1177,7 @@ footer {
   .fit-method-summary { grid-template-columns: 1fr; }
   .acquisition-reach-grid { grid-template-columns: repeat(3, 1fr); }.acquisition-channel-grid { grid-template-columns: 1fr; }.acquisition-channel-card h4 { min-height: 0; }
   .barrier-matrix-head { display: none; }.barrier-row { grid-template-columns: 190px 1fr 1fr; }.barrier-meaning { grid-column: 1 / -1; padding: 16px 20px !important; border-top: 1px solid var(--line); border-left: 0 !important; }
+  .market-cases-market > summary { grid-template-columns: minmax(150px, .7fr) minmax(215px, .9fr) minmax(250px, 1.2fr) 32px; gap: 14px; }
   .research-observations, .cross-market-insights-grid { grid-template-columns: repeat(2, 1fr); }
 }
 
@@ -1178,6 +1205,7 @@ footer {
   .acquisition-decision-grid { grid-template-columns: 1fr; }.acquisition-decision-avoid { grid-column: auto; grid-template-columns: 1fr; }.acquisition-decision-avoid .source-chips { justify-content: flex-start; }.acquisition-profile-evidence-list { grid-template-columns: 1fr; }
   .barrier-sort { justify-content: flex-start; }.barriers-summary-metrics { grid-template-columns: 1fr; }.barrier-method-note { grid-template-columns: 1fr; gap: 5px; }.barrier-row { grid-template-columns: 1fr; }.barrier-row > div + div { border-top: 1px solid var(--line); border-left: 0; }.barrier-market { padding-bottom: 18px !important; }.barrier-meaning { grid-column: auto; }.barrier-cases-heading { align-items: flex-start; flex-direction: column; gap: 6px; }.barrier-cases-heading > p { text-align: left; }.barrier-cases-grid { grid-template-columns: 1fr; }.barrier-case-card + .barrier-case-card { border-top: 1px solid var(--line); border-left: 0; }.barrier-case-product { min-height: 0; }
   .cases-intro { grid-template-columns: 1fr; }.cases-intro-metrics { border-top: 1px solid var(--line); border-left: 0; }.case-reasons-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }.case-patterns-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .market-cases-market > summary { grid-template-columns: minmax(0, 1fr) 32px; gap: 16px; padding: 19px 20px; }.market-cases-title { grid-column: 1; }.market-cases-toggle { grid-column: 2; grid-row: 1; }.market-case-signals, .market-case-names { grid-column: 1 / -1; }.market-cases-footer { align-items: flex-start; flex-direction: column; }.market-cases-footer button { width: 100%; }
   .research-observations, .cross-market-insights-grid, .assessment-grid, .respondent-grid, .local-competition-groups { grid-template-columns: 1fr; }
   .conclusions-section-heading { align-items: flex-start; flex-direction: column; padding: 24px 20px 19px; }
   .market-conclusions-list summary { grid-template-columns: 42px minmax(0, 1fr) 20px; padding: 18px 20px; }
@@ -1211,6 +1239,7 @@ footer {
   .report-rich-bullet.level-3 { margin-left: 42px; }
   .audience-group h4 { font-size: 19px; line-height: 1.38; }
   .cases-intro > div:first-child { padding: 25px 20px; }.cases-intro-metrics { grid-template-columns: 1fr; }.cases-intro-metrics div { padding: 17px 20px; border-top: 1px solid var(--line); border-left: 0; }.cases-intro-metrics div:first-child { border-top: 0; }.primary-case-heading { align-items: flex-start; flex-direction: column; padding: 25px 20px; }.primary-case-heading .source-chips { justify-content: flex-start; }.case-trajectory, .case-reasons-grid, .supporting-cases-grid, .case-patterns-grid { grid-template-columns: 1fr; }.case-trajectory article, .case-reasons-heading { padding: 22px 20px; }.case-main-lesson { grid-template-columns: 1fr; gap: 9px; padding: 22px 20px; }.cases-section-heading { align-items: flex-start; flex-direction: column; padding: 20px 4px 4px; }.cases-section-heading > p { text-align: left; }.supporting-case:last-child { grid-column: auto; }.cases-section-heading.compact { padding: 22px 20px 17px; }
+  .market-case-signals, .market-case-names { grid-template-columns: 1fr; }.market-cases-title h3 { font-size: 21px; }
 }
 
 /* Desktop readability pass for live presentation and shared-screen use. */
@@ -1314,6 +1343,7 @@ footer {
   .barrier-cases-heading > p { font-size: 13px; }
   .barrier-meaning p,
   .barrier-case-copy p { font-size: 14px; line-height: 1.58; }
+  .market-cases-footer p { font-size: 14px; }
   .barrier-balance p,
   .barrier-balance button,
   .barrier-meaning button { font-size: 12px; }

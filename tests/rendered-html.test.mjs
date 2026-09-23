@@ -35,6 +35,7 @@ test("server-renders the unified APS research workspace", async () => {
   assert.doesNotMatch(html, />Сравнение<\/button>/);
   assert.match(html, /Респонденты/);
   assert.match(html, />Кейсы<\/button>/);
+  assert.doesNotMatch(html, />Барьеры<\/button>/);
   assert.match(html, />Рейтинг</);
   assert.match(html, />Базовый</);
   assert.match(html, />Стратегический</);
@@ -64,6 +65,8 @@ test("keeps production metadata and documented market intelligence", async () =>
   assert.match(dashboard, /data\.unified_scoring/);
   assert.doesNotMatch(dashboard, /id: "compare"/);
   assert.doesNotMatch(dashboard, /id: "conclusions"/);
+  assert.doesNotMatch(dashboard, /id: "barriers"/);
+  assert.doesNotMatch(dashboard, /tab === "barriers"/);
   assert.equal((dashboard.match(/tab === "profiles"/g) ?? []).length, 2);
   assert.equal((dashboard.match(/data\.metadata\.interviews_conducted/g) ?? []).length, 2);
   assert.equal(parsedData.metadata.interviews_conducted, 18);
@@ -115,6 +118,9 @@ test("keeps production metadata and documented market intelligence", async () =>
   assert.match(dashboard, /Конкретные основания решения/);
   assert.match(dashboard, /Подтверждённый пример \/ свидетельство/);
   assert.match(dashboard, /data\.case_lessons/);
+  assert.match(dashboard, /КЕЙСЫ ПО РЫНКАМ/);
+  assert.match(dashboard, /marketCaseRows\.map/);
+  assert.match(dashboard, /market\.case_studies\[kind\]/);
   assert.match(dashboard, /study\.constraint_label \?\? "Что ограничило результат"/);
   assert.match(dashboard, /section\.id === "audience"/);
   assert.match(dashboard, /getUnifiedScore\(market\.code\)\.final_score/);
