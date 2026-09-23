@@ -37,6 +37,7 @@ test("server-renders the unified APS research workspace", async () => {
   assert.doesNotMatch(html, /Три независимых слоя/);
   assert.doesNotMatch(html, /Ключевой вывод/);
   assert.match(html, /Интерактивная карта рынков APS/);
+  assert.doesNotMatch(html, /class="selected-market"/);
   assert.match(html, />18<\/strong><span>экспертных интервью<\/span>/);
   assert.doesNotMatch(html, /codex-preview|Your site is taking shape/);
 });
@@ -65,6 +66,7 @@ test("keeps production metadata and documented market intelligence", async () =>
   assert.match(dashboard, /aps-map-score/);
   assert.doesNotMatch(dashboard, /bindPopup|openPopup|market-map-popup/);
   assert.match(dashboard, /atlas-legend-title/);
+  assert.doesNotMatch(dashboard, /className="selected-market"/);
   assert.match(dashboard, /Исследование рыночного потенциала криптофинансовой платформы для платежей и управления цифровыми активами с функцией выпуска крипто-связанных платежных карт/);
   assert.doesNotMatch(dashboard, /Восемь рынков в одном поле/);
   assert.doesNotMatch(dashboard, /Клик выбирает рынок и обновляет блок под картой/);
