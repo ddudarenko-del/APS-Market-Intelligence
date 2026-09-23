@@ -105,10 +105,13 @@ test("keeps competition, respondent and acquisition enums valid", () => {
 
 test("publishes only completed respondents and current ARQ naming", () => {
   assert.equal(data.metadata.interviews_conducted, 18);
-  assert.equal(data.respondents.length, 9);
+  assert.equal(data.respondents.length, 14);
   assert.ok(data.respondents.every((respondent) => respondent.status === "completed" && respondent.visibility === "name_initial"));
   assert.ok(data.respondents.every((respondent) => /^[A-Z][A-Za-z]+ [A-Z]\.$/.test(respondent.display_name)));
   assert.ok(data.respondents.every((respondent) => sourceIds.has(respondent.source_id)));
+  for (const displayName of ["Krystelle G.", "Alex B.", "Nhi P.", "Pakning L.", "Andrew R."]) {
+    assert.ok(data.respondents.some((respondent) => respondent.display_name === displayName), `missing respondent ${displayName}`);
+  }
   assert.ok(data.market_competitors.every((competitor) => competitor.provider !== "DolarApp"));
 });
 

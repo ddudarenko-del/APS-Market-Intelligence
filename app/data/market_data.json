@@ -5143,6 +5143,56 @@
       "url": null
     },
     {
+      "id": "interview_ph_web3_community_2026",
+      "type": "interview",
+      "tier": "expert_interview",
+      "title": "Филиппины: Web3-маркетинг и развитие сообществ",
+      "publisher": "Экспертное интервью",
+      "period": "2026",
+      "accessed": "2026-09-23",
+      "url": null
+    },
+    {
+      "id": "interview_canada_gtm_2026",
+      "type": "interview",
+      "tier": "expert_interview",
+      "title": "Канада: go-to-market, лицензирование и crypto-продукты",
+      "publisher": "Экспертное интервью",
+      "period": "2026",
+      "accessed": "2026-09-23",
+      "url": null
+    },
+    {
+      "id": "interview_vietnam_web3_marketing_2026",
+      "type": "interview",
+      "tier": "expert_interview",
+      "title": "Вьетнам: Web3-маркетинг, партнёрства и сообщества",
+      "publisher": "Экспертное интервью",
+      "period": "2026",
+      "accessed": "2026-09-23",
+      "url": null
+    },
+    {
+      "id": "interview_asia_crypto_payments_2026",
+      "type": "interview",
+      "tier": "expert_interview",
+      "title": "Азия: stablecoin-платежи и платёжные crypto-продукты",
+      "publisher": "Экспертное интервью",
+      "period": "2026",
+      "accessed": "2026-09-23",
+      "url": null
+    },
+    {
+      "id": "interview_neobank_cross_market_2026",
+      "type": "interview",
+      "tier": "expert_interview",
+      "title": "Великобритания и Латинская Америка: переводы и международные платежи",
+      "publisher": "Экспертное интервью",
+      "period": "2026",
+      "accessed": "2026-09-23",
+      "url": null
+    },
+    {
       "id": "tangem_annual_report_2025",
       "type": "company",
       "tier": "official_company_data",
@@ -6632,6 +6682,86 @@
       "interview_date": null,
       "status": "completed",
       "source_id": "interview_id_marketing_2026",
+      "visibility": "name_initial"
+    },
+    {
+      "id": "respondent_ph_03",
+      "display_name": "Krystelle G.",
+      "market_codes": [
+        "PHL"
+      ],
+      "scope": "market",
+      "role": "Эксперт по Web3-маркетингу и развитию сообществ с опытом более 10 лет. Сооснователь CryptoFemale Philippines, Country Lead в SheFi Philippines и SEA Marketing Lead в Darkex",
+      "expertise": "Web3-маркетинг, развитие сообществ и привлечение женской аудитории в криптоиндустрию",
+      "selection_rationale": "Глубокое понимание филиппинского Web3-рынка, локальных сообществ и механизмов продвижения криптопродуктов среди женщин",
+      "interview_date": null,
+      "status": "completed",
+      "source_id": "interview_ph_web3_community_2026",
+      "visibility": "name_initial"
+    },
+    {
+      "id": "respondent_canada_02",
+      "display_name": "Alex B.",
+      "market_codes": [
+        "CAN"
+      ],
+      "scope": "market",
+      "role": "Эксперт по выходу финансовых и криптовалютных продуктов на канадский рынок. Ранее работал в Unlimint, сейчас отвечает за Канаду в криптомайнинговой компании",
+      "expertise": "Go-to-market стратегия, лицензирование и развитие криптовалютных продуктов",
+      "selection_rationale": "Практический опыт оценки регуляторных требований, лицензирования и возможностей выхода на канадский рынок",
+      "interview_date": null,
+      "status": "completed",
+      "source_id": "interview_canada_gtm_2026",
+      "visibility": "name_initial"
+    },
+    {
+      "id": "respondent_vietnam_01",
+      "display_name": "Nhi P.",
+      "market_codes": [
+        "VNM"
+      ],
+      "scope": "market",
+      "role": "Специалист по маркетингу и партнёрствам в Web3, участник сообщества разработчиков и практикующий CFD- и криптотрейдер",
+      "expertise": "Web3-маркетинг, стратегические партнёрства, сообщества разработчиков и криптотрейдинг",
+      "selection_rationale": "Понимание поведения локальной криптоаудитории, профессиональных сообществ и каналов продвижения Web3-продуктов во Вьетнаме",
+      "interview_date": null,
+      "status": "completed",
+      "source_id": "interview_vietnam_web3_marketing_2026",
+      "visibility": "name_initial"
+    },
+    {
+      "id": "respondent_asia_01",
+      "display_name": "Pakning L.",
+      "market_codes": [
+        "PHL",
+        "VNM",
+        "IDN"
+      ],
+      "scope": "cross_market",
+      "role": "Эксперт по stablecoin-платежам и платёжным криптопродуктам. Ранее работал с Binance Pay & Card, Bitget и RedotPay",
+      "expertise": "Stablecoin-платежи, криптокарты, платёжная инфраструктура и развитие продуктов на азиатских рынках",
+      "selection_rationale": "Региональная экспертиза и практический опыт развития крупных криптоплатёжных продуктов в Азии",
+      "interview_date": null,
+      "status": "completed",
+      "source_id": "interview_asia_crypto_payments_2026",
+      "visibility": "name_initial"
+    },
+    {
+      "id": "respondent_cross_market_02",
+      "display_name": "Andrew R.",
+      "market_codes": [
+        "GBR",
+        "MEX",
+        "ARG",
+        "COL"
+      ],
+      "scope": "cross_market",
+      "role": "Сооснователь необанка",
+      "expertise": "Переводы и международные платежи",
+      "selection_rationale": "Региональная экспертиза",
+      "interview_date": null,
+      "status": "completed",
+      "source_id": "interview_neobank_cross_market_2026",
       "visibility": "name_initial"
     }
   ],
