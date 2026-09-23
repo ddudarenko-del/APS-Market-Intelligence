@@ -86,6 +86,7 @@ const reviewedTranslations: Record<string, string> = {
   "Цена и комиссии": "Pricing and fees",
   "Доходность": "Yield",
   "Дешевый вывод в PHP": "Low-cost cash-out in PHP",
+  "B2B-продукт для судоходных компаний и выплат морякам.": "A B2B product for shipping companies and seafarer payroll.",
   "Общий вывод": "Overall conclusion",
   "Универсальный аналог KAST не дает достаточного отличия": "A generic KAST analogue is not sufficiently differentiated",
   "СКВОЗНЫЕ ИНСАЙТЫ": "CROSS-MARKET INSIGHTS",

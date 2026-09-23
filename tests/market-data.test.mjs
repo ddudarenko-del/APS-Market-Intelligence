@@ -134,6 +134,14 @@ test("preserves the structured Indonesia country-detail report", () => {
   assert.doesNotMatch(report.sections.flatMap((section) => section.paragraphs).join(" "), /чч|на уровне Филиппин/);
 });
 
+test("includes the Philippines B2B seafarer-payments product", () => {
+  const report = data.market_reports.find((item) => item.market_code === "PHL");
+  assert.ok(report);
+  const product = report.sections.find((section) => section.id === "product");
+  assert.ok(product);
+  assert.ok(product.paragraphs.includes("B2B-продукт для судоходных компаний и выплат морякам."));
+});
+
 test("uses the expanded brief conclusions in every market profile", () => {
   const expectedHeadlines = {
     GBR: "Нишевый рынок без массовой потребности",
