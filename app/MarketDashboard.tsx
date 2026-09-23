@@ -5,7 +5,7 @@ import data from "./data/market_data.json";
 import task5Conclusions from "./data/task5_conclusions.json";
 import { type Language, translateCompositeText, translateText, translateTextNode } from "./localization";
 
-type Tab = "overview" | "conclusions" | "compare" | "profiles" | "competition" | "barriers" | "cases" | "acquisition" | "respondents" | "data" | "method";
+type Tab = "overview" | "conclusions" | "profiles" | "competition" | "barriers" | "cases" | "acquisition" | "respondents" | "data" | "method";
 type BarrierSort = "default" | "driver" | "barrier";
 type MetricValue = { value: number; year: number } | null;
 type Market = (typeof data.markets)[number];
@@ -103,7 +103,6 @@ function useDomLocalization(language: Language) {
 const tabLabels: Array<{ id: Tab; label: string }> = [
   { id: "overview", label: "Обзор" },
   { id: "conclusions", label: "Выводы" },
-  { id: "compare", label: "Сравнение" },
   { id: "profiles", label: "Профили" },
   { id: "competition", label: "Конкуренты" },
   { id: "barriers", label: "Барьеры" },
@@ -215,13 +214,6 @@ const unifiedCriteria = data.unified_scoring.blocks.flatMap((block) => block.cri
 function getUnifiedCriterion(key: string) {
   return unifiedCriteria.find((criterion) => criterion.key === key) ?? unifiedCriteria[0];
 }
-
-const brandRoleLabels: Record<string, string> = {
-  critical: "Критическая",
-  high: "Высокая",
-  medium: "Средняя",
-  secondary: "Вторичная",
-};
 
 const competitionGroupLabels: Record<string, string> = {
   direct_analogue: "Прямые аналоги",
@@ -572,7 +564,6 @@ export function MarketDashboard() {
   const tabsRef = useRef<HTMLElement>(null);
   const [tabScroll, setTabScroll] = useState({ left: false, right: false, overflow: false });
   const [selectedCode, setSelectedCode] = useState("PHL");
-  const [compareCodes, setCompareCodes] = useState<string[]>(["PHL", "COL", "MEX"]);
   const [region, setRegion] = useState("Все регионы");
   const [competitorMarket, setCompetitorMarket] = useState("ALL");
   const [barrierSort, setBarrierSort] = useState<BarrierSort>("default");
@@ -585,9 +576,6 @@ export function MarketDashboard() {
   const selectedReport = data.market_reports.find((item) => item.market_code === selected.code) ?? data.market_reports[0];
   const regions = ["Все регионы", ...Array.from(new Set(data.markets.map((market) => market.region)))];
   const visibleMarkets = region === "Все регионы" ? data.markets : data.markets.filter((market) => market.region === region);
-  const compareMarkets = compareCodes
-    .map((code) => data.markets.find((market) => market.code === code))
-    .filter(Boolean) as Market[];
   const selectedAcquisition = data.acquisition_channels.rows.find((row) => row.market_code === selected.code) ?? data.acquisition_channels.rows[0];
   const selectedCompetition = competitorMarket === "ALL" ? null : data.competition_by_market.find((item) => item.market_code === competitorMarket) ?? null;
   const selectedCompetitionAssessment = competitorMarket === "ALL" ? null : data.market_assessments.find((item) => item.market_code === competitorMarket) ?? null;
@@ -623,14 +611,6 @@ export function MarketDashboard() {
   function chooseOverviewMarket(code: string) {
     setSelectedCode(code);
     setStrategicOverlayOpen(true);
-  }
-
-  function toggleCompare(code: string) {
-    setCompareCodes((current) => {
-      if (current.includes(code)) return current.filter((item) => item !== code);
-      if (current.length >= 3) return [...current.slice(1), code];
-      return [...current, code];
-    });
   }
 
   useEffect(() => {
@@ -1149,97 +1129,6 @@ export function MarketDashboard() {
               ))}
             </div>
           </article>
-        </section>
-      )}
-
-      {tab === "compare" && (
-        <section className="compare-layout">
-          <div className="panel compare-picker">
-            <div className="panel-heading">
-              <div>
-                <span className="section-kicker">COMPARE</span>
-                <h2>Выберите до трёх рынков</h2>
-              </div>
-              <span className="count-pill">{compareCodes.length}/3</span>
-            </div>
-            <div className="market-pills">
-              {data.markets.map((market) => (
-                <button
-                  key={market.code}
-                  type="button"
-                  className={compareCodes.includes(market.code) ? "active" : ""}
-                  onClick={() => toggleCompare(market.code)}
-                >
-                  {market.name_ru}<span>{getUnifiedScore(market.code).final_score.toFixed(2)}</span>
-                </button>
-              ))}
-            </div>
-          </div>
-
-          <div className="comparison-cards">
-            {compareMarkets.map((market) => {
-              const assessment = data.market_assessments.find((item) => item.market_code === market.code)!;
-              const unified = getUnifiedScore(market.code);
-              return <article className="panel country-compare" key={market.code}>
-                <div className="country-card-head">
-                  <div><span>{market.code}</span><h2>{market.name_ru}</h2><p>{market.region}</p></div>
-                  <span className={`attractiveness-badge ${unified.level}`}>{unified.label} · {unified.final_score.toFixed(2)} / 5</span>
-                </div>
-                <h3 className="compare-headline">{assessment.headline}</h3>
-                <div className="qualitative-scores unified-blocks compact">
-                  <div><span>Потребность</span><strong>{unified.block_scores.product_need.toFixed(2)}</strong><small>35% итога</small></div>
-                  <div><span>Коммерческий потенциал</span><strong>{unified.block_scores.commercial_viability.toFixed(2)}</strong><small>30% итога</small></div>
-                  <div><span>Реализуемость входа</span><strong>{unified.block_scores.entry_feasibility.toFixed(2)}</strong><small>35% итога</small></div>
-                </div>
-                <div className="compare-qualitative">
-                  <p><span>Конкуренция</span>{assessment.competition_summary}</p>
-                  <p><span>Незакрытая задача</span>{assessment.market_gap}</p>
-                  <p><span>Условие входа</span>{assessment.entry_condition}</p>
-                  <p><span>Роль бренда</span>{brandRoleLabels[assessment.brand_role.level]}</p>
-                </div>
-                <div className="source-chips">{assessment.source_ids.map((id) => <SourceChip key={id} sourceId={id} />)}</div>
-                <div className="metric-stack">
-                  <div className="metric-section-label"><span>КОЛИЧЕСТВЕННЫЙ КОНТЕКСТ</span></div>
-                  <div><span>Входящие переводы</span><strong>{formatMoney(market.metrics.remittance_in_usd, language)}</strong><small>{market.metrics.remittance_in_usd?.year ?? "нет данных"}</small></div>
-                  <div><span>Переводы / ВВП</span><strong>{formatPct(market.metrics.remittance_pct_gdp, language)}</strong><small>{market.metrics.remittance_pct_gdp?.year ?? "нет данных"}</small></div>
-                  <div><span>Население</span><strong>{formatPeople(market.metrics.population, language)}</strong><small>{market.metrics.population?.year ?? "нет данных"}</small></div>
-                  <div><span>Account ownership</span><strong>{market.metrics.findex_2024.account_ownership_pct.toFixed(1)}%</strong><small>Findex 2024</small></div>
-                  <div><span>Smartphone</span><strong>{market.metrics.findex_2024.smartphone_pct.toFixed(1)}%</strong><small>Findex 2024</small></div>
-                  <div><span>Crypto adoption</span><strong>{market.metrics.chainalysis_rank_2025 ? `#${market.metrics.chainalysis_rank_2025}` : "вне top-20"}</strong><small>из 151 стран</small></div>
-                </div>
-                <div className="gate-box"><span>Регуляторный gate</span><strong>{gateLabels[market.regulatory.gate]}</strong><p>{market.regulatory.status}</p></div>
-              </article>;
-            })}
-          </div>
-
-          <div className="panel key-comparison">
-            <div className="panel-heading compact"><div><span className="section-kicker">КЛЮЧЕВОЕ СРАВНЕНИЕ</span><h2>Качественные условия входа</h2></div></div>
-            <div className="table-scroll"><table><thead><tr><th>Критерий</th>{compareMarkets.map((market) => <th key={market.code}>{market.name_ru}</th>)}</tr></thead><tbody>
-              {[
-                ["Итоговая привлекательность", (code: string) => `${getUnifiedScore(code).final_score.toFixed(2)} / 5 · ${getUnifiedScore(code).label}`],
-                ["Потребность", (code: string) => `${data.market_assessments.find((item) => item.market_code === code)!.need.score}/5`],
-                ["Сложность входа", (code: string) => `${data.market_assessments.find((item) => item.market_code === code)!.entry_complexity.score}/5`],
-                ["Незакрытая задача", (code: string) => data.market_assessments.find((item) => item.market_code === code)!.market_gap],
-                ["Условие входа", (code: string) => data.market_assessments.find((item) => item.market_code === code)!.entry_condition],
-                ["Подтверждение", (code: string) => confidenceLabels[data.market_assessments.find((item) => item.market_code === code)!.confidence]],
-              ].map(([label, getter]) => <tr key={label as string}><th>{label as string}</th>{compareMarkets.map((market) => <td key={market.code}>{(getter as (code: string) => string)(market.code)}</td>)}</tr>)}
-            </tbody></table></div>
-          </div>
-
-          <div className="panel criteria-panel">
-            <div className="panel-heading"><div><span className="section-kicker">ЕДИНАЯ ОЦЕНКА</span><h2>Три блока привлекательности</h2><p>Блоки не пересекаются: потребность, коммерческий потенциал и реализуемость входа.</p></div></div>
-            <div className="criteria-table">
-              {data.metadata.criteria.map((criterion) => (
-                <div className="criteria-row" key={criterion.key}>
-                  <div className="criteria-label"><strong>{criterion.label}</strong><span>{Math.round(criterion.weight * 100)}%</span></div>
-                  {compareMarkets.map((market) => {
-                    const value = getUnifiedScore(market.code).block_scores[criterion.key as keyof UnifiedScore["block_scores"]];
-                    return <div className="criteria-value" key={market.code}><span style={{ width: `${value * 20}%` }} /><strong>{value}</strong></div>;
-                  })}
-                </div>
-              ))}
-            </div>
-          </div>
         </section>
       )}
 
