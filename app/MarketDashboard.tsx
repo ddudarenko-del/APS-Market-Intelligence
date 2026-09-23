@@ -439,10 +439,9 @@ function MarketMap({
             if (!code) return;
             const market = marketByCode.get(code);
             if (!market) return;
-            const unified = getUnifiedScore(market.code);
             const hashtags = getStrategicRating(market.code).hashtags;
             countryLayer.bindTooltip(
-              `<strong>${market.name_ru}</strong><small class="aps-map-tags">${hashtags.map((tag) => `<span>${tag}</span>`).join("")}</small><span class="aps-map-score ${unified.level}">${unified.final_score.toFixed(2)} / 5</span>`,
+              `<strong>${market.name_ru}</strong><small class="aps-map-tags">${hashtags.map((tag) => `<span>${tag}</span>`).join("")}</small>`,
               { permanent: true, direction: "center", className: `aps-map-label aps-map-label-${market.code.toLowerCase()}`, opacity: 1, interactive: true },
             );
             const selectCountry = () => onSelectRef.current(code);

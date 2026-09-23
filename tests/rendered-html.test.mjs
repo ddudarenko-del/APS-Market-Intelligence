@@ -81,8 +81,7 @@ test("keeps production metadata and documented market intelligence", async () =>
   assert.match(dashboard, /\/data\/countries\.geojson/);
   assert.doesNotMatch(dashboard, /cartocdn|CARTO/i);
   assert.doesNotMatch(dashboard, /data-market-profile|onOpenProfileRef/);
-  assert.match(dashboard, /aps-map-score/);
-  assert.match(dashboard, /\$\{unified\.final_score\.toFixed\(2\)\} \/ 5<\/span>/);
+  assert.doesNotMatch(dashboard, /aps-map-score/);
   assert.doesNotMatch(dashboard, /\/ 5 · \$\{unified\.label\}<\/span>/);
   assert.doesNotMatch(dashboard, /bindPopup|openPopup|market-map-popup/);
   assert.match(dashboard, /atlas-legend-title/);
@@ -148,7 +147,7 @@ test("keeps production metadata and documented market intelligence", async () =>
   assert.match(data, /"Simple\.app"/);
   assert.match(dashboard, /\? "#40f785"[\s\S]*\? "#b7d85c"[\s\S]*\? "#f0cf57"[\s\S]*: "#f29a52"/);
   assert.match(styles, /\.attractiveness-badge\.low \{[^}]*#f29a52/);
-  assert.match(styles, /\.aps-map-score\.low \{ background: #f29a52; \}/);
+  assert.doesNotMatch(styles, /\.aps-map-score/);
   assert.match(styles, /\.leaflet-tooltip\.aps-map-label \{[\s\S]*white-space: normal;/);
   assert.match(styles, /\.leaflet-tooltip\.aps-map-label \{[\s\S]*pointer-events: auto;/);
   assert.match(styles, /\.aps-map-label small \{[^}]*overflow-wrap: anywhere;/);
