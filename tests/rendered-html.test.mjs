@@ -37,7 +37,7 @@ test("server-renders the unified APS research workspace", async () => {
   assert.match(html, />Базовый</);
   assert.match(html, />Стратегический</);
   assert.match(html, /Priority Market/);
-  assert.match(html, /ВЫБРАННЫЙ РЫНОК/);
+  assert.doesNotMatch(html, /ВЫБРАННЫЙ РЫНОК/);
   assert.doesNotMatch(html, /Три независимых слоя/);
   assert.doesNotMatch(html, /Ключевой вывод/);
   assert.match(html, /Интерактивная карта рынков APS/);
@@ -75,6 +75,9 @@ test("keeps production metadata and documented market intelligence", async () =>
   assert.doesNotMatch(dashboard, /bindPopup|openPopup|market-map-popup/);
   assert.match(dashboard, /atlas-legend-title/);
   assert.match(dashboard, /className="map-region-select"/);
+  assert.match(dashboard, /strategicOverlayOpen/);
+  assert.match(dashboard, /ВЫБРАННЫЙ РЫНОК/);
+  assert.match(styles, /@keyframes strategic-overlay-in/);
   assert.match(styles, /\.map-frame \.leaflet-top\.leaflet-right \{ top: 58px; \}/);
   assert.doesNotMatch(dashboard, /className="selected-market"/);
   assert.match(dashboard, /Исследование рыночного потенциала криптофинансовой платформы для платежей и управления цифровыми активами с функцией выпуска крипто-связанных платежных карт/);

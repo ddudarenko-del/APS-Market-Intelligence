@@ -305,10 +305,26 @@ body {
 
 .overview-grid, .compare-layout, .profiles-layout, .method-layout { padding-top: 18px; }
 .overview-grid { grid-template-columns: minmax(0, 1fr) 380px; gap: 18px; }
-.overview-main { min-width: 0; display: grid; gap: 18px; align-content: start; }
 
-.strategic-market-panel { padding: 24px 26px; }
+.strategic-market-panel {
+  position: absolute;
+  z-index: 720;
+  left: 50%;
+  bottom: 82px;
+  width: min(720px, calc(100% - 32px));
+  max-height: calc(100% - 166px);
+  padding: 24px 26px;
+  overflow-y: auto;
+  transform: translateX(-50%);
+  background: rgba(14, 21, 17, .97);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, .46);
+  backdrop-filter: blur(14px);
+  animation: strategic-overlay-in .2s ease-out both;
+}
+.strategic-overlay-close { position: absolute; top: 12px; right: 14px; z-index: 1; display: grid; width: 32px; height: 32px; place-items: center; padding: 0 0 2px; border: 1px solid #405047; border-radius: 50%; background: #111813; color: var(--ink-soft); font-size: 22px; line-height: 1; cursor: pointer; }
+.strategic-overlay-close:hover, .strategic-overlay-close:focus-visible { border-color: var(--lime); color: var(--lime); outline: none; }
 .strategic-market-heading { display: flex; align-items: flex-start; justify-content: space-between; gap: 18px; }
+.strategic-market-heading > div:first-child { padding-right: 32px; }
 .strategic-market-heading h2 { margin: 7px 0 0; font-size: 28px; letter-spacing: -.035em; }
 .strategic-rating-label { display: inline-flex; align-items: center; justify-content: center; min-width: 0; max-width: 100%; padding: 7px 10px; border: 1px solid transparent; border-radius: 10px; font-size: 11px; font-weight: 750; line-height: 1.25; text-align: center; overflow-wrap: anywhere; }
 .strategic-rating-label.priority { border-color: #3fcf75; background: rgba(64, 247, 133, .14); color: #6bfa9e; }
@@ -321,6 +337,7 @@ body {
 .strategic-market-details li::before { content: ""; position: absolute; top: .63em; left: 0; width: 6px; height: 6px; border-radius: 50%; background: var(--lime); }
 .strategic-source-link { display: inline-flex; margin-top: 20px; color: #83d9a3; font-size: 11px; text-decoration: none; }
 .strategic-source-link:hover { color: var(--lime); text-decoration: underline; }
+@keyframes strategic-overlay-in { from { opacity: 0; transform: translate(-50%, 12px); } to { opacity: 1; transform: translate(-50%, 0); } }
 
 .ranking-panel { align-self: start; overflow: hidden; }
 .ranking-columns { display: grid; grid-template-columns: minmax(120px, 1fr) 58px minmax(125px, 1.1fr); gap: 8px; padding: 12px 22px 8px; border-bottom: 1px solid var(--line); color: #7f8c85; font: 650 9px var(--font-plex-mono), monospace; letter-spacing: .08em; text-transform: uppercase; }
@@ -1148,6 +1165,7 @@ footer {
   .ranking-list { grid-template-columns: 1fr; }
   .strategic-market-details { grid-template-columns: 1fr; }
   .strategic-market-heading { flex-direction: column; }
+  .strategic-market-panel { bottom: 78px; max-height: calc(100% - 152px); padding: 20px; }
   .profiles-layout { grid-template-columns: 1fr; }.profile-nav { position: static; display: flex; overflow-x: auto; gap: 6px; }.profile-nav > .section-kicker { display: none; }.profile-nav button { min-width: 175px; border: 1px solid var(--line); }
   .profile-hero { padding: 24px; }.profile-hero h2 { font-size: 38px; }.profile-score { width: 94px; height: 94px; }.profile-grid, .profile-assessment-grid { grid-template-columns: 1fr; padding: 8px 24px; }.profile-grid > div, .profile-grid > div:nth-child(even), .profile-assessment-grid > div, .profile-assessment-grid > div:nth-child(even) { border-left: 0; padding-left: 0; }.profile-confidence { flex-direction: column; padding: 20px 24px; }.market-report { padding: 6px 24px 22px; }.market-report-section { grid-template-columns: 34px minmax(0, 1fr); gap: 12px; }.numbers-strip { grid-template-columns: repeat(2, 1fr); gap: 18px; padding: 22px 24px; }.numbers-strip div { border: 0; padding: 0; }.regulatory-section { flex-direction: column; padding: 24px; }.source-chips { justify-content: flex-start; }
   .profile-score-pair { gap: 8px; }.profile-score-pair .profile-score { width: 82px; height: 82px; }.profile-fit-section { padding: 24px; }.unified-criteria-list { grid-template-columns: 1fr 1fr; }.method-blocks { grid-template-columns: 1fr; }.case-studies-section { padding: 24px; }.case-studies-heading { align-items: flex-start; flex-direction: column; gap: 10px; }.case-studies-heading > p { text-align: left; }.case-studies-grid { grid-template-columns: 1fr; }

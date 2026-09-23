@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { type ReactNode, useEffect, useRef, useState } from "react";
 import data from "./data/market_data.json";
 import task5Conclusions from "./data/task5_conclusions.json";
 import { type Language, translateCompositeText, translateText, translateTextNode } from "./localization";
@@ -376,6 +376,8 @@ function MarketMap({
   selectedCode,
   visibleCodes,
   onSelect,
+  overlay,
+  onReset,
   region,
   regions,
   onRegionChange,
@@ -383,6 +385,8 @@ function MarketMap({
   selectedCode: string;
   visibleCodes: string[];
   onSelect: (code: string) => void;
+  overlay?: ReactNode;
+  onReset: () => void;
   region: string;
   regions: string[];
   onRegionChange: (region: string) => void;
@@ -535,6 +539,7 @@ function MarketMap({
 
   function resetView() {
     mapRef.current?.fitBounds([[-56, -168], [76, 178]], { padding: [12, 12] });
+    onReset();
   }
 
   return (
@@ -546,6 +551,7 @@ function MarketMap({
       <select className="map-region-select" value={region} onChange={(event) => onRegionChange(event.target.value)} aria-label="Фильтр по региону">
         {regions.map((item) => <option key={item} value={item}>{item}</option>)}
       </select>
+      {overlay}
       <div className="atlas-legend">
         <strong className="atlas-legend-title">Итоговая привлекательность рынка</strong>
         <span><i className="dot high" /> высокий · 4,00+</span>
@@ -569,6 +575,7 @@ export function MarketDashboard() {
   const [region, setRegion] = useState("Все регионы");
   const [competitorMarket, setCompetitorMarket] = useState("ALL");
   const [barrierSort, setBarrierSort] = useState<BarrierSort>("default");
+  const [strategicOverlayOpen, setStrategicOverlayOpen] = useState(false);
 
   const selected = data.markets.find((market) => market.code === selectedCode) ?? data.markets[0];
   const selectedAssessment = data.market_assessments.find((item) => item.market_code === selected.code) ?? data.market_assessments[0];
@@ -610,6 +617,11 @@ export function MarketDashboard() {
   function chooseMarket(code: string, nextTab?: Tab) {
     setSelectedCode(code);
     if (nextTab) setTab(nextTab);
+  }
+
+  function chooseOverviewMarket(code: string) {
+    setSelectedCode(code);
+    setStrategicOverlayOpen(true);
   }
 
   function toggleCompare(code: string) {
@@ -694,37 +706,38 @@ export function MarketDashboard() {
 
       {tab === "overview" && (
         <section className="content-grid overview-grid">
-          <div className="overview-main">
-            <div className="panel atlas-panel">
-              <div className="panel-heading">
-                <div>
-                  <span className="section-kicker">MARKET ATLAS</span>
-                  <h2>Исследование рыночного потенциала криптофинансовой платформы для платежей и управления цифровыми активами с функцией выпуска крипто-связанных платежных карт</h2>
-                </div>
+          <div className="panel atlas-panel">
+            <div className="panel-heading">
+              <div>
+                <span className="section-kicker">MARKET ATLAS</span>
+                <h2>Исследование рыночного потенциала криптофинансовой платформы для платежей и управления цифровыми активами с функцией выпуска крипто-связанных платежных карт</h2>
               </div>
-              <MarketMap
-                selectedCode={selectedCode}
-                visibleCodes={visibleMarkets.map((market) => market.code)}
-                onSelect={chooseMarket}
-                region={region}
-                regions={regions}
-                onRegionChange={setRegion}
-              />
             </div>
-
-            <article className="panel strategic-market-panel" aria-live="polite">
-              <div className="strategic-market-heading">
-                <div>
-                  <span className="section-kicker">ВЫБРАННЫЙ РЫНОК</span>
-                  <h2>{selected.name_ru}</h2>
-                </div>
-                <span className={`strategic-rating-label ${getStrategicRatingClass(selectedStrategic.rating)}`}>{selectedStrategic.rating}</span>
-              </div>
-              <ul className="strategic-market-details">
-                {(language === "en" ? selectedStrategic.details_en : selectedStrategic.details_ru).map((item) => <li key={item}>{item}</li>)}
-              </ul>
-              <a className="strategic-source-link" href={data.strategic_ranking.source_url} target="_blank" rel="noreferrer">Источник: {data.strategic_ranking.source_title}</a>
-            </article>
+            <MarketMap
+              selectedCode={selectedCode}
+              visibleCodes={visibleMarkets.map((market) => market.code)}
+              onSelect={chooseOverviewMarket}
+              onReset={() => setStrategicOverlayOpen(false)}
+              region={region}
+              regions={regions}
+              onRegionChange={setRegion}
+              overlay={strategicOverlayOpen ? (
+                <article className="panel strategic-market-panel strategic-market-overlay" aria-live="polite">
+                  <button type="button" className="strategic-overlay-close" aria-label="Закрыть описание выбранного рынка" onClick={() => setStrategicOverlayOpen(false)}>×</button>
+                  <div className="strategic-market-heading">
+                    <div>
+                      <span className="section-kicker">ВЫБРАННЫЙ РЫНОК</span>
+                      <h2>{selected.name_ru}</h2>
+                    </div>
+                    <span className={`strategic-rating-label ${getStrategicRatingClass(selectedStrategic.rating)}`}>{selectedStrategic.rating}</span>
+                  </div>
+                  <ul className="strategic-market-details">
+                    {(language === "en" ? selectedStrategic.details_en : selectedStrategic.details_ru).map((item) => <li key={item}>{item}</li>)}
+                  </ul>
+                  <a className="strategic-source-link" href={data.strategic_ranking.source_url} target="_blank" rel="noreferrer">Источник: {data.strategic_ranking.source_title}</a>
+                </article>
+              ) : null}
+            />
           </div>
 
           <aside className="panel ranking-panel">
@@ -742,7 +755,7 @@ export function MarketDashboard() {
             </div>
             <div className="ranking-list">
               {rankedVisibleMarkets.map((market) => (
-                <button key={market.code} type="button" onClick={() => chooseMarket(market.code)} className={selectedCode === market.code ? "active" : ""}>
+                <button key={market.code} type="button" onClick={() => chooseOverviewMarket(market.code)} className={selectedCode === market.code ? "active" : ""}>
                   <span className="rank-name"><strong>{market.name_ru}</strong><small>{market.region}</small></span>
                   <ScoreBadge score={getUnifiedScore(market.code).final_score} />
                   <span className={`strategic-rating-label ${getStrategicRatingClass(getStrategicRating(market.code).rating)}`}>{getStrategicRating(market.code).rating}</span>
