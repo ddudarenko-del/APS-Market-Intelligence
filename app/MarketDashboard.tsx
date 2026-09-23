@@ -5,7 +5,7 @@ import data from "./data/market_data.json";
 import task5Conclusions from "./data/task5_conclusions.json";
 import { type Language, translateCompositeText, translateText, translateTextNode } from "./localization";
 
-type Tab = "overview" | "conclusions" | "profiles" | "competition" | "barriers" | "cases" | "acquisition" | "respondents" | "data" | "method";
+type Tab = "overview" | "profiles" | "competition" | "barriers" | "cases" | "acquisition" | "respondents" | "data" | "method";
 type BarrierSort = "default" | "driver" | "barrier";
 type MetricValue = { value: number; year: number } | null;
 type Market = (typeof data.markets)[number];
@@ -102,7 +102,6 @@ function useDomLocalization(language: Language) {
 
 const tabLabels: Array<{ id: Tab; label: string }> = [
   { id: "overview", label: "Обзор" },
-  { id: "conclusions", label: "Выводы" },
   { id: "profiles", label: "Профили" },
   { id: "competition", label: "Конкуренты" },
   { id: "barriers", label: "Барьеры" },
@@ -752,7 +751,7 @@ export function MarketDashboard() {
       )}
 
 
-      {tab === "conclusions" && (
+      {tab === "profiles" && (
         <section className="conclusions-layout">
           <article className="panel research-conclusion">
             <span className="section-kicker">ИТОГ ИССЛЕДОВАНИЯ</span>

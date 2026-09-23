@@ -30,7 +30,8 @@ test("server-renders the unified APS research workspace", async () => {
 
   const html = await response.text();
   assert.match(html, /<title>APS Market Intelligence<\/title>/i);
-  assert.match(html, /Выводы/);
+  assert.doesNotMatch(html, />Выводы<\/button>/);
+  assert.match(html, />Профили<\/button>/);
   assert.doesNotMatch(html, />Сравнение<\/button>/);
   assert.match(html, /Респонденты/);
   assert.match(html, />Кейсы<\/button>/);
@@ -62,6 +63,8 @@ test("keeps production metadata and documented market intelligence", async () =>
   assert.match(layout, /images:\s*\["\/og\.png"\]/);
   assert.match(dashboard, /data\.unified_scoring/);
   assert.doesNotMatch(dashboard, /id: "compare"/);
+  assert.doesNotMatch(dashboard, /id: "conclusions"/);
+  assert.equal((dashboard.match(/tab === "profiles"/g) ?? []).length, 2);
   assert.equal((dashboard.match(/data\.metadata\.interviews_conducted/g) ?? []).length, 2);
   assert.equal(parsedData.metadata.interviews_conducted, 18);
   assert.equal(parsedData.metadata.updated, "2026-09-23");
