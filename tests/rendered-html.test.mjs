@@ -72,6 +72,8 @@ test("keeps production metadata and documented market intelligence", async () =>
   assert.equal(parsedData.metadata.interviews_conducted, 18);
   assert.equal(parsedData.metadata.updated, "2026-09-23");
   assert.equal(parsedData.strategic_ranking.rows.length, 8);
+  assert.equal("source_title" in parsedData.strategic_ranking, false);
+  assert.equal("source_url" in parsedData.strategic_ranking, false);
   assert.match(dashboard, /ЕДИНАЯ ОЦЕНКА/i);
   assert.match(dashboard, /data\.market_competitors/);
   assert.match(dashboard, /\/data\/countries\.geojson/);

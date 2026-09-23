@@ -708,7 +708,6 @@ export function MarketDashboard() {
                   <ul className="strategic-market-details">
                     {(language === "en" ? selectedStrategic.details_en : selectedStrategic.details_ru).map((item) => <li key={item}>{item}</li>)}
                   </ul>
-                  <a className="strategic-source-link" href={data.strategic_ranking.source_url} target="_blank" rel="noreferrer">Источник: {data.strategic_ranking.source_title}</a>
                 </article>
               ) : null}
             />

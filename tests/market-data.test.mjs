@@ -34,8 +34,6 @@ test("contains one complete qualitative assessment and six report sections per m
 });
 
 test("keeps one source-grounded strategic rating for every market", () => {
-  assert.equal(data.strategic_ranking.source_title, "Задание Денису");
-  assert.match(data.strategic_ranking.source_url, /docs\.google\.com\/document\/d\/1cWtavyTTl7_dARpfDPVvTu3ExhX66xsVRDXIqZtAoLM/);
   assert.equal(data.strategic_ranking.rows.length, 8);
   assert.equal(new Set(data.strategic_ranking.rows.map((row) => row.market_code)).size, 8);
   for (const row of data.strategic_ranking.rows) {
