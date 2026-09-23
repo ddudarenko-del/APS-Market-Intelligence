@@ -32,6 +32,7 @@ const reviewedTranslations: Record<string, string> = {
   "Страна": "Country",
   "Базовый": "Base",
   "Стратегический": "Strategic",
+  "Стратегический рейтинг был сформирован на стратегической сессии с командой 14 сентября. Он учитывает готовность выходить на рынки со сложным регулированием, ограничениями на рекламу и высокими требованиями к лицензированию ради более значимых возможностей.": "The strategic rating was developed during a strategy session with the team on 14 September. It reflects the willingness to enter markets with complex regulation, advertising restrictions and demanding licensing requirements in pursuit of more significant opportunities.",
   "ВЫБРАННЫЙ РЫНОК": "SELECTED MARKET",
   "Источник:": "Source:",
   "Потребность в продукте": "Product need",

@@ -345,6 +345,7 @@ body {
 .ranking-columns span:nth-child(2), .ranking-columns span:nth-child(3) { text-align: center; }
 .ranking-list button { grid-template-columns: minmax(120px, 1fr) 58px minmax(125px, 1.1fr); gap: 8px; }
 .ranking-list .strategic-rating-label { width: 100%; padding: 7px 6px; }
+.strategic-rating-note { margin: 0; padding: 15px 22px 18px; border-top: 1px solid var(--line); color: var(--ink-soft); font-size: 10px; line-height: 1.55; }
 
 .panel {
   border-color: #29332e;

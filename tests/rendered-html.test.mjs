@@ -39,6 +39,7 @@ test("server-renders the unified APS research workspace", async () => {
   assert.match(html, />Рейтинг</);
   assert.match(html, />Базовый</);
   assert.match(html, />Стратегический</);
+  assert.match(html, /Стратегический рейтинг был сформирован на стратегической сессии с командой 14 сентября/);
   assert.match(html, /Priority Market/);
   assert.doesNotMatch(html, /ВЫБРАННЫЙ РЫНОК/);
   assert.doesNotMatch(html, /Три независимых слоя/);
