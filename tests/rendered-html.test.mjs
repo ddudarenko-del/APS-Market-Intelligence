@@ -65,7 +65,9 @@ test("keeps production metadata and documented market intelligence", async () =>
   assert.match(dashboard, /aps-map-score/);
   assert.doesNotMatch(dashboard, /bindPopup|openPopup|market-map-popup/);
   assert.match(dashboard, /atlas-legend-title/);
-  assert.match(dashboard, /Клик выбирает рынок и обновляет блок под картой/);
+  assert.match(dashboard, /Исследование рыночного потенциала криптофинансовой платформы для платежей и управления цифровыми активами с функцией выпуска крипто-связанных платежных карт/);
+  assert.doesNotMatch(dashboard, /Восемь рынков в одном поле/);
+  assert.doesNotMatch(dashboard, /Клик выбирает рынок и обновляет блок под картой/);
   assert.doesNotMatch(dashboard, /Клик, тап или клавиатура/);
   assert.match(dashboard, /В выигрыше может оказаться продукт, который не заменяет GCash/);
   assert.match(dashboard, /Пользователь должен видеть лучший курс, меньшую комиссию или локальную функцию/);
@@ -73,7 +75,8 @@ test("keeps production metadata and documented market intelligence", async () =>
   assert.doesNotMatch(dashboard, /className="gate-mini"/);
   assert.match(dashboard, /className="hero hero-compact"/);
   assert.doesNotMatch(dashboard, /tab === "overview" \? "" : "hero-compact"/);
-  assert.match(dashboard, /Исследование обновлено 02\.09\.2026/);
+  assert.match(dashboard, /Исследование обновлено 23\.09\.2026/);
+  assert.doesNotMatch(dashboard, /Исследование обновлено 02\.09\.2026/);
   assert.doesNotMatch(dashboard, /Исследование обновлено 01\.09\.2026/);
   assert.match(dashboard, /interactive: true/);
   assert.match(dashboard, /tooltip\?\.on\("click", selectCountry\)/);

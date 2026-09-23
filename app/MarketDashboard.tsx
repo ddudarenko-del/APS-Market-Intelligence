@@ -630,7 +630,7 @@ export function MarketDashboard() {
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img className="aps-logo" src="/brand/aps-logo.svg" alt="APS" width={132} height={52} />
           <div className="hero-actions">
-            <span className="update-stamp">Исследование обновлено 02.09.2026</span>
+            <span className="update-stamp">Исследование обновлено 23.09.2026</span>
             <div className="language-switch" role="group" aria-label="Выбор языка">
               <button type="button" className={language === "ru" ? "active" : ""} aria-pressed={language === "ru"} onClick={() => setLanguage("ru")}>RU</button>
               <button type="button" className={language === "en" ? "active" : ""} aria-pressed={language === "en"} onClick={() => setLanguage("en")}>EN</button>
@@ -675,8 +675,7 @@ export function MarketDashboard() {
             <div className="panel-heading">
               <div>
                 <span className="section-kicker">MARKET ATLAS</span>
-                <h2>Восемь рынков в одном поле</h2>
-                <p>Цвет отражает единую оценку привлекательности рынка для запуска KAST-подобного продукта. Клик выбирает рынок и обновляет блок под картой.</p>
+                <h2>Исследование рыночного потенциала криптофинансовой платформы для платежей и управления цифровыми активами с функцией выпуска крипто-связанных платежных карт</h2>
               </div>
               <div className="panel-controls">
                 <select value={region} onChange={(event) => setRegion(event.target.value)} aria-label="Фильтр по региону">
