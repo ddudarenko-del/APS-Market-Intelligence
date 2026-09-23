@@ -111,7 +111,7 @@ a { color: inherit; }
 .ranking-list { min-width: 0; padding: 8px 14px; }
 .ranking-list button { width: 100%; min-width: 0; display: grid; grid-template-columns: 28px minmax(0, 1fr) auto; gap: 10px; align-items: center; border: 0; border-bottom: 1px dashed var(--line); background: transparent; padding: 14px 8px; text-align: left; cursor: pointer; border-radius: 10px; }
 .ranking-list button:hover, .ranking-list button.active { background: #f7f4e6; }
-.rank-number { color: var(--ink-soft); font: 12px var(--font-plex-mono), monospace; }.rank-name { min-width: 0; }.rank-name strong, .rank-name small { display: block; overflow-wrap: break-word; }.rank-name strong { hyphens: auto; }.rank-name small { color: var(--ink-soft); font-size: 11px; margin-top: 3px; }
+.rank-country { min-width: 0; display: grid; grid-template-columns: 24px minmax(0, 1fr); gap: 8px; align-items: center; }.rank-number { color: var(--ink-soft); font: 12px var(--font-plex-mono), monospace; text-align: center; }.rank-name { min-width: 0; }.rank-name strong, .rank-name small { display: block; overflow-wrap: break-word; }.rank-name strong { hyphens: auto; }.rank-name small { color: var(--ink-soft); font-size: 11px; margin-top: 3px; }
 .score-badge { min-width: 48px; padding: 7px 8px; text-align: center; border-radius: 999px; font: 700 13px var(--font-plex-mono), monospace; }.score-badge.high { background: var(--red); }.score-badge.mid { background: var(--yellow); }.score-badge.low { background: #b8e9b1; }
 
 .compare-layout, .method-layout { padding: 22px 8px 0; }

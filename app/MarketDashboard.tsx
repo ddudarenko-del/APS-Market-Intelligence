@@ -576,7 +576,11 @@ export function MarketDashboard() {
   const selectedCompetition = competitorMarket === "ALL" ? null : data.competition_by_market.find((item) => item.market_code === competitorMarket) ?? null;
   const selectedCompetitionAssessment = competitorMarket === "ALL" ? null : data.market_assessments.find((item) => item.market_code === competitorMarket) ?? null;
   const globalCompetitors = data.market_competitors.filter((item) => item.scope === "global" && item.availability);
-  const rankedVisibleMarkets = [...visibleMarkets].sort((a, b) => getUnifiedScore(a.code).rank - getUnifiedScore(b.code).rank);
+  const strategicallyOrderedVisibleMarkets = [...visibleMarkets].sort((a, b) => {
+    const aPosition = data.strategic_ranking.rows.findIndex((row) => row.market_code === a.code);
+    const bPosition = data.strategic_ranking.rows.findIndex((row) => row.market_code === b.code);
+    return aPosition - bPosition;
+  });
   const visibleCompetitors = [...globalCompetitors].sort((a, b) => {
     if (competitorMarket === "ALL") return 0;
     return availabilityOrder[getAvailability(a, competitorMarket).status] - availabilityOrder[getAvailability(b, competitorMarket).status];
@@ -728,9 +732,12 @@ export function MarketDashboard() {
               <span>Стратегический</span>
             </div>
             <div className="ranking-list">
-              {rankedVisibleMarkets.map((market) => (
+              {strategicallyOrderedVisibleMarkets.map((market) => (
                 <button key={market.code} type="button" onClick={() => chooseOverviewMarket(market.code)} className={selectedCode === market.code ? "active" : ""}>
-                  <span className="rank-name"><strong>{market.name_ru}</strong><small>{market.region}</small></span>
+                  <span className="rank-country">
+                    <span className="rank-number">{data.strategic_ranking.rows.findIndex((row) => row.market_code === market.code) + 1}</span>
+                    <span className="rank-name"><strong>{market.name_ru}</strong><small>{market.region}</small></span>
+                  </span>
                   <ScoreBadge score={getUnifiedScore(market.code).final_score} />
                   <span className={`strategic-rating-label ${getStrategicRatingClass(getStrategicRating(market.code).rating)}`}>{getStrategicRating(market.code).rating}</span>
                 </button>

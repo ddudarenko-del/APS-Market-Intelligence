@@ -90,6 +90,8 @@ test("keeps production metadata and documented market intelligence", async () =>
   assert.match(dashboard, /strategicOverlayOpen/);
   assert.match(dashboard, /ВЫБРАННЫЙ РЫНОК/);
   assert.match(dashboard, /getStrategicRating\(market\.code\)\.hashtags/);
+  assert.match(dashboard, /strategicallyOrderedVisibleMarkets/);
+  assert.match(dashboard, /className="rank-number"/);
   assert.match(styles, /@keyframes strategic-overlay-in/);
   assert.match(styles, /\.strategic-market-panel\.strategic-market-overlay \{[\s\S]*inset: 0;[\s\S]*width: 100%;[\s\S]*height: 100%;/);
   assert.match(styles, /\.map-frame \.leaflet-top\.leaflet-right \{ top: 58px; \}/);
