@@ -37,7 +37,7 @@ test("server-renders the unified APS research workspace", async () => {
   assert.doesNotMatch(html, /Три независимых слоя/);
   assert.doesNotMatch(html, /Ключевой вывод/);
   assert.match(html, /Интерактивная карта рынков APS/);
-  assert.match(html, />14<\/strong><span>экспертных интервью<\/span>/);
+  assert.match(html, />18<\/strong><span>экспертных интервью<\/span>/);
   assert.doesNotMatch(html, /codex-preview|Your site is taking shape/);
 });
 
@@ -56,7 +56,7 @@ test("keeps production metadata and documented market intelligence", async () =>
   assert.match(layout, /images:\s*\["\/og\.png"\]/);
   assert.match(dashboard, /data\.unified_scoring/);
   assert.equal((dashboard.match(/data\.metadata\.interviews_conducted/g) ?? []).length, 2);
-  assert.equal(parsedData.metadata.interviews_conducted, 14);
+  assert.equal(parsedData.metadata.interviews_conducted, 18);
   assert.match(dashboard, /ЕДИНАЯ ОЦЕНКА/i);
   assert.match(dashboard, /data\.market_competitors/);
   assert.match(dashboard, /\/data\/countries\.geojson/);
