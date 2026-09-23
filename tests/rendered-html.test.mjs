@@ -99,6 +99,8 @@ test("keeps production metadata and documented market intelligence", async () =>
   assert.doesNotMatch(dashboard, /Только конкретные компании и опубликованные факты/);
   assert.match(dashboard, /tabs-scroll-left/);
   assert.match(dashboard, /tabs\.scrollBy/);
+  assert.match(dashboard, /tabScroll\.overflow &&/);
+  assert.match(dashboard, /tabs\.scrollWidth > shell\.clientWidth/);
   assert.match(dashboard, /disabled=\{!tabScroll\.left\}/);
   assert.match(dashboard, /disabled=\{!tabScroll\.right\}/);
   assert.match(dashboard, /function AudienceGroups/);

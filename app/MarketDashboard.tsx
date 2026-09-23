@@ -568,8 +568,9 @@ export function MarketDashboard() {
   const localizationRootRef = useDomLocalization(language);
   const locale = language === "en" ? "en-US" : "ru-RU";
   const [tab, setTab] = useState<Tab>("overview");
+  const tabsShellRef = useRef<HTMLDivElement>(null);
   const tabsRef = useRef<HTMLElement>(null);
-  const [tabScroll, setTabScroll] = useState({ left: false, right: false });
+  const [tabScroll, setTabScroll] = useState({ left: false, right: false, overflow: false });
   const [selectedCode, setSelectedCode] = useState("PHL");
   const [compareCodes, setCompareCodes] = useState<string[]>(["PHL", "COL", "MEX"]);
   const [region, setRegion] = useState("Все регионы");
@@ -634,22 +635,26 @@ export function MarketDashboard() {
 
   useEffect(() => {
     const tabs = tabsRef.current;
-    if (!tabs) return;
+    const shell = tabsShellRef.current;
+    if (!tabs || !shell) return;
     const updateScrollState = () => {
+      const overflow = tabs.scrollWidth > shell.clientWidth - 2;
       setTabScroll({
-        left: tabs.scrollLeft > 2,
-        right: tabs.scrollLeft + tabs.clientWidth < tabs.scrollWidth - 2,
+        overflow,
+        left: overflow && tabs.scrollLeft > 2,
+        right: overflow && tabs.scrollLeft + tabs.clientWidth < tabs.scrollWidth - 2,
       });
     };
     updateScrollState();
     tabs.addEventListener("scroll", updateScrollState, { passive: true });
     const resizeObserver = new ResizeObserver(updateScrollState);
     resizeObserver.observe(tabs);
+    resizeObserver.observe(shell);
     return () => {
       tabs.removeEventListener("scroll", updateScrollState);
       resizeObserver.disconnect();
     };
-  }, []);
+  }, [language]);
 
   function scrollTabs(direction: -1 | 1) {
     const tabs = tabsRef.current;
@@ -687,8 +692,8 @@ export function MarketDashboard() {
         </div>
       </header>
 
-      <div className="tabs-shell">
-        <button type="button" className="tabs-scroll tabs-scroll-left" aria-label="Показать предыдущие разделы" disabled={!tabScroll.left} onClick={() => scrollTabs(-1)}>‹</button>
+      <div ref={tabsShellRef} className={`tabs-shell ${tabScroll.overflow ? "has-overflow" : ""}`}>
+        {tabScroll.overflow && <button type="button" className="tabs-scroll tabs-scroll-left" aria-label="Показать предыдущие разделы" disabled={!tabScroll.left} onClick={() => scrollTabs(-1)}>‹</button>}
         <nav ref={tabsRef} className="tabs" aria-label="Разделы исследования">
           {tabLabels.map((item) => (
             <button
@@ -701,7 +706,7 @@ export function MarketDashboard() {
             </button>
           ))}
         </nav>
-        <button type="button" className="tabs-scroll tabs-scroll-right" aria-label="Показать следующие разделы" disabled={!tabScroll.right} onClick={() => scrollTabs(1)}>›</button>
+        {tabScroll.overflow && <button type="button" className="tabs-scroll tabs-scroll-right" aria-label="Показать следующие разделы" disabled={!tabScroll.right} onClick={() => scrollTabs(1)}>›</button>}
       </div>
 
       {tab === "overview" && (
