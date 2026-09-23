@@ -474,6 +474,23 @@ body {
   cursor: pointer;
 }
 .map-reset:hover { border-color: var(--lime); color: var(--lime); }
+.map-region-select {
+  position: absolute;
+  z-index: 700;
+  top: 16px;
+  right: 16px;
+  width: min(210px, calc(100% - 140px));
+  min-height: 40px;
+  padding: 0 38px 0 15px;
+  border: 1px solid #405047;
+  border-radius: 999px;
+  background: rgba(12, 18, 14, .92);
+  color: var(--ink);
+  font: 650 13px var(--font-manrope);
+  cursor: pointer;
+}
+.map-region-select:hover, .map-region-select:focus-visible { border-color: var(--lime); outline: none; }
+.map-frame .leaflet-top.leaflet-right { top: 58px; }
 
 .atlas-legend {
   z-index: 700;

@@ -376,10 +376,16 @@ function MarketMap({
   selectedCode,
   visibleCodes,
   onSelect,
+  region,
+  regions,
+  onRegionChange,
 }: {
   selectedCode: string;
   visibleCodes: string[];
   onSelect: (code: string) => void;
+  region: string;
+  regions: string[];
+  onRegionChange: (region: string) => void;
 }) {
   const containerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<import("leaflet").Map | null>(null);
@@ -537,6 +543,9 @@ function MarketMap({
       {mapStatus === "loading" && <div className="map-state">Загружаем границы стран...</div>}
       {mapStatus === "error" && <div className="map-state error">Карта временно недоступна</div>}
       <button type="button" className="map-reset" onClick={resetView}>Весь мир</button>
+      <select className="map-region-select" value={region} onChange={(event) => onRegionChange(event.target.value)} aria-label="Фильтр по региону">
+        {regions.map((item) => <option key={item} value={item}>{item}</option>)}
+      </select>
       <div className="atlas-legend">
         <strong className="atlas-legend-title">Итоговая привлекательность рынка</strong>
         <span><i className="dot high" /> высокий · 4,00+</span>
@@ -692,16 +701,14 @@ export function MarketDashboard() {
                   <span className="section-kicker">MARKET ATLAS</span>
                   <h2>Исследование рыночного потенциала криптофинансовой платформы для платежей и управления цифровыми активами с функцией выпуска крипто-связанных платежных карт</h2>
                 </div>
-                <div className="panel-controls">
-                  <select value={region} onChange={(event) => setRegion(event.target.value)} aria-label="Фильтр по региону">
-                    {regions.map((item) => <option key={item} value={item}>{item}</option>)}
-                  </select>
-                </div>
               </div>
               <MarketMap
                 selectedCode={selectedCode}
                 visibleCodes={visibleMarkets.map((market) => market.code)}
                 onSelect={chooseMarket}
+                region={region}
+                regions={regions}
+                onRegionChange={setRegion}
               />
             </div>
 

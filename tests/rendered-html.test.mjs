@@ -74,6 +74,8 @@ test("keeps production metadata and documented market intelligence", async () =>
   assert.doesNotMatch(dashboard, /\/ 5 · \$\{unified\.label\}<\/span>/);
   assert.doesNotMatch(dashboard, /bindPopup|openPopup|market-map-popup/);
   assert.match(dashboard, /atlas-legend-title/);
+  assert.match(dashboard, /className="map-region-select"/);
+  assert.match(styles, /\.map-frame \.leaflet-top\.leaflet-right \{ top: 58px; \}/);
   assert.doesNotMatch(dashboard, /className="selected-market"/);
   assert.match(dashboard, /Исследование рыночного потенциала криптофинансовой платформы для платежей и управления цифровыми активами с функцией выпуска крипто-связанных платежных карт/);
   assert.doesNotMatch(dashboard, /Восемь рынков в одном поле/);
