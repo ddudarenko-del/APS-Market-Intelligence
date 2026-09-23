@@ -487,34 +487,36 @@ body {
 }
 .map-state.error { color: #efb3a6; }
 
-.map-reset {
+.map-toolbar {
   position: absolute;
   z-index: 700;
   top: 16px;
   left: 16px;
+  display: flex;
+  max-width: calc(100% - 32px);
+  align-items: center;
+  gap: 8px;
+}
+.map-reset,
+.map-region-select {
+  height: 40px;
   min-height: 40px;
-  padding: 0 16px;
   border: 1px solid #405047;
   border-radius: 999px;
   background: rgba(12, 18, 14, .92);
   color: var(--ink);
+  font: 650 13px/1 var(--font-manrope);
   cursor: pointer;
+}
+.map-reset {
+  flex: 0 0 auto;
+  padding: 0 16px;
 }
 .map-reset:hover { border-color: var(--lime); color: var(--lime); }
 .map-region-select {
-  position: absolute;
-  z-index: 700;
-  top: 16px;
-  right: 16px;
-  width: min(210px, calc(100% - 140px));
-  min-height: 40px;
+  width: 190px;
+  max-width: calc(100% - 108px);
   padding: 0 38px 0 15px;
-  border: 1px solid #405047;
-  border-radius: 999px;
-  background: rgba(12, 18, 14, .92);
-  color: var(--ink);
-  font: 650 13px var(--font-manrope);
-  cursor: pointer;
 }
 .map-region-select:hover, .map-region-select:focus-visible { border-color: var(--lime); outline: none; }
 .map-frame .leaflet-top.leaflet-right { top: 58px; }

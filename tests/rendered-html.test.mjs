@@ -87,6 +87,7 @@ test("keeps production metadata and documented market intelligence", async () =>
   assert.doesNotMatch(dashboard, /bindPopup|openPopup|market-map-popup/);
   assert.match(dashboard, /atlas-legend-title/);
   assert.match(dashboard, /className="map-region-select"/);
+  assert.match(dashboard, /className="map-toolbar"/);
   assert.match(dashboard, /strategicOverlayOpen/);
   assert.match(dashboard, /ВЫБРАННЫЙ РЫНОК/);
   assert.match(dashboard, /getStrategicRating\(market\.code\)\.hashtags/);
@@ -95,6 +96,7 @@ test("keeps production metadata and documented market intelligence", async () =>
   assert.match(styles, /@keyframes strategic-overlay-in/);
   assert.match(styles, /\.strategic-market-panel\.strategic-market-overlay \{[\s\S]*inset: 0;[\s\S]*width: 100%;[\s\S]*height: 100%;/);
   assert.match(styles, /\.map-frame \.leaflet-top\.leaflet-right \{ top: 58px; \}/);
+  assert.match(styles, /\.map-toolbar \{[\s\S]*display: flex;[\s\S]*gap: 8px;/);
   assert.doesNotMatch(dashboard, /className="selected-market"/);
   assert.match(dashboard, /Исследование рыночного потенциала криптофинансовой платформы для платежей и управления цифровыми активами с функцией выпуска крипто-связанных платежных карт/);
   assert.doesNotMatch(dashboard, /Восемь рынков в одном поле/);

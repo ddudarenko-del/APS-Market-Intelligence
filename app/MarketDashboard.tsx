@@ -536,10 +536,12 @@ function MarketMap({
       <div ref={containerRef} className="real-map" aria-label="Интерактивная карта рынков APS" />
       {mapStatus === "loading" && <div className="map-state">Загружаем границы стран...</div>}
       {mapStatus === "error" && <div className="map-state error">Карта временно недоступна</div>}
-      <button type="button" className="map-reset" onClick={resetView}>Весь мир</button>
-      <select className="map-region-select" value={region} onChange={(event) => onRegionChange(event.target.value)} aria-label="Фильтр по региону">
-        {regions.map((item) => <option key={item} value={item}>{item}</option>)}
-      </select>
+      <div className="map-toolbar">
+        <button type="button" className="map-reset" onClick={resetView}>Весь мир</button>
+        <select className="map-region-select" value={region} onChange={(event) => onRegionChange(event.target.value)} aria-label="Фильтр по региону">
+          {regions.map((item) => <option key={item} value={item}>{item}</option>)}
+        </select>
+      </div>
       {overlay}
       <div className="atlas-legend">
         <strong className="atlas-legend-title">Итоговая привлекательность рынка</strong>
