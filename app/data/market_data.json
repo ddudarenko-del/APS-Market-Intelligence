@@ -1295,7 +1295,7 @@
     }
   },
   "acquisition_channels": {
-    "checked_at": "2026-08-11",
+    "checked_at": "2026-09-24",
     "method_note": "Вкладка не влияет на рейтинг. Выводы собраны из разделов «Маркетинг» в профилях рынков, транскриптов интервью и подтверждённых механик конкурентов. Оценка 1–5 показывает только приоритет канала для запуска; рекламный охват платформ используется как контекст, а не как прогноз клиентов.",
     "rows": [
       {
@@ -1381,12 +1381,18 @@
             "brand_level": "Высокий: доверие и легальность",
             "brand": "Бренд должен подтверждать легальность и серьёзность финансового сервиса; основное обещание строится вокруг зарубежного дохода и переводов семье, а не вокруг crypto или карты.",
             "sales_level": "Критический",
-            "sales": "Финтех-инфлюенсеры, региональные Facebook/Reddit-сообщества вокруг OFW и embedded-партнёрства с payroll, freelancer и remittance-сервисами.",
+            "sales": "Facebook для семейных и региональных сообществ, X и Telegram для Web3-аудитории, TikTok и Instagram для продуктового объяснения; отдельно проверять партнёрские маршруты через GCash, GoTyme и MariBank.",
             "primary_channel": "Инфлюенсеры + региональные сообщества",
             "avoid": "Не начинать с общенационального mass marketing и абстрактного обещания «криптокарта».",
             "source_ids": ["interview_ph_2026", "interview_ph_crossborder_2026"]
           },
           "profile_evidence": [
+            {"title": "GCash ecosystem — подтверждено", "point": "GCash задаёт привычный everyday-wallet сценарий. Его следует рассматривать как ориентир и потенциальный маршрут выплаты или конвертации, а не как продукт, который нужно заменить: международный или stablecoin-доход должен приходить в знакомый локальный платёжный опыт.", "source_ids": ["ph_gcash_official_2026", "interview_ph_web3_community_2026"]},
+            {"title": "GoTyme Bank — подтверждено", "point": "Актуальный digital-bank маршрут для переводов, накоплений, карт и QR Ph. Нужно оценить потенциал партнёрства, выплат и совместимости.", "source_ids": ["ph_gotyme_official_2026", "interview_ph_web3_community_2026"]},
+            {"title": "MariBank Philippines, ранее SeaBank — подтверждено", "point": "Актуальная digital-bank экосистема для переводов, QR-платежей и международных remittance-партнёров. В планировании и материалах нужно использовать текущее название MariBank.", "source_ids": ["ph_maribank_official_2026", "interview_ph_web3_community_2026"]},
+            {"title": "Женские founder- и startup-сообщества", "point": "Не ограничиваться women-only crypto-группами: включить предпринимательские, remote-work и университетские startup-программы. Сообщение строить вокруг международного дохода, независимых накоплений и бизнес-платежей.", "source_ids": ["interview_ph_web3_community_2026"]},
+            {"title": "Airdrop hunters и trader communities", "point": "Эти пользователи уже держат цифровые активы и нуждаются в практическом пути от rewards или trading balance к повседневным расходам. Использовать прозрачную wallet-to-QR демонстрацию и измерять удержание отдельно от incentive-led регистраций.", "source_ids": ["interview_ph_web3_community_2026"]},
+            {"title": "Иерархия каналов", "point": "Facebook — для широких семейных и региональных сообществ, X — для Web3 и KOL reach, Telegram — для crypto-community коммуникации, TikTok и Instagram — для понятного продуктового образования и creator-контента.", "source_ids": ["interview_ph_web3_community_2026"]},
             {"point": "Эксперты называют инфлюенсеров каналом с высоким потенциалом и рекомендуют отдельного специалиста для работы с ними, скидками и бонусами.", "source_ids": ["interview_ph_2026"]},
             {"point": "Reddit и Facebook используются местными crypto-сообществами; это более конкретная среда для первых пользователей, чем широкий охват.", "source_ids": ["interview_ph_2026", "datareportal_ph_2025"]},
             {"point": "Концентрация семей OFW в CALABARZON, Central Luzon и Western Visayas позволяет запускать regional community acquisition.", "source_ids": ["interview_ph_2026", "ph_psa_ofw_2024"]},
@@ -1928,12 +1934,18 @@
             "brand_level": "Высокий",
             "brand": "Бренд должен сигнализировать надёжность, прозрачность и легальный локальный статус; известный вьетнамский финансовый партнёр работает как trust layer.",
             "sales_level": "Высокий, только в разрешённом периметре",
-            "sales": "Локальные ambassadors/KOL, собственные community events и education, developer/ecosystem partnerships — до широкого paid acquisition.",
-            "primary_channel": "Ambassadors + community events",
+            "sales": "Лицензированный QR/off-ramp партнёр, local BD и KOL product seeding, небольшие partner-led events и партнёрства с gaming/Web3/DeFi-компаниями — до широкого paid acquisition.",
+            "primary_channel": "Лицензированный QR/off-ramp партнёр + local BD/KOL",
             "avoid": "Не масштабировать paid acquisition и не обещать «новую криптокарту» вне разрешённой продуктовой и рекламной модели.",
             "source_ids": ["vn_digital_assets_law", "vn_crypto_pilot", "coin98_titans_2026", "coin98_community_2026"]
           },
           "profile_evidence": [
+            {"title": "Gaming, Web3 и DeFi-компании", "point": "Потенциальный B2B-маршрут к пользователям, которые уже получают или держат токены. Проверять интеграции payment gateway, cashback и off-ramp, переводящие digital reward в локальную QR-покупку.", "source_ids": ["interview_vietnam_web3_marketing_2026"]},
+            {"title": "Sky Mavis и другие вьетнамские gaming-экосистемы — предварительная проверка", "point": "Использовать как партнёрские лиды, а не как гарантированные медиа-каналы. До контакта подтвердить актуальную активность пользователей, коммерческое соответствие и регуляторную реализуемость.", "source_ids": ["vn_sky_mavis_official_2026", "interview_vietnam_web3_marketing_2026"]},
+            {"title": "Иностранные резиденты и digital nomads с crypto-доходом", "point": "Русскоязычные, китайские и другие международные резиденты могут сильнее массовой локальной аудитории нуждаться в stablecoin-to-QR платежах. Доступ к ним возможен через международные coworking-пространства, профессиональные сообщества и частные рекомендации.", "source_ids": ["interview_vietnam_web3_marketing_2026"]},
+            {"title": "Закрытые мероприятия через локального партнёра", "point": "Во Вьетнаме операции строятся через отношения. Использовать доверенную площадку или community-партнёра для небольших встреч по приглашениям, заранее подтверждать разрешения и не продвигать публично транзакционный продукт без legal clearance.", "source_ids": ["interview_vietnam_web3_marketing_2026"]},
+            {"title": "Local BD и KOL product seeding", "point": "Отобрать владельцев сообществ как ранних тестеров до paid promotion: дать им провести реальную транзакцию, собрать обратную связь и показать преимущество продукта через cashback или referral benefit.", "source_ids": ["interview_vietnam_web3_marketing_2026"]},
+            {"title": "Лицензированные QR и off-ramp партнёры", "point": "Соответствующие требованиям VND settlement и local QR access являются инфраструктурой входа. Consumer acquisition следует начинать только после подтверждения надёжного локального партнёра и разрешённой операционной модели.", "source_ids": ["interview_vietnam_web3_marketing_2026", "vn_crypto_pilot"]},
             {"point": "Coin98 Titans подтверждает формализованную ambassador-модель для локальных лидеров сообщества и контент-активностей.", "source_ids": ["coin98_titans_2026"]},
             {"point": "Coin98 проводит собственные community gatherings; такие события дают доверие и обучение без обещаний mass-market продукта.", "source_ids": ["coin98_community_2026"]},
             {"point": "Solana Vietnam Regional Track показывает потенциал developer ecosystem, но эта аудитория не должна выдаваться за весь рынок.", "source_ids": ["coin98_solana_hackathon_2026"]}
@@ -5334,6 +5346,46 @@
       "period": "Latest available observation",
       "accessed": "2026-09-01",
       "url": "https://data.worldbank.org/country/vn"
+    },
+    {
+      "id": "ph_gcash_official_2026",
+      "type": "company",
+      "tier": "official_company_data",
+      "title": "GCash official website",
+      "publisher": "GCash",
+      "period": "Current product page checked 2026-09-24",
+      "accessed": "2026-09-24",
+      "url": "https://gcash.com/"
+    },
+    {
+      "id": "ph_gotyme_official_2026",
+      "type": "company",
+      "tier": "official_company_data",
+      "title": "GoTyme Bank official website",
+      "publisher": "GoTyme Bank",
+      "period": "Current product page checked 2026-09-24",
+      "accessed": "2026-09-24",
+      "url": "https://www.gotyme.com.ph/"
+    },
+    {
+      "id": "ph_maribank_official_2026",
+      "type": "company",
+      "tier": "official_company_data",
+      "title": "MariBank Philippines official website",
+      "publisher": "MariBank Philippines",
+      "period": "Current product page checked 2026-09-24",
+      "accessed": "2026-09-24",
+      "url": "https://www.maribank.ph/"
+    },
+    {
+      "id": "vn_sky_mavis_official_2026",
+      "type": "company",
+      "tier": "official_company_data",
+      "title": "Sky Mavis official website",
+      "publisher": "Sky Mavis",
+      "period": "Current company page checked 2026-09-24",
+      "accessed": "2026-09-24",
+      "url": "https://www.skymavis.com/"
     }
   ],
   "market_assessments": [

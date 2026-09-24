@@ -901,8 +901,12 @@ export function MarketDashboard() {
               <div className="acquisition-profile-evidence-list">
                 {selectedAcquisition.strategy.profile_evidence.map((item, index) => (
                   <article key={item.point}>
-                    <span>0{index + 1}</span>
-                    <div><p>{item.point}</p><div className="source-chips">{item.source_ids.map((id) => <SourceChip key={id} sourceId={id} />)}</div></div>
+                    <span>{String(index + 1).padStart(2, "0")}</span>
+                    <div>
+                      {"title" in item && Boolean(item.title) && <strong className="acquisition-evidence-title">{String(item.title)}</strong>}
+                      <p>{item.point}</p>
+                      <div className="source-chips">{item.source_ids.map((id) => <SourceChip key={id} sourceId={id} />)}</div>
+                    </div>
                   </article>
                 ))}
               </div>

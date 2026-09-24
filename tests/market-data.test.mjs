@@ -223,6 +223,29 @@ test("integrates both Indonesia interviews into positioning, acquisition and com
   }
 });
 
+test("integrates the updated Philippines and Vietnam acquisition routes", () => {
+  assert.equal(data.acquisition_channels.checked_at, "2026-09-24");
+  const philippines = data.acquisition_channels.rows.find((item) => item.market_code === "PHL");
+  const vietnam = data.acquisition_channels.rows.find((item) => item.market_code === "VNM");
+  assert.ok(philippines && vietnam);
+
+  const philippinesEvidence = philippines.strategy.profile_evidence.map((item) => `${item.title ?? ""} ${item.point}`).join(" ");
+  assert.match(philippinesEvidence, /GCash ecosystem/);
+  assert.match(philippinesEvidence, /GoTyme Bank/);
+  assert.match(philippinesEvidence, /MariBank Philippines/);
+  assert.match(philippinesEvidence, /Иерархия каналов/);
+
+  const vietnamEvidence = vietnam.strategy.profile_evidence.map((item) => `${item.title ?? ""} ${item.point}`).join(" ");
+  assert.match(vietnamEvidence, /Sky Mavis/);
+  assert.match(vietnamEvidence, /Local BD и KOL product seeding/);
+  assert.match(vietnamEvidence, /Лицензированные QR и off-ramp партнёры/);
+  assert.match(vietnam.strategy.decision.primary_channel, /QR\/off-ramp/);
+
+  for (const id of ["ph_gcash_official_2026", "ph_gotyme_official_2026", "ph_maribank_official_2026", "vn_sky_mavis_official_2026"]) {
+    assert.ok(sourceIds.has(id), `missing updated acquisition source ${id}`);
+  }
+});
+
 test("includes the sourced Tangem success case for Indonesia", () => {
   const tangem = data.case_lessons.supporting_cases.find((item) => item.company === "Tangem Wallet" && item.market === "Индонезия");
   assert.ok(tangem);
