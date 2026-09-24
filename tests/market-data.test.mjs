@@ -4,6 +4,7 @@ import test from "node:test";
 
 const data = JSON.parse(await readFile(new URL("../app/data/market_data.json", import.meta.url), "utf8"));
 const task5Conclusions = JSON.parse(await readFile(new URL("../app/data/task5_conclusions.json", import.meta.url), "utf8"));
+const acquisitionChannelMap = JSON.parse(await readFile(new URL("../app/data/acquisition_channel_map.json", import.meta.url), "utf8"));
 const marketCodes = new Set(data.markets.map((market) => market.code));
 const sourceIds = new Set(data.sources.map((source) => source.id));
 const competitorIds = new Set(data.market_competitors.map((competitor) => competitor.id));
@@ -244,6 +245,42 @@ test("integrates the updated Philippines and Vietnam acquisition routes", () => 
   for (const id of ["ph_gcash_official_2026", "ph_gotyme_official_2026", "ph_maribank_official_2026", "vn_sky_mavis_official_2026"]) {
     assert.ok(sourceIds.has(id), `missing updated acquisition source ${id}`);
   }
+});
+
+test("imports the complete updated acquisition-channel document for all eight markets", () => {
+  assert.equal(acquisitionChannelMap.meta.markets_count, 8);
+  assert.equal(acquisitionChannelMap.meta.source_word_count, 5295);
+  assert.match(acquisitionChannelMap.meta.source_sha256, /^[a-f0-9]{64}$/);
+  assert.deepEqual(Object.keys(acquisitionChannelMap.markets), ["IDN", "MEX", "VNM", "PHL", "CAN", "COL", "ARG", "GBR"]);
+
+  const completeEnglishDocument = [
+    acquisitionChannelMap.reading_key.en,
+    ...Object.values(acquisitionChannelMap.markets).map((market) => market.en),
+    ...Object.values(acquisitionChannelMap.global).map((section) => section.en),
+  ].join(" ");
+  const importedWordCount = completeEnglishDocument.replace(/<[^>]*>/g, " ").trim().split(/\s+/).length;
+  assert.ok(importedWordCount >= 5_280, `only ${importedWordCount} source words were imported`);
+  assert.ok((completeEnglishDocument.match(/href="https:\/\//g) ?? []).length >= 150);
+
+  const expectedEvidence = {
+    IDN: /Coinfest Asia[\s\S]*Crypto Ndo[\s\S]*BINUS Blockchain/,
+    MEX: /Mexico Fintech Week[\s\S]*Espacio Cripto[\s\S]*SheWorks/,
+    VNM: /5 Phút Crypto[\s\S]*GM Vietnam[\s\S]*Sky Mavis/,
+    PHL: /GCash ecosystem[\s\S]*MariBank Philippines[\s\S]*Online Filipino Freelancers/,
+    CAN: /Fiesta Extravaganza[\s\S]*Toronto Caribbean Carnival[\s\S]*Blockchain Futurist/,
+    COL: /Colombia Fintech[\s\S]*Latam Fintech Market[\s\S]*Ruta N/,
+    ARG: /LABITCONF[\s\S]*Argentina Fintech Forum[\s\S]*Take Profit/,
+    GBR: /Indian Professionals[\s\S]*Kanlungan[\s\S]*Innovate Finance Digital Assets Summit/,
+  };
+  for (const [code, pattern] of Object.entries(expectedEvidence)) {
+    assert.match(acquisitionChannelMap.markets[code].en, pattern, `${code}: detailed channel map is incomplete`);
+    assert.ok(acquisitionChannelMap.markets[code].ru.length > 2_500, `${code}: Russian version is missing`);
+  }
+
+  assert.match(acquisitionChannelMap.global.exclude.en, /Unlicensed global exchanges/);
+  assert.match(acquisitionChannelMap.global.guardrails.en, /financial-promotion regime/);
+  assert.match(acquisitionChannelMap.global.outreach.en, /Select five channels in each market/);
+  assert.doesNotMatch(completeEnglishDocument, /<script|<style|\son\w+=|javascript:/i);
 });
 
 test("includes the sourced Tangem success case for Indonesia", () => {

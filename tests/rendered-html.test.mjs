@@ -95,6 +95,13 @@ test("keeps production metadata and documented market intelligence", async () =>
   assert.match(dashboard, /getStrategicRating\(market\.code\)\.hashtags/);
   assert.match(dashboard, /acquisition-evidence-title/);
   assert.match(dashboard, /String\(index \+ 1\)\.padStart\(2, "0"\)/);
+  assert.match(dashboard, /acquisition_channel_map\.json/);
+  assert.match(dashboard, /ОБНОВЛЁННАЯ КАРТА КАНАЛОВ · 2026/);
+  assert.match(dashboard, /selectedAcquisitionDocument\[language\]/);
+  assert.ok(dashboard.indexOf('className="acquisition-map-intro"') < dashboard.indexOf('className="panel acquisition-summary"'));
+  assert.ok(dashboard.indexOf('className="acquisition-document-market"') < dashboard.indexOf('className="panel acquisition-summary"'));
+  assert.match(styles, /\.acquisition-source-content table/);
+  assert.match(styles, /\.acquisition-document-global/);
   assert.match(dashboard, /strategicallyOrderedVisibleMarkets/);
   assert.match(dashboard, /className="rank-number"/);
   assert.match(styles, /@keyframes strategic-overlay-in/);

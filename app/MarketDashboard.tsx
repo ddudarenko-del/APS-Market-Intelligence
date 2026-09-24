@@ -1,6 +1,7 @@
 "use client";
 
 import { type ReactNode, useEffect, useRef, useState } from "react";
+import acquisitionChannelMap from "./data/acquisition_channel_map.json";
 import data from "./data/market_data.json";
 import task5Conclusions from "./data/task5_conclusions.json";
 import { type Language, translateCompositeText, translateText, translateTextNode } from "./localization";
@@ -549,6 +550,7 @@ export function MarketDashboard() {
   const selectedReport = data.market_reports.find((item) => item.market_code === selected.code) ?? data.market_reports[0];
   const visibleMarkets = data.markets;
   const selectedAcquisition = data.acquisition_channels.rows.find((row) => row.market_code === selected.code) ?? data.acquisition_channels.rows[0];
+  const selectedAcquisitionDocument = acquisitionChannelMap.markets[selected.code as keyof typeof acquisitionChannelMap.markets] ?? acquisitionChannelMap.markets.PHL;
   const selectedCompetition = competitorMarket === "ALL" ? null : data.competition_by_market.find((item) => item.market_code === competitorMarket) ?? null;
   const selectedCompetitionAssessment = competitorMarket === "ALL" ? null : data.market_assessments.find((item) => item.market_code === competitorMarket) ?? null;
   const globalCompetitors = data.market_competitors.filter((item) => item.scope === "global" && item.availability);
@@ -816,6 +818,48 @@ export function MarketDashboard() {
 
       {tab === "acquisition" && (
         <section className="acquisition-layout">
+          <div className="acquisition-market-picker" aria-label={language === "en" ? "Select a market for channel analysis" : "Выбор рынка для анализа каналов"}>
+            {data.markets.map((market) => (
+              <button key={market.code} type="button" className={selected.code === market.code ? "active" : ""} onClick={() => chooseMarket(market.code)}>
+                <span>{market.code}</span>{market.name_ru}
+              </button>
+            ))}
+          </div>
+
+          <article className="panel acquisition-map-intro">
+            <div className="acquisition-map-title">
+              <div>
+                <span className="section-kicker">{language === "en" ? "UPDATED CHANNEL MAP · 2026" : "ОБНОВЛЁННАЯ КАРТА КАНАЛОВ · 2026"}</span>
+                <h2>{acquisitionChannelMap.meta.title[language]}</h2>
+                <p>{language === "en" ? "The complete updated document: audiences, communities, events, KOLs, physical touchpoints, links and constraints." : "Полная детализация из обновлённого документа: аудитории, сообщества, события, KOL, офлайн-точки, ссылки и ограничения."}</p>
+              </div>
+              <div className="acquisition-map-count"><strong>{acquisitionChannelMap.meta.markets_count}</strong><span>{language === "en" ? "markets" : "рынков"}</span></div>
+            </div>
+            <div className="acquisition-source-content acquisition-reading-key" dangerouslySetInnerHTML={{ __html: acquisitionChannelMap.reading_key[language] }} />
+          </article>
+
+          <article className="panel acquisition-document-market">
+            <div className="acquisition-document-head">
+              <div>
+                <span className="section-kicker">{selected.code} · {language === "en" ? "FULL CHANNEL MAP" : "ПОЛНАЯ КАРТА КАНАЛОВ"}</span>
+                <h2>{selectedAcquisitionDocument.name[language]}</h2>
+              </div>
+              <span className="acquisition-document-status">{language === "en" ? "Every item and link from the document" : "Все пункты и ссылки из документа"}</span>
+            </div>
+            <div className="acquisition-source-content" dangerouslySetInnerHTML={{ __html: selectedAcquisitionDocument[language] }} />
+          </article>
+
+          <section className="acquisition-document-global" aria-label={language === "en" ? "Channel-map rules" : "Общие правила карты каналов"}>
+            <article className="panel acquisition-global-card" dangerouslySetInnerHTML={{ __html: acquisitionChannelMap.global.exclude[language] }} />
+            <article className="panel acquisition-global-card" dangerouslySetInnerHTML={{ __html: acquisitionChannelMap.global.guardrails[language] }} />
+            <article className="panel acquisition-global-card" dangerouslySetInnerHTML={{ __html: acquisitionChannelMap.global.outreach[language] }} />
+          </section>
+
+          <div className="acquisition-secondary-heading">
+            <span>{language === "en" ? "Additional analysis" : "Дополнительная аналитика"}</span>
+            <p>{language === "en" ? "The general strategy and quantitative reach follow the complete channel map." : "Обобщённая стратегия и количественный охват находятся ниже полной карты каналов."}</p>
+          </div>
+
           <article className="panel acquisition-summary">
             <div className="panel-heading">
               <div>
@@ -848,14 +892,6 @@ export function MarketDashboard() {
               </table>
             </div>
           </article>
-
-          <div className="acquisition-market-picker" aria-label="Выбор рынка для анализа каналов">
-            {data.markets.map((market) => (
-              <button key={market.code} type="button" className={selected.code === market.code ? "active" : ""} onClick={() => chooseMarket(market.code)}>
-                <span>{market.code}</span>{market.name_ru}
-              </button>
-            ))}
-          </div>
 
           <article className="panel acquisition-country">
             <div className="acquisition-country-head">
