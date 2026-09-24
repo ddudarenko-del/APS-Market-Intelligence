@@ -212,6 +212,19 @@ function getStrategicRatingClass(rating: string) {
   return "long-term";
 }
 
+const strategicRatingLabelsRu: Record<string, string> = {
+  "Priority Market": "Приоритетный рынок",
+  "Priority Subject to Licensing": "Приоритетный рынок при условии лицензирования",
+  "Conditional Opportunity": "Условная возможность",
+  "High-Potential, High-Risk Test": "Тест с высоким потенциалом и высоким риском",
+  "Secondary Opportunity": "Вторичная возможность",
+  "Longer-Term, Corridor-Specific Opportunity": "Долгосрочная возможность для отдельных коридоров",
+};
+
+function getStrategicRatingLabel(rating: string, language: Language) {
+  return language === "ru" ? strategicRatingLabelsRu[rating] ?? rating : rating;
+}
+
 function ScoreBadge({ score }: { score: number }) {
   const tone = score >= 4 ? "high" : score >= 3.4 ? "medium-high" : score >= 2.8 ? "mid" : "low";
   return <span className={`score-badge ${tone}`}>{score.toFixed(2)}</span>;
@@ -699,7 +712,7 @@ export function MarketDashboard() {
                       <span className="section-kicker">ВЫБРАННЫЙ РЫНОК</span>
                       <h2>{selected.name_ru}</h2>
                     </div>
-                    <span className={`strategic-rating-label ${getStrategicRatingClass(selectedStrategic.rating)}`}>{selectedStrategic.rating}</span>
+                    <span className={`strategic-rating-label ${getStrategicRatingClass(selectedStrategic.rating)}`}>{getStrategicRatingLabel(selectedStrategic.rating, language)}</span>
                   </div>
                   <ul className="strategic-market-details">
                     {(language === "en" ? selectedStrategic.details_en : selectedStrategic.details_ru).map((item) => <li key={item}><StrategicDetail text={item} /></li>)}
@@ -730,7 +743,7 @@ export function MarketDashboard() {
                     <span className="rank-name"><strong>{market.name_ru}</strong><small>{market.region}</small></span>
                   </span>
                   <ScoreBadge score={getUnifiedScore(market.code).final_score} />
-                  <span className={`strategic-rating-label ${getStrategicRatingClass(getStrategicRating(market.code).rating)}`}>{getStrategicRating(market.code).rating}</span>
+                  <span className={`strategic-rating-label ${getStrategicRatingClass(getStrategicRating(market.code).rating)}`}>{getStrategicRatingLabel(getStrategicRating(market.code).rating, language)}</span>
                 </button>
               ))}
             </div>
@@ -742,12 +755,11 @@ export function MarketDashboard() {
         <section className="conclusions-layout overview-conclusions">
           <article className="panel research-conclusion">
             <span className="section-kicker">ИТОГ ИССЛЕДОВАНИЯ</span>
-            <h2>Универсальный аналог KAST не дает достаточного отличия</h2>
             <p>Карта, долларовый счет, хранение стейблкоинов и базовая конвертация уже воспринимаются как стандартный набор. Возможность возникает вокруг конкретной аудитории, незакрытой задачи и измеримого преимущества: курса, комиссии, доходности, локальной функции, платежного маршрута, налогового сопровождения или упрощения сложного финансового сценария.</p>
           </article>
           <div className="research-observations">
             {[
-              ["Главный спрос - трансграничные деньги", "Зарубежный доход, семейные переводы и международные специалисты дают наиболее понятные сценарии."],
+              ["Главный спрос - трансграничные деньги и снижение налоговой нагрузки", "Зарубежный доход, семейные переводы и международные специалисты дают наиболее понятные сценарии. При этом использование криптовалюты для платежей часто связано со стремлением снизить налоговую нагрузку"],
               ["Базовый продукт больше не отличает", "В выигрыше может оказаться продукт, который не заменяет GCash, QRIS или локальный банк, а становится для них «входом глобальных денег». На Филиппинах и в Индонезии это особенно выражено."],
               ["Переключение требует ощутимой выгоды", "Пользователь должен видеть лучший курс, меньшую комиссию или локальную функцию."],
               ["Регулирование и партнеры определяют реальный вход", "Потенциал спроса нельзя оценивать отдельно от разрешенной модели запуска."],
@@ -1036,7 +1048,7 @@ export function MarketDashboard() {
               <div><span className="section-kicker">{selected.region} · {selected.currency}</span><h2>{selected.name_ru}</h2><p>{selectedAssessment.headline}</p></div>
               <div className="profile-rating-stack">
                 <span className={`attractiveness-badge ${selectedUnified.level}`}>{selectedUnified.label} · {selectedUnified.final_score.toFixed(2)} / 5</span>
-                <span className={`strategic-rating-label ${getStrategicRatingClass(selectedStrategic.rating)}`}>{selectedStrategic.rating}</span>
+                <span className={`strategic-rating-label ${getStrategicRatingClass(selectedStrategic.rating)}`}>{getStrategicRatingLabel(selectedStrategic.rating, language)}</span>
               </div>
             </div>
             <div className="profile-assessment-grid">
