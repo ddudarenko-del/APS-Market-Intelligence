@@ -125,11 +125,11 @@ function useDomLocalization(language: Language) {
 }
 
 const tabLabels: Array<{ id: Tab; label: string }> = [
-  { id: "overview", label: "Обзор" },
-  { id: "profiles", label: "Профили" },
+  { id: "overview", label: "Обзор и итоги" },
+  { id: "profiles", label: "Профили стран" },
   { id: "competition", label: "Конкуренты" },
   { id: "cases", label: "Кейсы" },
-  { id: "acquisition", label: "Каналы" },
+  { id: "acquisition", label: "Каналы продвижения" },
   { id: "respondents", label: "Респонденты" },
   { id: "data", label: "Данные" },
   { id: "method", label: "Методология" },
@@ -374,7 +374,7 @@ function StrategicDetail({ text }: { text: string }) {
   return (
     <>
       <strong>{text.slice(0, separator)}</strong>
-      <span>{text.slice(separator + 1).trim()}</span>
+      {" "}<span>{text.slice(separator + 1).trim()}</span>
     </>
   );
 }
@@ -386,6 +386,10 @@ function getRegulatoryConstraintHtml(language: Language, countryName: string) {
     .slice(1)
     .find((item) => item.startsWith(`${countryName}</strong>`));
   return segment ? `${marker}${segment}` : "";
+}
+
+function removeAcquisitionEvidenceMarkers(html: string) {
+  return html.replace(/[★✓△]\s*/g, "");
 }
 
 function MarketMap({
@@ -593,6 +597,7 @@ export function MarketDashboard() {
   const selectedAcquisition = data.acquisition_channels.rows.find((row) => row.market_code === selected.code) ?? data.acquisition_channels.rows[0];
   const selectedAcquisitionDocument = acquisitionChannelMap.markets[selected.code as keyof typeof acquisitionChannelMap.markets] ?? acquisitionChannelMap.markets.PHL;
   const selectedRegulatoryConstraintHtml = getRegulatoryConstraintHtml(language, selectedAcquisitionDocument.name[language]);
+  const selectedAcquisitionDocumentHtml = removeAcquisitionEvidenceMarkers(selectedAcquisitionDocument[language]);
   const selectedCompetition = competitorMarket === "ALL" ? null : data.competition_by_market.find((item) => item.market_code === competitorMarket) ?? null;
   const selectedCompetitionAssessment = competitorMarket === "ALL" ? null : data.market_assessments.find((item) => item.market_code === competitorMarket) ?? null;
   const globalCompetitors = data.market_competitors.filter((item) => item.scope === "global" && item.availability);
@@ -734,20 +739,6 @@ export function MarketDashboard() {
             </p>
           </aside>
         </section>
-        <section className="under-map-insights" aria-labelledby="under-map-insights-title">
-          <div className="under-map-insights-heading">
-            <span className="section-kicker">ТОЧКИ ВХОДА</span>
-            <h2 id="under-map-insights-title">Неочевидные точки входа на рынок</h2>
-          </div>
-          <div className="under-map-insights-list">
-            {underMapInsights.map((insight) => (
-              <article key={insight.title}>
-                <h3>{insight.title}</h3>
-                <p>{insight.body}</p>
-              </article>
-            ))}
-          </div>
-        </section>
         <section className="conclusions-layout overview-conclusions">
           <article className="panel research-conclusion">
             <span className="section-kicker">ИТОГ ИССЛЕДОВАНИЯ</span>
@@ -782,11 +773,31 @@ export function MarketDashboard() {
               ))}
             </div>
           </section>
+          <section className="panel under-map-insights" aria-labelledby="under-map-insights-title">
+            <div className="under-map-insights-heading">
+              <span className="section-kicker">ТОЧКИ ВХОДА</span>
+              <h2 id="under-map-insights-title">Неочевидные точки входа на рынок</h2>
+            </div>
+            <div className="under-map-insights-list">
+              {underMapInsights.map((insight) => (
+                <article key={insight.title}>
+                  <h3>{insight.title}</h3>
+                  <p>{insight.body}</p>
+                </article>
+              ))}
+            </div>
+          </section>
         </section>
         </>
       )}
       {tab === "acquisition" && (
         <section className="acquisition-layout">
+          <article className="panel acquisition-first-wave">
+            <span className="section-kicker">{language === "en" ? "RECOMMENDED START" : "РЕКОМЕНДУЕМЫЙ СТАРТ"}</span>
+            <h2>{language === "en" ? "Recommended first outreach wave" : "Рекомендуемая первая волна контактов"}</h2>
+            <p>{language === "en" ? "Select up to five channels in each relevant market: 1) one high-intent payment audience, 2) one crypto or fintech publication, 3) one migrant, diaspora or freelancer community, 4) one current event, and 5) one unusual offline activation. In Canada and the United Kingdom, select the high-intent audience and community within a specific diaspora corridor. This creates a balanced test of intent, credibility, scale and local cultural relevance without over-investing in broad reach." : "Выберите до пяти каналов на каждом релевантном рынке: 1) один сегмент платежной аудитории с высокими намерениями, 2) одно издание о криптовалютах или финансовых технологиях, 3) одно сообщество мигрантов, диаспоры или фрилансеров, 4) одно текущее событие и 5) одну необычную офлайн-активацию. В Канаде и Соединенном Королевстве аудиторию с высоким намерением и сообщество следует выбирать внутри конкретного коридора диаспоры. Это создает сбалансированную проверку намерений, достоверности, масштаба и местной культурной значимости без чрезмерных инвестиций в широкий охват."}</p>
+          </article>
+
           <div className="acquisition-market-picker" aria-label={language === "en" ? "Select a market for channel analysis" : "Выбор рынка для анализа каналов"}>
             {data.markets.map((market) => (
               <button key={market.code} type="button" className={selected.code === market.code ? "active" : ""} onClick={() => chooseMarket(market.code)}>
@@ -798,8 +809,7 @@ export function MarketDashboard() {
           <article className="panel acquisition-map-intro">
             <div className="acquisition-map-title">
               <div>
-                <span className="section-kicker">{language === "en" ? "UPDATED CHANNEL MAP · 2026" : "ОБНОВЛЁННАЯ КАРТА КАНАЛОВ · 2026"}</span>
-                <p>{language === "en" ? "The complete updated document: audiences, communities, events, KOLs, physical touchpoints, links and constraints." : "Полная детализация из обновлённого документа: аудитории, сообщества, события, KOL, офлайн-точки, ссылки и ограничения."}</p>
+                <span className="section-kicker">{language === "en" ? "UPDATED PROMOTION CHANNEL MAP · 2026" : "ОБНОВЛЁННАЯ КАРТА КАНАЛОВ ПРОДВИЖЕНИЯ · 2026"}</span>
               </div>
               <div className="acquisition-map-count"><strong>{acquisitionChannelMap.meta.markets_count}</strong><span>{language === "en" ? "markets" : "рынков"}</span></div>
             </div>
@@ -808,7 +818,7 @@ export function MarketDashboard() {
           <article className="panel acquisition-document-market">
             <div className="acquisition-document-head">
               <div>
-                <span className="section-kicker">{selected.code} · {language === "en" ? "FULL CHANNEL MAP" : "ПОЛНАЯ КАРТА КАНАЛОВ"}</span>
+                <span className="section-kicker">{selected.code} · {language === "en" ? "FULL PROMOTION CHANNEL MAP" : "ПОЛНАЯ КАРТА КАНАЛОВ ПРОДВИЖЕНИЯ"}</span>
                 <h2>{selectedAcquisitionDocument.name[language]}</h2>
               </div>
             </div>
@@ -868,12 +878,11 @@ export function MarketDashboard() {
               </div>
               <p>{language === "en" ? "The complete country-specific channel map follows below." : "Ниже приведена полная карта каналов для выбранной страны."}</p>
             </div>
-            <div className="acquisition-source-content" dangerouslySetInnerHTML={{ __html: selectedAcquisitionDocument[language] }} />
+            <div className="acquisition-source-content" dangerouslySetInnerHTML={{ __html: selectedAcquisitionDocumentHtml }} />
           </article>
 
           <section className="acquisition-document-global" aria-label={language === "en" ? "Channel-map rules" : "Общие правила карты каналов"}>
             <article className="panel acquisition-global-card" dangerouslySetInnerHTML={{ __html: acquisitionChannelMap.global.exclude[language] }} />
-            <article className="panel acquisition-global-card" dangerouslySetInnerHTML={{ __html: acquisitionChannelMap.global.outreach[language] }} />
           </section>
         </section>
       )}
@@ -1025,7 +1034,10 @@ export function MarketDashboard() {
           <article className="panel profile-detail">
             <div className="profile-hero">
               <div><span className="section-kicker">{selected.region} · {selected.currency}</span><h2>{selected.name_ru}</h2><p>{selectedAssessment.headline}</p></div>
-              <span className={`attractiveness-badge ${selectedUnified.level}`}>{selectedUnified.label} · {selectedUnified.final_score.toFixed(2)} / 5</span>
+              <div className="profile-rating-stack">
+                <span className={`attractiveness-badge ${selectedUnified.level}`}>{selectedUnified.label} · {selectedUnified.final_score.toFixed(2)} / 5</span>
+                <span className={`strategic-rating-label ${getStrategicRatingClass(selectedStrategic.rating)}`}>{selectedStrategic.rating}</span>
+              </div>
             </div>
             <div className="profile-assessment-grid">
               <div><span>Итоговая привлекательность</span><strong>{selectedUnified.final_score.toFixed(2)} / 5</strong><p>{selectedUnified.label}</p></div>
@@ -1035,6 +1047,22 @@ export function MarketDashboard() {
               <div><span>Приоритетная аудитория</span><p>{selectedAssessment.priority_audience}</p></div>
               <div><span>Основное сообщение</span><p>{selectedAssessment.core_message}</p></div>
             </div>
+            <section className="profile-strategic-context">
+              <div className="profile-strategic-heading">
+                <div>
+                  <span className="section-kicker">СТРАТЕГИЧЕСКИЙ КОНТЕКСТ</span>
+                  <h3>Полная информация из обзора</h3>
+                </div>
+                <div className="profile-strategic-hashtags" aria-label="Хештеги рынка">
+                  {selectedStrategic.hashtags.map((hashtag) => <span key={hashtag}>{hashtag}</span>)}
+                </div>
+              </div>
+              <ul>
+                {(language === "en" ? selectedStrategic.details_en : selectedStrategic.details_ru).map((item) => (
+                  <li key={item}><StrategicDetail text={item} /></li>
+                ))}
+              </ul>
+            </section>
             <div className="profile-confidence"><strong>Уровень подтверждения: {confidenceLabels[selectedAssessment.confidence]}</strong><div className="source-chips">{selectedAssessment.source_ids.map((id) => <SourceChip key={id} sourceId={id} plain />)}</div></div>
             <section className="profile-market-findings">
               <span className="section-kicker">ВЫВОДЫ ПО РЫНКУ</span>

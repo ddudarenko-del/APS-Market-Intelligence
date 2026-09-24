@@ -31,7 +31,9 @@ test("server-renders the unified APS research workspace", async () => {
   const html = await response.text();
   assert.match(html, /<title>APS Market Intelligence<\/title>/i);
   assert.doesNotMatch(html, />Выводы<\/button>/);
-  assert.match(html, />Профили<\/button>/);
+  assert.match(html, />Обзор и итоги<\/button>/);
+  assert.match(html, />Профили стран<\/button>/);
+  assert.match(html, />Каналы продвижения<\/button>/);
   assert.doesNotMatch(html, />Сравнение<\/button>/);
   assert.match(html, /Респонденты/);
   assert.match(html, />Кейсы<\/button>/);
@@ -96,7 +98,10 @@ test("keeps production metadata and documented market intelligence", async () =>
   assert.match(dashboard, /acquisition-evidence-title/);
   assert.match(dashboard, /String\(index \+ 1\)\.padStart\(2, "0"\)/);
   assert.match(dashboard, /acquisition_channel_map\.json/);
-  assert.match(dashboard, /ОБНОВЛЁННАЯ КАРТА КАНАЛОВ · 2026/);
+  assert.match(dashboard, /ОБНОВЛЁННАЯ КАРТА КАНАЛОВ ПРОДВИЖЕНИЯ · 2026/);
+  assert.doesNotMatch(dashboard, /Полная детализация из обновлённого документа/);
+  assert.match(dashboard, /Рекомендуемая первая волна контактов/);
+  assert.match(dashboard, /Выберите до пяти каналов на каждом релевантном рынке/);
   assert.doesNotMatch(dashboard, /acquisitionChannelMap\.meta\.title\[language\]/);
   assert.match(dashboard, /selectedAcquisitionDocument\[language\]/);
   assert.doesNotMatch(dashboard, /acquisitionChannelMap\.reading_key|acquisition-reading-key/);
@@ -106,6 +111,9 @@ test("keeps production metadata and documented market intelligence", async () =>
   assert.match(dashboard, /getRegulatoryConstraintHtml/);
   assert.match(dashboard, /className="acquisition-regulatory-point"/);
   assert.match(dashboard, /selectedRegulatoryConstraintHtml/);
+  assert.match(dashboard, /removeAcquisitionEvidenceMarkers/);
+  assert.match(dashboard, /replace\(\/\[★✓△\]/);
+  assert.match(dashboard, /selectedAcquisitionDocumentHtml/);
   assert.ok(dashboard.indexOf('className="acquisition-country-context"') < dashboard.indexOf('className="acquisition-source-content"'));
   assert.match(styles, /\.acquisition-source-content table/);
   assert.match(styles, /\.acquisition-document-global/);
@@ -125,9 +133,14 @@ test("keeps production metadata and documented market intelligence", async () =>
   assert.match(dashboard, /В выигрыше может оказаться продукт, который не заменяет GCash/);
   assert.match(dashboard, /Неочевидные точки входа на рынок/);
   assert.match(dashboard, /Моряк подключает целую семью/);
-  assert.ok(dashboard.indexOf('className="under-map-insights"') < dashboard.indexOf('className="conclusions-layout overview-conclusions"'));
+  assert.ok(dashboard.indexOf('className="conclusions-layout overview-conclusions"') < dashboard.indexOf('className="panel under-map-insights"'));
+  assert.ok(dashboard.indexOf('className="panel cross-market-insights"') < dashboard.indexOf('className="panel under-map-insights"'));
   assert.ok(dashboard.indexOf('className="conclusions-layout overview-conclusions"') < dashboard.indexOf('tab === "profiles"'));
+  assert.ok(dashboard.indexOf('className="panel under-map-insights"') < dashboard.indexOf('tab === "profiles"'));
   assert.match(dashboard, /marketConclusionItems\[selected\.code\]/);
+  assert.match(dashboard, /className="profile-strategic-context"/);
+  assert.match(dashboard, /selectedStrategic\.hashtags\.map/);
+  assert.equal((dashboard.match(/selectedStrategic\.details_en : selectedStrategic\.details_ru/g) ?? []).length, 2);
   assert.match(dashboard, /allowLinks=\{false\}/);
   assert.match(dashboard, /sourceId=\{id\} plain/);
   assert.match(dashboard, /Пользователь должен видеть лучший курс, меньшую комиссию или локальную функцию/);
@@ -203,4 +216,7 @@ test("ships a reviewed RU / EN language layer without changing the Russian defau
   assert.match(localization, /"Реализуемость входа": "Entry feasibility"/);
   assert.match(localization, /"Незакрытая задача": "Unmet need"/);
   assert.match(localization, /"Каналы привлечения": "Acquisition channels"/);
+  assert.match(localization, /"Обзор и итоги": "Overview and findings"/);
+  assert.match(localization, /"Профили стран": "Country profiles"/);
+  assert.match(localization, /"Каналы продвижения": "Promotion channels"/);
 });
