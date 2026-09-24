@@ -379,6 +379,15 @@ function StrategicDetail({ text }: { text: string }) {
   );
 }
 
+function getRegulatoryConstraintHtml(language: Language, countryName: string) {
+  const marker = '<p class="acq-bullet"><strong>';
+  const segment = acquisitionChannelMap.global.guardrails[language]
+    .split(marker)
+    .slice(1)
+    .find((item) => item.startsWith(`${countryName}</strong>`));
+  return segment ? `${marker}${segment}` : "";
+}
+
 function MarketMap({
   selectedCode,
   visibleCodes,
@@ -583,6 +592,7 @@ export function MarketDashboard() {
   const visibleMarkets = data.markets;
   const selectedAcquisition = data.acquisition_channels.rows.find((row) => row.market_code === selected.code) ?? data.acquisition_channels.rows[0];
   const selectedAcquisitionDocument = acquisitionChannelMap.markets[selected.code as keyof typeof acquisitionChannelMap.markets] ?? acquisitionChannelMap.markets.PHL;
+  const selectedRegulatoryConstraintHtml = getRegulatoryConstraintHtml(language, selectedAcquisitionDocument.name[language]);
   const selectedCompetition = competitorMarket === "ALL" ? null : data.competition_by_market.find((item) => item.market_code === competitorMarket) ?? null;
   const selectedCompetitionAssessment = competitorMarket === "ALL" ? null : data.market_assessments.find((item) => item.market_code === competitorMarket) ?? null;
   const globalCompetitors = data.market_competitors.filter((item) => item.scope === "global" && item.availability);
@@ -793,7 +803,6 @@ export function MarketDashboard() {
               </div>
               <div className="acquisition-map-count"><strong>{acquisitionChannelMap.meta.markets_count}</strong><span>{language === "en" ? "markets" : "рынков"}</span></div>
             </div>
-            <div className="acquisition-source-content acquisition-reading-key" dangerouslySetInnerHTML={{ __html: acquisitionChannelMap.reading_key[language] }} />
           </article>
 
           <article className="panel acquisition-document-market">
@@ -802,125 +811,70 @@ export function MarketDashboard() {
                 <span className="section-kicker">{selected.code} · {language === "en" ? "FULL CHANNEL MAP" : "ПОЛНАЯ КАРТА КАНАЛОВ"}</span>
                 <h2>{selectedAcquisitionDocument.name[language]}</h2>
               </div>
-              <span className="acquisition-document-status">{language === "en" ? "Every item and link from the document" : "Все пункты и ссылки из документа"}</span>
+            </div>
+            <div className="acquisition-country-context">
+              <div className="acquisition-country-head">
+                <div>
+                  <span className="section-kicker">{language === "en" ? "MARKET CONTEXT" : "КОНТЕКСТ РЫНКА"}</span>
+                  <p>{selectedAcquisition.entry_mix}</p>
+                </div>
+                <div className="acquisition-source-date">Проверено<br /><strong>{data.acquisition_channels.checked_at}</strong></div>
+              </div>
+
+              <div className="acquisition-decision-grid">
+                <div className="acquisition-decision-lead"><span>Что важнее на этом рынке</span><strong>{selectedAcquisition.strategy.decision.priority}</strong></div>
+                <div><span>Брендинг</span><strong>{selectedAcquisition.strategy.decision.brand_level}</strong><p>{selectedAcquisition.strategy.decision.brand}</p></div>
+                <div><span>Каналы продаж</span><strong>{selectedAcquisition.strategy.decision.sales_level}</strong><p>{selectedAcquisition.strategy.decision.sales}</p></div>
+                <div className="acquisition-decision-avoid"><span>Не использовать как основу</span><p>{selectedAcquisition.strategy.decision.avoid}</p><div className="source-chips">{selectedAcquisition.strategy.decision.source_ids.map((id) => <SourceChip key={id} sourceId={id} />)}</div></div>
+              </div>
+
+              <div className="acquisition-profile-evidence">
+                <div className="acquisition-profile-evidence-head"><span className="section-kicker">ИЗ ПРОФИЛЯ И ИНТЕРВЬЮ</span><h3>Конкретные основания решения</h3></div>
+                <div className="acquisition-profile-evidence-list">
+                  {selectedAcquisition.strategy.profile_evidence.map((item, index) => (
+                    <article key={item.point}>
+                      <span>{String(index + 1).padStart(2, "0")}</span>
+                      <div>
+                        {"title" in item && Boolean(item.title) && <strong className="acquisition-evidence-title">{String(item.title)}</strong>}
+                        <p>{item.point}</p>
+                        <div className="source-chips">{item.source_ids.map((id) => <SourceChip key={id} sourceId={id} />)}</div>
+                      </div>
+                    </article>
+                  ))}
+                </div>
+              </div>
+
+              <div className="acquisition-reach-grid">
+                <div><span>Пользователи интернета</span><strong>{selectedAcquisition.digital_reach.internet_users_m.toLocaleString(locale)} млн</strong><small>январь 2025</small></div>
+                <div><span>Активные профили в соцсетях</span><strong>{selectedAcquisition.digital_reach.social_identities_m.toLocaleString(locale)} млн</strong><small>{selectedAcquisition.digital_reach.social_pct_population.toLocaleString(locale)}% населения</small></div>
+                <div><span>Рекламная аудитория Facebook</span><strong>{selectedAcquisition.digital_reach.facebook_ad_m.toLocaleString(locale)} млн</strong><small>потенциальный охват</small></div>
+                <div><span>Рекламная аудитория YouTube</span><strong>{selectedAcquisition.digital_reach.youtube_ad_m.toLocaleString(locale)} млн</strong><small>потенциальный охват</small></div>
+                <div><span>Рекламная аудитория TikTok 18+</span><strong>{selectedAcquisition.digital_reach.tiktok_adult_ad_m.toLocaleString(locale)} млн</strong><small>потенциальный охват</small></div>
+              </div>
+
+              <div className="acquisition-regulatory-point">
+                <div>
+                  <span className="section-kicker">{language === "en" ? "MARKET CONSTRAINT" : "ОГРАНИЧЕНИЕ РЫНКА"}</span>
+                  <h3>{language === "en" ? "Regulatory constraints" : "Регуляторные ограничения"}</h3>
+                </div>
+                <div className="acquisition-regulatory-copy" dangerouslySetInnerHTML={{ __html: selectedRegulatoryConstraintHtml }} />
+              </div>
+            </div>
+
+            <div className="acquisition-channels-heading">
+              <div>
+                <span className="section-kicker">{language === "en" ? "DETAILED CHANNEL LIST" : "ПОДРОБНЫЙ СПИСОК КАНАЛОВ"}</span>
+                <h3>{language === "en" ? "Audiences, communities and activation points" : "Аудитории, сообщества и точки активации"}</h3>
+              </div>
+              <p>{language === "en" ? "The complete country-specific channel map follows below." : "Ниже приведена полная карта каналов для выбранной страны."}</p>
             </div>
             <div className="acquisition-source-content" dangerouslySetInnerHTML={{ __html: selectedAcquisitionDocument[language] }} />
           </article>
 
           <section className="acquisition-document-global" aria-label={language === "en" ? "Channel-map rules" : "Общие правила карты каналов"}>
             <article className="panel acquisition-global-card" dangerouslySetInnerHTML={{ __html: acquisitionChannelMap.global.exclude[language] }} />
-            <article className="panel acquisition-global-card" dangerouslySetInnerHTML={{ __html: acquisitionChannelMap.global.guardrails[language] }} />
             <article className="panel acquisition-global-card" dangerouslySetInnerHTML={{ __html: acquisitionChannelMap.global.outreach[language] }} />
           </section>
-
-          <div className="acquisition-secondary-heading">
-            <span>{language === "en" ? "Additional analysis" : "Дополнительная аналитика"}</span>
-            <p>{language === "en" ? "The general strategy and quantitative reach follow the complete channel map." : "Обобщённая стратегия и количественный охват находятся ниже полной карты каналов."}</p>
-          </div>
-
-          <article className="panel acquisition-summary">
-            <div className="panel-heading">
-              <div>
-                <span className="section-kicker">СТРАТЕГИЯ ПРИВЛЕЧЕНИЯ</span>
-                <h2>Какие каналы способны привести первых пользователей</h2>
-                <p>Локальный цифровой охват, подтверждённые механики конкурентов и стратегический вывод для нового игрока.</p>
-              </div>
-              <span className="independent-badge">Не влияет на рейтинг</span>
-            </div>
-            <div className="acquisition-method-note">
-              <strong>Методология</strong>
-              <p>{data.acquisition_channels.method_note}</p>
-            </div>
-            <div className="acquisition-priority-table-wrap">
-              <table className="acquisition-priority-table">
-                <thead><tr><th>Рынок</th><th>Что важнее</th><th>Роль бренда</th><th>Основной канал продаж</th></tr></thead>
-                <tbody>
-                  {data.acquisition_channels.rows.map((row) => {
-                    const market = data.markets.find((item) => item.code === row.market_code)!;
-                    return (
-                      <tr className={selected.code === row.market_code ? "active" : ""} key={row.market_code}>
-                        <td><button type="button" onClick={() => chooseMarket(row.market_code)}><span>{row.market_code}</span>{market.name_ru}</button></td>
-                        <td>{row.strategy.decision.priority}</td>
-                        <td><strong>{row.strategy.decision.brand_level}</strong></td>
-                        <td>{row.strategy.decision.primary_channel}</td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
-            </div>
-          </article>
-
-          <article className="panel acquisition-country">
-            <div className="acquisition-country-head">
-              <div>
-                <span className="section-kicker">{selected.code} · {selected.region}</span>
-                <h2>{selected.name_ru}</h2>
-                <p>{selectedAcquisition.entry_mix}</p>
-              </div>
-              <div className="acquisition-source-date">Проверено<br /><strong>{data.acquisition_channels.checked_at}</strong></div>
-            </div>
-
-            <div className="acquisition-decision-grid">
-              <div className="acquisition-decision-lead"><span>Что важнее на этом рынке</span><strong>{selectedAcquisition.strategy.decision.priority}</strong></div>
-              <div><span>Брендинг</span><strong>{selectedAcquisition.strategy.decision.brand_level}</strong><p>{selectedAcquisition.strategy.decision.brand}</p></div>
-              <div><span>Каналы продаж</span><strong>{selectedAcquisition.strategy.decision.sales_level}</strong><p>{selectedAcquisition.strategy.decision.sales}</p></div>
-              <div className="acquisition-decision-avoid"><span>Не использовать как основу</span><p>{selectedAcquisition.strategy.decision.avoid}</p><div className="source-chips">{selectedAcquisition.strategy.decision.source_ids.map((id) => <SourceChip key={id} sourceId={id} />)}</div></div>
-            </div>
-
-            <div className="acquisition-profile-evidence">
-              <div className="acquisition-profile-evidence-head"><span className="section-kicker">ИЗ ПРОФИЛЯ И ИНТЕРВЬЮ</span><h3>Конкретные основания решения</h3></div>
-              <div className="acquisition-profile-evidence-list">
-                {selectedAcquisition.strategy.profile_evidence.map((item, index) => (
-                  <article key={item.point}>
-                    <span>{String(index + 1).padStart(2, "0")}</span>
-                    <div>
-                      {"title" in item && Boolean(item.title) && <strong className="acquisition-evidence-title">{String(item.title)}</strong>}
-                      <p>{item.point}</p>
-                      <div className="source-chips">{item.source_ids.map((id) => <SourceChip key={id} sourceId={id} />)}</div>
-                    </div>
-                  </article>
-                ))}
-              </div>
-            </div>
-
-            <div className="acquisition-reach-grid">
-              <div><span>Пользователи интернета</span><strong>{selectedAcquisition.digital_reach.internet_users_m.toLocaleString(locale)} млн</strong><small>январь 2025</small></div>
-              <div><span>Активные профили в соцсетях</span><strong>{selectedAcquisition.digital_reach.social_identities_m.toLocaleString(locale)} млн</strong><small>{selectedAcquisition.digital_reach.social_pct_population.toLocaleString(locale)}% населения</small></div>
-              <div><span>Рекламная аудитория Facebook</span><strong>{selectedAcquisition.digital_reach.facebook_ad_m.toLocaleString(locale)} млн</strong><small>потенциальный охват</small></div>
-              <div><span>Рекламная аудитория YouTube</span><strong>{selectedAcquisition.digital_reach.youtube_ad_m.toLocaleString(locale)} млн</strong><small>потенциальный охват</small></div>
-              <div><span>Рекламная аудитория TikTok 18+</span><strong>{selectedAcquisition.digital_reach.tiktok_adult_ad_m.toLocaleString(locale)} млн</strong><small>потенциальный охват</small></div>
-            </div>
-
-            <div className="acquisition-channels-heading">
-              <div><span className="section-kicker">ПОТЕНЦИАЛ КАНАЛОВ</span><h3>Приоритетный набор для запуска</h3></div>
-              <p>Только подтверждённые механики конкурентов, профили рынков и свидетельства интервью.</p>
-            </div>
-            <div className="acquisition-channel-grid">
-              {selectedAcquisition.channels.map((channel, index) => (
-                <article className="acquisition-channel-card" key={channel.channel}>
-                  <div className="acquisition-channel-topline">
-                    <span>0{index + 1}</span>
-                    <div className="channel-importance" aria-label={`Важность канала ${channel.importance} из 5`}>
-                      {Array.from({ length: 5 }, (_, item) => <i key={item} className={item < channel.importance ? "filled" : ""} />)}
-                    </div>
-                    <strong>{channel.importance_label}</strong>
-                  </div>
-                  {("phase" in channel || "evidence_type" in channel) && (
-                    <div className="channel-meta">
-                      {"phase" in channel && Boolean(channel.phase) && <span>Фаза: {String(channel.phase)}</span>}
-                      {"evidence_type" in channel && Boolean(channel.evidence_type) && <span>Основание: {String(channel.evidence_type)}</span>}
-                    </div>
-                  )}
-                  <h4>{channel.channel}</h4>
-                  <div className="channel-reach"><span>Масштаб / контекст</span><p>{channel.reach}</p></div>
-                  <div className="channel-example"><span>Подтверждённый пример / свидетельство</span><strong>{channel.competitor}</strong><p>{channel.example}</p></div>
-                  <div className="channel-playbook"><span>Как использовать новому игроку</span><p>{channel.playbook}</p></div>
-                  <div className="source-chips">{channel.source_ids.map((id) => <SourceChip key={id} sourceId={id} />)}</div>
-                </article>
-              ))}
-            </div>
-          </article>
         </section>
       )}
 

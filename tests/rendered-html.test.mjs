@@ -99,10 +99,17 @@ test("keeps production metadata and documented market intelligence", async () =>
   assert.match(dashboard, /ОБНОВЛЁННАЯ КАРТА КАНАЛОВ · 2026/);
   assert.doesNotMatch(dashboard, /acquisitionChannelMap\.meta\.title\[language\]/);
   assert.match(dashboard, /selectedAcquisitionDocument\[language\]/);
-  assert.ok(dashboard.indexOf('className="acquisition-map-intro"') < dashboard.indexOf('className="panel acquisition-summary"'));
-  assert.ok(dashboard.indexOf('className="acquisition-document-market"') < dashboard.indexOf('className="panel acquisition-summary"'));
+  assert.doesNotMatch(dashboard, /acquisitionChannelMap\.reading_key|acquisition-reading-key/);
+  assert.doesNotMatch(dashboard, /Все пункты и ссылки из документа|acquisition-document-status/);
+  assert.doesNotMatch(dashboard, /Дополнительная аналитика|className="panel acquisition-summary"|Какие каналы способны привести первых пользователей/);
+  assert.doesNotMatch(dashboard, /data\.acquisition_channels\.method_note|selectedAcquisition\.channels\.map/);
+  assert.match(dashboard, /getRegulatoryConstraintHtml/);
+  assert.match(dashboard, /className="acquisition-regulatory-point"/);
+  assert.match(dashboard, /selectedRegulatoryConstraintHtml/);
+  assert.ok(dashboard.indexOf('className="acquisition-country-context"') < dashboard.indexOf('className="acquisition-source-content"'));
   assert.match(styles, /\.acquisition-source-content table/);
   assert.match(styles, /\.acquisition-document-global/);
+  assert.doesNotMatch(styles, /\.acquisition-reading-key|\.acquisition-document-status|\.acquisition-secondary-heading|\.acquisition-priority-table/);
   assert.match(dashboard, /strategicallyOrderedVisibleMarkets/);
   assert.match(dashboard, /className="rank-number"/);
   assert.match(styles, /@keyframes strategic-overlay-in/);
@@ -142,7 +149,7 @@ test("keeps production metadata and documented market intelligence", async () =>
   assert.match(dashboard, /function RichInlineText/);
   assert.match(dashboard, /Что важнее на этом рынке/);
   assert.match(dashboard, /Конкретные основания решения/);
-  assert.match(dashboard, /Подтверждённый пример \/ свидетельство/);
+  assert.match(dashboard, /Аудитории, сообщества и точки активации/);
   assert.match(dashboard, /data\.case_lessons/);
   assert.match(dashboard, /КЕЙСЫ ПО РЫНКАМ/);
   assert.match(dashboard, /кейсов и примеров/);
