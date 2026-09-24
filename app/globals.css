@@ -931,6 +931,14 @@ body {
 .selected-confidence { margin-top: 9px !important; color: var(--ink-soft) !important; font-size: 10px; }
 
 .conclusions-layout { display: grid; gap: 14px; padding: 18px 8px 0; }
+.under-map-insights { margin: 30px 8px 0; padding: 8px 24px 4px; }
+.under-map-insights-heading { max-width: 760px; }
+.under-map-insights-heading h2 { margin: 9px 0 0; font-size: clamp(28px, 3vw, 40px); line-height: 1.08; letter-spacing: -.04em; }
+.under-map-insights-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 56px; row-gap: 0; margin-top: 22px; }
+.under-map-insights-list article { min-width: 0; padding: 19px 0 21px; border-top: 1px solid var(--line); }
+.under-map-insights-list h3 { margin: 0 0 8px; font-size: 18px; line-height: 1.35; }
+.under-map-insights-list p { max-width: 62ch; margin: 0; color: #cbd4cf; font-size: 14px; line-height: 1.65; }
+.overview-conclusions { padding-top: 30px; }
 .research-conclusion { padding: 34px; border-color: #375343; background: #0d1711; }
 .research-conclusion h2 { max-width: 900px; margin: 11px 0 13px; font-size: clamp(30px, 4vw, 52px); line-height: 1.05; letter-spacing: -.05em; }
 .research-conclusion p { max-width: 980px; margin: 0; color: #c5d0c9; font-size: 15px; line-height: 1.7; }
@@ -977,6 +985,17 @@ body {
 .qualitative-scores span, .qualitative-scores small { display: block; color: var(--ink-soft); font-size: 9px; text-transform: uppercase; letter-spacing: .07em; }
 .qualitative-scores strong { display: block; margin: 6px 0 3px; color: var(--lime); font: 700 23px var(--font-plex-mono); }
 .qualitative-scores.unified-blocks { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+
+.profiles-layout { display: block; }
+.profile-nav { position: static; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px; margin-bottom: 14px; padding: 12px; }
+.profile-nav > .section-kicker { grid-column: 1 / -1; padding: 2px 8px 8px; }
+.profile-nav button { border: 1px solid var(--line); }
+.profile-detail { width: 100%; }
+.profile-market-findings { padding: 28px 34px 30px; border-bottom: 1px solid var(--line); }
+.profile-market-findings h3 { margin: 8px 0 18px; font-size: 25px; }
+.profile-market-findings ul { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 34px; margin: 0; padding: 0; list-style: none; }
+.profile-market-findings li { padding: 14px 0; border-top: 1px solid var(--line); color: #cbd4cf; font-size: 14px; line-height: 1.65; }
+.profile-market-findings li strong { color: var(--ink); }
 
 .barrier-meaning { display: flex; flex-direction: column; justify-content: center; background: #0b100d; }
 .barrier-meaning > span { color: var(--lime); font-size: 9px; letter-spacing: .07em; text-transform: uppercase; }
@@ -1183,6 +1202,10 @@ body {
   .cases-intro { grid-template-columns: 1fr; }.cases-intro-metrics { border-top: 1px solid var(--line); border-left: 0; }.case-reasons-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }.case-patterns-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .market-cases-market > summary { grid-template-columns: minmax(0, 1fr) 32px; gap: 16px; padding: 19px 20px; }.market-cases-title { grid-column: 1; }.market-cases-toggle { grid-column: 2; grid-row: 1; }.market-case-signals, .market-case-names { grid-column: 1 / -1; }.market-cases-footer { align-items: flex-start; flex-direction: column; }.market-cases-footer button { width: 100%; }
   .research-observations, .cross-market-insights-grid, .assessment-grid, .respondent-grid, .local-competition-groups { grid-template-columns: 1fr; }
+  .under-map-insights { margin: 24px 12px 0; padding: 4px 8px 0; }
+  .under-map-insights-list, .profile-market-findings ul { grid-template-columns: 1fr; }
+  .under-map-insights-list { margin-top: 18px; }
+  .profile-market-findings { padding: 24px; }
   .conclusions-section-heading { align-items: flex-start; flex-direction: column; padding: 24px 20px 19px; }
   .market-conclusions-list summary { grid-template-columns: 42px minmax(0, 1fr) 20px; padding: 18px 20px; }
   .market-conclusions-list summary > small { grid-column: 2; }

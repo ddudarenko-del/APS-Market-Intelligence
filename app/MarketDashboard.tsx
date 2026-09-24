@@ -23,8 +23,33 @@ type CountryFeature = GeoJSON.Feature<GeoJSON.Geometry, CountryProperties>;
 type CountryLayer = import("leaflet").Path & { feature?: CountryFeature };
 
 const translatableAttributes = ["aria-label", "title", "placeholder"] as const;
-const conclusionMarketOrder = ["IDN", "PHL", "CAN", "MEX", "COL", "ARG", "GBR", "VNM"];
 const marketConclusionItems = task5Conclusions.markets as Record<string, Array<{ title: string; body: string }>>;
+const underMapInsights = [
+  {
+    title: "Больницы - новые центры диаспор",
+    body: "В Канаде и UK крупные медицинские центры концентрируют филиппинских, индийских, нигерийских и карибских специалистов с регулярным международным доходом и переводами семье.",
+  },
+  {
+    title: "Не таргетинг по стране, а охота за районами",
+    body: "Mississauga, Brampton и Surrey - готовые кластеры диаспор и трансграничных денежных коридоров. Один район может быть ценнее национальной кампании.",
+  },
+  {
+    title: "Женщины - не сегмент, а стартовая площадка",
+    body: "На Филиппинах сообщества вокруг финансовой независимости могут стать соавторами продукта, первыми пользователями и каналом доверия к нему.",
+  },
+  {
+    title: "Моряк подключает целую семью",
+    body: "Партнёрство с судоходной компанией или крюинговым агентством приводит сразу двух пользователей: моряка, который получает зарплату, и семью, которая получает часть дохода на Филиппинах.",
+  },
+  {
+    title: "Инновация вместо слова денег",
+    body: "В Индонезии платёжное кольцо или другая заметная технология способна привлечь гораздо более широкую аудиторию, чем коммуникация внутри криптосообщества.",
+  },
+  {
+    title: "Один студент - вход в семейный кошелёк",
+    body: "Студент первым осваивает продукт для оплаты обучения или международных переводов, а затем подключает родителей и других родственников. Вход на рынок через студенческие сообщества (в том числе сообщества диаспор).",
+  },
+];
 
 function useDomLocalization(language: Language) {
   const rootRef = useRef<HTMLElement>(null);
@@ -192,14 +217,6 @@ function ScoreBadge({ score }: { score: number }) {
   return <span className={`score-badge ${tone}`}>{score.toFixed(2)}</span>;
 }
 
-function driverScoreLabel(score: number) {
-  return score === 5 ? "Очень сильная" : score === 4 ? "Сильная" : score === 3 ? "Сегментная" : score === 2 ? "Нишевая" : "Слабая";
-}
-
-function barrierScoreLabel(score: number) {
-  return score === 5 ? "Критическая" : score === 4 ? "Высокая" : score === 3 ? "Существенная" : score === 2 ? "Управляемая" : "Низкая";
-}
-
 const confidenceLabels: Record<string, string> = {
   high: "Хорошо подтверждено",
   medium: "Требует дополнительной проверки",
@@ -256,11 +273,11 @@ function getCountryStyle(code: string, visibleCodes: string[], selectedCode: str
   };
 }
 
-function SourceChip({ sourceId }: { sourceId: string }) {
+function SourceChip({ sourceId, plain = false }: { sourceId: string; plain?: boolean }) {
   const source = data.sources.find((item) => item.id === sourceId);
   if (!source) return null;
   const label = source.type === "interview" ? "Экспертное интервью" : sourceLabelOverrides[sourceId] ?? source.publisher;
-  if (!source.url) {
+  if (plain || !source.url) {
     return <span className="source-chip interview-source" title={source.title}>{label}</span>;
   }
   return (
@@ -315,21 +332,22 @@ function AudienceGroups({ paragraphs, language }: { paragraphs: string[]; langua
   );
 }
 
-function RichInlineText({ source, language }: { source: string; language: Language }) {
+function RichInlineText({ source, language, allowLinks = true }: { source: string; language: Language; allowLinks?: boolean }) {
   const tokens = source.split(/(\*\*[^*]+\*\*|\[[^\]]+\]\(https?:\/\/[^)]+\)|https?:\/\/[^\s]+)/g).filter(Boolean);
   return tokens.map((token, index) => {
     const bold = token.match(/^\*\*([\s\S]+)\*\*$/);
     if (bold) return <strong key={index}>{translateTextNode(bold[1], language)}</strong>;
     const markdownLink = token.match(/^\[([^\]]+)\]\((https?:\/\/[^)]+)\)$/);
     if (markdownLink) {
+      if (!allowLinks) return <span key={index}>{translateTextNode(markdownLink[1], language)}</span>;
       return <a key={index} href={markdownLink[2]} target="_blank" rel="noreferrer">{translateTextNode(markdownLink[1], language)}</a>;
     }
-    if (/^https?:\/\//.test(token)) return <a key={index} href={token} target="_blank" rel="noreferrer">{token}</a>;
+    if (/^https?:\/\//.test(token)) return allowLinks ? <a key={index} href={token} target="_blank" rel="noreferrer">{token}</a> : null;
     return <span key={index}>{translateTextNode(token, language)}</span>;
   });
 }
 
-function RichReportContent({ paragraphs, language }: { paragraphs: string[]; language: Language }) {
+function RichReportContent({ paragraphs, language, allowLinks = true }: { paragraphs: string[]; language: Language; allowLinks?: boolean }) {
   return (
     <div className="report-rich-content" role="list">
       {paragraphs.map((source, index) => {
@@ -337,12 +355,12 @@ function RichReportContent({ paragraphs, language }: { paragraphs: string[]; lan
         const kind = marker?.[1] ?? "p";
         const level = marker?.[2] ? Number(marker[2]) : 0;
         const content = marker?.[3] ?? source;
-        if (kind === "h") return <h4 className="report-rich-heading" key={index}><RichInlineText source={content} language={language} /></h4>;
-        if (kind === "p") return <p className="report-rich-paragraph" key={index}><RichInlineText source={content} language={language} /></p>;
+        if (kind === "h") return <h4 className="report-rich-heading" key={index}><RichInlineText source={content} language={language} allowLinks={allowLinks} /></h4>;
+        if (kind === "p") return <p className="report-rich-paragraph" key={index}><RichInlineText source={content} language={language} allowLinks={allowLinks} /></p>;
         return (
           <div className={`report-rich-bullet level-${level}`} role="listitem" aria-level={level + 1} key={index}>
             <span className="report-rich-marker" aria-hidden="true">{level >= 2 ? "–" : "•"}</span>
-            <p><RichInlineText source={content} language={language} /></p>
+            <p><RichInlineText source={content} language={language} allowLinks={allowLinks} /></p>
           </div>
         );
       })}
@@ -679,6 +697,7 @@ export function MarketDashboard() {
       </div>
 
       {tab === "overview" && (
+        <>
         <section className="content-grid overview-grid">
           <div className="panel atlas-panel">
             <div className="panel-heading">
@@ -739,11 +758,21 @@ export function MarketDashboard() {
             </p>
           </aside>
         </section>
-      )}
-
-
-      {tab === "profiles" && (
-        <section className="conclusions-layout">
+        <section className="under-map-insights" aria-labelledby="under-map-insights-title">
+          <div className="under-map-insights-heading">
+            <span className="section-kicker">ТОЧКИ ВХОДА</span>
+            <h2 id="under-map-insights-title">Неочевидные точки входа на рынок</h2>
+          </div>
+          <div className="under-map-insights-list">
+            {underMapInsights.map((insight) => (
+              <article key={insight.title}>
+                <h3>{insight.title}</h3>
+                <p>{insight.body}</p>
+              </article>
+            ))}
+          </div>
+        </section>
+        <section className="conclusions-layout overview-conclusions">
           <article className="panel research-conclusion">
             <span className="section-kicker">ИТОГ ИССЛЕДОВАНИЯ</span>
             <h2>Универсальный аналог KAST не дает достаточного отличия</h2>
@@ -777,62 +806,9 @@ export function MarketDashboard() {
               ))}
             </div>
           </section>
-          <div className="assessment-grid">
-            {data.markets.map((market) => {
-              const assessment = data.market_assessments.find((item) => item.market_code === market.code)!;
-              const unified = getUnifiedScore(market.code);
-              return (
-                <article className="panel assessment-card" key={market.code}>
-                  <div className="assessment-card-head"><span>{market.code}</span><strong>{market.name_ru}</strong></div>
-                  <span className={`attractiveness-badge ${unified.level}`}>{unified.label} · {unified.final_score.toFixed(2)} / 5</span>
-                  <h3>{assessment.headline}</h3>
-                  <div className="qualitative-scores">
-                    <div><span>Сила потребности</span><strong>{assessment.need.score}/5</strong><small>{driverScoreLabel(assessment.need.score)}</small></div>
-                    <div><span>Сложность входа</span><strong>{assessment.entry_complexity.score}/5</strong><small>{barrierScoreLabel(assessment.entry_complexity.score)}</small></div>
-                  </div>
-                  <p><strong>Незакрытая задача:</strong> {assessment.market_gap}</p>
-                  <p className="confidence-line">Уровень подтверждения: {confidenceLabels[assessment.confidence]}</p>
-                  <div className="source-chips">{assessment.source_ids.map((id) => <SourceChip key={id} sourceId={id} />)}</div>
-                  <button type="button" onClick={() => chooseMarket(market.code, "profiles")}>Открыть профиль</button>
-                </article>
-              );
-            })}
-          </div>
-          <section className="panel market-conclusions">
-            <div className="conclusions-section-heading">
-              <div>
-                <span className="section-kicker">ВЫВОДЫ ПО РЫНКАМ</span>
-                <h2>Продуктовые и коммуникационные направления</h2>
-                <p>Разверните рынок, чтобы увидеть полный набор выводов.</p>
-              </div>
-              <span className="count-pill">8 рынков</span>
-            </div>
-            <div className="market-conclusions-list">
-              {conclusionMarketOrder.map((code, index) => {
-                const market = data.markets.find((item) => item.code === code)!;
-                const items = marketConclusionItems[code] ?? [];
-                return (
-                  <details key={code} open={index === 0}>
-                    <summary>
-                      <span>{code}</span>
-                      <strong>{market.name_ru}</strong>
-                      <small>{items.length} выводов</small>
-                    </summary>
-                    <ul>
-                      {items.map((item) => (
-                        <li key={`${code}-${item.title}`}>
-                          <strong>{item.title}</strong>{item.body ? <>{/^[,.;:!?]/.test(item.body) ? "" : " "}{item.body}</> : null}
-                        </li>
-                      ))}
-                    </ul>
-                  </details>
-                );
-              })}
-            </div>
-          </section>
         </section>
+        </>
       )}
-
       {tab === "acquisition" && (
         <section className="acquisition-layout">
           <div className="acquisition-market-picker" aria-label={language === "en" ? "Select a market for channel analysis" : "Выбор рынка для анализа каналов"}>
@@ -1141,11 +1117,22 @@ export function MarketDashboard() {
               <div><span>Приоритетная аудитория</span><p>{selectedAssessment.priority_audience}</p></div>
               <div><span>Основное сообщение</span><p>{selectedAssessment.core_message}</p></div>
             </div>
-            <div className="profile-confidence"><strong>Уровень подтверждения: {confidenceLabels[selectedAssessment.confidence]}</strong><div className="source-chips">{selectedAssessment.source_ids.map((id) => <SourceChip key={id} sourceId={id} />)}</div></div>
+            <div className="profile-confidence"><strong>Уровень подтверждения: {confidenceLabels[selectedAssessment.confidence]}</strong><div className="source-chips">{selectedAssessment.source_ids.map((id) => <SourceChip key={id} sourceId={id} plain />)}</div></div>
+            <section className="profile-market-findings">
+              <span className="section-kicker">ВЫВОДЫ ПО РЫНКУ</span>
+              <h3>Продуктовые и коммуникационные направления</h3>
+              <ul>
+                {(marketConclusionItems[selected.code] ?? []).map((item) => (
+                  <li key={`${selected.code}-${item.title}`}>
+                    <strong>{item.title}</strong>{item.body ? <>{/^[,.;:!?]/.test(item.body) ? "" : " "}{item.body}</> : null}
+                  </li>
+                ))}
+              </ul>
+            </section>
             <div className="market-report">
               {selectedReport.sections.map((section, index) => (
                 <section className="market-report-section" key={section.id}>
-                  <span className="report-index">0{index + 1}</span><div><h3>{section.title}</h3>{section.paragraphs.some((paragraph) => paragraph.startsWith("::")) ? <RichReportContent paragraphs={section.paragraphs} language={language} /> : section.id === "audience" ? <AudienceGroups paragraphs={section.paragraphs} language={language} /> : section.paragraphs.map((paragraph, paragraphIndex) => <p key={paragraphIndex}>{paragraph}</p>)}<div className="source-chips">{section.source_ids.map((id) => <SourceChip key={id} sourceId={id} />)}</div></div>
+                  <span className="report-index">0{index + 1}</span><div><h3>{section.title}</h3>{section.paragraphs.some((paragraph) => paragraph.startsWith("::")) ? <RichReportContent paragraphs={section.paragraphs} language={language} allowLinks={false} /> : section.id === "audience" ? <AudienceGroups paragraphs={section.paragraphs} language={language} /> : section.paragraphs.map((paragraph, paragraphIndex) => <p key={paragraphIndex}>{paragraph}</p>)}<div className="source-chips">{section.source_ids.map((id) => <SourceChip key={id} sourceId={id} plain />)}</div></div>
                 </section>
               ))}
             </div>
@@ -1172,7 +1159,7 @@ export function MarketDashboard() {
                       <p className="case-study-product">{study.product}</p>
                       <div className="case-study-fact"><span>Факт</span><p>{study.evidence}</p></div>
                       <div className="case-study-lesson"><span>Вывод для APS</span><p>{study.lesson}</p></div>
-                      <div className="source-chips">{study.source_ids.map((id) => <SourceChip key={id} sourceId={id} />)}</div>
+                      <div className="source-chips">{study.source_ids.map((id) => <SourceChip key={id} sourceId={id} plain />)}</div>
                     </article>
                   );
                 })}
@@ -1180,7 +1167,7 @@ export function MarketDashboard() {
             </div>
             <div className="regulatory-section">
               <div><span className="section-kicker">REGULATORY GATE</span><h3>{gateLabels[selected.regulatory.gate]}</h3><p>{selected.regulatory.status}</p></div>
-              <div className="source-chips">{selected.regulatory.source_ids.map((id) => <SourceChip key={id} sourceId={id} />)}</div>
+              <div className="source-chips">{selected.regulatory.source_ids.map((id) => <SourceChip key={id} sourceId={id} plain />)}</div>
             </div>
             <div className="profile-fit-section unified-score-detail">
               <div className="unified-score-intro"><span className="section-kicker">ЕДИНАЯ ОЦЕНКА</span><h3>{selectedUnified.final_score.toFixed(2)} / 5 · {selectedUnified.label}</h3><p>{data.unified_scoring.formula}</p></div>
@@ -1197,7 +1184,7 @@ export function MarketDashboard() {
                       <div className="unified-criterion-head"><strong>{criterion.label}</strong><span>{component.score.toFixed(1)} / 5</span></div>
                       <div className="unified-criterion-bar"><i style={{ width: `${component.score * 20}%` }} /></div>
                       <p>{component.evidence}</p>
-                      <div className="source-chips">{component.source_ids.map((id) => <SourceChip key={id} sourceId={id} />)}</div>
+                      <div className="source-chips">{component.source_ids.map((id) => <SourceChip key={id} sourceId={id} plain />)}</div>
                     </article>
                   );
                 })}

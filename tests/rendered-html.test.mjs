@@ -69,7 +69,7 @@ test("keeps production metadata and documented market intelligence", async () =>
   assert.doesNotMatch(dashboard, /id: "conclusions"/);
   assert.doesNotMatch(dashboard, /id: "barriers"/);
   assert.doesNotMatch(dashboard, /tab === "barriers"/);
-  assert.equal((dashboard.match(/tab === "profiles"/g) ?? []).length, 2);
+  assert.equal((dashboard.match(/tab === "profiles"/g) ?? []).length, 1);
   assert.equal((dashboard.match(/data\.metadata\.interviews_conducted/g) ?? []).length, 2);
   assert.equal(parsedData.metadata.interviews_conducted, 18);
   assert.equal(parsedData.metadata.updated, "2026-09-23");
@@ -116,6 +116,13 @@ test("keeps production metadata and documented market intelligence", async () =>
   assert.doesNotMatch(dashboard, /Клик, тап или клавиатура/);
   assert.doesNotMatch(dashboard, /APS Market Intelligence · research workspace/);
   assert.match(dashboard, /В выигрыше может оказаться продукт, который не заменяет GCash/);
+  assert.match(dashboard, /Неочевидные точки входа на рынок/);
+  assert.match(dashboard, /Моряк подключает целую семью/);
+  assert.ok(dashboard.indexOf('className="under-map-insights"') < dashboard.indexOf('className="conclusions-layout overview-conclusions"'));
+  assert.ok(dashboard.indexOf('className="conclusions-layout overview-conclusions"') < dashboard.indexOf('tab === "profiles"'));
+  assert.match(dashboard, /marketConclusionItems\[selected\.code\]/);
+  assert.match(dashboard, /allowLinks=\{false\}/);
+  assert.match(dashboard, /sourceId=\{id\} plain/);
   assert.match(dashboard, /Пользователь должен видеть лучший курс, меньшую комиссию или локальную функцию/);
   assert.doesNotMatch(dashboard, /меньшее число сервисов/);
   assert.doesNotMatch(dashboard, /className="gate-mini"/);
