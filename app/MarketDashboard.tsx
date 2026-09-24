@@ -542,13 +542,6 @@ function MarketMap({
         </select>
       </div>
       {overlay}
-      <div className="atlas-legend">
-        <strong className="atlas-legend-title">Итоговая привлекательность рынка</strong>
-        <span><i className="dot high" /> высокий · 4,00+</span>
-        <span><i className="dot medium-high" /> средне-высокий · 3,40–3,99</span>
-        <span><i className="dot mid" /> средний · 2,80–3,39</span>
-        <span><i className="dot low" /> низкий · ниже 2,80</span>
-      </div>
     </div>
   );
 }

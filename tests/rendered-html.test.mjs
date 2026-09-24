@@ -84,7 +84,8 @@ test("keeps production metadata and documented market intelligence", async () =>
   assert.doesNotMatch(dashboard, /aps-map-score/);
   assert.doesNotMatch(dashboard, /\/ 5 · \$\{unified\.label\}<\/span>/);
   assert.doesNotMatch(dashboard, /bindPopup|openPopup|market-map-popup/);
-  assert.match(dashboard, /atlas-legend-title/);
+  assert.doesNotMatch(dashboard, /atlas-legend/);
+  assert.doesNotMatch(styles, /\.atlas-legend/);
   assert.match(dashboard, /className="map-region-select"/);
   assert.match(dashboard, /className="map-toolbar"/);
   assert.match(dashboard, /strategicOverlayOpen/);

@@ -101,9 +101,6 @@ a { color: inherit; }
 .map-marker.high { background: var(--red); }.map-marker.mid { background: var(--yellow); }.map-marker.low { background: #b8e9b1; }
 .map-marker:hover, .map-marker.selected { transform: translate(-50%, -50%) scale(1.12); box-shadow: 0 0 0 6px rgba(201,255,46,.55), 0 10px 25px rgba(10,23,51,.2); z-index: 3; }
 .map-marker span { font: 700 12px var(--font-plex-mono), monospace; }.map-marker small { font-size: 10px; }
-.atlas-legend { position: absolute; left: 20px; bottom: 18px; display: flex; flex-wrap: wrap; gap: 8px 16px; max-width: calc(100% - 40px); padding: 11px 13px; background: rgba(255,255,255,.94); border: 1px solid var(--line); border-radius: 12px; z-index: 4; }
-.atlas-legend-title { flex-basis: 100%; font-size: 9px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; }
-.atlas-legend span { display: flex; align-items: center; gap: 6px; font-size: 11px; }.dot { width: 9px; height: 9px; border-radius: 50%; }.dot.high { background: var(--red); }.dot.mid { background: var(--yellow); }.dot.low { background: #b8e9b1; }
 
 .metric-stack span, .profile-grid span, .numbers-strip span, .gate-box span { display: block; color: var(--ink-soft); font-size: 11px; text-transform: uppercase; letter-spacing: .08em; }
 .primary-button { border: 0; border-radius: 12px; background: var(--ink); color: white; padding: 13px 17px; cursor: pointer; white-space: nowrap; }
@@ -504,16 +501,6 @@ body {
 .map-region-select:hover, .map-region-select:focus-visible { border-color: var(--lime); outline: none; }
 .map-frame .leaflet-top.leaflet-right { top: 58px; }
 
-.atlas-legend {
-  z-index: 700;
-  border-color: #37443d;
-  border-radius: 14px;
-  background: rgba(9, 14, 11, .92);
-}
-.dot.high { background: #40f785; }
-.dot.medium-high { background: #b7d85c; }
-.dot.mid { background: #f0cf57; }
-.dot.low { background: #f29a52; }
 
 .primary-button {
   border-radius: 999px;
@@ -1282,8 +1269,6 @@ footer {
   .leaflet-tooltip.aps-map-label { width: 170px; padding: 10px 11px 11px; }
   .aps-map-label strong { font-size: 13px; }
   .aps-map-label small { font-size: 11px; line-height: 1.35; overflow-wrap: anywhere; }
-  .atlas-legend-title { font-size: 10px; }
-  .atlas-legend span { font-size: 12px; }
 
   .research-observations p,
   .cross-market-insights-grid p,
