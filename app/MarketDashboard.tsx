@@ -401,6 +401,7 @@ function MarketMap({
         const map = L.map(containerRef.current, {
           center: [18, 8],
           zoom: 2,
+          zoomSnap: 0,
           zoomControl: false,
           dragging: false,
           scrollWheelZoom: false,
@@ -435,43 +436,17 @@ function MarketMap({
             if (!code) return;
             const market = marketByCode.get(code);
             if (!market) return;
-            const hashtags = getStrategicRating(market.code).hashtags;
-            countryLayer.bindTooltip(
-              `<strong>${market.name_ru}</strong><small class="aps-map-tags">${hashtags.map((tag) => `<span>${tag}</span>`).join("")}</small>`,
-              { permanent: true, direction: "center", className: `aps-map-label aps-map-label-${market.code.toLowerCase()}`, opacity: 1, interactive: true },
-            );
             const selectCountry = () => onSelectRef.current(code);
             const highlightCountry = () => {
               countryLayer.bringToFront();
               countryLayer.setStyle({ color: "#effff4", weight: 3, fillOpacity: 1 });
-              countryLayer.getTooltip()?.getElement()?.classList.add("is-hovered");
             };
             const resetCountryHighlight = () => {
               countryLayer.setStyle(getCountryStyle(code, visibleCodesRef.current, selectedCodeRef.current));
-              countryLayer.getTooltip()?.getElement()?.classList.remove("is-hovered");
             };
             countryLayer.on("click", selectCountry);
             countryLayer.on("mouseover", highlightCountry);
             countryLayer.on("mouseout", resetCountryHighlight);
-            const tooltip = countryLayer.getTooltip();
-            tooltip?.on("click", selectCountry);
-            tooltip?.on("mouseover", highlightCountry);
-            tooltip?.on("mouseout", resetCountryHighlight);
-            countryLayer.on("tooltipopen", () => {
-              const tooltipElement = countryLayer.getTooltip()?.getElement();
-              if (!tooltipElement) return;
-              tooltipElement.classList.toggle("is-selected", code === selectedCodeRef.current);
-              tooltipElement.setAttribute("tabindex", "0");
-              tooltipElement.setAttribute("role", "button");
-              tooltipElement.setAttribute("aria-label", `Выбрать рынок: ${market.name_ru}`);
-              if (tooltipElement.dataset.keyboardReady === "true") return;
-              tooltipElement.dataset.keyboardReady = "true";
-              tooltipElement.addEventListener("keydown", (event) => {
-                if (event.key !== "Enter" && event.key !== " ") return;
-                event.preventDefault();
-                selectCountry();
-              });
-            });
             countryLayer.on("add", () => {
               const element = (countryLayer as import("leaflet").Path).getElement();
               if (!element) return;
@@ -488,7 +463,15 @@ function MarketMap({
           },
         }).addTo(map);
         layerRef.current = layer;
-        map.fitBounds([[-56, -168], [76, 178]], { padding: [12, 12] });
+        const worldBounds: import("leaflet").LatLngBoundsExpression = [[-56, -168], [76, 178]];
+        const fitMapToFrame = () => {
+          map.invalidateSize({ animate: false });
+          map.fitBounds(worldBounds, { padding: [22, 22], animate: false });
+        };
+        fitMapToFrame();
+        const resizeObserver = new ResizeObserver(fitMapToFrame);
+        resizeObserver.observe(containerRef.current);
+        map.once("unload", () => resizeObserver.disconnect());
         setMapStatus("ready");
       } catch {
         setMapStatus("error");
@@ -517,13 +500,47 @@ function MarketMap({
       const market = data.markets.find((item) => item.code === code);
       if (!market) return;
       countryLayer.setStyle(getCountryStyle(code, [...visibleSet], selectedCode));
-      countryLayer.getTooltip()?.getElement()?.classList.toggle("is-selected", code === selectedCode);
     });
   }, [selectedCode, visibleCodes]);
+
+  const setLabelHighlight = (code: string, active: boolean) => {
+    const layer = layerRef.current;
+    if (!layer) return;
+    layer.eachLayer((layerItem: import("leaflet").Layer) => {
+      const countryLayer = layerItem as CountryLayer;
+      if (countryLayer.feature?.properties?.ADM0_A3 !== code) return;
+      if (active) {
+        countryLayer.bringToFront();
+        countryLayer.setStyle({ color: "#effff4", weight: 3, fillOpacity: 1 });
+        return;
+      }
+      countryLayer.setStyle(getCountryStyle(code, visibleCodesRef.current, selectedCodeRef.current));
+    });
+  };
 
   return (
     <div className="map-frame">
       <div ref={containerRef} className="real-map" aria-label="Карта рынков APS" />
+      {mapStatus === "ready" && (
+        <div className="map-label-layer" aria-label="Рынки на карте">
+          {data.markets.filter((market) => visibleCodes.includes(market.code)).map((market) => (
+            <button
+              type="button"
+              key={market.code}
+              className={`map-label-card map-label-card-${market.code.toLowerCase()}${selectedCode === market.code ? " is-selected" : ""}`}
+              onClick={() => onSelect(market.code)}
+              onMouseEnter={() => setLabelHighlight(market.code, true)}
+              onMouseLeave={() => setLabelHighlight(market.code, false)}
+              onFocus={() => setLabelHighlight(market.code, true)}
+              onBlur={() => setLabelHighlight(market.code, false)}
+              aria-label={`Выбрать рынок: ${market.name_ru}`}
+            >
+              <strong>{market.name_ru}</strong>
+              <small>{getStrategicRating(market.code).hashtags.join(" ")}</small>
+            </button>
+          ))}
+        </div>
+      )}
       {mapStatus === "loading" && <div className="map-state">Загружаем границы стран...</div>}
       {mapStatus === "error" && <div className="map-state error">Карта временно недоступна</div>}
       {overlay}

@@ -378,21 +378,28 @@ body {
 
 .map-frame {
   position: relative;
+  width: 100%;
   min-height: 610px;
   overflow: hidden;
   background: #0a0e0c;
 }
 
-.real-map { width: 100%; height: 610px; background: #0a0e0c; }
+.real-map, .leaflet-container { width: 100% !important; height: 610px; background: #0a0e0c; }
 .leaflet-container { font-family: var(--font-manrope); }
 .leaflet-control-attribution {
   background: rgba(4, 7, 5, .8) !important;
   color: #7f8c85 !important;
 }
 .leaflet-control-attribution a { color: #91cfa8 !important; }
-.leaflet-tooltip.aps-map-label {
-  box-sizing: border-box;
-  width: 176px;
+.map-label-layer {
+  position: absolute;
+  z-index: 640;
+  inset: 0;
+  pointer-events: none;
+}
+.map-label-card {
+  position: absolute;
+  width: 158px;
   margin: 0;
   padding: 9px 10px 10px;
   border: 1px solid rgba(126, 148, 136, .52);
@@ -400,52 +407,41 @@ body {
   background: rgba(9, 14, 11, .88);
   color: #f1f6f2;
   box-shadow: 0 8px 22px rgba(0, 0, 0, .28);
-  white-space: normal;
+  font-family: var(--font-manrope);
+  text-align: left;
   pointer-events: auto;
   cursor: pointer;
-  transform: translate(-50%, -50%);
-  transition: border-color .16s ease, background-color .16s ease, box-shadow .16s ease, opacity .16s ease;
+  transition: border-color .16s ease, background-color .16s ease, box-shadow .16s ease, transform .16s ease;
 }
-.leaflet-tooltip.aps-map-label:focus-visible {
+.map-label-card:focus-visible {
   outline: 2px solid var(--lime);
   outline-offset: 3px;
 }
-.leaflet-tooltip.aps-map-label::before { display: none; }
-.aps-map-label strong, .aps-map-label small { display: block; }
-.aps-map-label strong { color: #f4faf6; font-size: 12px; line-height: 1.2; }
-.aps-map-label small { margin-top: 5px; overflow-wrap: anywhere; color: #b8c5bd; font-size: 8px; line-height: 1.3; }
-.aps-map-tags { display: flex !important; flex-wrap: wrap; gap: 2px 5px; }
-.aps-map-tags span { display: inline; }
-.leaflet-tooltip.aps-map-label.is-hovered, .leaflet-tooltip.aps-map-label.is-selected {
+.map-label-card strong, .map-label-card small { display: block; }
+.map-label-card strong { color: #f4faf6; font-size: 12px; line-height: 1.2; }
+.map-label-card small { margin-top: 5px; overflow-wrap: anywhere; color: #b8c5bd; font-size: 8px; line-height: 1.3; }
+.map-label-card:hover, .map-label-card.is-selected {
   border-color: var(--lime);
   background: rgba(18, 32, 23, .97);
   box-shadow: 0 0 0 2px rgba(64, 247, 133, .16), 0 10px 28px rgba(0, 0, 0, .38);
 }
-.leaflet-tooltip.aps-map-label.is-hovered strong, .leaflet-tooltip.aps-map-label.is-selected strong { color: var(--lime); }
-.leaflet-tooltip.aps-map-label-phl { margin-left: 116px; margin-top: -18px; }
-.leaflet-tooltip.aps-map-label-vnm { margin-left: -104px; margin-top: 4px; }
-.leaflet-tooltip.aps-map-label-idn { margin-left: 72px; margin-top: 104px; }
-.leaflet-tooltip.aps-map-label-gbr { margin-left: 2px; margin-top: 70px; }
-.leaflet-tooltip.aps-map-label-mex { margin-left: -70px; margin-top: 46px; }
-.leaflet-tooltip.aps-map-label-col { margin-left: 82px; margin-top: 32px; }
-.leaflet-tooltip.aps-map-label-arg { margin-left: 250px; margin-top: -112px; }
-.leaflet-tooltip.aps-map-label-can { margin-left: -58px; margin-top: 88px; }
+.map-label-card:hover strong, .map-label-card.is-selected strong { color: var(--lime); }
+.map-label-card:active { transform: translateY(1px); }
+.map-label-card-can { top: 16px; left: 16px; }
+.map-label-card-gbr { top: 22px; left: 39%; }
+.map-label-card-phl { top: 22px; right: 16px; }
+.map-label-card-mex { top: 245px; left: 16px; }
+.map-label-card-vnm { top: 235px; right: 19%; }
+.map-label-card-col { top: 390px; left: 23%; }
+.map-label-card-idn { top: 410px; right: 16px; }
+.map-label-card-arg { right: 43%; bottom: 8px; }
 
 @media (max-width: 780px) {
-  .leaflet-tooltip.aps-map-label {
-    width: 144px;
-    padding: 7px 8px 8px;
-  }
-  .aps-map-label strong { font-size: 10px; }
-  .aps-map-label small { margin-top: 3px; font-size: 7px; line-height: 1.22; }
-  .leaflet-tooltip.aps-map-label-can { margin-left: 2px; margin-top: 28px; }
-  .leaflet-tooltip.aps-map-label-mex { margin-left: -24px; margin-top: 22px; }
-  .leaflet-tooltip.aps-map-label-col { margin-left: 20px; margin-top: 44px; }
-  .leaflet-tooltip.aps-map-label-arg { margin-left: 24px; margin-top: -18px; }
-  .leaflet-tooltip.aps-map-label-gbr { margin-left: -4px; margin-top: 24px; }
-  .leaflet-tooltip.aps-map-label-vnm { margin-left: -86px; margin-top: 30px; }
-  .leaflet-tooltip.aps-map-label-phl { margin-left: 36px; margin-top: 42px; }
-  .leaflet-tooltip.aps-map-label-idn { margin-left: 8px; margin-top: 42px; }
+  .map-frame, .real-map, .leaflet-container { min-height: 680px; height: 680px; }
+  .map-label-layer { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); align-content: end; gap: 8px; padding: 210px 12px 12px; }
+  .map-label-card { position: static; width: auto; min-height: 0; padding: 8px 9px 9px; }
+  .map-label-card strong { font-size: 11px; }
+  .map-label-card small { margin-top: 4px; font-size: 8px; line-height: 1.3; }
 }
 
 .map-state {
@@ -1158,7 +1154,7 @@ body {
   .hero-metrics { grid-template-columns: repeat(3, minmax(0, 1fr)); }.hero-metrics div { padding: 14px 9px; border-right: 1px solid var(--line); border-bottom: 0; }.hero-metrics div:last-child { border-right: 0; }
   .tabs-shell { grid-template-columns: 34px minmax(0, 1fr) 34px; gap: 6px; margin: 16px 12px 0; }.tabs-scroll { width: 34px; height: 34px; font-size: 24px; }
   .overview-grid, .compare-layout, .profiles-layout, .method-layout, .kast-layout, .barriers-layout, .cases-layout, .acquisition-layout, .conclusions-layout, .respondents-layout { margin-left: 0; margin-right: 0; padding: 14px 12px 0; }.data-panel { margin: 14px 12px 0; }
-  .panel-heading { flex-direction: column; }.panel-controls { width: 100%; justify-content: stretch; }.panel-heading select { width: 100%; }.map-frame, .real-map { min-height: 480px; height: 480px; }
+  .panel-heading { flex-direction: column; }.panel-controls { width: 100%; justify-content: stretch; }.panel-heading select { width: 100%; }.map-frame, .real-map, .leaflet-container { min-height: 680px; height: 680px; }
   .ranking-list { grid-template-columns: 1fr; }
   .strategic-market-details { grid-template-columns: 1fr; }
   .strategic-market-details li, .strategic-market-details li:nth-child(3n + 2), .strategic-market-details li:nth-child(3n + 3) { padding: 15px 0; border-left: 0; }
@@ -1263,9 +1259,9 @@ body {
   .numbers-strip span,
   .gate-box span { font-size: 12px; }
 
-  .leaflet-tooltip.aps-map-label { width: 170px; padding: 10px 11px 11px; }
-  .aps-map-label strong { font-size: 13px; }
-  .aps-map-label small { font-size: 11px; line-height: 1.35; overflow-wrap: anywhere; }
+  .map-label-card { width: 158px; padding: 10px 11px 11px; }
+  .map-label-card strong { font-size: 13px; }
+  .map-label-card small { font-size: 10px; line-height: 1.35; overflow-wrap: anywhere; }
 
   .research-observations p,
   .cross-market-insights-grid p,
