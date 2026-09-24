@@ -97,6 +97,7 @@ test("keeps production metadata and documented market intelligence", async () =>
   assert.match(dashboard, /String\(index \+ 1\)\.padStart\(2, "0"\)/);
   assert.match(dashboard, /acquisition_channel_map\.json/);
   assert.match(dashboard, /ОБНОВЛЁННАЯ КАРТА КАНАЛОВ · 2026/);
+  assert.doesNotMatch(dashboard, /acquisitionChannelMap\.meta\.title\[language\]/);
   assert.match(dashboard, /selectedAcquisitionDocument\[language\]/);
   assert.ok(dashboard.indexOf('className="acquisition-map-intro"') < dashboard.indexOf('className="panel acquisition-summary"'));
   assert.ok(dashboard.indexOf('className="acquisition-document-market"') < dashboard.indexOf('className="panel acquisition-summary"'));

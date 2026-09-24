@@ -847,7 +847,6 @@ export function MarketDashboard() {
             <div className="acquisition-map-title">
               <div>
                 <span className="section-kicker">{language === "en" ? "UPDATED CHANNEL MAP · 2026" : "ОБНОВЛЁННАЯ КАРТА КАНАЛОВ · 2026"}</span>
-                <h2>{acquisitionChannelMap.meta.title[language]}</h2>
                 <p>{language === "en" ? "The complete updated document: audiences, communities, events, KOLs, physical touchpoints, links and constraints." : "Полная детализация из обновлённого документа: аудитории, сообщества, события, KOL, офлайн-точки, ссылки и ограничения."}</p>
               </div>
               <div className="acquisition-map-count"><strong>{acquisitionChannelMap.meta.markets_count}</strong><span>{language === "en" ? "markets" : "рынков"}</span></div>
