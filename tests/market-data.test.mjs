@@ -172,7 +172,7 @@ test("uses the expanded brief conclusions in every market profile", () => {
   const expectedHeadlines = {
     GBR: "Нишевый рынок без массовой потребности",
     ARG: "Сильный спрос, но рынок уже перенасыщен",
-    MEX: "Налоговая сложность одновременно сдерживает рынок и создает нишу",
+    MEX: "Спрос подтверждён, а главным ограничением является compliance",
     COL: "Сильная потребность в защите сбережений, но конкуренция растет",
     CAN: "Консервативный финансовый рынок",
     PHL: "Рынок огромного трансграничного спроса",
@@ -187,6 +187,24 @@ test("uses the expanded brief conclusions in every market profile", () => {
     assert.ok(summary.paragraphs.every((paragraph) => paragraph.startsWith("::b0::")), `${report.market_code}: rich paragraph marker`);
     assert.match(summary.paragraphs[0], new RegExp(expectedHeadlines[report.market_code]));
   }
+});
+
+test("treats Mexico demand as confirmed and compliance as the binding constraint", () => {
+  const scoring = data.unified_scoring.rows.find((item) => item.market_code === "MEX");
+  const assessment = data.market_assessments.find((item) => item.market_code === "MEX");
+  const report = data.market_reports.find((item) => item.market_code === "MEX");
+  const acquisition = data.acquisition_channels.rows.find((item) => item.market_code === "MEX");
+  const mexicoContent = JSON.stringify({ scoring, assessment, report, acquisition, conclusions: task5Conclusions.markets.MEX });
+
+  assert.equal(scoring.gate.key, "compliance_and_channel_restrictions");
+  assert.match(scoring.gate.explanation, /Спрос подтверждён/);
+  assert.equal(assessment.need.score, 4);
+  assert.equal(assessment.entry_complexity.score, 5);
+  assert.equal(assessment.confidence, "high");
+  assert.match(acquisition.strategy.decision.primary_channel, /Community seeding/);
+  assert.match(acquisition.strategy.decision.avoid, /традиционные рекламные каналы/);
+  assert.match(report.sections.find((section) => section.id === "marketing").paragraphs.join(" "), /посев внутри/);
+  assert.doesNotMatch(mexicoContent, /спрос[^\"]*(?:не подтвержд|не доказан)|Гипотеза: люди/i);
 });
 
 test("adds the complete task-five content to the conclusions tab", () => {
