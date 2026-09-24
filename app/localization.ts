@@ -37,7 +37,6 @@ const reviewedTranslations: Record<string, string> = {
   "Карта каналов привлечения 2026": "Acquisition Channel Map 2026",
   "Полная детализация из обновлённого документа: аудитории, сообщества, события, KOL, офлайн-точки, ссылки и ограничения.": "The complete updated document: audiences, communities, events, KOLs, physical touchpoints, links and constraints.",
   "СТРАТЕГИЧЕСКИЙ КОНТЕКСТ": "STRATEGIC CONTEXT",
-  "Полная информация из обзора": "Complete information from the overview",
   "Хештеги рынка": "Market hashtags",
   "ПОЛНАЯ КАРТА КАНАЛОВ": "FULL CHANNEL MAP",
   "Все пункты и ссылки из документа": "Every item and link from the document",

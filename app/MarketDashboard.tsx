@@ -1063,7 +1063,6 @@ export function MarketDashboard() {
               <div className="profile-strategic-heading">
                 <div>
                   <span className="section-kicker">СТРАТЕГИЧЕСКИЙ КОНТЕКСТ</span>
-                  <h3>Полная информация из обзора</h3>
                 </div>
                 <div className="profile-strategic-hashtags" aria-label="Хештеги рынка">
                   {selectedStrategic.hashtags.map((hashtag) => <span key={hashtag}>{hashtag}</span>)}

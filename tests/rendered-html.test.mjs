@@ -33,6 +33,7 @@ test("server-renders the unified APS research workspace", async () => {
   assert.doesNotMatch(html, />Выводы<\/button>/);
   assert.match(html, />Обзор и итоги<\/button>/);
   assert.match(html, />Профили стран<\/button>/);
+  assert.doesNotMatch(html, /Полная информация из обзора/);
   assert.match(html, />Каналы продвижения<\/button>/);
   assert.doesNotMatch(html, />Сравнение<\/button>/);
   assert.match(html, /Респонденты/);
