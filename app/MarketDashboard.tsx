@@ -1195,6 +1195,53 @@ export function MarketDashboard() {
                   </article>
                 ))}
               </div>
+              {selectedCompetition.entities.some((entity) => entity.relevance) && (
+                <section className="local-competition-detail">
+                  <div className="local-competition-detail-heading">
+                    <span className="section-kicker">ЛОКАЛЬНЫЕ ЛИДЕРЫ</span>
+                    <h3>Сравнение и выводы для APS</h3>
+                  </div>
+                  <div className="local-competition-table-scroll">
+                    <table className="local-competition-table">
+                      <thead>
+                        <tr>
+                          <th>Конкурент</th>
+                          <th>Роль на рынке</th>
+                          <th>Сильная сторона</th>
+                          <th>Окно для APS</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {selectedCompetition.entities.filter((entity) => entity.relevance).map((entity) => {
+                          const competitor = data.market_competitors.find((item) => item.id === entity.competitor_id);
+                          return (
+                            <tr key={`local-table-${entity.competitor_id}`}>
+                              <td><strong>{competitor?.provider ?? entity.competitor_id}</strong><small>{competitor?.profile}</small></td>
+                              <td>{entity.relevance}</td>
+                              <td>{entity.strength}</td>
+                              <td>{entity.gap}</td>
+                            </tr>
+                          );
+                        })}
+                      </tbody>
+                    </table>
+                  </div>
+                  <div className="local-competitor-analysis">
+                    {selectedCompetition.entities.filter((entity) => entity.relevance).map((entity) => {
+                      const competitor = data.market_competitors.find((item) => item.id === entity.competitor_id);
+                      return (
+                        <article key={`local-analysis-${entity.competitor_id}`}>
+                          <div className="local-competitor-analysis-head"><span>{competitionGroupLabels[entity.group_type]}</span><h4>{competitor?.provider ?? entity.competitor_id}</h4></div>
+                          <p className="local-competitor-product">{competitor?.product}</p>
+                          {entity.expert_insight?.text && <div><strong>Что отмечают эксперты</strong><p>{entity.expert_insight.text}</p></div>}
+                          <div><strong>Вывод для APS</strong><p>{entity.project_implication}</p></div>
+                          <div className="source-chips">{competitor?.source_ids.map((id) => <SourceChip key={id} sourceId={id} />)}</div>
+                        </article>
+                      );
+                    })}
+                  </div>
+                </section>
+              )}
             </section>
           )}
           <div className="subsection-heading global-availability-heading"><div><span className="section-kicker">ДОСТУПНОСТЬ ГЛОБАЛЬНЫХ ПРОДУКТОВ</span><h2>Аккаунт, обмен и выпуск карты</h2><p>Waitlist и coming soon не считаются действующим присутствием. Частичная доступность показывается отдельно.</p></div></div>

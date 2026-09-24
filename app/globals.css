@@ -1039,6 +1039,26 @@ body {
 .local-entity { display: inline-flex; flex-direction: column; gap: 3px; padding: 8px 10px; border: 1px solid #344139; border-radius: 9px; }
 .local-entity strong { font-size: 11px; }.local-entity small { color: var(--ink-soft); font-size: 8px; }
 .local-entity.infrastructure { border-color: #4a705a; background: #132219; }.local-entity.reference { border-style: dashed; }
+.local-competition-detail { padding: 24px; border-top: 1px solid var(--line); background: #0b120e; }
+.local-competition-detail-heading { margin-bottom: 16px; }
+.local-competition-detail-heading h3 { margin: 8px 0 0; font-size: 20px; }
+.local-competition-table-scroll { overflow-x: auto; border: 1px solid var(--line); border-radius: 10px; }
+.local-competition-table { width: 100%; min-width: 840px; border-collapse: collapse; }
+.local-competition-table th { padding: 10px 12px; background: #101914; color: var(--ink-soft); font-size: 9px; font-weight: 750; letter-spacing: .05em; text-align: left; text-transform: uppercase; }
+.local-competition-table td { padding: 14px 12px; border-top: 1px solid var(--line); color: #cbd4cf; font-size: 11px; line-height: 1.5; vertical-align: top; }
+.local-competition-table td:first-child { width: 190px; color: var(--ink); }
+.local-competition-table td strong, .local-competition-table td small { display: block; }
+.local-competition-table td small { margin-top: 5px; color: var(--ink-soft); font-size: 9px; }
+.local-competitor-analysis { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin-top: 14px; }
+.local-competitor-analysis article { padding: 18px; border: 1px solid var(--line); border-radius: 12px; background: #0d1711; }
+.local-competitor-analysis-head span { color: var(--lime); font-size: 9px; font-weight: 750; letter-spacing: .05em; text-transform: uppercase; }
+.local-competitor-analysis-head h4 { margin: 6px 0 0; font-size: 20px; }
+.local-competitor-product { margin: 12px 0 14px; color: #d5ded8; font-size: 12px; line-height: 1.55; }
+.local-competitor-analysis article > div:not(.local-competitor-analysis-head):not(.source-chips) { padding-top: 12px; border-top: 1px solid var(--line); }
+.local-competitor-analysis article > div + div { margin-top: 12px; }
+.local-competitor-analysis article > div > strong { color: var(--ink-soft); font-size: 9px; letter-spacing: .04em; text-transform: uppercase; }
+.local-competitor-analysis article > div > p { margin: 6px 0 0; color: #cbd4cf; font-size: 11px; line-height: 1.55; }
+.local-competitor-analysis .source-chips { justify-content: flex-start; margin-top: 14px; }
 .global-availability-heading { border-top: 1px solid var(--line); }
 
 .respondents-layout { display: grid; gap: 14px; padding: 18px 8px 0; }
@@ -1163,7 +1183,7 @@ body {
   .barrier-sort { justify-content: flex-start; }.barriers-summary-metrics { grid-template-columns: 1fr; }.barrier-method-note { grid-template-columns: 1fr; gap: 5px; }.barrier-row { grid-template-columns: 1fr; }.barrier-row > div + div { border-top: 1px solid var(--line); border-left: 0; }.barrier-market { padding-bottom: 18px !important; }.barrier-meaning { grid-column: auto; }.barrier-cases-heading { align-items: flex-start; flex-direction: column; gap: 6px; }.barrier-cases-heading > p { text-align: left; }.barrier-cases-grid { grid-template-columns: 1fr; }.barrier-case-card + .barrier-case-card { border-top: 1px solid var(--line); border-left: 0; }.barrier-case-product { min-height: 0; }
   .cases-intro { grid-template-columns: 1fr; }.cases-intro-metrics { border-top: 1px solid var(--line); border-left: 0; }.case-reasons-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }.case-patterns-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .market-cases-market > summary { grid-template-columns: minmax(0, 1fr) 32px; gap: 16px; padding: 19px 20px; }.market-cases-title { grid-column: 1; }.market-cases-toggle { grid-column: 2; grid-row: 1; }.market-case-signals, .market-case-names { grid-column: 1 / -1; }.market-cases-footer { align-items: flex-start; flex-direction: column; }.market-cases-footer button { width: 100%; }
-  .research-observations, .cross-market-insights-grid, .assessment-grid, .respondent-grid, .local-competition-groups { grid-template-columns: 1fr; }
+  .research-observations, .cross-market-insights-grid, .assessment-grid, .respondent-grid, .local-competition-groups, .local-competitor-analysis { grid-template-columns: 1fr; }
   .under-map-insights { margin: 0; padding: 24px 20px 6px; }
   .under-map-insights-list, .profile-market-findings ul { grid-template-columns: 1fr; }
   .under-map-insights-list { margin-top: 18px; }

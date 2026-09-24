@@ -3416,11 +3416,15 @@
       "provider": "GCash",
       "entity_type": "product",
       "scope": "local",
-      "profile": "",
-      "product": "",
-      "evidence": "",
-      "public_terms": "",
-      "source_ids": [],
+      "profile": "Финансовое суперприложение и ведущий локальный электронный кошелёк",
+      "product": "P2P- и QR-платежи, счета, переводы, GSave, GCrypto, кредиты, инвестиции и GCash Visa Card",
+      "evidence": "GCash уже объединяет основные повседневные финансовые сценарии и задаёт привычный локальный платёжный опыт. Отдельный GCash Overseas поддерживает получение денег через международных партнёров и часть трансграничных операций.",
+      "public_terms": "Полный набор функций требует полной верификации. GCash Visa Card является предоплаченной картой, связанной с балансом кошелька; доступность отдельных кредитных и инвестиционных функций зависит от профиля пользователя и партнёров.",
+      "source_ids": [
+        "ph_gcash_official_2026",
+        "interview_ph_2026",
+        "interview_ph_web3_community_2026"
+      ],
       "availability": null
     },
     {
@@ -3428,11 +3432,15 @@
       "provider": "Maya",
       "entity_type": "product",
       "scope": "local",
-      "profile": "",
-      "product": "",
-      "evidence": "",
-      "public_terms": "",
-      "source_ids": [],
+      "profile": "Локальный digital bank, электронный кошелёк и крипто-суперприложение",
+      "product": "Wallet, QR, переводы, счета, накопления, кредит, Maya Crypto, rewards, виртуальная и физическая карты",
+      "evidence": "Maya объединяет кошелёк и банковские функции с QR-платежами, картами, накоплениями, кредитом и Maya Crypto. Это наиболее близкий локальный ориентир для модели финансового суперприложения.",
+      "public_terms": "Для банковских, криптовалютных и расширенных платёжных функций требуется обновлённый аккаунт и верификация. Виртуальная карта доступна для онлайн-платежей, физическая — для локальных и зарубежных операций в сети Visa или Mastercard.",
+      "source_ids": [
+        "ph_maya_official_2026",
+        "interview_ph_2026",
+        "interview_asia_crypto_payments_2026"
+      ],
       "availability": null
     },
     {
@@ -5356,6 +5364,16 @@
       "period": "Current product page checked 2026-09-24",
       "accessed": "2026-09-24",
       "url": "https://gcash.com/"
+    },
+    {
+      "id": "ph_maya_official_2026",
+      "type": "company",
+      "tier": "official_company_data",
+      "title": "Maya official product website",
+      "publisher": "Maya",
+      "period": "Current product pages checked 2026-09-24",
+      "accessed": "2026-09-24",
+      "url": "https://www.maya.ph/"
     },
     {
       "id": "ph_gotyme_official_2026",
@@ -7858,28 +7876,52 @@
           "group_type": "local_payments",
           "role": "active",
           "display_order": 1,
-          "relevance": "",
+          "relevance": "Базовая повседневная платёжная привычка и главный ориентир для локального пользовательского опыта",
           "user_job_ids": [],
-          "strength": "",
-          "gap": "",
-          "attributes": [],
+          "strength": "Масштабный набор привычных сценариев: P2P и QR, счета, переводы, GSave, GCrypto, кредиты, инвестиции и Visa-карта.",
+          "gap": "Сильный локальный кошелёк, но не единый глобальный долларовый счёт для всех сценариев зарубежного дохода; международные функции зависят от отдельных партнёрских маршрутов.",
+          "attributes": [
+            "everyday wallet",
+            "QR Ph",
+            "GCrypto",
+            "GCash Overseas",
+            "Visa card"
+          ],
           "official_facts": [],
-          "expert_insight": null,
-          "project_implication": ""
+          "expert_insight": {
+            "text": "Эксперты рассматривают GCash как стандарт локальной платёжной привычки и конечный маршрут для международного дохода, а не как продукт, который следует заменять.",
+            "source_ids": [
+              "interview_ph_2026",
+              "interview_ph_web3_community_2026"
+            ]
+          },
+          "project_implication": "Не заменять GCash. Дать пользователю дешёвый и понятный вывод международного или stablecoin-дохода в GCash и использовать его как конечную локальную инфраструктуру."
         },
         {
           "competitor_id": "maya",
           "group_type": "local_payments",
           "role": "active",
           "display_order": 2,
-          "relevance": "",
+          "relevance": "Прямой локальный ориентир: digital bank, wallet и криптовалютные функции внутри одного суперприложения",
           "user_job_ids": [],
-          "strength": "",
-          "gap": "",
-          "attributes": [],
+          "strength": "Кошелёк, QR, переводы, счета, накопления, кредит, Maya Crypto, rewards и карты собраны в одном интерфейсе.",
+          "gap": "Продукт оптимизирован под локальную экосистему; окно APS возникает до конвертации в PHP — в получении зарубежного дохода, хранении USD или stablecoins и семейных переводах.",
+          "attributes": [
+            "digital bank",
+            "QR Ph",
+            "Maya Crypto",
+            "savings and credit",
+            "physical and virtual cards"
+          ],
           "official_facts": [],
-          "expert_insight": null,
-          "project_implication": ""
+          "expert_insight": {
+            "text": "Эксперт отдельно назвал Maya важным конкурентом: продукт уже показывает востребованность суперприложения, где платежи, банковские функции, карта и crypto доступны в одном месте.",
+            "source_ids": [
+              "interview_ph_2026",
+              "interview_asia_crypto_payments_2026"
+            ]
+          },
+          "project_implication": "Отличаться не ещё одним кошельком или картой, а трансграничным долларовым счётом с быстрым и дешёвым выводом в Maya."
         },
         {
           "competitor_id": "coins_ph",

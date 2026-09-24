@@ -265,6 +265,27 @@ test("integrates the updated Philippines and Vietnam acquisition routes", () => 
   }
 });
 
+test("includes GCash and Maya in the Philippines competitor table and analysis", () => {
+  const philippines = data.competition_by_market.find((item) => item.market_code === "PHL");
+  assert.ok(philippines);
+
+  for (const competitorId of ["gcash", "maya"]) {
+    const entity = philippines.entities.find((item) => item.competitor_id === competitorId);
+    const competitor = data.market_competitors.find((item) => item.id === competitorId);
+    assert.ok(entity?.relevance);
+    assert.ok(entity?.strength);
+    assert.ok(entity?.gap);
+    assert.ok(entity?.expert_insight?.text);
+    assert.ok(entity?.project_implication);
+    assert.ok(competitor?.profile);
+    assert.ok(competitor?.product);
+    assert.ok(competitor?.source_ids.length);
+  }
+
+  assert.match(data.market_competitors.find((item) => item.id === "maya")?.product ?? "", /Maya Crypto/);
+  assert.ok(sourceIds.has("ph_maya_official_2026"));
+});
+
 test("imports the complete updated acquisition-channel document for all eight markets", () => {
   assert.equal(acquisitionChannelMap.meta.markets_count, 8);
   assert.equal(acquisitionChannelMap.meta.source_word_count, 5295);
