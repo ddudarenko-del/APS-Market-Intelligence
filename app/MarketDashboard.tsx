@@ -365,19 +365,11 @@ function MarketMap({
   visibleCodes,
   onSelect,
   overlay,
-  onReset,
-  region,
-  regions,
-  onRegionChange,
 }: {
   selectedCode: string;
   visibleCodes: string[];
   onSelect: (code: string) => void;
   overlay?: ReactNode;
-  onReset: () => void;
-  region: string;
-  regions: string[];
-  onRegionChange: (region: string) => void;
 }) {
   const containerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<import("leaflet").Map | null>(null);
@@ -408,14 +400,17 @@ function MarketMap({
         const map = L.map(containerRef.current, {
           center: [18, 8],
           zoom: 2,
-          minZoom: 0,
-          maxZoom: 6,
           zoomControl: false,
+          dragging: false,
+          scrollWheelZoom: false,
+          doubleClickZoom: false,
+          boxZoom: false,
+          keyboard: false,
+          touchZoom: false,
           worldCopyJump: false,
           attributionControl: false,
         });
         mapRef.current = map;
-        L.control.zoom({ position: "topright" }).addTo(map);
 
         const response = await fetch("/data/countries.geojson");
         if (!response.ok) throw new Error("Country geometry unavailable");
@@ -525,22 +520,11 @@ function MarketMap({
     });
   }, [selectedCode, visibleCodes]);
 
-  function resetView() {
-    mapRef.current?.fitBounds([[-56, -168], [76, 178]], { padding: [12, 12] });
-    onReset();
-  }
-
   return (
     <div className="map-frame">
-      <div ref={containerRef} className="real-map" aria-label="Интерактивная карта рынков APS" />
+      <div ref={containerRef} className="real-map" aria-label="Карта рынков APS" />
       {mapStatus === "loading" && <div className="map-state">Загружаем границы стран...</div>}
       {mapStatus === "error" && <div className="map-state error">Карта временно недоступна</div>}
-      <div className="map-toolbar">
-        <button type="button" className="map-reset" onClick={resetView}>Весь мир</button>
-        <select className="map-region-select" value={region} onChange={(event) => onRegionChange(event.target.value)} aria-label="Фильтр по региону">
-          {regions.map((item) => <option key={item} value={item}>{item}</option>)}
-        </select>
-      </div>
       {overlay}
     </div>
   );
@@ -555,7 +539,6 @@ export function MarketDashboard() {
   const tabsRef = useRef<HTMLElement>(null);
   const [tabScroll, setTabScroll] = useState({ left: false, right: false, overflow: false });
   const [selectedCode, setSelectedCode] = useState("PHL");
-  const [region, setRegion] = useState("Все регионы");
   const [competitorMarket, setCompetitorMarket] = useState("ALL");
   const [strategicOverlayOpen, setStrategicOverlayOpen] = useState(false);
 
@@ -564,8 +547,7 @@ export function MarketDashboard() {
   const selectedUnified = getUnifiedScore(selected.code);
   const selectedStrategic = getStrategicRating(selected.code);
   const selectedReport = data.market_reports.find((item) => item.market_code === selected.code) ?? data.market_reports[0];
-  const regions = ["Все регионы", ...Array.from(new Set(data.markets.map((market) => market.region)))];
-  const visibleMarkets = region === "Все регионы" ? data.markets : data.markets.filter((market) => market.region === region);
+  const visibleMarkets = data.markets;
   const selectedAcquisition = data.acquisition_channels.rows.find((row) => row.market_code === selected.code) ?? data.acquisition_channels.rows[0];
   const selectedCompetition = competitorMarket === "ALL" ? null : data.competition_by_market.find((item) => item.market_code === competitorMarket) ?? null;
   const selectedCompetitionAssessment = competitorMarket === "ALL" ? null : data.market_assessments.find((item) => item.market_code === competitorMarket) ?? null;
@@ -690,10 +672,6 @@ export function MarketDashboard() {
               selectedCode={selectedCode}
               visibleCodes={visibleMarkets.map((market) => market.code)}
               onSelect={chooseOverviewMarket}
-              onReset={() => setStrategicOverlayOpen(false)}
-              region={region}
-              regions={regions}
-              onRegionChange={setRegion}
               overlay={strategicOverlayOpen ? (
                 <article className="panel strategic-market-panel strategic-market-overlay" aria-live="polite">
                   <button type="button" className="strategic-overlay-close" aria-label="Закрыть описание выбранного рынка" onClick={() => setStrategicOverlayOpen(false)}>×</button>
@@ -1473,9 +1451,6 @@ export function MarketDashboard() {
         </section>
       )}
 
-      <footer>
-        <span>APS Market Intelligence · research workspace</span>
-      </footer>
     </main>
   );
 }

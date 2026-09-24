@@ -45,7 +45,7 @@ test("server-renders the unified APS research workspace", async () => {
   assert.doesNotMatch(html, /Три независимых слоя/);
   assert.doesNotMatch(html, /Ключевой вывод/);
   assert.doesNotMatch(html, /Диагностический инструмент, не юридическое заключение/);
-  assert.match(html, /Интерактивная карта рынков APS/);
+  assert.match(html, /Карта рынков APS/);
   assert.doesNotMatch(html, /class="selected-market"/);
   assert.match(html, />18<\/strong><span>экспертных интервью<\/span>/);
   assert.doesNotMatch(html, /codex-preview|Your site is taking shape/);
@@ -86,8 +86,10 @@ test("keeps production metadata and documented market intelligence", async () =>
   assert.doesNotMatch(dashboard, /bindPopup|openPopup|market-map-popup/);
   assert.doesNotMatch(dashboard, /atlas-legend/);
   assert.doesNotMatch(styles, /\.atlas-legend/);
-  assert.match(dashboard, /className="map-region-select"/);
-  assert.match(dashboard, /className="map-toolbar"/);
+  assert.doesNotMatch(dashboard, /className="map-region-select"|className="map-toolbar"|L\.control\.zoom/);
+  assert.match(dashboard, /dragging: false/);
+  assert.match(dashboard, /scrollWheelZoom: false/);
+  assert.match(dashboard, /doubleClickZoom: false/);
   assert.match(dashboard, /strategicOverlayOpen/);
   assert.match(dashboard, /ВЫБРАННЫЙ РЫНОК/);
   assert.match(dashboard, /getStrategicRating\(market\.code\)\.hashtags/);
@@ -97,13 +99,14 @@ test("keeps production metadata and documented market intelligence", async () =>
   assert.match(dashboard, /className="rank-number"/);
   assert.match(styles, /@keyframes strategic-overlay-in/);
   assert.match(styles, /\.strategic-market-panel\.strategic-market-overlay \{[\s\S]*inset: 0;[\s\S]*width: 100%;[\s\S]*height: 100%;/);
-  assert.match(styles, /\.map-frame \.leaflet-top\.leaflet-right \{ top: 58px; \}/);
-  assert.match(styles, /\.map-toolbar \{[\s\S]*display: flex;[\s\S]*gap: 8px;/);
+  assert.doesNotMatch(styles, /\.map-toolbar|\.map-reset|\.map-region-select|\.leaflet-control-zoom/);
+  assert.match(styles, /\.overview-grid \{[^}]*align-items: start;/);
   assert.doesNotMatch(dashboard, /className="selected-market"/);
   assert.match(dashboard, /Исследование рыночного потенциала криптофинансовой платформы для платежей и управления цифровыми активами с функцией выпуска крипто-связанных платежных карт/);
   assert.doesNotMatch(dashboard, /Восемь рынков в одном поле/);
   assert.doesNotMatch(dashboard, /Клик выбирает рынок и обновляет блок под картой/);
   assert.doesNotMatch(dashboard, /Клик, тап или клавиатура/);
+  assert.doesNotMatch(dashboard, /APS Market Intelligence · research workspace/);
   assert.match(dashboard, /В выигрыше может оказаться продукт, который не заменяет GCash/);
   assert.match(dashboard, /Пользователь должен видеть лучший курс, меньшую комиссию или локальную функцию/);
   assert.doesNotMatch(dashboard, /меньшее число сервисов/);
