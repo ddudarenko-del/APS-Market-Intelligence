@@ -1,7 +1,7 @@
 {
   "metadata": {
     "title": "APS Market Intelligence",
-    "updated": "2026-09-23",
+    "updated": "2026-09-24",
     "countries": 8,
     "interviews_conducted": 18,
     "criteria": [
@@ -22,7 +22,7 @@
       }
     ],
     "method_note": "Единая оценка привлекательности рынка для запуска продукта, функционально повторяющего KAST. Она объединяет количественные показатели, подтверждённые конкурентные факты и качественное исследование без двойного учёта одних и тех же факторов.",
-    "research_updated": "2026-09-23"
+    "research_updated": "2026-09-24"
   },
   "strategic_ranking": {
     "rows": [
@@ -5404,6 +5404,16 @@
       "period": "Current company page checked 2026-09-24",
       "accessed": "2026-09-24",
       "url": "https://www.skymavis.com/"
+    },
+    {
+      "id": "interview_indonesia_business_development_2026",
+      "type": "interview",
+      "tier": "expert_interview",
+      "title": "Индонезия: развитие бизнеса в Forex и Crypto",
+      "publisher": "Экспертное интервью",
+      "period": "сентябрь 2026",
+      "accessed": "2026-09-24",
+      "url": null
     }
   ],
   "market_assessments": [
@@ -6857,6 +6867,21 @@
       "interview_date": null,
       "status": "completed",
       "source_id": "interview_id_marketing_2026",
+      "visibility": "name_initial"
+    },
+    {
+      "id": "respondent_id_03",
+      "display_name": "Advan P.",
+      "market_codes": [
+        "IDN"
+      ],
+      "scope": "market",
+      "role": "Менеджер по развитию бизнеса",
+      "expertise": "Опыт в Forex и Crypto",
+      "selection_rationale": "Практический опыт развития бизнеса в сферах Forex и Crypto на рынке Индонезии",
+      "interview_date": null,
+      "status": "completed",
+      "source_id": "interview_indonesia_business_development_2026",
       "visibility": "name_initial"
     },
     {

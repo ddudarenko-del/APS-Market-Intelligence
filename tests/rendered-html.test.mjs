@@ -79,7 +79,7 @@ test("keeps production metadata and documented market intelligence", async () =>
   assert.equal((dashboard.match(/tab === "profiles"/g) ?? []).length, 1);
   assert.equal((dashboard.match(/data\.metadata\.interviews_conducted/g) ?? []).length, 2);
   assert.equal(parsedData.metadata.interviews_conducted, 18);
-  assert.equal(parsedData.metadata.updated, "2026-09-23");
+  assert.equal(parsedData.metadata.updated, "2026-09-24");
   assert.equal(parsedData.strategic_ranking.rows.length, 8);
   assert.equal("source_title" in parsedData.strategic_ranking, false);
   assert.equal("source_url" in parsedData.strategic_ranking, false);
@@ -153,9 +153,11 @@ test("keeps production metadata and documented market intelligence", async () =>
   assert.doesNotMatch(dashboard, /className="gate-mini"/);
   assert.match(dashboard, /className="hero hero-compact"/);
   assert.doesNotMatch(dashboard, /tab === "overview" \? "" : "hero-compact"/);
-  assert.match(dashboard, /Исследование обновлено 23\.09\.2026/);
+  assert.match(dashboard, /Исследование обновлено 24\.09\.2026/);
+  assert.doesNotMatch(dashboard, /Исследование обновлено 23\.09\.2026/);
   assert.doesNotMatch(dashboard, /Исследование обновлено 02\.09\.2026/);
   assert.doesNotMatch(dashboard, /Исследование обновлено 01\.09\.2026/);
+  assert.doesNotMatch(dashboard, /КОНКУРЕНТНАЯ СРЕДА · 01\.09\.2026/);
   assert.match(dashboard, /onClick=\{\(\) => onSelect\(market\.code\)\}/);
   assert.match(dashboard, /onMouseEnter=\{\(\) => setLabelHighlight\(market\.code, true\)\}/);
   assert.match(dashboard, /Что уже работает или не работает/);
