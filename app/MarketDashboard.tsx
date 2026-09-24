@@ -933,9 +933,7 @@ export function MarketDashboard() {
               <p>{data.case_lessons.intro}</p>
             </div>
             <div className="cases-intro-metrics" aria-label="Состав анализа">
-              <div><strong>1</strong><span>подробный разбор</span></div>
               <div><strong>{data.case_lessons.supporting_cases.length + marketCaseRows.length * 2}</strong><span>кейсов и примеров</span></div>
-              <div><strong>{data.case_lessons.patterns.length}</strong><span>повторяющихся причин</span></div>
             </div>
           </article>
 

@@ -824,7 +824,7 @@ body {
 .cases-intro > div:first-child { padding: 34px; }
 .cases-intro h2 { margin: 9px 0 13px; font-size: clamp(32px, 4vw, 52px); line-height: 1.04; letter-spacing: -.05em; }
 .cases-intro p { max-width: 850px; margin: 0; color: #c5d0c9; font-size: 14px; line-height: 1.7; }
-.cases-intro-metrics { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); border-left: 1px solid var(--line); background: #0b110d; }
+.cases-intro-metrics { display: grid; grid-template-columns: 1fr; border-left: 1px solid var(--line); background: #0b110d; }
 .cases-intro-metrics div { display: flex; min-width: 0; flex-direction: column; justify-content: center; padding: 26px 20px; border-left: 1px solid var(--line); }
 .cases-intro-metrics div:first-child { border-left: 0; }
 .cases-intro-metrics strong { color: var(--lime); font: 750 34px var(--font-plex-mono); }

@@ -145,6 +145,8 @@ test("keeps production metadata and documented market intelligence", async () =>
   assert.match(dashboard, /Подтверждённый пример \/ свидетельство/);
   assert.match(dashboard, /data\.case_lessons/);
   assert.match(dashboard, /КЕЙСЫ ПО РЫНКАМ/);
+  assert.match(dashboard, /кейсов и примеров/);
+  assert.doesNotMatch(dashboard, /подробный разбор|повторяющихся причин/);
   assert.match(dashboard, /marketCaseRows\.map/);
   assert.match(dashboard, /market\.case_studies\[kind\]/);
   assert.match(dashboard, /study\.constraint_label \?\? "Что ограничило результат"/);
