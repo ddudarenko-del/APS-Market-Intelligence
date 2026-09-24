@@ -70,15 +70,11 @@ a { color: inherit; }
 .hero-metrics strong { display: block; font-size: 34px; letter-spacing: -.04em; }
 .hero-metrics span { display: block; color: var(--ink-soft); font-size: 12px; margin-top: 5px; }
 
-.tabs-shell { display: grid; grid-template-columns: 40px minmax(0, 1fr) 40px; gap: 10px; align-items: center; margin-top: 22px; }
-.tabs-shell:not(.has-overflow) { grid-template-columns: minmax(0, 1fr); gap: 0; }
-.tabs { display: flex; gap: 4px; width: 100%; padding: 0 8px; background: var(--paper); border: 1px solid var(--line); border-radius: 18px 18px 0 0; overflow-x: auto; scrollbar-width: none; }
+.tabs-shell { display: block; min-width: 0; margin-top: 22px; }
+.tabs { display: flex; gap: 4px; width: 100%; min-width: 0; padding: 0 8px; background: var(--paper); border: 1px solid var(--line); border-radius: 18px 18px 0 0; overflow-x: auto; overscroll-behavior-inline: contain; scroll-behavior: smooth; touch-action: pan-x; scrollbar-width: none; }
 .tabs::-webkit-scrollbar { display: none; }
 .tabs button { border: 0; background: transparent; padding: 19px 22px; white-space: nowrap; cursor: pointer; color: var(--ink-soft); border-bottom: 3px solid transparent; font-weight: 650; }
 .tabs button.active { color: var(--ink); border-bottom-color: var(--ink); }
-.tabs-scroll { display: grid; width: 40px; height: 40px; place-items: center; padding: 0 0 3px; border: 1px solid #405047; border-radius: 50%; background: #111813; color: var(--lime); font-size: 28px; line-height: 1; cursor: pointer; transition: opacity .18s ease, border-color .18s ease, background-color .18s ease, color .18s ease; }
-.tabs-scroll:not(:disabled):hover { border-color: var(--lime); background: #1d2922; }
-.tabs-scroll:disabled { border-color: #28322d; background: #0b100d; color: #68736d; cursor: default; opacity: .38; }
 
 .content-grid, .compare-layout, .profiles-layout, .data-panel, .method-layout { margin-top: 0; }
 .overview-grid { display: grid; grid-template-columns: minmax(0, 1fr) 420px; gap: 22px; align-items: start; padding: 22px 8px 0; }
@@ -1171,7 +1167,7 @@ body {
   .hero-grid { margin-top: 20px; }.hero h1 { font-size: clamp(34px, 11vw, 42px); }.hero p { margin-top: 12px; font-size: 14px; }
   .aps-logo { width: 96px; }
   .hero-metrics { grid-template-columns: repeat(3, minmax(0, 1fr)); }.hero-metrics div { padding: 14px 9px; border-right: 1px solid var(--line); border-bottom: 0; }.hero-metrics div:last-child { border-right: 0; }
-  .tabs-shell { grid-template-columns: 34px minmax(0, 1fr) 34px; gap: 6px; margin: 16px 12px 0; }.tabs-scroll { width: 34px; height: 34px; font-size: 24px; }
+  .tabs-shell { margin: 16px 12px 0; }
   .overview-grid, .compare-layout, .profiles-layout, .method-layout, .kast-layout, .barriers-layout, .cases-layout, .acquisition-layout, .conclusions-layout, .respondents-layout { margin-left: 0; margin-right: 0; padding: 14px 12px 0; }.data-panel { margin: 14px 12px 0; }
   .panel-heading { flex-direction: column; }.panel-controls { width: 100%; justify-content: stretch; }.panel-heading select { width: 100%; }.map-frame, .real-map, .leaflet-container { min-height: 680px; height: 680px; }
   .ranking-list { grid-template-columns: 1fr; }
@@ -1258,7 +1254,6 @@ body {
   .tabs-shell { position: sticky; top: 8px; z-index: 900; margin-top: 14px; padding: 4px 0; border-radius: 24px; background: #030504; }
   .tabs { gap: 2px; padding: 5px 6px; }
   .tabs button { min-height: 46px; padding: 10px 12px; font-size: 14px; }
-  .tabs-scroll { width: 38px; height: 38px; }
 
   .panel-heading > div:first-child,
   .research-conclusion p,

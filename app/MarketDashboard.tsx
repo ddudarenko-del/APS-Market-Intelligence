@@ -571,9 +571,6 @@ export function MarketDashboard() {
   const localizationRootRef = useDomLocalization(language);
   const locale = language === "en" ? "en-US" : "ru-RU";
   const [tab, setTab] = useState<Tab>("overview");
-  const tabsShellRef = useRef<HTMLDivElement>(null);
-  const tabsRef = useRef<HTMLElement>(null);
-  const [tabScroll, setTabScroll] = useState({ left: false, right: false, overflow: false });
   const [selectedCode, setSelectedCode] = useState("PHL");
   const [competitorMarket, setCompetitorMarket] = useState("ALL");
   const [strategicOverlayOpen, setStrategicOverlayOpen] = useState(false);
@@ -620,35 +617,6 @@ export function MarketDashboard() {
     setStrategicOverlayOpen(true);
   }
 
-  useEffect(() => {
-    const tabs = tabsRef.current;
-    const shell = tabsShellRef.current;
-    if (!tabs || !shell) return;
-    const updateScrollState = () => {
-      const overflow = tabs.scrollWidth > shell.clientWidth - 2;
-      setTabScroll({
-        overflow,
-        left: overflow && tabs.scrollLeft > 2,
-        right: overflow && tabs.scrollLeft + tabs.clientWidth < tabs.scrollWidth - 2,
-      });
-    };
-    updateScrollState();
-    tabs.addEventListener("scroll", updateScrollState, { passive: true });
-    const resizeObserver = new ResizeObserver(updateScrollState);
-    resizeObserver.observe(tabs);
-    resizeObserver.observe(shell);
-    return () => {
-      tabs.removeEventListener("scroll", updateScrollState);
-      resizeObserver.disconnect();
-    };
-  }, [language]);
-
-  function scrollTabs(direction: -1 | 1) {
-    const tabs = tabsRef.current;
-    if (!tabs) return;
-    tabs.scrollBy({ left: direction * Math.max(220, tabs.clientWidth * 0.72), behavior: "smooth" });
-  }
-
   return (
     <main ref={localizationRootRef} className="app-shell">
       <header className="hero hero-compact">
@@ -679,9 +647,8 @@ export function MarketDashboard() {
         </div>
       </header>
 
-      <div ref={tabsShellRef} className={`tabs-shell ${tabScroll.overflow ? "has-overflow" : ""}`}>
-        {tabScroll.overflow && <button type="button" className="tabs-scroll tabs-scroll-left" aria-label="Показать предыдущие разделы" disabled={!tabScroll.left} onClick={() => scrollTabs(-1)}>‹</button>}
-        <nav ref={tabsRef} className="tabs" aria-label="Разделы исследования">
+      <div className="tabs-shell">
+        <nav className="tabs" aria-label="Разделы исследования">
           {tabLabels.map((item) => (
             <button
               key={item.id}
@@ -693,7 +660,6 @@ export function MarketDashboard() {
             </button>
           ))}
         </nav>
-        {tabScroll.overflow && <button type="button" className="tabs-scroll tabs-scroll-right" aria-label="Показать следующие разделы" disabled={!tabScroll.right} onClick={() => scrollTabs(1)}>›</button>}
       </div>
 
       {tab === "overview" && (

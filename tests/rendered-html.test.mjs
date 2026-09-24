@@ -135,12 +135,8 @@ test("keeps production metadata and documented market intelligence", async () =>
   assert.match(dashboard, /onMouseEnter=\{\(\) => setLabelHighlight\(market\.code, true\)\}/);
   assert.match(dashboard, /Что уже работает или не работает/);
   assert.doesNotMatch(dashboard, /Только конкретные компании и опубликованные факты/);
-  assert.match(dashboard, /tabs-scroll-left/);
-  assert.match(dashboard, /tabs\.scrollBy/);
-  assert.match(dashboard, /tabScroll\.overflow &&/);
-  assert.match(dashboard, /tabs\.scrollWidth > shell\.clientWidth/);
-  assert.match(dashboard, /disabled=\{!tabScroll\.left\}/);
-  assert.match(dashboard, /disabled=\{!tabScroll\.right\}/);
+  assert.doesNotMatch(dashboard, /tabs-scroll|tabScroll|tabs\.scrollBy|tabs\.scrollWidth/);
+  assert.match(styles, /\.tabs \{[^}]*overflow-x: auto;/);
   assert.match(dashboard, /function AudienceGroups/);
   assert.match(dashboard, /function RichReportContent/);
   assert.match(dashboard, /function RichInlineText/);
