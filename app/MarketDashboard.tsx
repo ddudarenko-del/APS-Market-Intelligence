@@ -1,6 +1,6 @@
 "use client";
 
-import { type ReactNode, useEffect, useRef, useState } from "react";
+import { Fragment, type ReactNode, useEffect, useRef, useState } from "react";
 import acquisitionChannelMap from "./data/acquisition_channel_map.json";
 import data from "./data/market_data.json";
 import task5Conclusions from "./data/task5_conclusions.json";
@@ -21,6 +21,13 @@ type Availability = {
 type CountryProperties = { ADM0_A3?: string };
 type CountryFeature = GeoJSON.Feature<GeoJSON.Geometry, CountryProperties>;
 type CountryLayer = import("leaflet").Path & { feature?: CountryFeature };
+type AcquisitionTableRow = {
+  category: string;
+  channelHtml: string;
+  contextHtml: string;
+  activationHtml: string;
+  linksHtml: string;
+};
 
 const translatableAttributes = ["aria-label", "title", "placeholder"] as const;
 const marketConclusionItems = task5Conclusions.markets as Record<string, Array<{ title: string; body: string }>>;
@@ -267,6 +274,38 @@ const sourceLabelOverrides: Record<string, string> = {
   kast_account_creation_2026: "KAST · регистрация",
 };
 
+const sourceTierLabels: Record<string, { ru: string; en: string }> = {
+  primary_dataset: { ru: "Основной набор данных", en: "Primary dataset" },
+  industry_methodology: { ru: "Отраслевая методология", en: "Industry methodology" },
+  regulator: { ru: "Регулятор", en: "Regulator" },
+  law: { ru: "Законодательство", en: "Legislation" },
+  official_product_terms: { ru: "Официальные условия продукта", en: "Official product terms" },
+  card_network: { ru: "Платёжная сеть", en: "Card network" },
+  official_company_claim: { ru: "Официальное заявление компании", en: "Official company statement" },
+  official_company_data: { ru: "Официальные данные компании", en: "Official company data" },
+  regulator_primary: { ru: "Первичный источник регулятора", en: "Primary regulatory source" },
+  independent_reporting: { ru: "Независимое издание", en: "Independent reporting" },
+  company_financial_filing: { ru: "Финансовая отчётность компании", en: "Company financial filing" },
+  official_incident_report: { ru: "Официальный отчёт об инциденте", en: "Official incident report" },
+  industry_dataset: { ru: "Отраслевой набор данных", en: "Industry dataset" },
+  official_acquisition_program: { ru: "Официальная программа привлечения", en: "Official acquisition programme" },
+  official_partnership: { ru: "Официальное партнёрство", en: "Official partnership" },
+  official_social_channel: { ru: "Официальный социальный канал", en: "Official social channel" },
+  official_acquisition_page: { ru: "Официальная страница привлечения", en: "Official acquisition page" },
+  official_content_marketing: { ru: "Официальный контент-маркетинг", en: "Official content marketing" },
+  official_partnership_product: { ru: "Официальный партнёрский продукт", en: "Official partnership product" },
+  official_partnership_campaign: { ru: "Официальная партнёрская кампания", en: "Official partnership campaign" },
+  official_community_program: { ru: "Официальная программа сообщества", en: "Official community programme" },
+  official_brand_campaign: { ru: "Официальная бренд-кампания", en: "Official brand campaign" },
+  official_partnerships: { ru: "Официальные партнёрства", en: "Official partnerships" },
+  expert_interview: { ru: "Экспертное интервью", en: "Expert interview" },
+  official_data: { ru: "Официальные данные", en: "Official data" },
+};
+
+function getSourceTierLabel(tier: string, language: Language) {
+  return sourceTierLabels[tier]?.[language] ?? tier.replaceAll("_", " ");
+}
+
 function getCountryStyle(code: string, visibleCodes: string[], selectedCode: string) {
   const unified = getUnifiedScore(code);
   const visible = visibleCodes.includes(code);
@@ -403,6 +442,100 @@ function getRegulatoryConstraintHtml(language: Language, countryName: string) {
 
 function removeAcquisitionEvidenceMarkers(html: string) {
   return html.replace(/[★✓△]\s*/g, "");
+}
+
+function stripHtml(html: string) {
+  return html
+    .replace(/<br\s*\/?>/gi, " ")
+    .replace(/<[^>]+>/g, " ")
+    .replace(/&nbsp;/g, " ")
+    .replace(/&amp;/g, "&")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function cleanAcquisitionHtml(html: string) {
+  return removeAcquisitionEvidenceMarkers(html)
+    .replace(/\s+[—–]\s+/g, ": ")
+    .replace(/^[—–]\s*/g, "");
+}
+
+function parseAcquisitionChannelTable(html: string, language: Language): AcquisitionTableRow[] {
+  if (language === "ru") {
+    const russianSourceLabels: Record<string, string> = {
+      "Superteam Vietnam Education only": "Superteam Vietnam, только образовательные активности",
+      "Coworking and startup spaces in HCMC and Hanoi": "Коворкинги и стартап-пространства в Хошимине и Ханое",
+      "Developer and export-tech communities": "Сообщества разработчиков и экспортных технологических компаний",
+      "University blockchain and fintech clubs": "Университетские блокчейн- и финтех-клубы",
+      "Gaming Web3 and DeFi companies": "Игровые Web3- и DeFi-компании",
+      "Sky Mavis and other Vietnamese gaming ecosystems": "Sky Mavis и другие вьетнамские игровые экосистемы",
+      "Foreign residents and crypto-paid digital nomads": "Иностранные резиденты и цифровые кочевники с доходом в криптовалюте",
+      "Private partner-led events": "Закрытые мероприятия с партнёрами",
+      "Local BD and KOL product seeding": "Локальные бизнес-партнёрства и посев продукта через лидеров мнений",
+      "Licensed financial QR and off-ramp partners": "Лицензированные финансовые партнёры для QR-платежей и вывода средств",
+      "CryptoFemmes Baguio with pre-check": "CryptoFemmes Baguio, с предварительной проверкой",
+      "Women founders and startup networks": "Сообщества женщин-основателей и стартапов",
+      "Airdrop hunters and trader communities": "Охотники за аирдропами и сообщества трейдеров",
+      "Channel hierarchy": "Иерархия каналов",
+      "OFW family associations seafarer unions and maritime schools": "Ассоциации семей OFW, профсоюзы моряков и морские учебные заведения",
+      "Church-based OFW family ministries": "Церковные сообщества семей OFW",
+      "Filipino churches community centres and grocery clusters": "Филиппинские церкви, общественные центры и продуктовые кластеры",
+      "NHS Filipino staff networks and community nursing groups": "Сети филиппинских сотрудников NHS и сообщества медработников",
+      "London fintech and stablecoin communities": "Лондонские финтех- и стейблкоин-сообщества",
+    };
+    for (const [source, target] of Object.entries(russianSourceLabels)) html = html.replaceAll(source, target);
+  }
+  const rows: AcquisitionTableRow[] = [];
+  const blocks = html.match(/<h3>[\s\S]*?<\/h3>|<table>[\s\S]*?<\/table>|<p(?:\s+class="[^"]*")?>[\s\S]*?<\/p>/gi) ?? [];
+  let category = language === "en" ? "Other channels and cases" : "Другие каналы и кейсы";
+
+  for (const rawBlock of blocks) {
+    if (/^<h3>/i.test(rawBlock)) {
+      category = stripHtml(rawBlock);
+      continue;
+    }
+
+    if (/^<table>/i.test(rawBlock)) {
+      const tableRows = rawBlock.match(/<tr>[\s\S]*?<\/tr>/gi) ?? [];
+      tableRows.forEach((tableRow, index) => {
+        const cells = [...tableRow.matchAll(/<td>([\s\S]*?)<\/td>/gi)].map((match) => cleanAcquisitionHtml(match[1]));
+        if (!cells.length || (index === 0 && /acq-table-head/.test(tableRow))) return;
+        rows.push({
+          category,
+          channelHtml: cells[0] ?? "",
+          contextHtml: cells[1] ?? "",
+          activationHtml: cells[2] ?? "",
+          linksHtml: "",
+        });
+      });
+      continue;
+    }
+
+    const className = rawBlock.match(/^<p(?:\s+class="([^"]*)")?>/i)?.[1] ?? "";
+    const body = cleanAcquisitionHtml(rawBlock.replace(/^<p(?:\s+class="[^"]*")?>/i, "").replace(/<\/p>$/i, ""));
+    if (className.includes("acq-link")) {
+      const previous = rows.at(-1);
+      if (previous) previous.linksHtml = `${previous.linksHtml}${previous.linksHtml ? "<br />" : ""}${body}`;
+      else rows.push({ category, channelHtml: language === "en" ? "Source" : "Источник", contextHtml: "", activationHtml: "", linksHtml: body });
+      continue;
+    }
+
+    const strongMatch = body.match(/<strong>([\s\S]*?)<\/strong>/i);
+    if (strongMatch) {
+      const context = body.replace(strongMatch[0], "").replace(/^\s*[:,-]\s*/, "");
+      rows.push({ category, channelHtml: strongMatch[1], contextHtml: context, activationHtml: "", linksHtml: "" });
+    } else {
+      rows.push({
+        category,
+        channelHtml: language === "en" ? "Additional context" : "Дополнительный контекст",
+        contextHtml: body,
+        activationHtml: "",
+        linksHtml: "",
+      });
+    }
+  }
+
+  return rows.filter((row) => stripHtml(`${row.channelHtml}${row.contextHtml}${row.activationHtml}${row.linksHtml}`));
 }
 
 function MarketMap({
@@ -611,6 +744,7 @@ export function MarketDashboard() {
   const selectedAcquisitionDocument = acquisitionChannelMap.markets[selected.code as keyof typeof acquisitionChannelMap.markets] ?? acquisitionChannelMap.markets.PHL;
   const selectedRegulatoryConstraintHtml = getRegulatoryConstraintHtml(language, selectedAcquisitionDocument.name[language]);
   const selectedAcquisitionDocumentHtml = removeAcquisitionEvidenceMarkers(selectedAcquisitionDocument[language]);
+  const selectedAcquisitionRows = parseAcquisitionChannelTable(selectedAcquisitionDocumentHtml, language);
   const selectedCompetition = competitorMarket === "ALL" ? null : data.competition_by_market.find((item) => item.market_code === competitorMarket) ?? null;
   const selectedCompetitionAssessment = competitorMarket === "ALL" ? null : data.market_assessments.find((item) => item.market_code === competitorMarket) ?? null;
   const globalCompetitors = data.market_competitors.filter((item) => item.scope === "global" && item.availability);
@@ -696,7 +830,7 @@ export function MarketDashboard() {
           <div className="panel atlas-panel">
             <div className="panel-heading">
               <div>
-                <span className="section-kicker">MARKET ATLAS</span>
+                <span className="section-kicker">КАРТА РЫНКОВ</span>
                 <h2>Исследование рыночного потенциала криптофинансовой платформы для платежей и управления цифровыми активами с функцией выпуска крипто-связанных платежных карт</h2>
               </div>
             </div>
@@ -818,21 +952,13 @@ export function MarketDashboard() {
             ))}
           </div>
 
-          <article className="panel acquisition-map-intro">
-            <div className="acquisition-map-title">
-              <div>
-                <span className="section-kicker">{language === "en" ? "UPDATED PROMOTION CHANNEL MAP · 2026" : "ОБНОВЛЁННАЯ КАРТА КАНАЛОВ ПРОДВИЖЕНИЯ · 2026"}</span>
-              </div>
-              <div className="acquisition-map-count"><strong>{acquisitionChannelMap.meta.markets_count}</strong><span>{language === "en" ? "markets" : "рынков"}</span></div>
-            </div>
-          </article>
-
           <article className="panel acquisition-document-market">
             <div className="acquisition-document-head">
               <div>
-                <span className="section-kicker">{selected.code} · {language === "en" ? "FULL PROMOTION CHANNEL MAP" : "ПОЛНАЯ КАРТА КАНАЛОВ ПРОДВИЖЕНИЯ"}</span>
+                <span className="section-kicker">{language === "en" ? "UPDATED PROMOTION CHANNEL MAP · 2026" : "ОБНОВЛЁННАЯ КАРТА КАНАЛОВ ПРОДВИЖЕНИЯ · 2026"}</span>
                 <h2>{selectedAcquisitionDocument.name[language]}</h2>
               </div>
+              <div className="acquisition-map-count"><strong>{selectedAcquisitionRows.length}</strong><span>{language === "en" ? "channels and cases" : "каналов и кейсов"}</span></div>
             </div>
             <div className="acquisition-country-context">
               <div className="acquisition-country-head">
@@ -883,14 +1009,41 @@ export function MarketDashboard() {
               </div>
             </div>
 
-            <div className="acquisition-channels-heading">
+            <div className="acquisition-channels-heading acquisition-unified-heading">
               <div>
-                <span className="section-kicker">{language === "en" ? "DETAILED CHANNEL LIST" : "ПОДРОБНЫЙ СПИСОК КАНАЛОВ"}</span>
-                <h3>{language === "en" ? "Audiences, communities and activation points" : "Аудитории, сообщества и точки активации"}</h3>
+                <span className="section-kicker">{language === "en" ? "ONE COUNTRY TABLE" : "ЕДИНАЯ ТАБЛИЦА ПО СТРАНЕ"}</span>
+                <h3>{language === "en" ? "International and local channels and cases" : "Международные и локальные каналы и кейсы"}</h3>
               </div>
-              <p>{language === "en" ? "The complete country-specific channel map follows below." : "Ниже приведена полная карта каналов для выбранной страны."}</p>
+              <p>{language === "en" ? "All audiences, media, events, communities, expert suggestions, local activations and source links from the updated document are consolidated below." : "В таблице сохранены все аудитории, медиа, события, сообщества, предложения экспертов, локальные активации и ссылки из обновлённого документа."}</p>
             </div>
-            <div className="acquisition-source-content" dangerouslySetInnerHTML={{ __html: selectedAcquisitionDocumentHtml }} />
+            <div className="acquisition-unified-table-wrap">
+              <table className="acquisition-unified-table">
+                <thead>
+                  <tr>
+                    <th>{language === "en" ? "Channel or case" : "Канал или кейс"}</th>
+                    <th>{language === "en" ? "Context and role" : "Контекст и роль"}</th>
+                    <th>{language === "en" ? "Recommended activation" : "Рекомендуемая активация"}</th>
+                    <th>{language === "en" ? "Links" : "Ссылки"}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {selectedAcquisitionRows.map((row, index) => {
+                    const previousCategory = selectedAcquisitionRows[index - 1]?.category;
+                    return (
+                      <Fragment key={`${row.category}-${index}`}>
+                        {row.category !== previousCategory && <tr className="acquisition-table-group"><th colSpan={4}>{row.category}</th></tr>}
+                        <tr>
+                          <td dangerouslySetInnerHTML={{ __html: row.channelHtml }} />
+                          <td dangerouslySetInnerHTML={{ __html: row.contextHtml }} />
+                          <td dangerouslySetInnerHTML={{ __html: row.activationHtml }} />
+                          <td className="acquisition-table-links" dangerouslySetInnerHTML={{ __html: row.linksHtml }} />
+                        </tr>
+                      </Fragment>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
           </article>
 
           <section className="acquisition-document-global" aria-label={language === "en" ? "Channel-map rules" : "Общие правила карты каналов"}>
@@ -1035,7 +1188,7 @@ export function MarketDashboard() {
       {tab === "profiles" && (
         <section className="profiles-layout">
           <aside className="panel profile-nav">
-            <span className="section-kicker">COUNTRY PROFILES</span>
+            <span className="section-kicker">ПРОФИЛИ СТРАН</span>
             {data.markets.map((market) => (
               <button key={market.code} type="button" className={selectedCode === market.code ? "active" : ""} onClick={() => chooseMarket(market.code)}>
                 <span>{market.code}</span><strong>{market.name_ru}</strong><small>{getUnifiedScore(market.code).final_score.toFixed(2)}</small>
@@ -1095,9 +1248,9 @@ export function MarketDashboard() {
             </div>
             <div className="numbers-strip">
               <div><span>Переводы</span><strong>{formatMoney(selected.metrics.remittance_in_usd, language)}</strong><small>{selected.metrics.remittance_in_usd?.year}</small></div>
-              <div><span>Инфляция</span><strong>{selected.metrics.imf_weo.inflation_2025_pct.toFixed(1)}%</strong><small>IMF 2025</small></div>
-              <div><span>Account ownership</span><strong>{selected.metrics.findex_2024.account_ownership_pct.toFixed(1)}%</strong><small>Findex 2024</small></div>
-              <div><span>Crypto rank</span><strong>{selected.metrics.chainalysis_rank_2025 ? `#${selected.metrics.chainalysis_rank_2025}` : ">20"}</strong><small>Chainalysis 2025</small></div>
+              <div><span>Инфляция</span><strong>{selected.metrics.imf_weo.inflation_2025_pct.toFixed(1)}%</strong><small>МВФ 2025</small></div>
+              <div><span>Владеют счётом</span><strong>{selected.metrics.findex_2024.account_ownership_pct.toFixed(1)}%</strong><small>Global Findex 2024</small></div>
+              <div><span>Рейтинг криптоадаптации</span><strong>{selected.metrics.chainalysis_rank_2025 ? `#${selected.metrics.chainalysis_rank_2025}` : ">20"}</strong><small>Chainalysis 2025</small></div>
             </div>
             <div className="case-studies-section">
               <div className="case-studies-heading">
@@ -1123,7 +1276,7 @@ export function MarketDashboard() {
               </div>
             </div>
             <div className="regulatory-section">
-              <div><span className="section-kicker">REGULATORY GATE</span><h3>{gateLabels[selected.regulatory.gate]}</h3><p>{selected.regulatory.status}</p></div>
+              <div><span className="section-kicker">РЕГУЛЯТОРНОЕ УСЛОВИЕ</span><h3>{gateLabels[selected.regulatory.gate]}</h3><p>{selected.regulatory.status}</p></div>
               <div className="source-chips">{selected.regulatory.source_ids.map((id) => <SourceChip key={id} sourceId={id} plain />)}</div>
             </div>
             <div className="profile-fit-section unified-score-detail">
@@ -1314,7 +1467,7 @@ export function MarketDashboard() {
           </div>
           <div className="subsection-heading competition-detail-heading">
             <div>
-              <span className="section-kicker">OFFICIAL EVIDENCE</span>
+              <span className="section-kicker">ОФИЦИАЛЬНЫЕ ДАННЫЕ</span>
               <h2>{competitorMarket === "ALL" ? "Профили и покрытие" : `Доступность: ${data.markets.find((market) => market.code === competitorMarket)?.name_ru}`}</h2>
             </div>
             <span className="count-pill">{competitorMarket === "ALL" ? "вся география" : "сначала доступные"}</span>
@@ -1358,7 +1511,7 @@ export function MarketDashboard() {
             })}
           </div>
           <div className="subsection-heading">
-            <div><span className="section-kicker">VERIFIED PRICE POINTS</span><h2>Сопоставимые тарифы и лимиты</h2><p>Только опубликованные цифры с официальных страниц; условия разных регионов не переносятся автоматически.</p></div>
+            <div><span className="section-kicker">ПОДТВЕРЖДЁННЫЕ ТАРИФЫ</span><h2>Сопоставимые тарифы и лимиты</h2><p>Только опубликованные цифры с официальных страниц; условия разных регионов не переносятся автоматически.</p></div>
             <span className="count-pill">{data.competitor_benchmarks.length} точек</span>
           </div>
           <div className="benchmark-grid">
@@ -1368,7 +1521,7 @@ export function MarketDashboard() {
               return (
                 <article className="benchmark-card" key={`${item.provider}-${index}`}>
                   <div className="benchmark-head">
-                    <span>{item.market_code === "GLOBAL" ? "Global benchmark" : market?.name_ru ?? item.market_code}</span>
+                    <span>{item.market_code === "GLOBAL" ? (language === "en" ? "Global benchmark" : "Глобальный ориентир") : market?.name_ru ?? item.market_code}</span>
                     <strong>{item.provider}</strong>
                   </div>
                   <p className="benchmark-product">{item.product}</p>
@@ -1385,7 +1538,7 @@ export function MarketDashboard() {
           </div>
           <div className="benchmark-conclusion">
             <strong>Что это означает для APS</strong>
-            <p>Сравнивать нужно effective cost полного сценария: funding → conversion → card/QR spend → cash-out. Headline «0%» без fair-use, FX и withdrawal cost недостаточен.</p>
+            <p>Сравнивать нужно полную стоимость сценария: пополнение → конвертация → оплата картой или QR → вывод средств. Заявление «0%» недостаточно без учёта ограничений, обменного курса и стоимости вывода.</p>
           </div>
         </section>
       )}
@@ -1420,11 +1573,11 @@ export function MarketDashboard() {
       {tab === "data" && (
         <section className="panel data-panel">
           <div className="panel-heading">
-            <div><span className="section-kicker">RAW INDICATOR DATA</span><h2>Сопоставимые значения</h2><p>Каждая ячейка хранит год наблюдения. «Нет данных» означает, что источник не публикует показатель.</p></div>
+            <div><span className="section-kicker">ИСХОДНЫЕ ДАННЫЕ</span><h2>Сопоставимые значения</h2><p>Каждая ячейка хранит год наблюдения. «Нет данных» означает, что источник не публикует показатель.</p></div>
           </div>
           <div className="table-scroll">
             <table>
-              <thead><tr><th>Рынок</th><th>Итог</th><th>Потребность</th><th>Коммерческий потенциал</th><th>Реализуемость входа</th><th>Входящие переводы</th><th>% ВВП</th><th>Население</th><th>Интернет</th><th>Account ownership</th><th>Digital payments</th><th>Smartphone</th><th>Инфляция 2025</th><th>Crypto rank</th></tr></thead>
+              <thead><tr><th>Рынок</th><th>Итог</th><th>Потребность</th><th>Коммерческий потенциал</th><th>Реализуемость входа</th><th>Входящие переводы</th><th>% ВВП</th><th>Население</th><th>Интернет</th><th>Владеют счётом</th><th>Цифровые платежи</th><th>Смартфоны</th><th>Инфляция 2025</th><th>Рейтинг криптоадаптации</th></tr></thead>
               <tbody>
                 {data.markets.map((market) => {
                   const unified = getUnifiedScore(market.code);
@@ -1454,15 +1607,15 @@ export function MarketDashboard() {
       {tab === "method" && (
         <section className="method-layout">
           <article className="panel methodology-card">
-            <span className="section-kicker">METHODOLOGY</span>
+            <span className="section-kicker">МЕТОДОЛОГИЯ</span>
             <h2>Одна оценка, девять непересекающихся критериев</h2>
             <div className="method-steps">
-              <div><span>01</span><strong>Фактический слой</strong><p>World Bank, Global Findex, IMF, Chainalysis и регуляторы. Год хранится рядом с каждым значением.</p></div>
+              <div><span>01</span><strong>Фактический слой</strong><p>Всемирный банк, Global Findex, МВФ, Chainalysis и регуляторы. Год хранится рядом с каждым значением.</p></div>
               <div><span>02</span><strong>Единая рубрика 1–5</strong><p>Одинаковые определения применены ко всем восьми рынкам. Балл — нормированная аналитическая оценка, а не внешняя статистика.</p></div>
-              <div><span>03</span><strong>Полная конкурентная среда</strong><p>Учитываются KAST, прямые аналоги, exchanges, банки, кошельки и локальные платёжные сервисы.</p></div>
+              <div><span>03</span><strong>Полная конкурентная среда</strong><p>Учитываются KAST, прямые аналоги, криптобиржи, банки, кошельки и локальные платёжные сервисы.</p></div>
               <div><span>04</span><strong>Качественная проверка</strong><p>Интервью уточняют незакрытые задачи, экономику переключения и практический путь входа, но не добавляются отдельным бонусом.</p></div>
               <div><span>05</span><strong>Жёсткие ограничители</strong><p>Критически нерешённая лицензия, недоступный канал запуска или действительно неподтверждённый спрос ограничивают максимум, даже если другие показатели сильны.</p></div>
-              <div><span>06</span><strong>Уровень подтверждения</strong><p>Confidence остаётся отдельной пометкой качества доказательств и не является второй оценкой рынка.</p></div>
+              <div><span>06</span><strong>Уровень подтверждения</strong><p>Уровень подтверждения остаётся отдельной пометкой качества доказательств и не является второй оценкой рынка.</p></div>
             </div>
             <div className="formula-box"><code>{data.unified_scoring.formula}</code><p>Итог = сумма девяти баллов × их веса. Пример: Филиппины = 5×15% + 3,5×12% + 4,5×8% + 4×15% + 4×10% + 4,5×5% + 4×15% + 5×12% + 4,5×8% = 4,315 → <strong>{language === "en" ? "4.32" : "4,32"}</strong>.</p></div>
             <div className="method-blocks">
@@ -1473,15 +1626,15 @@ export function MarketDashboard() {
                 </article>
               ))}
             </div>
-            <div className="formula-box gate-formula"><code>Итог = min(взвешенный балл, применимый gate)</code>{data.unified_scoring.gates.map((gate) => <p key={gate.key}><strong>Максимум {gate.cap.toFixed(2)}:</strong> {gate.rule}</p>)}<p>Для Вьетнама входящие переводы 2024 рассчитаны как 3,4% от опубликованного World Bank ВВП 2024; производное значение отмечено в данных.</p></div>
+            <div className="formula-box gate-formula"><code>Итог = min(взвешенный балл, применимый ограничитель)</code>{data.unified_scoring.gates.map((gate) => <p key={gate.key}><strong>Максимум {gate.cap.toFixed(2)}:</strong> {gate.rule}</p>)}<p>Для Вьетнама входящие переводы 2024 рассчитаны как 3,4% от опубликованного Всемирным банком ВВП 2024; производное значение отмечено в данных.</p></div>
           </article>
 
           <article className="panel sources-card">
-            <div className="panel-heading compact"><div><span className="section-kicker">SOURCE REGISTER</span><h2>{data.sources.length} базовых источников</h2></div></div>
+            <div className="panel-heading compact"><div><span className="section-kicker">РЕЕСТР ИСТОЧНИКОВ</span><h2>{data.sources.length} базовых источников</h2></div></div>
             <div className="sources-list">
               {data.sources.map((source) => (
                 <article key={source.id}>
-                  <span className="source-tier">{source.tier.replaceAll("_", " ")}</span>
+                  <span className="source-tier">{getSourceTierLabel(source.tier, language)}</span>
                   <strong>{source.title}</strong>
                   <p>{source.publisher} · {source.period}</p>
                   <small>Проверено {source.accessed}</small>

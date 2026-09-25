@@ -725,6 +725,23 @@ body {
 .acquisition-channels-heading { display: flex; align-items: end; justify-content: space-between; gap: 30px; padding: 25px 30px 18px; }
 .acquisition-channels-heading h3 { margin: 6px 0 0; font-size: 24px; letter-spacing: -.025em; }
 .acquisition-channels-heading > p { max-width: 390px; margin: 0; color: var(--ink-soft); font-size: 10px; line-height: 1.5; text-align: right; }
+.acquisition-unified-heading { border-top: 1px solid var(--line); }
+.acquisition-unified-table-wrap { overflow-x: auto; border-top: 1px solid var(--line); }
+.acquisition-unified-table { width: 100%; min-width: 980px; border-collapse: collapse; table-layout: fixed; background: #0c120e; }
+.acquisition-unified-table thead th { position: sticky; top: 0; padding: 13px 16px; background: #17211b; color: #aebbb3; font-size: 9px; font-weight: 750; letter-spacing: .07em; text-align: left; text-transform: uppercase; }
+.acquisition-unified-table thead th:nth-child(1) { width: 23%; }
+.acquisition-unified-table thead th:nth-child(2) { width: 31%; }
+.acquisition-unified-table thead th:nth-child(3) { width: 31%; }
+.acquisition-unified-table thead th:nth-child(4) { width: 15%; }
+.acquisition-unified-table td { padding: 15px 16px; border-bottom: 1px solid var(--line); color: #d8e1dc; font-size: 12px; line-height: 1.55; vertical-align: top; overflow-wrap: anywhere; }
+.acquisition-unified-table td + td { border-left: 1px solid rgba(45, 59, 51, .72); }
+.acquisition-unified-table td:first-child { color: #f2f7f4; font-weight: 720; }
+.acquisition-unified-table p { margin: 0; }
+.acquisition-unified-table strong { color: inherit; }
+.acquisition-unified-table a { color: #73eaa0; text-decoration-color: rgba(115,234,160,.35); text-underline-offset: 3px; }
+.acquisition-unified-table a:hover { color: #b9ffcf; }
+.acquisition-table-group th { padding: 17px 16px 10px; border-top: 1px solid #3a4a41; border-bottom: 1px solid var(--line); background: #102419; color: var(--lime); font-size: 12px; letter-spacing: .01em; text-align: left; }
+.acquisition-table-links { font: 600 10px/1.5 var(--font-plex-mono); }
 
 .barriers-layout { padding: 18px 8px 0; }
 .barriers-summary { overflow: hidden; }

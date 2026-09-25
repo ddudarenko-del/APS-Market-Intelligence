@@ -119,8 +119,12 @@ test("keeps production metadata and documented market intelligence", async () =>
   assert.match(dashboard, /removeAcquisitionEvidenceMarkers/);
   assert.match(dashboard, /replace\(\/\[★✓△\]/);
   assert.match(dashboard, /selectedAcquisitionDocumentHtml/);
-  assert.ok(dashboard.indexOf('className="acquisition-country-context"') < dashboard.indexOf('className="acquisition-source-content"'));
-  assert.match(styles, /\.acquisition-source-content table/);
+  assert.match(dashboard, /parseAcquisitionChannelTable/);
+  assert.match(dashboard, /className="acquisition-unified-table"/);
+  assert.match(dashboard, /Международные и локальные каналы и кейсы/);
+  assert.ok(dashboard.indexOf('className="acquisition-country-context"') < dashboard.indexOf('className="acquisition-unified-table-wrap"'));
+  assert.match(styles, /\.acquisition-unified-table \{/);
+  assert.doesNotMatch(dashboard, /className="panel acquisition-map-intro"/);
   assert.match(styles, /\.acquisition-document-global/);
   assert.doesNotMatch(styles, /\.acquisition-reading-key|\.acquisition-document-status|\.acquisition-secondary-heading|\.acquisition-priority-table/);
   assert.match(dashboard, /strategicallyOrderedVisibleMarkets/);
@@ -169,7 +173,7 @@ test("keeps production metadata and documented market intelligence", async () =>
   assert.match(dashboard, /function RichInlineText/);
   assert.match(dashboard, /Что важнее на этом рынке/);
   assert.match(dashboard, /Конкретные основания решения/);
-  assert.match(dashboard, /Аудитории, сообщества и точки активации/);
+  assert.match(dashboard, /Международные и локальные каналы и кейсы/);
   assert.match(dashboard, /data\.case_lessons/);
   assert.match(dashboard, /КЕЙСЫ ПО РЫНКАМ/);
   assert.match(dashboard, /кейсов и примеров/);
@@ -226,4 +230,7 @@ test("ships a reviewed RU / EN language layer without changing the Russian defau
   assert.match(localization, /"Обзор и итоги": "Overview and findings"/);
   assert.match(localization, /"Профили стран": "Country profiles"/);
   assert.match(localization, /"Каналы продвижения": "Promotion channels"/);
+  assert.match(localization, /"ПРОФИЛИ СТРАН": "COUNTRY PROFILES"/);
+  assert.doesNotMatch(dashboard, />COUNTRY PROFILES</);
+  assert.doesNotMatch(dashboard, /Сообщение\. В отличие от UK и Канады/);
 });
