@@ -265,6 +265,78 @@ const competitionRoleLabels: Record<string, string> = {
   historical: "Исторический кейс",
 };
 
+const competitorWebsiteById: Record<string, string> = {
+  kast: "https://www.kast.xyz/",
+  redotpay: "https://www.redotpay.com/",
+  bleap: "https://www.bleap.finance/",
+  etherfi_cash: "https://www.ether.fi/",
+  gnosis_pay: "https://gnosispay.com/",
+  nexo: "https://nexo.com/",
+  crypto_com: "https://crypto.com/",
+  wirex: "https://wirexapp.com/",
+  coinbase: "https://www.coinbase.com/",
+  revolut: "https://www.revolut.com/",
+  wise: "https://wise.com/",
+  kraken: "https://www.kraken.com/",
+  lemfi: "https://www.lemfi.com/",
+  taptap_send: "https://www.taptapsend.com/",
+  remitly: "https://www.remitly.com/",
+  p3_money: "https://privat3money.com/",
+  "3s_money": "https://3s.money/",
+  lemon: "https://lemon.me/",
+  belo: "https://www.belo.app/",
+  arq: "https://www.arqfinance.com/",
+  bitso: "https://bitso.com/",
+  bybit: "https://www.bybit.com/",
+  bitget_wallet: "https://web3.bitget.com/",
+  tria: "https://www.tria.so/",
+  tangem_wallet: "https://tangem.com/",
+  meru: "https://www.getmeru.com/",
+  takenos: "https://takenos.com/",
+  kontigo: "https://www.kontigo.com/",
+  brighty: "https://brighty.app/",
+  littio: "https://littio.co/",
+  td: "https://www.td.com/ca/en/personal-banking",
+  rbc: "https://www.rbcroyalbank.com/",
+  cibc: "https://www.cibc.com/",
+  moonpay: "https://www.moonpay.com/",
+  binance: "https://www.binance.com/",
+  digifinex: "https://www.digifinex.com/",
+  gcash: "https://gcash.com/",
+  maya: "https://www.maya.ph/",
+  coins_ph: "https://www.coins.ph/",
+  pdax: "https://pdax.ph/",
+  qris: "https://www.bi.go.id/QRIS/default.aspx",
+  gopay: "https://gopay.co.id/",
+  shopeepay: "https://shopeepay.co.id/",
+  dana: "https://www.dana.id/",
+  ovo: "https://www.ovo.id/",
+  pintu: "https://pintu.co.id/",
+  indodax: "https://indodax.com/",
+  tokocrypto: "https://www.tokocrypto.com/",
+  reku: "https://reku.id/",
+  vietqr_napas: "https://en.napas.com.vn/",
+  momo: "https://www.momo.vn/",
+  zalopay: "https://zalopay.vn/",
+  viettel_money: "https://www.viettelmoney.vn/",
+  coin98: "https://coin98.com/",
+};
+
+function CompetitorWebsiteLink({ competitor }: { competitor: (typeof data.market_competitors)[number] }) {
+  const website = competitorWebsiteById[competitor.id];
+  if (!website) return <>{competitor.provider}</>;
+  return (
+    <a
+      className="competitor-website-link"
+      href={website}
+      target="_blank"
+      rel="noreferrer"
+    >
+      {competitor.provider}<span aria-hidden="true">↗</span>
+    </a>
+  );
+}
+
 const sourceLabelOverrides: Record<string, string> = {
   kast_series_a_2026: "KAST · показатели",
   kast_card_fees_2026: "KAST · тарифы",
@@ -1342,7 +1414,7 @@ export function MarketDashboard() {
                     <h4>{competitionGroupLabels[group]}</h4>
                     <div>{selectedCompetition.entities.filter((entity) => entity.group_type === group).map((entity) => {
                       const competitor = data.market_competitors.find((item) => item.id === entity.competitor_id);
-                      return <span className={`local-entity ${entity.role}`} key={entity.competitor_id}><strong>{competitor?.provider ?? entity.competitor_id}</strong><small>{competitionRoleLabels[entity.role]}</small></span>;
+                      return <span className={`local-entity ${entity.role}`} key={entity.competitor_id}><strong>{competitor ? <CompetitorWebsiteLink competitor={competitor} /> : entity.competitor_id}</strong><small>{competitionRoleLabels[entity.role]}</small></span>;
                     })}</div>
                   </article>
                 ))}
@@ -1368,7 +1440,7 @@ export function MarketDashboard() {
                           const competitor = data.market_competitors.find((item) => item.id === entity.competitor_id);
                           return (
                             <tr key={`local-table-${entity.competitor_id}`}>
-                              <td><strong>{competitor?.provider ?? entity.competitor_id}</strong><small>{competitor?.profile}</small></td>
+                              <td><strong>{competitor ? <CompetitorWebsiteLink competitor={competitor} /> : entity.competitor_id}</strong><small>{competitor?.profile}</small></td>
                               <td>{entity.relevance}</td>
                               <td>{entity.strength}</td>
                               <td>{entity.gap}</td>
@@ -1383,7 +1455,7 @@ export function MarketDashboard() {
                       const competitor = data.market_competitors.find((item) => item.id === entity.competitor_id);
                       return (
                         <article key={`local-analysis-${entity.competitor_id}`}>
-                          <div className="local-competitor-analysis-head"><span>{competitionGroupLabels[entity.group_type]}</span><h4>{competitor?.provider ?? entity.competitor_id}</h4></div>
+                          <div className="local-competitor-analysis-head"><span>{competitionGroupLabels[entity.group_type]}</span><h4>{competitor ? <CompetitorWebsiteLink competitor={competitor} /> : entity.competitor_id}</h4></div>
                           <p className="local-competitor-product">{competitor?.product}</p>
                           {entity.expert_insight?.text && <div><strong>Что отмечают эксперты</strong><p>{entity.expert_insight.text}</p></div>}
                           <div><strong>Вывод для APS</strong><p>{entity.project_implication}</p></div>
@@ -1417,7 +1489,7 @@ export function MarketDashboard() {
                 <tbody>
                   {globalCompetitors.map((item) => (
                     <tr key={item.provider}>
-                      <td><strong>{item.provider}</strong></td>
+                      <td><strong><CompetitorWebsiteLink competitor={item} /></strong></td>
                       <td><span>{item.profile}</span></td>
                       {data.markets.map((market) => {
                         const marketAvailability = getAvailability(item, market.code);
@@ -1451,7 +1523,7 @@ export function MarketDashboard() {
                     const marketAvailability = getAvailability(item, competitorMarket);
                     return (
                       <tr key={item.provider}>
-                        <td><strong>{item.provider}</strong></td>
+                        <td><strong><CompetitorWebsiteLink competitor={item} /></strong></td>
                         <td><span>{item.profile}</span></td>
                         <td><AvailabilityBadge status={marketAvailability.status} /></td>
                         <td><strong className={`support-value ${marketAvailability.account === null ? "unknown" : marketAvailability.account ? "yes" : "no"}`}>{supportLabel(marketAvailability.account)}</strong></td>
@@ -1481,7 +1553,7 @@ export function MarketDashboard() {
                 <article className="competitor-card" key={item.provider}>
                   <div className="competitor-card-head">
                     <span>{item.profile}</span>
-                    <strong>{item.provider}</strong>
+                    <strong><CompetitorWebsiteLink competitor={item} /></strong>
                   </div>
                   {selectedAvailability ? (
                     <div className="selected-availability">

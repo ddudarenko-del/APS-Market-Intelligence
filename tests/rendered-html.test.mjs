@@ -85,6 +85,10 @@ test("keeps production metadata and documented market intelligence", async () =>
   assert.equal("source_url" in parsedData.strategic_ranking, false);
   assert.match(dashboard, /ЕДИНАЯ ОЦЕНКА/i);
   assert.match(dashboard, /data\.market_competitors/);
+  assert.match(dashboard, /const competitorWebsiteById/);
+  assert.match(dashboard, /function CompetitorWebsiteLink/);
+  assert.match(dashboard, /className="competitor-website-link"/);
+  assert.match(styles, /\.competitor-website-link/);
   assert.match(dashboard, /\/data\/countries\.geojson/);
   assert.doesNotMatch(dashboard, /cartocdn|CARTO/i);
   assert.doesNotMatch(dashboard, /data-market-profile|onOpenProfileRef/);

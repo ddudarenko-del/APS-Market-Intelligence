@@ -574,6 +574,10 @@ body {
 .availability-table tbody tr:last-child td { border-bottom: 0; }
 .availability-table tbody tr:hover td { background: #111a14; }
 .availability-table td strong { color: var(--ink); font-size: 13px; }
+.competitor-website-link { display: inline-flex; align-items: baseline; gap: 5px; color: inherit; text-decoration-color: rgba(64, 247, 133, .42); text-decoration-thickness: 1px; text-underline-offset: 3px; }
+.competitor-website-link span { color: var(--lime); font-size: .78em; font-weight: 800; }
+.competitor-website-link:hover { color: var(--lime); }
+.competitor-website-link:focus-visible { border-radius: 3px; outline: 2px solid var(--lime); outline-offset: 3px; }
 .availability-table td > span { color: var(--ink-soft); font-size: 10px; }
 .availability-table td button { display: inline-flex; align-items: center; justify-content: center; width: 32px; height: 28px; border: 0; border-radius: 8px; background: transparent; cursor: pointer; }
 .availability-table td button:hover { background: #1f2b23; }
