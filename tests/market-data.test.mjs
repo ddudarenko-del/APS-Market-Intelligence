@@ -233,13 +233,15 @@ test("treats Mexico demand as confirmed and compliance as the binding constraint
 test("adds the complete task-five content to the conclusions tab", () => {
   assert.equal(task5Conclusions.cross_market.length, 8);
   assert.deepEqual(new Set(Object.keys(task5Conclusions.markets)), marketCodes);
-  assert.equal(Object.values(task5Conclusions.markets).flat().length, 80);
+  assert.equal(Object.values(task5Conclusions.markets).flat().length, 82);
   assert.ok(task5Conclusions.cross_market.every((item) => item.title && item.body));
   assert.ok(Object.values(task5Conclusions.markets).flat().every((item) => item.title));
   assert.match(task5Conclusions.cross_market.map((item) => item.title).join(" "), /конкретный денежный коридор/);
   assert.match(task5Conclusions.markets.IDN.map((item) => `${item.title} ${item.body}`).join(" "), /QRIS как основа продукта/);
   assert.match(task5Conclusions.markets.PHL.map((item) => `${item.title} ${item.body}`).join(" "), /основного кормильца/);
   assert.match(task5Conclusions.markets.CAN.map((item) => `${item.title} ${item.body}`).join(" "), /Interac критически важен/);
+  assert.match(task5Conclusions.markets.COL.map((item) => item.body).join(" "), /отдельный бренд/);
+  assert.match(task5Conclusions.markets.VNM.map((item) => item.body).join(" "), /сохраняют ему верность/);
 });
 
 test("integrates both Indonesia interviews into positioning, acquisition and competitors", () => {
