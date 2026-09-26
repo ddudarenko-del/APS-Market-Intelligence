@@ -807,6 +807,7 @@ export function MarketDashboard() {
   const [selectedCode, setSelectedCode] = useState("PHL");
   const [competitorMarket, setCompetitorMarket] = useState("ALL");
   const [strategicOverlayOpen, setStrategicOverlayOpen] = useState(false);
+  const [rankingMode, setRankingMode] = useState<"strategic" | "base">("strategic");
 
   const selected = data.markets.find((market) => market.code === selectedCode) ?? data.markets[0];
   const selectedAssessment = data.market_assessments.find((item) => item.market_code === selected.code) ?? data.market_assessments[0];
@@ -822,7 +823,8 @@ export function MarketDashboard() {
   const selectedCompetition = competitorMarket === "ALL" ? null : data.competition_by_market.find((item) => item.market_code === competitorMarket) ?? null;
   const selectedCompetitionAssessment = competitorMarket === "ALL" ? null : data.market_assessments.find((item) => item.market_code === competitorMarket) ?? null;
   const globalCompetitors = data.market_competitors.filter((item) => item.scope === "global" && item.availability);
-  const strategicallyOrderedVisibleMarkets = [...visibleMarkets].sort((a, b) => {
+  const rankedVisibleMarkets = [...visibleMarkets].sort((a, b) => {
+    if (rankingMode === "base") return getUnifiedScore(b.code).final_score - getUnifiedScore(a.code).final_score;
     const aPosition = data.strategic_ranking.rows.findIndex((row) => row.market_code === a.code);
     const bPosition = data.strategic_ranking.rows.findIndex((row) => row.market_code === b.code);
     return aPosition - bPosition;
@@ -958,16 +960,20 @@ export function MarketDashboard() {
               </div>
               <span className="count-pill">8 рынков</span>
             </div>
+            <div className="ranking-mode-switch" role="group" aria-label="Порядок рейтинга">
+              <button type="button" aria-pressed={rankingMode === "strategic"} onClick={() => setRankingMode("strategic")}><span>Стратегический</span></button>
+              <button type="button" aria-pressed={rankingMode === "base"} onClick={() => setRankingMode("base")}><span>Базовый</span></button>
+            </div>
             <div className="ranking-columns" aria-hidden="true">
               <span>Страна</span>
               <span>Базовый</span>
               <span>Стратегический</span>
             </div>
             <div className="ranking-list">
-              {strategicallyOrderedVisibleMarkets.map((market) => (
+              {rankedVisibleMarkets.map((market, index) => (
                 <button key={market.code} type="button" onClick={() => chooseOverviewMarket(market.code)} className={selectedCode === market.code ? "active" : ""}>
                   <span className="rank-country">
-                    <span className="rank-number">{data.strategic_ranking.rows.findIndex((row) => row.market_code === market.code) + 1}</span>
+                    <span className="rank-number">{index + 1}</span>
                     <span className="rank-name"><strong>{market.name_ru}</strong><small>{market.region}</small></span>
                   </span>
                   <ScoreBadge score={getUnifiedScore(market.code).final_score} />

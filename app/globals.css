@@ -340,6 +340,10 @@ body {
 
 .ranking-panel { align-self: start; overflow: hidden; }
 .ranking-columns { display: grid; grid-template-columns: minmax(120px, 1fr) 58px minmax(125px, 1.1fr); gap: 8px; padding: 12px 22px 8px; border-bottom: 1px solid var(--line); color: #7f8c85; font: 650 9px var(--font-plex-mono), monospace; letter-spacing: .08em; text-transform: uppercase; }
+.ranking-mode-switch { display: flex; gap: 4px; margin: 16px 20px; padding: 4px; border: 1px solid var(--line); border-radius: 14px; }
+.ranking-mode-switch button { flex: 1; min-width: 0; min-height: 44px; padding: 8px; border: 0; border-radius: 10px; background: transparent; color: var(--ink); font: inherit; font-size: 14px; font-weight: 700; cursor: pointer; }
+.ranking-mode-switch button[aria-pressed="true"] { background: #32f580; color: #08120c; }
+.ranking-mode-switch button:focus-visible { outline: 2px solid #32f580; outline-offset: 3px; }
 .ranking-columns span:nth-child(2), .ranking-columns span:nth-child(3) { text-align: center; }
 .ranking-list button { grid-template-columns: minmax(120px, 1fr) 58px minmax(125px, 1.1fr); gap: 8px; }
 .ranking-list .strategic-rating-label { width: 100%; padding: 7px 6px; }

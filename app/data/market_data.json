@@ -162,6 +162,33 @@
         ]
       },
       {
+        "market_code": "VNM",
+        "rating": "Conditional Opportunity",
+        "hashtags": ["#CryptoNativeUsers", "#USDTtoQR", "#GamingPayments", "#LocalPartner", "#PhishingRisk", "#RegulatoryUncertainty"],
+        "details_en": [
+          "Core hypothesis: Start with crypto-native users who already hold or earn stablecoins and need a direct route from USDT to everyday local spending without manual P2P exchange.",
+          "Entry focus: Verify the regulatory framework and secure a credible local partner connected to licensed financial infrastructure. Confirm whether stablecoin conversion, Vietnamese-dong settlement and local QR payments are legally possible.",
+          "Priority audiences: Traders, Web3 developers and marketers, crypto-paid professionals, DeFi and airdrop participants, blockchain gamers and technology-oriented investors under 40.",
+          "Product: Direct stablecoin spending through Vietnamese QR payments, local-currency conversion, family transfers and international-income management. Apple Pay or a similarly simple tap-to-pay experience could strengthen daily utility. A B2B payment-gateway offer for gaming and Web3 ecosystems provides an additional route to scale.",
+          "Priority corridors: Vietnam ↔ Singapore, Thailand, South Korea, Japan and Taiwan, subject to further validation of actual transfer volumes.",
+          "Focus geographies: Ho Chi Minh City and Hanoi for technology and professional audiences, with Da Nang as an international and digital-work hub.",
+          "Communities and channels: Telegram, X, Coin68, 5 Phút Crypto, developer groups, gaming ecosystems and specialist KOL communities.",
+          "Activation: Recruit trusted KOLs as early testers and demonstrate the complete journey from receiving USDT to paying a merchant or transferring money to family.",
+          "Entry implication: Regulation, local partnership and trust are prerequisites. Verified outreach is essential because users are highly alert to phishing and wallet theft."
+        ],
+        "details_ru": [
+          "Основная гипотеза: начать с crypto-native пользователей, которые уже хранят или зарабатывают стейблкоины и нуждаются в прямом пути от USDT к повседневным локальным расходам без ручного P2P-обмена.",
+          "Фокус входа: проверить регуляторную среду и привлечь надёжного локального партнёра, подключённого к лицензированной финансовой инфраструктуре. Подтвердить юридическую возможность конвертации стейблкоинов, расчётов во вьетнамских донгах и локальных QR-платежей.",
+          "Приоритетные аудитории: трейдеры, разработчики и маркетологи Web3, специалисты с оплатой в криптовалюте, участники DeFi и airdrop, blockchain-геймеры и технологически ориентированные инвесторы младше 40 лет.",
+          "Продукт: прямое расходование стейблкоинов через вьетнамские QR-платежи, конвертация в локальную валюту, семейные переводы и управление международным доходом. Apple Pay или столь же простой tap-to-pay-сценарий может усилить повседневную пользу. B2B-платёжный шлюз для gaming- и Web3-экосистем создаёт дополнительный путь масштабирования.",
+          "Приоритетные коридоры: Вьетнам ↔ Сингапур, Таиланд, Южная Корея, Япония и Тайвань, при условии дополнительной проверки реальных объёмов переводов.",
+          "Фокусная география: Хошимин и Ханой для технологической и профессиональной аудитории, Дананг как международный центр цифровой работы.",
+          "Сообщества и каналы: Telegram, X, Coin68, 5 Phút Crypto, группы разработчиков, gaming-экосистемы и специализированные сообщества KOL.",
+          "Активация: привлечь доверенных KOL в качестве ранних тестировщиков и показать полный путь от получения USDT до оплаты продавцу или перевода семье.",
+          "Условие входа: регулирование, локальное партнёрство и доверие обязательны. Верифицированная коммуникация критична, поскольку пользователи особенно внимательны к фишингу и краже средств из кошельков."
+        ]
+      },
+      {
         "market_code": "CAN",
         "rating": "Longer-Term, Corridor-Specific Opportunity",
         "hashtags": ["#DiasporaRemittances", "#CorridorStrategy", "#PairedOnboarding", "#MSBLimitations", "#CustodyLicence", "#DevelopedMarketCompetition", "#TraditionalMarket", "#UniversityDiasporas"],
@@ -213,33 +240,6 @@
           "Сообщества и каналы: индийские профессиональные группы, нигерийские деловые и студенческие сети, сообщества филиппинских работников NHS и сферы ухода, медиа диаспор, культурные организации, рабочие места и религиозные учреждения.",
           "Активация: сессии финансового образования на рабочих местах, парный семейный онбординг и прозрачные сравнения комиссий, курсов и итоговых сумм получения.",
           "Условие входа: массовый рынок крайне конкурентен и хорошо обслуживается. Выход должен опираться на доказанный пробел в конкретном коридоре, а не на широкий запуск кошелька со стейблкоинами."
-        ]
-      },
-      {
-        "market_code": "VNM",
-        "rating": "Conditional Opportunity",
-        "hashtags": ["#CryptoNativeUsers", "#USDTtoQR", "#GamingPayments", "#LocalPartner", "#PhishingRisk", "#RegulatoryUncertainty"],
-        "details_en": [
-          "Core hypothesis: Start with crypto-native users who already hold or earn stablecoins and need a direct route from USDT to everyday local spending without manual P2P exchange.",
-          "Entry focus: Verify the regulatory framework and secure a credible local partner connected to licensed financial infrastructure. Confirm whether stablecoin conversion, Vietnamese-dong settlement and local QR payments are legally possible.",
-          "Priority audiences: Traders, Web3 developers and marketers, crypto-paid professionals, DeFi and airdrop participants, blockchain gamers and technology-oriented investors under 40.",
-          "Product: Direct stablecoin spending through Vietnamese QR payments, local-currency conversion, family transfers and international-income management. Apple Pay or a similarly simple tap-to-pay experience could strengthen daily utility. A B2B payment-gateway offer for gaming and Web3 ecosystems provides an additional route to scale.",
-          "Priority corridors: Vietnam ↔ Singapore, Thailand, South Korea, Japan and Taiwan, subject to further validation of actual transfer volumes.",
-          "Focus geographies: Ho Chi Minh City and Hanoi for technology and professional audiences, with Da Nang as an international and digital-work hub.",
-          "Communities and channels: Telegram, X, Coin68, 5 Phút Crypto, developer groups, gaming ecosystems and specialist KOL communities.",
-          "Activation: Recruit trusted KOLs as early testers and demonstrate the complete journey from receiving USDT to paying a merchant or transferring money to family.",
-          "Entry implication: Regulation, local partnership and trust are prerequisites. Verified outreach is essential because users are highly alert to phishing and wallet theft."
-        ],
-        "details_ru": [
-          "Основная гипотеза: начать с crypto-native пользователей, которые уже хранят или зарабатывают стейблкоины и нуждаются в прямом пути от USDT к повседневным локальным расходам без ручного P2P-обмена.",
-          "Фокус входа: проверить регуляторную среду и привлечь надёжного локального партнёра, подключённого к лицензированной финансовой инфраструктуре. Подтвердить юридическую возможность конвертации стейблкоинов, расчётов во вьетнамских донгах и локальных QR-платежей.",
-          "Приоритетные аудитории: трейдеры, разработчики и маркетологи Web3, специалисты с оплатой в криптовалюте, участники DeFi и airdrop, blockchain-геймеры и технологически ориентированные инвесторы младше 40 лет.",
-          "Продукт: прямое расходование стейблкоинов через вьетнамские QR-платежи, конвертация в локальную валюту, семейные переводы и управление международным доходом. Apple Pay или столь же простой tap-to-pay-сценарий может усилить повседневную пользу. B2B-платёжный шлюз для gaming- и Web3-экосистем создаёт дополнительный путь масштабирования.",
-          "Приоритетные коридоры: Вьетнам ↔ Сингапур, Таиланд, Южная Корея, Япония и Тайвань, при условии дополнительной проверки реальных объёмов переводов.",
-          "Фокусная география: Хошимин и Ханой для технологической и профессиональной аудитории, Дананг как международный центр цифровой работы.",
-          "Сообщества и каналы: Telegram, X, Coin68, 5 Phút Crypto, группы разработчиков, gaming-экосистемы и специализированные сообщества KOL.",
-          "Активация: привлечь доверенных KOL в качестве ранних тестировщиков и показать полный путь от получения USDT до оплаты продавцу или перевода семье.",
-          "Условие входа: регулирование, локальное партнёрство и доверие обязательны. Верифицированная коммуникация критична, поскольку пользователи особенно внимательны к фишингу и краже средств из кошельков."
         ]
       }
     ]

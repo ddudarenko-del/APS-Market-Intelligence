@@ -133,7 +133,7 @@ test("keeps production metadata and documented market intelligence", async () =>
   assert.doesNotMatch(dashboard, /className="panel acquisition-map-intro"/);
   assert.match(styles, /\.acquisition-document-global/);
   assert.doesNotMatch(styles, /\.acquisition-reading-key|\.acquisition-document-status|\.acquisition-secondary-heading|\.acquisition-priority-table/);
-  assert.match(dashboard, /strategicallyOrderedVisibleMarkets/);
+  assert.match(dashboard, /rankedVisibleMarkets/);
   assert.match(dashboard, /className="rank-number"/);
   assert.match(styles, /@keyframes strategic-overlay-in/);
   assert.match(styles, /\.strategic-market-panel\.strategic-market-overlay \{[\s\S]*inset: 0;[\s\S]*width: 100%;[\s\S]*height: 100%;/);

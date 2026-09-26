@@ -3,6 +3,7 @@ import machineTranslations from "./data/translations.en.json";
 export type Language = "ru" | "en";
 
 const reviewedTranslations: Record<string, string> = {
+  "Порядок рейтинга": "Ranking order",
   "Приоритетный рынок": "Priority Market",
   "Приоритетный рынок при условии лицензирования": "Priority Subject to Licensing",
   "Условная возможность": "Conditional Opportunity",
