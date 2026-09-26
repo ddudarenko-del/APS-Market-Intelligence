@@ -37,7 +37,7 @@ test("contains one complete qualitative assessment and six report sections per m
 test("keeps one source-grounded strategic rating for every market", () => {
   assert.equal(data.strategic_ranking.rows.length, 8);
   assert.equal(new Set(data.strategic_ranking.rows.map((row) => row.market_code)).size, 8);
-  assert.deepEqual(data.strategic_ranking.rows.map((row) => row.market_code), ["PHL", "COL", "IDN", "MEX", "ARG", "VNM", "CAN", "GBR"]);
+  assert.deepEqual(data.strategic_ranking.rows.map((row) => row.market_code), ["PHL", "COL", "VNM", "IDN", "MEX", "ARG", "CAN", "GBR"]);
   for (const row of data.strategic_ranking.rows) {
     assert.ok(marketCodes.has(row.market_code));
     assert.ok(row.rating);
