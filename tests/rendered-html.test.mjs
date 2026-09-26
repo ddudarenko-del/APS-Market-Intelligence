@@ -70,8 +70,10 @@ test("keeps production metadata and documented market intelligence", async () =>
   assert.match(layout, /APS Market Intelligence/);
   assert.match(layout, /images:\s*\["\/og\.png"\]/);
   assert.match(dashboard, /data\.unified_scoring/);
-  assert.match(dashboard, /Сравнение и выводы для APS/);
-  assert.match(dashboard, /local-competition-table/);
+  assert.match(dashboard, /Конкуренты по рынкам/);
+  assert.match(dashboard, /unified-competition-table/);
+  assert.match(dashboard, /Глобальный продукт/);
+  assert.match(dashboard, /Локальный игрок/);
   assert.doesNotMatch(dashboard, /id: "compare"/);
   assert.doesNotMatch(dashboard, /id: "conclusions"/);
   assert.doesNotMatch(dashboard, /id: "barriers"/);
