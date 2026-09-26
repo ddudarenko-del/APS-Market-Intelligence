@@ -984,6 +984,7 @@ export function MarketDashboard() {
             <p className="strategic-rating-note">
               Стратегический рейтинг был сформирован на стратегической сессии с командой 14 сентября. Он учитывает готовность выходить на рынки со сложным регулированием, ограничениями на рекламу и высокими требованиями к лицензированию ради более значимых возможностей.
             </p>
+            <p className="strategic-rating-note">Для Канады и Великобритании требуется пересмотр критерия трансграничных денег с учётом исходящих переводов. Их базовые рейтинги пока предварительные.</p>
           </aside>
         </section>
         <section className="conclusions-layout overview-conclusions">
@@ -1599,22 +1600,23 @@ export function MarketDashboard() {
       {tab === "data" && (
         <section className="panel data-panel">
           <div className="panel-heading">
-            <div><span className="section-kicker">ИСХОДНЫЕ ДАННЫЕ</span><h2>Сопоставимые значения</h2><p>Каждая ячейка хранит год наблюдения. «Нет данных» означает, что источник не публикует показатель.</p></div>
+            <div><span className="section-kicker">ИСХОДНЫЕ ДАННЫЕ</span><h2>Сопоставимые значения</h2><p>Статистика приведена за указанный год; оценки и расчёты отмечены отдельно. «Нет данных» означает отсутствие значения в выбранной серии. Рейтинговые баллы — экспертная модель APS, а не статистика первоисточников.</p><p>Для Канады и Великобритании требуется пересмотр критерия трансграничных денег с учётом исходящих переводов. Их базовые рейтинги пока предварительные.</p></div>
           </div>
           <div className="table-scroll">
             <table>
-              <thead><tr><th>Рынок</th><th>Итог</th><th>Потребность</th><th>Коммерческий потенциал</th><th>Реализуемость входа</th><th>Входящие переводы</th><th>% ВВП</th><th>Население</th><th>Интернет</th><th>Владеют счётом</th><th>Цифровые платежи</th><th>Смартфоны</th><th>Инфляция 2025</th><th>Рейтинг криптоадаптации</th></tr></thead>
+              <thead><tr><th>Рынок</th><th>Итог</th><th>Потребность</th><th>Коммерческий потенциал</th><th>Реализуемость входа</th><th>Входящие личные переводы, $</th><th>Исходящие личные переводы, $</th><th>Входящие / ВВП</th><th>Население</th><th>Интернет</th><th>Имеют счёт, 15+</th><th>Совершали или получали цифровые платежи, 15+</th><th>Основной телефон — смартфон, 15+</th><th>Среднегодовая инфляция 2025</th><th>Рейтинг криптоадаптации</th></tr></thead>
               <tbody>
                 {data.markets.map((market) => {
                   const unified = getUnifiedScore(market.code);
                   return <tr key={market.code} onClick={() => chooseMarket(market.code, "profiles")}>
                     <td><strong>{market.name_ru}</strong><small>{market.code}</small></td>
-                    <td>{unified.final_score.toFixed(2)}<small>{unified.label}</small></td>
+                    <td>{unified.final_score.toFixed(2)}<small>{unified.label}</small>{["CAN", "GBR"].includes(market.code) && <small>Предварительный</small>}</td>
                     <td>{unified.block_scores.product_need.toFixed(2)}<small>35%</small></td>
                     <td>{unified.block_scores.commercial_viability.toFixed(2)}<small>30%</small></td>
                     <td>{unified.block_scores.entry_feasibility.toFixed(2)}<small>35%</small></td>
-                    <td>{formatMoney(market.metrics.remittance_in_usd, language)}<small>{market.metrics.remittance_in_usd?.year}</small></td>
-                    <td>{formatPct(market.metrics.remittance_pct_gdp, language)}<small>{market.metrics.remittance_pct_gdp?.year}</small></td>
+                    <td>{formatMoney(market.metrics.remittance_in_usd, language)}<small>{market.metrics.remittance_in_usd?.year}</small>{"estimate" in market.metrics.remittance_in_usd && <small>Оценка Всемирного банка</small>}</td>
+                    <td>{formatMoney(market.metrics.remittance_out_usd, language)}<small>{market.metrics.remittance_out_usd?.year}</small></td>
+                    <td>{formatPct(market.metrics.remittance_pct_gdp, language)}<small>{market.metrics.remittance_pct_gdp?.year}</small>{"derived" in market.metrics.remittance_pct_gdp && <small>Расчёт по ВВП WDI</small>}</td>
                     <td>{formatPeople(market.metrics.population, language)}<small>{market.metrics.population?.year}</small></td>
                     <td>{market.metrics.internet_users_pct ? `${market.metrics.internet_users_pct.value.toFixed(1)}%` : "нет данных"}<small>{market.metrics.internet_users_pct?.year}</small></td>
                     <td>{market.metrics.findex_2024.account_ownership_pct.toFixed(1)}%<small>2024</small></td>
@@ -1627,6 +1629,8 @@ export function MarketDashboard() {
               </tbody>
             </table>
           </div>
+          <p>Личные переводы WDI включают трансферты между домохозяйствами и оплату труда определённых категорий работников. Это не все международные платежи и не объём криптопереводов. Переводы BSP через банковскую систему в профиле Филиппин — отдельный показатель.</p>
+          <div className="source-chips"><SourceChip sourceId="wb_api" /><SourceChip sourceId="vn_remittances_2025" /><SourceChip sourceId="wb_vietnam_data" /><SourceChip sourceId="wb_findex_2025" /><SourceChip sourceId="imf_weo_2026" /><SourceChip sourceId="chainalysis_2025" /></div>
         </section>
       )}
 
@@ -1652,7 +1656,7 @@ export function MarketDashboard() {
                 </article>
               ))}
             </div>
-            <div className="formula-box gate-formula"><code>Итог = min(взвешенный балл, применимый ограничитель)</code>{data.unified_scoring.gates.map((gate) => <p key={gate.key}><strong>Максимум {gate.cap.toFixed(2)}:</strong> {gate.rule}</p>)}<p>Для Вьетнама входящие переводы 2024 рассчитаны как 3,4% от опубликованного Всемирным банком ВВП 2024; производное значение отмечено в данных.</p></div>
+            <div className="formula-box gate-formula"><code>Итог = min(взвешенный балл, применимый ограничитель)</code>{data.unified_scoring.gates.map((gate) => <p key={gate.key}><strong>Максимум {gate.cap.toFixed(2)}:</strong> {gate.rule}</p>)}<p>Для Вьетнама используется опубликованная оценка Всемирного банка: $16,0 млрд за 2024 год. Доля 3,36% рассчитана по ВВП WDI за тот же год.</p><p>Баллы критериев являются экспертными оценками, а не автоматическим пересчётом статистики. Исправление суммы Вьетнама не меняет его итог 3,19: действует регуляторный ограничитель.</p><p>Для Канады и Великобритании требуется пересмотр критерия трансграничных денег с учётом исходящих переводов. Их базовые рейтинги пока предварительные.</p></div>
           </article>
 
           <article className="panel sources-card">

@@ -350,10 +350,10 @@
     ],
     "gates": [
       {
-        "key": "unconfirmed_mass_need",
-        "label": "Не подтверждён массовый спрос",
+        "key": "compliance_and_channel_restrictions",
+        "label": "Ограничения запуска и продвижения",
         "cap": 2.7,
-        "rule": "Если интервью и рыночные кейсы не подтверждают повторяемую массовую задачу, итог не может быть выше низкой категории до отдельной валидации спроса."
+        "rule": "Для Мексики применяется предел 2,70 из-за ограничений операционной модели и традиционных каналов продвижения. Спрос подтверждён; ограничитель относится к возможности запуска, а не к отсутствию потребности."
       },
       {
         "key": "critical_unresolved_license",
@@ -483,7 +483,7 @@
           "entry_feasibility": 2.31
         },
         "components": {
-          "cross_border": { "score": 4, "evidence": "Оценка входящих переводов за 2024 год — $16,2 млрд, или 3,4% ВВП.", "source_ids": ["wb_vietnam_data", "vn_remittances_2025"] },
+          "cross_border": { "score": 4, "evidence": "Опубликованная оценка Всемирного банка: $16,0 млрд входящих переводов за 2024 год. Расчётная доля ВВП — 3,36%. Это отдельная оценочная серия, а не наблюдение WDI.", "source_ids": ["wb_vietnam_data", "vn_remittances_2025"] },
           "stable_value_need": { "score": 3, "evidence": "Инфляция 3,31%; спрос связан главным образом с международными потоками и цифровыми активами.", "source_ids": ["imf_weo_2026", "vn_remittances_2025"] },
           "audience_readiness": { "score": 5, "evidence": "Вьетнам занимает 4-е место в индексе crypto adoption; 85,44% взрослых имеют smartphone.", "source_ids": ["chainalysis_2025", "wb_findex_2025"] },
           "competitive_whitespace": { "score": 4, "evidence": "Высокая crypto-готовность подтверждена, но универсальный регулируемый stablecoin-account с локальным выводом ещё не стал массовым стандартом.", "source_ids": ["chainalysis_2025", "coin98_wallet_2025", "vn_crypto_pilot"] },
@@ -508,7 +508,7 @@
           "entry_feasibility": 4.13
         },
         "components": {
-          "cross_border": { "score": 1, "evidence": "$0,83 млрд входящих переводов в 2025 году, 0,04% ВВП.", "source_ids": ["wb_api"] },
+          "cross_border": { "score": 1, "evidence": "В 2025 году входящие переводы составили $0,83 млрд, исходящие — $15,11 млрд. Для диаспор важен исходящий поток. Прежний экспертный балл требует пересмотра по единой рубрике для отправляющих и принимающих рынков; низкий входящий поток сам по себе не означает слабый спрос.", "source_ids": ["wb_api", "interview_canada_2026", "interview_canada_gtm_2026"] },
           "stable_value_need": { "score": 1.5, "evidence": "Инфляция 2,08% и зрелый CAD/USD-банкинг не создают широкой потребности в защите через stablecoins.", "source_ids": ["imf_weo_2026", "interview_canada_2026", "interview_canada_gtm_2026"] },
           "audience_readiness": { "score": 3, "evidence": "84,06% взрослых имеют smartphone и 95,05% недавно пользовались интернетом, но Канада не вошла в опубликованный top-20 crypto adoption.", "source_ids": ["wb_findex_2025", "chainalysis_2025"] },
           "competitive_whitespace": { "score": 3, "evidence": "Массовые задачи закрыты банками и fintech; остаётся сегментная связка CAD/USD, Interac и цифровых активов.", "source_ids": ["interview_canada_2026", "interview_canada_gtm_2026", "cryptocom_canada_card_2026"] },
@@ -533,7 +533,7 @@
           "entry_feasibility": 3.91
         },
         "components": {
-          "cross_border": { "score": 2, "evidence": "$5,36 млрд входящих переводов в 2025 году, 0,13% ВВП; релевантны отдельные диаспоры и международные специалисты.", "source_ids": ["wb_api", "interview_uk_fintech_2026"] },
+          "cross_border": { "score": 2, "evidence": "В 2025 году входящие переводы составили $5,36 млрд, исходящие — $13,17 млрд. Для диаспор важен исходящий поток. Прежний экспертный балл требует пересмотра по единой рубрике для отправляющих и принимающих рынков; объём переводов не равен незакрытому спросу на новый продукт.", "source_ids": ["wb_api", "interview_uk_fintech_2026"] },
           "stable_value_need": { "score": 1.5, "evidence": "Инфляция 3,37%, а массовые GBP/USD/EUR-сценарии уже закрыты банками и fintech.", "source_ids": ["imf_weo_2026", "interview_uk_emi_2026"] },
           "audience_readiness": { "score": 4, "evidence": "Великобритания занимает 11-е место в индексе crypto adoption; 85,44% взрослых имеют smartphone.", "source_ids": ["chainalysis_2025", "wb_findex_2025"] },
           "competitive_whitespace": { "score": 1.5, "evidence": "Revolut, Wise, Wirex, Coinbase, Crypto.com, Bleap и другие решения закрывают основные массовые и crypto-сценарии.", "source_ids": ["revolut_supported_2026", "wise_service_countries_2026", "wirex_supported_2026", "interview_uk_fintech_2026"] },
@@ -1148,14 +1148,16 @@
           "year": 2024
         },
         "remittance_in_usd": {
-          "value": 16197260000,
+          "value": 16000000000,
           "year": 2024,
-          "derived": true
+          "estimate": true,
+          "source_id": "vn_remittances_2025"
         },
         "remittance_out_usd": null,
         "remittance_pct_gdp": {
-          "value": 3.4,
-          "year": 2024
+          "value": 3.3590540808109934,
+          "year": 2024,
+          "derived": true
         },
         "findex_2024": {
           "account_ownership_pct": 70.55,
@@ -4127,11 +4129,11 @@
     },
     {
       "id": "wb_vietnam_data",
-      "title": "Viet Nam country data: remittances and GDP",
+      "title": "Viet Nam GDP, current US dollars, 2024 — WDI",
       "publisher": "World Bank",
       "period": "2024",
-      "url": "https://data.worldbank.org/country/vn",
-      "accessed": "2026-08-11",
+      "url": "https://api.worldbank.org/v2/country/VNM/indicator/NY.GDP.MKTP.CD?date=2024&format=json",
+      "accessed": "2026-09-26",
       "tier": "primary_dataset",
       "type": "official_data"
     },
@@ -5349,11 +5351,11 @@
       "id": "vn_remittances_2025",
       "type": "official_data",
       "tier": "primary_dataset",
-      "title": "Viet Nam country data: personal remittances received",
+      "title": "Inward Remittance Flows, July 2025: Vietnam 2024 estimate",
       "publisher": "World Bank",
-      "period": "Latest available observation",
-      "accessed": "2026-09-01",
-      "url": "https://data.worldbank.org/country/vn"
+      "period": "2024 estimate; July 2025 release",
+      "accessed": "2026-09-26",
+      "url": "https://datacatalogfiles.worldbank.org/ddh-published/0066877/DR0095407/Inward_remittance_flows_%28July_13_2025%29.xlsx"
     },
     {
       "id": "ph_gcash_official_2026",

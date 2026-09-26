@@ -9,6 +9,25 @@ const marketCodes = new Set(data.markets.map((market) => market.code));
 const sourceIds = new Set(data.sources.map((source) => source.id));
 const competitorIds = new Set(data.market_competitors.map((competitor) => competitor.id));
 
+test("Vietnam uses the published remittance estimate, with GDP share derived in the correct direction", () => {
+  const metrics = data.markets.find((market) => market.code === "VNM").metrics;
+  assert.equal(metrics.remittance_in_usd.value, 16_000_000_000);
+  assert.equal(metrics.remittance_in_usd.estimate, true);
+  assert.equal(metrics.remittance_in_usd.year, 2024);
+  assert.ok(Math.abs(metrics.remittance_pct_gdp.value - 16_000_000_000 / 476_324_572_783.807 * 100) < 1e-9);
+  assert.equal(metrics.remittance_pct_gdp.derived, true);
+});
+
+test("every applied rating cap is documented with the same limit", () => {
+  for (const row of data.unified_scoring.rows) {
+    if (!row.gate?.applied) continue;
+    const rule = data.unified_scoring.gates.find((gate) => gate.key === row.gate.key);
+    assert.ok(rule, `${row.market_code}: undocumented cap`);
+    assert.equal(row.gate.cap, rule.cap);
+    assert.equal(row.final_score, Math.round((Math.min(row.raw_score, rule.cap) + 1e-9) * 100) / 100);
+  }
+});
+
 function assertReferences(value, path = "data") {
   if (Array.isArray(value)) return value.forEach((item, index) => assertReferences(item, `${path}[${index}]`));
   if (!value || typeof value !== "object") return;
